@@ -110,6 +110,15 @@ This exception is thrown if an attempt is made to create a vector with more
 
 
 \family typewriter 
+TooManyVectorsException
+\layout Standard
+
+This exception is thrown if an attempt is made to create a new vector when
+ all available positions on the animation canvas have been filled.
+\layout Subsubsection
+
+
+\family typewriter 
 InvalidLocationException
 \layout Standard
 
@@ -549,20 +558,21 @@ s and
 \family typewriter 
 VectorState
 \family default 
-s, namely the value of the variable 
+s, namely the value of the boolean array 
 \family typewriter 
-highestColUsed
+colsOccupied
 \family default 
 .
- This variable stores the position of the right-most 
+ This array is used for placing new 
 \family typewriter 
 Vector
 \family default 
- known to the animator, and is used for placing new 
+s: the canvas is divided up into logical columns, each of which is allowed
+ to contain a 
 \family typewriter 
 Vector
 \family default 
-s.
+, and the array stores which of these columns is occupied.
  It is stored in the 
 \family typewriter 
 State
@@ -571,12 +581,6 @@ State
  and the animator is then taken back to a state before that vector was created,
  the vector will appear in the same position as before if it is created
  again.
- If this variable is allowed to persist through calls to 
-\family typewriter 
-restoreState
-\family default 
-, this vector will appear further over on subsequent animations of that
- step of the algorithm.
 \layout Standard
 
 The design of this class has a number of drawbacks, which should be drawn
@@ -638,18 +642,6 @@ synchronized
 wait
 \family default 
 s for an event.
-\layout Standard
-
-Fourthly, the placement of vectors is rather inflexible.
- New vectors are placed to the right of the rightmost vector currently known
- to the animator, but this includes deleted vectors, so if an algorithm
- using many vectors, many of which are deleted and new ones subsequently
- created, the positioning of the vectors will be strange, with large gaps
- resulting where the deleted vectors were.
- This is not true of the kinds of algorithm we are animating, so this is
- not considered to be a problem as far as this project is concerned, but
- for full flexibility in animating arbitrary vector algorithms, this positioning
- scheme should be extended to something more intelligent.
 \layout Subsection
 
 
