@@ -10,9 +10,11 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
  * @author Sid
  */
 public class BiDirBubbleSort extends VectorAlgorithm {
-	/**
-	 * @param values
-	 */
+	
+	// STATISTICS
+	public int SWAPS;
+	public int COMPARES;
+	
 	int[] a;
 	VectorAnimator anim;
 	
@@ -59,10 +61,13 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					arrowA.move(j, false);
 					
 					if (a[j] > a[j + 1]) {
+						COMPARES++;
+						
 						int T = a[j];
 						a[j] = a[j + 1];
 						a[j + 1] = T;
 						
+						SWAPS++;
 						// ANIM: Swap the elements
 						anim.setCurrentStep(2);
 						arrowA.flash();
@@ -73,6 +78,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					}
 				}
 				if (!swapped) {
+					arrowA.delete();
 					v.setLabel("Done!");
 					return;
 				}
@@ -94,10 +100,14 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					arrowB.move(j, false);
 					
 					if (a[j] > a[j + 1]) {
+						
+						COMPARES++;
+						
 						int T = a[j];
 						a[j] = a[j + 1];
 						a[j + 1] = T;
 
+						SWAPS++;
 						// ANIM: Swap the elements
 						anim.setCurrentStep(2);
 						arrowB.flash();
@@ -108,6 +118,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					}
 				}
 				if (!swapped) {
+					arrowB.delete();
 					v.setLabel("Done!");
 					return;
 				}
@@ -129,7 +140,12 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 	 */
 	public void execute(Animator anim) {
 		this.anim = (VectorAnimator)anim;
+		
+		SWAPS = 0;
+		COMPARES = 0;
+		
 		sort();
+		System.out.println(COMPARES + "\t" + SWAPS);
 	}
 	
 	public static String getName() {

@@ -11,7 +11,11 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
  * @author Sid
  */
 public class QuickSort extends VectorAlgorithm {
-
+	
+	// STATISTICS
+	public int SWAPS;
+	public int COMPARES;
+	
 	private int[] a;
 	VectorAnimator anim;
 	
@@ -83,6 +87,9 @@ public class QuickSort extends VectorAlgorithm {
 			{
 				// Search for elements to swap
 				while( (i < high ) && ( a[i] < pivot ) ) {
+					
+					COMPARES++;
+					
 					// ANIM: Move the low-end pointer down
 					anim.setCurrentStep(1);
 					aLow.move(i-low +1, false);
@@ -90,6 +97,9 @@ public class QuickSort extends VectorAlgorithm {
 					++i;
 				}
 				while( (j > low ) && ( a[j] > pivot ) ) {
+					
+					COMPARES++;
+					
 					// ANIM: Move the high-end pointer up
 					anim.setCurrentStep(2);
 					aHigh.move(j-low -1, false);
@@ -102,6 +112,7 @@ public class QuickSort extends VectorAlgorithm {
 				{
 					if (i !=j ) {
 						swap(i, j); 
+						SWAPS++;
 						// ANIM: Swap the elements
 						anim.setCurrentStep(3);
 						curr.swapElements(i-low, j-low);
@@ -234,6 +245,9 @@ public class QuickSort extends VectorAlgorithm {
 	public void execute(Animator anim) {
 		this.anim = (VectorAnimator) anim;
 		
+		SWAPS = 0;
+		COMPARES = 0;
+				
 		try {
 			quick(0, a.length - 1);
 			
@@ -248,6 +262,8 @@ public class QuickSort extends VectorAlgorithm {
 		} catch (Exception e) {
 			System.err.println("quicksort died: " + e);
 		}
+		
+		System.out.println(COMPARES + "\t" + SWAPS);
 	}
 
 }

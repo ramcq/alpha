@@ -16,6 +16,10 @@ import org.ucam.ned.teamalpha.animators.ItemDeletedException;
  */
 public class InsertionSort extends VectorAlgorithm {
 	
+	// STATISTICS
+	public int SWAPS;
+	public int COMPARES;	
+	
 	int[] a;
 	VectorAnimator anim;
 	
@@ -73,16 +77,22 @@ public class InsertionSort extends VectorAlgorithm {
 				
 				// Find insertion point
 				while ( a[j-1] > v ) {
+					
+					COMPARES++;
+					
 					a[j] = a[j-1];
 					// ANIM: Have the arrow pointing at the potential insertion point
 					anim.setCurrentStep(1);
 					aSorted.move(j-1, false);
 					
 					// ANIM: Shift elements to make space
+					SWAPS++;
 					anim.setCurrentStep(2);
 					sorted.moveElement(j-1, j);
 				
 					j = j-1;
+					
+					COMPARES++;
 					if ( j <= 0 ) break;
 				}
 				// Correct insertion point found, insert here
@@ -133,10 +143,16 @@ public class InsertionSort extends VectorAlgorithm {
 	 */
 	public void execute(Animator anim) {
 		this.anim = (VectorAnimator) anim;
+		
+		SWAPS = 0;
+		COMPARES = 0;
+		
 		try {
 			sort();
 		} catch (ItemDeletedException e) {
 			System.out.println("Oh no; we're buggered.");
 		}
+		
+		System.out.println(COMPARES + "\t" + SWAPS);
 	}
 }
