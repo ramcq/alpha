@@ -142,6 +142,8 @@ public class AnimatorPanel extends ShellPanel {
 				if (queue.isBusy()) {
 					buttons.setEnabled(0, false);
 					buttons.setEnabled(2, false);
+					if (!play)
+						buttons.setEnabled(1, false);
 				} else if (play && queue.hasNext()) {
 						try {
 							queue.next();
