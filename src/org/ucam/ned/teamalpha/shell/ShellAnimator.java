@@ -18,9 +18,9 @@ import org.ucam.ned.teamalpha.animators.Animator;
  */
 public abstract class ShellAnimator extends JPanel {
 	class State implements Animator.State {
-		String[] steps;
-		int step;
-		String msg;
+		private String[] steps;
+		private int step;
+		private String msg;
 		
 		State() {
 			this.steps = ShellAnimator.this.steps;
@@ -39,9 +39,9 @@ public abstract class ShellAnimator extends JPanel {
 	}
 	
 	private Shell shell;
-	String[] steps;
-	int step;
-	String msg;
+	private String[] steps;
+	private int step;
+	private String msg;
 
 	public ShellAnimator() {
 		shell = Shell.getInstance();
