@@ -75,10 +75,6 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		if (mode > MODE_INPUT && algorithm == null)
 			throw new InvalidModeException("Unable to proceed beyond input mode if no algorithm has been made!");
 		
-		// do nothing if we're in the same mode
-		if (mode == this.mode)
-			return;
-		
 		// looks good, proceed
 		this.mode = mode;
 
@@ -97,9 +93,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 				break;
 			case MODE_ANIMATE:
 				panel = new AnimatorPanel();
-				String[] names2 = { "Prev", "Stop", "Play", "Next" };
-				buttons.update(names2);
-				buttons.setEnabled(3, false);
+				main.add(panel);
 				break;
 			default:
 		}
@@ -158,6 +152,8 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 			System.exit(0);
 		else if (e.getActionCommand().equals("Restart"))
 			try {
+				choice = null;
+				algorithm = null;
 				setMode(MODE_CHOOSE);
 			} catch (Exception ex) {
 				System.err.println(ex);
