@@ -5,7 +5,7 @@ import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.algorithms.Kruskal;
 
 /**
- * @author richie
+ * @author zrll2
  * Created on 18-Feb-2004
  */
 public class KruskalTest extends GraphAlgorithm {

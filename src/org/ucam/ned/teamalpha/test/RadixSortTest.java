@@ -7,7 +7,7 @@ import org.ucam.ned.teamalpha.algorithms.*;
 import org.ucam.ned.teamalpha.animators.*;
 
 /**
- * @author richie
+ * @author zrll2
  *
  */
 public class RadixSortTest extends VectorAlgorithm {
@@ -20,7 +20,7 @@ public class RadixSortTest extends VectorAlgorithm {
 		rs.execute(va);			// Sort the data
 		System.out.println("Radix Sort result: ");
 		for (int i=0; i<data.length; i++) {	// Print out the results
-			System.out.println(data[i]);
+			System.out.print(data[i] + "\t");
 		}		
 	}
 	

@@ -14,15 +14,15 @@ import org.ucam.ned.teamalpha.animators.*;
  */
 public class QuickSortTest extends VectorAlgorithm {
 
-	static VectorAnimator va;
+	static Animator anim;
 	static int[] data = InsertionSortTest.data;
 	
 	public static void main(String[] args) {
 		QuickSort qs = new QuickSort(data);
-		qs.execute(va);			// Sort the data
+		qs.execute(anim);			// Sort the data
 		System.out.println("Quick Sort result: ");
 		for (int i=0; i<data.length; i++) {	// Print out the results
-			System.out.println(data[i]);
+			System.out.print(data[i] + "\t");
 		}		
 	}
 	

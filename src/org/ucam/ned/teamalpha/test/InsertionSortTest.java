@@ -1,42 +1,36 @@
 /*
- * Created on 15-Feb-2004
+ * Created on 16-Feb-2004
+ *
  */
 package org.ucam.ned.teamalpha.test;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JFrame;
-
-import org.ucam.ned.teamalpha.algorithms.InsertionSort;
-import org.ucam.ned.teamalpha.shell.ShellVectorAnimator;
+import org.ucam.ned.teamalpha.algorithms.*;
+import org.ucam.ned.teamalpha.animators.*;
 
 /**
- * @author Sid
- *
- * Testing Sid's InsertionSort class 
+ * @author zrll2
+ * Test class for InsertionSort
+ * This class uses the common test data used by other testing classes.
  */
-public class InsertionSortTest {
+public class InsertionSortTest extends VectorAlgorithm {
+
+	static Animator anim;
+	static int[] data = {1,2,56,234,2452,142,1};
 	
-	static int[] data = {12,34, 1,1494,23,456,45,-12};
-	
-	public static void main(String[] args) {	
-		JFrame frame = new JFrame("InsertionSort Animation test");
-		frame.setSize(500,500);
-		frame.setVisible(true);
-		
-		ShellVectorAnimator app = new ShellVectorAnimator(frame.getContentPane());
-		
-		frame.addWindowListener(new WindowAdapter() {
-			public void windowClosed(WindowEvent e) {
-				System.exit(0);
-			}
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-		
-		InsertionSort is = new InsertionSort( data);
-		is.execute(app);
+	public static void main(String[] args) {
+		InsertionSort is = new InsertionSort(data);
+		is.execute(anim);			// Sort the data
+		System.out.println("Insertion Sort result: ");
+		for (int i=0; i<data.length; i++) {	// Print out the results
+			System.out.print(data[i] + "\t");
+		}		
 	}
+	
+	public InsertionSortTest(int[] values) {
+		super(values);
+	}
+	
+	public void execute(Animator anim) {
+	}
+
 }

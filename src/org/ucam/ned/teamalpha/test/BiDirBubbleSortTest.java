@@ -12,14 +12,14 @@ package org.ucam.ned.teamalpha.test;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class BiDirBubbleSort {
+public class BiDirBubbleSortTest {
 	/**
 	 * 
 	 */
 	
 	int[] a;
 	
-	public BiDirBubbleSort(int[] items) {
+	public BiDirBubbleSortTest(int[] items) {
 		this.a = items;
 	}
 	
@@ -67,9 +67,9 @@ public class BiDirBubbleSort {
 	
 	public static void main(String[] args) {
 		
-		int[] vals = {1,5,3,2,5,6, -45};
+		int[] vals = {1,5,3,999999,5,6, -45};
 		
-		BiDirBubbleSort b = new BiDirBubbleSort(vals);
+		BiDirBubbleSortTest b = new BiDirBubbleSortTest(vals);
 		
 		b.sort();
 		b.print();
