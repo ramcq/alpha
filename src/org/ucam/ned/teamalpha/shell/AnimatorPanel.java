@@ -46,16 +46,12 @@ public class AnimatorPanel extends ShellPanel {
 			
 			setText((index + 1) + ". " + value.toString());
 			
-			if (isSelected) {
+			if (index == step) {
 				setForeground(list.getSelectionForeground());
 				setBackground(list.getSelectionBackground());
-			}	
-			else if ((index % 2) == 0) {
+			} else {
 				setForeground(list.getForeground());
 				setBackground(list.getBackground());
-			} else {
-				setForeground(list.getSelectionForeground());
-				setBackground(list.getSelectionBackground().brighter());
 			}
 						
 			return this;
@@ -73,6 +69,7 @@ public class AnimatorPanel extends ShellPanel {
 	private JTextPane message;
 	private Timer playTimer;
 	private boolean play;
+	private int step;
 	
 	/**
 	 * @param b
@@ -211,10 +208,7 @@ public class AnimatorPanel extends ShellPanel {
 	}
 	
 	public void setCurrentStep(int step) {
-		if (step >= 0) {
-			stepList.setSelectedIndex(step);
-		} else {
-			stepList.clearSelection();
-		}
+		this.step = step;
+		stepList.repaint();
 	}
 }
