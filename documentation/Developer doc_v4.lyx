@@ -1,7 +1,7 @@
 #LyX 1.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 221
 \textclass article
-\language english
+\language british
 \inputencoding auto
 \fontscheme default
 \graphics default
@@ -78,7 +78,7 @@ We will demonstrate step by step what needs to be done by the user to implement
  of items to sort.
  Each set is every i-th item, e.g set 1 is item 1, 1+i, 1+2i, set 2 is item
  2, 2+i, etc.
- Tupically each set is sorted with an insertionsort.
+ Typically each set is sorted with an insertionsort.
  On each successing pass, the increment, i, is reduced until it is 1 for
  the last pass.
 \layout Enumerate
@@ -198,7 +198,7 @@ public class ShellSort extends VectorAlgorithm {
 
 
 \family typewriter 
-int [ ] a;
+int [] a;
 \layout Standard
 
 
@@ -210,17 +210,17 @@ VectorAnimator anim;
 
 
 \family typewriter 
-public void sort(){ 
+public void sort(){
 \layout Standard
 
 
 \family typewriter 
-//VectorAnimator methods to setup the animation 
+// VectorAnimator methods to setup the animation
 \layout Standard
 
 
 \family typewriter 
-//for example, arrows and arrays
+// for example, arrows and arrays
 \layout Standard
 
 
@@ -230,7 +230,7 @@ public void sort(){
 
 
 \family typewriter 
-//with calling of animation methods
+// with calling of animation methods
 \layout Standard
 
 
@@ -401,7 +401,13 @@ ese
 are
 \series medium 
 \size normal 
- included inside the BubbleSort class.
+ included inside the 
+\series default 
+\size default 
+Shell
+\series medium 
+\size normal 
+Sort class.
 \layout Enumerate
 \pagebreak_bottom 
 
@@ -820,7 +826,7 @@ The final step is to add the algorithm
 inside the catalog
 \series default 
 \size default 
- class which as already mentioned is inside the Shell pckage.
+ class which as already mentioned is inside the Shell package.
 \layout Section
 
 Useful Information
