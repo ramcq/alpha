@@ -92,7 +92,7 @@ smh22@cam.ac.uk
 ).
 \layout Section
 
-Changes from specification
+Changes to specification
 \layout Paragraph
 
 Algorithm Package
@@ -132,7 +132,7 @@ Delete element method removed; variable vector lengths aren't necessary
  for the sorting algorithms we plan to implement.
 \layout Itemize
 
-Split vector method also removed, for similar reasons.
+Split vector method also removed for similar reasons; also hard to implement.
 \layout Itemize
 
 Boolean highlight of 
@@ -153,9 +153,6 @@ It's not possible to use introspection to enumerate classes within a package,
 AlgorithmCatalog
 \family default 
  interface will be created (see below).
-\layout Standard
-
-Include difficulties - refer to specification DO STUFF FOR THIS
 \layout Section
 
 Code status
@@ -180,16 +177,24 @@ All five of the proposed algorithms have been implemented and tested by
  Sid (the coder).
  More testing (especially of the graph algorithms) will be required by other
  testers/coders to ensure that the implementations aren't flawed.
- Sid has included some sample connectivity matrices that can be used by
- testers; these are stored in the folder TestData under the file ConnectivityMat
-rices.txt.
+ He has also prepared some sample connectivity matrices that can be used
+ by testers; these are stored in the folder TestData under the file Connectivity
+Matrices.txt.
  The code produced the correct results with this data.
 \layout Standard
 
 Most of the algorithms have been commented at points where animator primitives
  will be called.
- During the integration phase, these comments will be replaced with additions
- to AnimatorQueues.
+ During the integration phase, these comments will be replaced with the
+ appropriate calls to animation methods from the 
+\family typewriter 
+GraphAnimator
+\family default 
+ or 
+\family typewriter 
+VectorAnimator
+\family default 
+ classes.
 \layout Subsection
 
 Animators
@@ -198,11 +203,13 @@ Animators
 For both the graph and vector animator APIs, a set of exceptions for invalid
  input to the methods must be created, along with static functions which
  perform these tests.
- These tests can be used by all implementers of the APIs, as well as packages
- which need to test input
+ These tests can be used by all implementers of the APIs, to ensure a consistent
+ response to invalid data - this consistent implementation is especially
+ important to ensure that the queue does not accept an animation event which
+ the actual animator will later reject.
 \layout Subsubsection
 
-Graph animators (Steven)
+Graph animator (Steven)
 \layout Standard
 
 Almost complete, only highlighting nodes and edges and algorithm step messages
@@ -218,7 +225,7 @@ Almost complete, only highlighting nodes and edges and algorithm step messages
    Only used elementary tests to confirm various methods are working correctly.
 \layout Subsubsection
 
-Vector animators (Andrew)
+Vector animator (Andrew)
 \layout Standard
 
 The vast majority of this class has now been completed.
@@ -369,8 +376,8 @@ A class
 \family typewriter 
 GenericQueue
 \family default 
- has been written, to provide the common functionality which is used by
- both the 
+ has been written to provide the common functionality which is used by both
+ the 
 \family typewriter 
 GraphQueue
 \family default 
@@ -379,30 +386,78 @@ GraphQueue
 VectorQueue
 \family default 
  classes.
- It implements an inner class 
+ As well as implementing the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface itself, it also provides an 
+\family typewriter 
+enqueue()
+\family default 
+ function which allows the graph and vector queue classes to queue a method
+ call, with the subject object, method name, arguments, and if one is necessary,
+ the placeholder object that the queue will return from the method call.
+ The 
+\family typewriter 
+GenericQueue
+\family default 
+ stores these values as members in an internal
+\emph on 
+ 
+\family typewriter 
+\emph default 
+Event
+\family default 
+ class, and stores them in a linked list within the 
 \family typewriter 
 State
 \family default 
- to store each simulated state that the algorithm requests, and each of
- these contains a linked list of 
+ inner class.
+ When the algorithm invokes the 
 \family typewriter 
-Event
+saveState()
 \family default 
-.
- Functionally complete.
- Untested.
- 
+ method on the queue, a new 
+\family typewriter 
+State
+\family default 
+ object is created, and the subsequent events stored inside that.
+ When 
+\family typewriter 
+next()
+\family default 
+ is called, the queue saves the state of the real animator, and then for
+ each state in the linked list, uses introspection to find and invoke the
+ methods on the actual objects.
+ A hash map is maintained of placeholder objects which the queue returned
+ to the algorithm, mapping to actual objects which the animator returned
+ to the queue.
+ Calls to the 
+\family typewriter 
+prev()
+\family default 
+ method load the saved states back into the animator.
+\layout Standard
+
+The queue classes are essentially complete, but further consideration will
+ be given to making the queue class safe for concurrent operation, because
+ it is intended to have the queue invoke the animator in a seperate thread
+ to the user interface code itself.
+ As stated above, the queue will also need to perform the same checks on
+ input data that the animators do, to ensure that no method call which is
+ accepted and enqueued by the queue is later rejected by the animator.
+ The queue will need to be tested more extensively with use of test algorithms
+ and animators, as well as with the actual algorithms and animators (initial
+ testing has already shown one odd behaviour with the positioning of re-created
+ vectors in the vector animator).
 \layout Subsection
 
 Shell
 \layout Standard
 
-The user interface which will be implemented by the shell has been designed,
- and a proof of concept created.
- This has yet to be written though.
-\layout Standard
-
-There will be three main screens in the system:
+The user interface of the shell has been designed on paper, and proof of
+ concept code has been created as a basis for the actual implementation.
+ There will be three main screens in the system:
 \layout Enumerate
 
 
@@ -431,25 +486,25 @@ The data input screen
  step at a time, with the user choosing when to move on.
 \layout Enumerate
 
-the animation screen (Diagram 3)
-\begin_deeper 
-\layout Itemize
 
-This will show the animation of the algorithm, along with a description
- of what is happening at each step.
+\emph on 
+The animation screen
+\emph default 
+ (Diagram 3): this will show the animation of the algorithm, along with
+ text areas containing description of what is happening at each step.
  There will be 'Next', 'Previous', 'Play' and 'Pause' buttons to step through
  the algorithm, as well as a 'Restart' button to return to the first step,
  and an 'Exit' button to return to the algorithm select screen.
-\end_deeper 
 \layout Standard
 
 In place of the introspection, which hasn't proved possible, the shell will
- internally make use of a 
+ internally make use of a new 
 \family typewriter 
 AlgorithmCatalog
 \family default 
  interface, which provides methods to enumerate the available algorithms,
- load them into the JVM, and instantiate the appropriate 
+ load them into the JVM, and instantiate the appropriate data-gathering,
+ 
 \family typewriter 
 Queue
 \family default 
@@ -457,18 +512,40 @@ Queue
 \family typewriter 
 Animator
 \family default 
- classes for the shell.
- 
+ classes for the shell, performing an abstract factory role to hide the
+ details of graph vs vector algorithms from the shell.
+ This will initially be implemented as a static catalog, which will contain
+ lists of the initially available algorithms and their necessary queues
+ and animators, but the same interface could be implemented by various class
+ loaders, such as investigating a directory on disk, a configuration file,
+ or even downloading algorithms from a web server.
 \layout Section
 
-Test results
+Testing
 \layout Standard
 
-Richard, Alan
+Work has started on test animators and algorithms to exercise and implement
+ all of the animation primitives in both the graph and vector animator APIs.
+ These will be completed shortly, and a variety of test programs can be
+ made which will run the test algorithms against the real animators, with
+ and without queues, to test that the animators function and correctly interact
+ with the queue, and the test algorithms against the test animators via
+ the queue, to independently verify the queue's correct functionality.
+ Only recently has enough of the coding been completed to allow modules
+ to be tested at an external interface level, so much of the testing has
+ not been started.
 \layout Standard
 
-Say what we are testing it for and how we are testing it.
- Also test strategy.
+For each erroneous input data case which has been conceived, a test case
+ will be created to ensure that the error is caught consistently at the
+ interfaces between modules.
+ Special care will be taken to test that the queue and animators respond
+ to erroneous input in the same way, to prevent problems with the queue
+ failing to deliver events to the animator which appeared valid when called
+ by the algorithm.
+ The actual algorithms which have been implemented so far do not yet call
+ animation primitives, so can be independently tested with the same inputs,
+ to ensure correct action in all cases.
 \layout Section
 
 Documentation
@@ -480,7 +557,8 @@ The user guide has been written by Graham, but will be updated in more detail
  by Neofytos, again this will be updated in more detail as the project progresse
 s.
  Current copies of both have been submitted.
- All code has been documented by the coders as it has been written.
+ All code, especially APIs which are implemented by multiple classes, is
+ being documented by the coders as it has been written.
 \layout Section
 
 Plan of action
@@ -489,7 +567,7 @@ Plan of action
 To be completed by Sunday 15th Feb:
 \layout Itemize
 
-Finish of last parts of
+Finish off last parts of
 \begin_deeper 
 \layout Itemize
 
@@ -499,7 +577,7 @@ algorithms - Sid
 animator - Steven and Andrew
 \layout Itemize
 
-queue - Rob
+queue and threading - Rob
 \end_deeper 
 \layout Standard
 
@@ -515,7 +593,7 @@ Fully test modules - Richard and Alan
 To be completed by Wednesday 25th Feb:
 \layout Itemize
 
-Integrate all code together - Sid, Steven, Andrew and Rob
+Integrate all modules together - Sid, Steven, Andrew and Rob
 \layout Itemize
 
 Fully test entire program - Richard and Alan
