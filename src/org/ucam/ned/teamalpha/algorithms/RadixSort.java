@@ -3,7 +3,8 @@
  */
 package org.ucam.ned.teamalpha.algorithms;
 
-import java.util.*;
+import java.util.Vector;
+
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**

@@ -7,6 +7,7 @@
 package org.ucam.ned.teamalpha.shell;
 
 import javax.swing.JPanel;
+
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.queues.AnimatorQueue;
 

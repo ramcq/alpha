@@ -9,8 +9,9 @@
  */
 package org.ucam.ned.teamalpha.test;
 
-import java.util.*;
-import javax.swing.*;
+import java.util.Random;
+
+import javax.swing.JPanel;
 
 public class GUITest extends javax.swing.JFrame {
 	
