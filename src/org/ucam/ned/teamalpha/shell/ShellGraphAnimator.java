@@ -535,12 +535,20 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		if (x1 != x2 && y1 != y2){ //this bit doesn't work
 			double grad = (double) ((x1-x2)/(y1-y2));
 			grad = (-1 / grad);
-			if (x1>x2) {
+			if (x1>x2 && y1>y2) {
 				sx = (int)(sx - 30 * grad);
 				sy = (int)(sy + 30 * grad);
 			}
-			else {
+			if (x2>x1 && y2>y1) {
 				sx = (int)(sx + 30 * grad);
+				sy = (int)(sy - 30 * grad);
+			}
+			if (x1>x2 && y2>y1) {
+				sx = (int)(sx + 30 * grad);
+				sy = (int)(sy + 30 * grad);
+			}
+			if (x2>x1 && y1>y2) {
+				sx = (int)(sx - 30 * grad);
 				sy = (int)(sy - 30 * grad);
 			}
 		}
@@ -602,19 +610,24 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int arlen = 7;
 		if (x1 != x2 && y1 != y2){
 			double grad = (double) ((x1-x2)/(y1-y2));
-			if (x1>x2) {
+			if ((x1>x2 && y1>y2) || (x2>x1 && y2>y1)) {
 				sx3 = (int)(x + arlen * grad);
-				sy3 = (int)(y - arlen * grad);
+				sy3 = (int)(y + arlen * grad);
+				grad = (-1 / grad);
+				sx1 = (int)(x - arsize * grad);
+				sy1 = (int)(y + arsize * grad);
+				sx2 = (int)(x + arsize * grad);
+				sy2 = (int)(y - arsize * grad);			
 			}
 			else {
 				sx3 = (int)(x - arlen * grad);
 				sy3 = (int)(y + arlen * grad);
+				grad = (-1 / grad);
+				sx1 = (int)(x - arsize * grad);
+				sy1 = (int)(y - arsize * grad);
+				sx2 = (int)(x + arsize * grad);
+				sy2 = (int)(y + arsize * grad);			
 			}
-			grad = (-1 / grad);
-			sx1 = (int)(x - arsize * grad);
-			sy1 = (int)(y - arsize * grad);
-			sx2 = (int)(x + arsize * grad);
-			sy2 = (int)(y + arsize * grad);
 		}
 		else {
 			if (x1 == x2) {
@@ -660,7 +673,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int arsize = 5;
 		if (x3 != x4 && y3 != y4){
 			double grad = (double) ((x3-x4)/(y3-y4));
-			if (x3>x4) {
+/*			if (x3>x4) {
 				sx3 = (int)(x2 - arsize * grad);
 				sy3 = (int)(y2 + arsize * grad);
 			}
@@ -672,7 +685,37 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			sx1 = (int)(x - arsize * grad);
 			sy1 = (int)(y - arsize * grad);
 			sx2 = (int)(x + arsize * grad);
-			sy2 = (int)(y + arsize * grad);
+			sy2 = (int)(y + arsize * grad); */
+			if ((x3>x4 && y3>y4) || (x4>x3 && y4>y3)) {
+				if (x3>x4 && y3>y4) {
+					sx3 = (int)(x2 - arsize * grad);
+					sy3 = (int)(y2 - arsize * grad);
+				}
+				else {
+					sx3 = (int)(x2 + arsize * grad);
+					sy3 = (int)(y2 + arsize * grad);
+				}
+				grad = (-1 / grad);
+				sx1 = (int)(x - arsize * grad);
+				sy1 = (int)(y + arsize * grad);
+				sx2 = (int)(x + arsize * grad);
+				sy2 = (int)(y - arsize * grad);			
+			}
+			else {
+				if (x4>x3 && y3>y4) {
+					sx3 = (int)(x2 - arsize * grad);
+					sy3 = (int)(y2 + arsize * grad);
+				}
+				else {
+					sx3 = (int)(x2 + arsize * grad);
+					sy3 = (int)(y2 - arsize * grad);
+				}
+				grad = (-1 / grad);
+				sx1 = (int)(x - arsize * grad);
+				sy1 = (int)(y - arsize * grad);
+				sx2 = (int)(x + arsize * grad);
+				sy2 = (int)(y + arsize * grad);			
+			}
 		}
 		else {
 			if (x3 == x4) {
@@ -1081,9 +1124,21 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	*	app.setEdgeShade(0,1,3);
 	*	app.setEdgeShade(2,0,2);
 	*	Result: Now draws and shades curved edges	
+	*
 	*4)int[][] tstcosts = {{0,0,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
 	*	app.createGraph(tstcosts);
 	*	app.setEdgeShade(0,2,1);
 	*	app.setEdgeShade(2,0,2);
 	*	Result: now draws arrows
+	*
+	*5)int[][] tstcosts = {{0,0,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
+	*	app.createGraph(tstcosts);
+	*	Animator.State s = app.saveState();
+	*	app.setEdgeShade(0,2,1);
+	*	app.setEdgeShade(2,0,2);
+	*	app.setEdgeShade(1,2,3);
+	*	app.setEdgeShade(2,1,1);
+	*	app.restoreState(s);
+	*	app.setEdgeShade(1,2,6);
+	*	Result: savestate bug fixed
 	*/
