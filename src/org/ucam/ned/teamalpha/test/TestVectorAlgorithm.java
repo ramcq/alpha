@@ -25,7 +25,7 @@ public class TestVectorAlgorithm extends VectorAlgorithm {
 	* @param values
 	*/
 
-	public VectorAlgorithm(VectorAnimator va, int[] values) {
+	public TestVectorAlgorithm(VectorAnimator va, int[] values) {
 		super(va, values);
 		this.va = va;
 		this.values = values;
