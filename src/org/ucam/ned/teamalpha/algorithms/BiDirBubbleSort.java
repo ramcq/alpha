@@ -58,7 +58,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 			// The main sorting phase
 			while (st < limit) {
 				
-				anim.showMessage("Update unsorted region markers.");
+				anim.showMessage("Update top unsorted region marker.");
 				
 				anim.setCurrentStep(4);
 				
@@ -68,7 +68,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				
 				limit--;
 				// ANIM: Mark Upper bound
-				bottom.move(limit+1, true);
+				//bottom.move(limit+1, true);
 				
 				boolean swapped = false;
 				
@@ -117,6 +117,10 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				// ANIM: Get rid of the arrow
 				arrowA.delete();
 				
+				// Move the bottom arrow for Andrew :P
+				bottom.move(limit, true);
+				anim.showMessage("Update top unsorted region marker.");
+				
 				// OTHER WAY NOW! //
 				
 				anim.showMessage("Switching direction.");
@@ -155,8 +159,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						swapped = true;
 					}
 					
-					// Move the bottom arrow for Andrew :P
-					bottom.move(limit, true);
+
 				}
 				if (!swapped) {
 					arrowB.delete();
