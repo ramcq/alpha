@@ -431,8 +431,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 */
 		private boolean isValidArrowPos(int pos, boolean boundary) {
 			boolean res = true;
-			if (boundary) res = ((pos>=0) && (pos<=size+1));
-			else res = ((pos>=0) && (pos<=size));
+			if (boundary) res = ((pos>=0) && (pos<=size));
+			else res = ((pos>=0) && (pos<size));
 			return res;
 		}
 		
@@ -1232,7 +1232,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	
 	public void paintComponent(Graphics g) {
 		Rectangle clipArea = g.getClipBounds();
-		Rectangle biArea = new Rectangle(0,0,bi.getWidth(), bi.getHeight());
+		Rectangle biArea = new Rectangle(0,0,bi.getWidth()-1, bi.getHeight()-1);
 		Rectangle redraw = biArea.intersection(clipArea);
 		
 		g.setColor(bgcolour);

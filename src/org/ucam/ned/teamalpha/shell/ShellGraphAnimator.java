@@ -526,7 +526,7 @@ public class ShellGraphAnimator
 
 	public void paintComponent(Graphics g) {
 		Rectangle clipArea = g.getClipBounds();
-		Rectangle biArea = new Rectangle(0,0,bi.getWidth(), bi.getHeight());
+		Rectangle biArea = new Rectangle(0,0,bi.getWidth()-1, bi.getHeight()-1);
 		Rectangle redraw = biArea.intersection(clipArea);
 		
 		g.setColor(bgcolour);
