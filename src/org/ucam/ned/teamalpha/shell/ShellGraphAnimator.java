@@ -30,9 +30,7 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * 
  * @author sjc209
  * 
- * 
  */
-
 /*
  * TODO: bug fixes:
  * problem with gradient -> infinity with 3 node graph ({trig,cast to int} functions rounding error)
@@ -159,12 +157,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}
 		}
-		/*
-		 * Depreciated
-		 */
-	/*	public void highlightNode() {
-			
-		}*/
 		/**
 		 * Method called by the setNodeShade api to change the colour of a node
 		 * @param set
@@ -193,8 +185,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					System.out.println(e);
 				}
 			}
-		}
-		
+		}	
 		/**
 		 * Method to add a flash node event to the internal animation queue
 		 */
@@ -227,7 +218,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.oldlen = n.oldlen;
 		}
 	}
-	
 	/**
 	 * @author Steven
 	 *
@@ -418,8 +408,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					System.out.println(e);
 				}
 			}
-		}
-		
+		}	
 		/**
 		 * Method to copy the data from one edge onto the current edge. Used in save/resore state api.
 		 * @param e
@@ -439,7 +428,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.toshade = e.toshade;
 		}
 	}
-
 	/**
 	 * @author Steven
 	 *
@@ -542,7 +530,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		big.fillRect(0,0,500,500);
 		big.setColor(fgcolour);
 	}
-	
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
@@ -713,7 +700,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNode(nodelist[e.nd2],g);
 	}
 	/**
-	 * Draws a curve between two points
+	 * Draws a set amount of a curve between two points. Called by drawEdge and drawEdgeShade
 	 * @param x1
 	 * 			X coorinate of first point
 	 * @param y1
@@ -807,7 +794,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		g.setColor(fgcolour);
 	}
 	/**
-	 * Draws an arrow on a straight line to indicate one directional edges
+	 * Draws an arrow on a straight line to indicate one directional edges. Called by drawEdge
 	 * @param x1
 	 * 			X coorinate of first point
 	 * @param y1
@@ -883,7 +870,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		g.setColor(fgcolour);
 	}
 	/** 
-	 * Method for drawing arrows on curves
+	 * Method for drawing arrows on curves. Called by drawcurve at midpoints of curves
 	 * @param x1
 	 * 			X coorinate of first point - one point of curve section
 	 * @param y1
@@ -982,7 +969,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		g.setColor(fgcolour);
 	}
 	/**
-	 * Draws an section of an edge on screen - used to animate the edge being shaded
+	 * Draws an section of an edge on screen - used to animate the edge being shaded. Is called once per frame while the edge is being shaded
 	 * @param e
 	 *			Edge to be drawn
 	 * @param g
@@ -1023,7 +1010,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNode(nodelist[e.nd2],g);
 	}
 	/**
-	 * Draws edge when flashing
+	 * Draws edge when flashing. Either this or the normal drawEdge method is called once per frame while the flashing event continues.
 	 * @param e
 	 *			Edge to be drawn
 	 * @param fset
@@ -1372,12 +1359,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void showMessage(String msg) {
 		// TODO Auto-generated method stub		
 	}
-	/*
-	 * not used
-	 */
-	public void drawImage() {
-		outg.drawImage(bi,0,0,outc);
-	}	
 	/**
 	 * Method to conrol the speed of the animation display
 	 * @param fps
