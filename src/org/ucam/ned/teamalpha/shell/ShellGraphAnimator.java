@@ -45,8 +45,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public static final Color EDGE_SHADE_COLOUR = Color.orange;
 	
 	public class Node /*implements Serializable*/{
-		int Nodewidth=3;
-		int Nodeheight=3;
+		int Nodewidth=6;
+		int Nodeheight=6;
 		int x;
 		int y;
 		Color colour;
@@ -303,7 +303,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void drawNode(Node n, Graphics g) {
 		g.setColor(n.colour);
 		System.out.println("drawn node at " + n.x + ", " + n.y);
-		g.fillOval(n.x, n.y, n.Nodewidth, n.Nodeheight);
+		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
 		g.setColor(fgcolour);		
 	}
 	
