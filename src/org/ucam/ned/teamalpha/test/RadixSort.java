@@ -1,10 +1,11 @@
 /*
  * Created on Feb 4, 2004
  */
-package org.ucam.ned.teamalpha.algorithms;
+package org.ucam.ned.teamalpha.test;
 
 import java.util.Vector;
 
+import org.ucam.ned.teamalpha.algorithms.VectorAlgorithm;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 

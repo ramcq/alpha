@@ -4,10 +4,14 @@
  * To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package org.ucam.ned.teamalpha.shell;
+package org.ucam.ned.teamalpha.test;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+
+import org.ucam.ned.teamalpha.shell.ButtonPanel;
+import org.ucam.ned.teamalpha.shell.Shell;
+import org.ucam.ned.teamalpha.shell.ShellPanel;
 
 /**
  * @author ram48

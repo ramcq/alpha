@@ -11,7 +11,6 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import org.ucam.ned.teamalpha.algorithms.RadixSort;
 import org.ucam.ned.teamalpha.shell.ShellVectorAnimator;
 
 /**
