@@ -31,7 +31,7 @@ public class InsertionSortTest {
 		frame.getContentPane().add(panel);
 		panel.setVisible(true);
 		
-		ShellVectorAnimator app = new ShellVectorAnimator(panel);
+		ShellVectorAnimator app = new ShellVectorAnimator(frame);
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {

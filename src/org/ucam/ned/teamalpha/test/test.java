@@ -30,7 +30,7 @@ public class test {
 		frame.getContentPane().add(panel);
 		panel.setVisible(true);
 		
-		ShellVectorAnimator app = new ShellVectorAnimator(panel);
+		ShellVectorAnimator app = new ShellVectorAnimator(frame);
 			
 		TestVectorAlgorithm testalg = new TestVectorAlgorithm(app, values);	
 		

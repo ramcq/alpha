@@ -8,6 +8,7 @@ package org.ucam.ned.teamalpha.test;
 
 import org.ucam.ned.teamalpha.algorithms.GraphAlgorithm;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
+import org.ucam.ned.teamalpha.animators.Animator;
 
 /**
  * @author ram48
@@ -24,7 +25,7 @@ public class TestGraphAlgorithm extends GraphAlgorithm {
 	 * @param costs
 	 */
 	public TestGraphAlgorithm(GraphAnimator ga, int[][] costs) {
-		super(ga, costs);
+		super(costs);
 		this.ga = ga;
 		this.costs = costs;
 	}
@@ -32,7 +33,7 @@ public class TestGraphAlgorithm extends GraphAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
-	public void execute() {
+	public void execute(Animator anim) {
 		// TODO this sucks, make it do something sensible
 		String[] steps = { "foo", "bar", "baz", "qux" };
 		ga.setSteps(steps);
