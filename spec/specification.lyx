@@ -349,7 +349,12 @@ collapsed false
 
 \layout Caption
 
-Class diagram for package 
+
+\begin_inset LatexCommand \label{figure:UML-Class-Algorithm}
+
+\end_inset 
+
+UML Class diagram for package 
 \family typewriter 
 Algorithm
 \end_inset 
@@ -364,7 +369,12 @@ The classes within this package will ultimately implement the algorithms
  and any other information which is displayed.
 \layout Standard
 
-The abstract class 
+As can be seen from Figure 
+\begin_inset LatexCommand \ref{figure:UML-Class-Algorithm}
+
+\end_inset 
+
+, the abstract class 
 \family typewriter 
 Algorithm
 \family default 
@@ -405,13 +415,14 @@ collapsed false
 
 \layout Caption
 
-Class diagram for packages 
+
+\begin_inset LatexCommand \label{figure:UML-Class-AnimatorQueue}
+
+\end_inset 
+
+UML Class diagram for package 
 \family typewriter 
 Animator
-\family default 
- and 
-\family typewriter 
-Queue
 \end_inset 
 
 
@@ -432,6 +443,12 @@ GraphAnimator
 SortAnimator
 \family default 
 , which will specify the methods necessary for the following primitives.
+ (See Figure 
+\begin_inset LatexCommand \ref{figure:UML-Class-AnimatorQueue}
+
+\end_inset 
+
+.)
 \layout Subsubsection
 
 Animator Primitives
@@ -592,18 +609,25 @@ Shell
 
 
 \begin_inset Float figure
+placement p
 wide false
 collapsed false
 
+\layout Standard
+\added_space_bottom smallskip \align center 
+
+\begin_inset Graphics
+	filename PackageShell.eps
+	scale 50
+
+\end_inset 
+
+
 \layout Caption
 
-Class diagram for package 
+UML Class diagram for package 
 \family typewriter 
 Shell
-\family default 
- 
-\emph on 
-(currently incomplete)
 \end_inset 
 
 
@@ -828,14 +852,6 @@ placement bp
 wide false
 collapsed false
 
-\layout Caption
-
-
-\begin_inset LatexCommand \label{table:division-of-tasks}
-
-\end_inset 
-
-Division of project tasks
 \layout Standard
 \align center 
 
@@ -1013,6 +1029,14 @@ As many others as are required
 \end_inset 
 
 
+\layout Caption
+
+
+\begin_inset LatexCommand \label{table:division-of-tasks}
+
+\end_inset 
+
+Division of project tasks
 \end_inset 
 
 
