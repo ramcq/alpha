@@ -7,7 +7,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import org.ucam.ned.teamalpha.algorithms.InsertionSort;
 import org.ucam.ned.teamalpha.shell.ShellVectorAnimator;
