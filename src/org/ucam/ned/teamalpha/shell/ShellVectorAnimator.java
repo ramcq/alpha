@@ -320,11 +320,11 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) throws ItemDeletedException, InvalidLocationException {
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary, boolean left) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			if (!isValidArrowPos(position, boundary)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", arrow position was ("+position+", "+boundary+")");
 			synchronized (ShellVectorAnimator.this) {
-				Arrow res = new Arrow(this, label, position, boundary);
+				Arrow res = new Arrow(this, label, position, boundary, left);
 				arrows.add(res);
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, res));
@@ -346,7 +346,18 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
 		 */
 		public VectorAnimator.Arrow createArrow(int position, boolean boundary) throws ItemDeletedException, InvalidLocationException {
-			return createArrow("", position, boundary);
+			return createArrow("", position, boundary, false);
+		}
+		
+		public VectorAnimator.Arrow createArrow(int position, boolean boundary, boolean left) throws ItemDeletedException, InvalidLocationException {
+			return createArrow("", position, boundary, left);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
+		 */
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) throws ItemDeletedException, InvalidLocationException {
+			return createArrow(label, position, boundary, false);
 		}
 		
 		/* (non-Javadoc)
@@ -517,6 +528,33 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * @param v
 		 * 	The Vector we should be pointing at
 		 * @param label
+		 * 	The label of the arrow (four chars or fewer, longer strings will be truncated)
+		 * @param position
+		 * 	The initial position of the arrow. If boundary is true, then the arrow will point
+		 * 	directly at element "position" of the Vector v. If false, then the arrow will point
+		 * 	between elements (position-1) and position of the Vector v.
+		 * @param boundary
+		 * 	True if the arrow is to point between two vector elements;
+		 * 	false if it is to point directly at a particular element.
+		 * @param left
+		 * 	True if the arrow is to be placed to the left of the vector;
+		 * 	false if the arrow is to be placed to the right.
+		 */
+		Arrow(Vector v, String label, int position, boolean boundary, boolean left) {
+			this.vector = v;
+			this.position = position;
+			this.boundary = boundary;
+			this.left = left;
+			if (label.length() > 4) label = label.substring(0,4); 
+			this.label = label;
+		}
+		
+		/**
+		 * Constructor
+		 * 
+		 * @param v
+		 * 	The Vector we should be pointing at
+		 * @param label
 		 * 	The label of the arrow (should be four characters or fewer; longer labels will be truncated)
 		 * @param position
 		 * 	The initial position of the arrow. If boundary is true, then the arrow will point
@@ -527,9 +565,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	false if it is to point directly at a particular element.
 		 */
 		Arrow(Vector v, String label, int position, boolean boundary) {
-			this(v, position, boundary);
-			if (label.length() > 4) label = label.substring(0,4); 
-			this.label = label;
+			this(v, label, position, boundary, false);
 		}
 		
 		/**
@@ -546,9 +582,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	false if it is to point directly at a particular element.
 		 */
 		Arrow(Vector v, int position, boolean boundary) {
-			this.vector = v;
-			this.position = position;
-			this.boundary = boundary;
+			this(v, "", position, boundary, false);
 		}
 		
 		/* (non-Javadoc)
