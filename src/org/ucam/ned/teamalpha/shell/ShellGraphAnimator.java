@@ -30,13 +30,14 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
  * 		setEdgeShade
  * 		saveState
  * 		restoreState
- * 
+ * 		label drawing
+ *
  */
 
 /* Current TODO list
  * 
  * Build more animation functionality
- * 			highlighting and label drawing
+ * 			highlighting
  * documentation
  * 
  */
@@ -68,7 +69,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int y; //position of top left corner of square containing node
 		int set; //set node belongs to
 		private String label; 
-		
 		/*
 		 * called by creategraph api to initialise node data 
 		 */
@@ -82,7 +82,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		public void delete() {
 			
 		}
-		
 		/*
 		 * called by nodesetlabel api to set label and update display
 		 */
@@ -131,8 +130,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int x1,x2; 
 		int y1,y2; //coordinates for two end points of lines
 		int set; //set the edge belongs to, determines colour
-		private String label; 
-		
+		private String label; 		
 		/*
 		 * called by creategraph api to initialise node data 
 		 */
@@ -148,7 +146,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		public void delete() {
 			
 		}
-		
 		/*
 		 * called by edgesetlabel api to set label and update display
 		 */
@@ -192,6 +189,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		}
 	}
+
 	public class AnimationEvent {
 		public static final int GRAPH_REDRAW = 0; //not sure whether needed - currently drawing each node/edge as separate events
 		public static final int NODE_REDRAW = 1;
@@ -314,7 +312,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	//draw edge label on screen
 	public void drawEdgelabel(Edge e, Graphics g) {
-		// TODO
+		int x = (int) (e.x1 - (e.x1 - e.x2)/3);
+		int y = (int) (e.y1 - (e.y1 - e.y2)/3);
+		drawlabel(x, y, e.label, g);
 	}
 	//draw node label on screen
 	public void drawNodelabel(Node n, Graphics g) {
@@ -322,13 +322,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	//actual method for drawing text on screen
 	public void drawlabel(int x,int y,String label, Graphics g) {
-		// TODO
+		g.setFont(new Font("MonoSpaced", Font.PLAIN, 10));
+		g.drawString(label, x, y);
 	}
 	
 	public void drawGraph(Graphics g) {
 		// currently unused method
 	}
-	
 	//implementation of abstract methods
 	public Node[] nodelist = new Node[10];
 	public Edge[][] edgematrix = new Edge[10][10];
@@ -402,7 +402,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void setEdgeShade(int from, int to, int set) {
 		edgematrix[from][to].setEdgeshade(set);
 	}
-	
 	/* class for storing the animator state, used to save state
 	 * so that it can be resumed again later.
 	 * Used by saveState and restoreState api
@@ -466,7 +465,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 		outg.drawImage(bi,0,0,outc);
 	}
-
 	//main function purely for module testing
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellGraphAnimator test");
@@ -482,11 +480,24 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				System.exit(0);
 			}
 		});
+		//current test data
 		int[][] tstcosts = {{1,2,0,0},{0,1,0,0},{0,0,1,0},{1,2,0,0}};
 		app.createGraph(tstcosts);
 		app.setNodeShade(1,1);
 		app.setEdgeShade(0,1,1);
 	}
-
-	
 }
+   /*
+	*Previous test data	
+	*
+	*1) int[][] tstcosts = {{1,2,0,0},{0,1,0,0},{0,0,1,0},{1,2,0,0}};
+	*	app.createGraph(tstcosts);
+	*	app.setNodeShade(1,1);
+	*	app.setEdgeShade(0,1,1);
+	*	Result: Worked fine (pic wanted?)
+	*
+	*
+	* 
+	*
+	* 
+	*/
