@@ -551,6 +551,25 @@ AnimatorQueue
  updated accordingly.
  To move forwards, the next animation primitives will be executed in sequence
  until the next checkpoint is reached.
+\layout Standard
+
+It should be noted that it would not be possible to skip forwards to the
+ next checkpoint (without animation) unless the user has gone backwards
+ and then forwards again, because the state of the animation canvas will
+ not exist yet in this case.
+ It would be easier to implement the same basic functionality by simply
+ giving the user the ability to change the animation speed instead (a facility
+ which is on the 
+\begin_inset Quotes eld
+\end_inset 
+
+optional
+\begin_inset Quotes erd
+\end_inset 
+
+ list).
+ There could be a button which temporarily sets the animation speed to infinity
+ until the next checkpoint, for example.
 \layout Subsection
 
 Shell
@@ -1085,31 +1104,37 @@ AnimatorQueue
  class are called.
 \layout Section
 
-Final Acceptance Criteria
+Final acceptance criteria
 \layout Itemize
 
 The system must allow a user to pick an algorithm from a selection of at
  least five, where there must be at least two different types of algorithm;
 \layout Itemize
 
-The system must allow a user to input data to be used with the selected
+the system must allow a user to input data to be used with the selected
  algorithm;
 \layout Itemize
 
-The system must compute each step of the algorithm correctly using the data
+the system must compute each step of the algorithm correctly using the data
  it receives;
 \layout Itemize
 
-The system must animate each step of the algorithm on the screen, explaining
- the steps taken and allowing the user to review each step individually;
+the system must animate each step of the algorithm on the screen, allowing
+ the user to review each step individually and move forwards and backwards
+ at will (the system 
+\emph on 
+must
+\emph default 
+ allow the user to repeat animations, not just flick back and forth between
+ states);
 \layout Itemize
 
-The user documentation must explain how to use the system as it is implemented
- now;
+the user documentation must explain how to use the system as it is currently
+ implemented;
 \layout Itemize
 
-The user documentation must explain how to extend the system with new algorithms
- and animations (using the APIs provided by the system).
+the user documentation must explain how to extend the system with new algorithms
+ and animations (using the APIs provided).
 \layout Section
 
 Division of tasks
