@@ -1,4 +1,4 @@
-package shell;
+package org.ucam.ned.alpha.shell;
 
 public class Shell {
 	static Shell myself = null;
