@@ -43,12 +43,12 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 	private int[] values;
 	
 	private void makeCells(int num) {
-		fields = new JFormattedTextField[num*num];
+		fields = new JFormattedTextField[num];
 		numbers = new HashMap();
 
 		cells.removeAll();
 		
-		for (int i = 0; i < num*num; i++) {
+		for (int i = 0; i < num; i++) {
 			JFormattedTextField field = new JFormattedTextField(NumberFormat.getIntegerInstance());
 			field.setValue(new Integer(values[i]));
 			field.setColumns(6);
