@@ -1,13 +1,13 @@
 #LyX 1.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 221
 \textclass article
-\language english
+\language british
 \inputencoding auto
 \fontscheme default
 \graphics default
 \paperfontsize default
 \spacing single 
-\papersize Default
+\papersize a4paper
 \paperpackage a4
 \use_geometry 0
 \use_amsmath 0
@@ -32,6 +32,14 @@ Animating Algorithms: Description Of System Components
 Robert McQueen, Andrew Medworth,
 \newline 
 Steven Cooper, Sidath Senanayake
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
 \layout Section
 
 Introduction
@@ -39,8 +47,8 @@ Introduction
 
 This is the description of system components document for the "Animating
  Algorithms" (Topic 8.5) Computer Science Tripos Part IB / Part II (General)
- group project.The authors are the coders of group "Alpha", listed individually
- above.
+ group project.
+ The authors are the coders of group "Alpha", listed individually above.
  This project is being over seen by Steven Hand (smh22@cam.ac.uk).
 \layout Section
 
@@ -60,6 +68,14 @@ VectorAlgorithm
 GraphAlgorithm
 \family default 
 )
+\layout Standard
+
+These abstract classes provide a simple collection of the methods that need
+ to be called on algorithms, static methods for querying information about
+ the algorithm, such as its name and description, as well as defining the
+ constructors which set the initial data, and the method to execute the
+ algorithm.
+ They were coded by Robert McQueen.
 \layout Subsection
 
 
@@ -78,8 +94,8 @@ This class performs an insertion sort on the data passed to it, calling
 QuickSort
 \layout Standard
 
-The class performs a recurcsive quick sort on the supplied data calling
- on the animator to provide short descriptions of each step and to perform
+The class performs a recursive quick sort on the supplied data calling on
+ the animator to provide short descriptions of each step and to perform
  the actual animation that the user sees.
  It was coded and tested by Sid.
 \layout Subsection
@@ -89,7 +105,7 @@ The class performs a recurcsive quick sort on the supplied data calling
 BiDirBubbleSort
 \layout Standard
 
-This class implements a bi directional bubble sort on the supplied data.
+This class implements a bi-directional bubble sort on the supplied data.
  It also calls on the animator to present brief descriptions of each step
  and to describe how the animation proceeds.
  It was coded and tested by Sid.
@@ -133,6 +149,103 @@ GraphAnimator
 VectorAnimator
 \family default 
 )
+\layout Subsubsection
+
+
+\family typewriter 
+Animator
+\layout Standard
+
+The 
+\family typewriter 
+Animator
+\family default 
+ abstract class provides the API for the methods that all animators have
+ in common.
+ These include the methods 
+\family typewriter 
+setSteps()
+\family default 
+ and 
+\family typewriter 
+setCurrentStep()
+\family default 
+ which allow the algorithm to register a range of steps and show the user
+ which is currently active, 
+\family typewriter 
+showMessage()
+\family default 
+ to show text to the user, and the inner class 
+\family typewriter 
+State
+\family default 
+ with the 
+\family typewriter 
+saveState()
+\family default 
+ and 
+\family typewriter 
+restoreState()
+\family default 
+ methods to save and restore the animator, allowing the algorithm to be
+ broken down into logical steps which can be returned to later.
+ A 
+\family typewriter 
+setFpsFactor()
+\family default 
+ method is available to allow algorithms to make animation run faster over
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+boring
+\begin_inset Quotes erd
+\end_inset 
+
+ parts of the algorithm such as operations which must be performed but do
+ not aid understanding of the mechanism, or to run more slowly at complicated
+ parts.
+\layout Subsubsection
+
+
+\family typewriter 
+GraphAnimator
+\layout Standard
+
+The 
+\family typewriter 
+GraphAnimator
+\family default 
+ abstract class provides the fairly simple API for the graph animation primitive
+s, including 
+\family typewriter 
+createGraph()
+\family default 
+ to register the initial cost matrix, methods to set node and edge labels,
+ flash nodes and edges, and include nodes and edges in similarly-coloured
+ sets.
+\layout Subsubsection
+
+
+\family typewriter 
+VectorAnimator
+\layout Standard
+
+The 
+\family typewriter 
+VectorAnimator
+\family default 
+ abstract class, and its inner classes 
+\family typewriter 
+Vector
+\family default 
+ and 
+\family typewriter 
+Arrow
+\family default 
+, provide the API for the operations that are required to animate vector
+ algorithms, such as creating vectors and arrows, swapping elements, moving
+ arrows, flashing elements, and setting labels.
 \layout Subsection
 
 Exceptions
@@ -210,7 +323,7 @@ squareness
 \family typewriter 
 int[][]
 \family default 
-, and this is called whereever an attempt to create a graph is made.
+, and this is called whenever an attempt to create a graph is made.
 \layout Section
 
 Queues
@@ -219,42 +332,665 @@ Queues
 \end_inset 
 
 
+\layout Standard
+
+The queue classes were written by Robert McQueen, and form a layer of abstractio
+n between the algorithms and the actual implementation of the animators,
+ and allow the algorithms to run to completion before any animation is shown
+ to the user.
+ When the algorithm uses an animator primitive, the queue internally records
+ the requested action, and returns control to the algorithm.
+\layout Standard
+
+Every so often the algorithm will call a special animation primitive which
+ signals a 
+\emph on 
+checkpoint.
+ 
+\emph default 
+These checkpoints are the junctures at which the animation will pause and
+ the user will have the opportunity to go forward or back --- essentially,
+ each sequence of animation primitives between checkpoints constitutes one
+ step of the algorithm.
+ For example, if we were implementing insertion sort, one step might consist
+ of the insertion of a single value into the vector: we might want to move
+ a pointer along the vector until we find the correct place for the value,
+ move all the other data items up to make room, insert the value into the
+ gap, and update a pointer showing what portion of the vector is sorted.
+ Clicking the 
+\begin_inset Quotes eld
+\end_inset 
+
+next step
+\begin_inset Quotes erd
+\end_inset 
+
+ button would then animate the insertion of the next item.
+\layout Standard
+
+As the algorithm progresses, the queue builds up a list of all of the animator
+ primitives which the algorithm used to get between one check-pointed state
+ of the animator and the next.
+ The shell can then provide the queue with an actual implementation of the
+ animator primitives, and use the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface to instruct the queue to execute each batch of queued primitives
+ in sequence on the actual animator.
+\layout Standard
+
+The more important functionality of this package is that, at each checkpoint
+ reached when playing back the stored events, it stores the state of the
+ animation canvas and the data structures of the animator.
+ This will allow the user to roll the animator back to previous states so
+ the user can revisit previous steps of the algorithm, and the queue retains
+ the steps that need to be done to return the animator to subsequent states.
+ There will be methods in the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface available to the shell which will cause the animation to move
+ forwards and backwards between checkpoints.
+ To move backwards, the state of the canvas and data structures at the previous
+ checkpoint will be restored, and the queue's internal structures will be
+ updated accordingly.
+ To move forwards, the next animation primitives will be executed in sequence
+ until the next checkpoint is reached.
 \layout Subsection
 
 Interface 
 \family typewriter 
 AnimatorQueue
+\layout Standard
+
+This interface provides the methods which the shell will use to control
+ the delivery of animation events from the queue to the animator.
+ It has two methods 
+\family typewriter 
+next()
+\family default 
+ and 
+\family typewriter 
+prev()
+\family default 
+ to move between stored algorithm steps, and booleans 
+\family typewriter 
+hasNext()
+\family default 
+ and 
+\family typewriter 
+hasPrev()
+\family default 
+ to check for the availability of these steps.
+ It also provides an 
+\family typewriter 
+isBusy()
+\family default 
+ method to check if the queue's event delivery thread is currently engaged
+ in moving from one step to the next.
+ This allows the shell to poll the status of the queue to keep the user
+ interface updated while animation is in progress.
 \layout Subsection
 
 
 \family typewriter 
 GenericQueue
-\layout Subsection
+\layout Standard
 
-
+The 
 \family typewriter 
-VectorQueue
-\layout Subsection
-
-
+GenericQueue
+\family default 
+ class provides the common functionality which is used by both the 
 \family typewriter 
 GraphQueue
+\family default 
+ and 
+\family typewriter 
+VectorQueue
+\family default 
+ classes.
+ Its functionality breaks down into two parts.
+ The first is to expose an interface which the 
+\family typewriter 
+GraphQueue 
+\family default 
+and
+\family typewriter 
+ VectorQueue
+\family default 
+ classes can use to implement the animator APIs, and enqueue the events.
+ To do this, it provides an 
+\family typewriter 
+enqueue()
+\family default 
+ function which allows the graph and vector queue classes to queue a method
+ call, with the subject object, method name, arguments, and if one is necessary,
+ the placeholder object that the queue will return from the method call.
+ The 
+\family typewriter 
+GenericQueue
+\family default 
+ stores these values as members in an internal
+\emph on 
+ 
+\family typewriter 
+\emph default 
+Event
+\family default 
+ object, and stores that 
+\family typewriter 
+Event
+\family default 
+ in a linked list within an instance of the 
+\family typewriter 
+State
+\family default 
+ inner class.
+ When the algorithm invokes the 
+\family typewriter 
+saveState()
+\family default 
+ method on the queue, a new 
+\family typewriter 
+State
+\family default 
+ object is created, and the subsequent events stored inside that.
+\layout Standard
+
+The second set of functionality is that exposed to the shell through the
+ 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface, and its associated thread for delivery of the queued method
+ calls to the real animator.
+ When 
+\family typewriter 
+next()
+\family default 
+ is called, the waiting thread is awoken, and saves the state of the real
+ animator before using introspection to find and invoke the list of queued
+ method calls on the actual objects.
+ A hash map is maintained of placeholder objects which the queue returned
+ to the algorithm, mapping to actual objects which the animator returned
+ to the queue.
+ Calls to the 
+\family typewriter 
+prev()
+\family default 
+ method signal the delivery thread to load the saved states back into the
+ animator.
+\layout Subsection
+
+
+\family typewriter 
+VectorQueue, GraphQueue
+\layout Standard
+
+These are simple classes with a series of stub method calls and stub inner
+ classes, each of which merely call
+\family typewriter 
+ enqueue()
+\family default 
+ on the generic queue, to store the animation methods call.
+ Methods which return instances of the inner classes instead return the
+ stub inner classes, which the 
+\family typewriter 
+GenericQueue
+\family default 
+ maps to the real returned objects when the methods are called on the real
+ animator.
 \layout Subsection
 
 
 \family typewriter 
 Primitive
+\layout Standard
+
+This is a simple container class with eight constructors to encapsulate
+ the eight primitive types.
+ It does this with the usual wrapper types (such as 
+\family typewriter 
+Integer
+\family default 
+), but also keeps a reference to the 
+\family typewriter 
+Class
+\family default 
+ value of the primitive type.
+ This is necessary so that the queue can look up the method with the primitive
+ class values when determining the types of arguments before executing method
+ calls, rather than the class of the wrapper types, which wouldn't match
+ the method signature.
+ The queue has to look up methods by prototype just before executing, because
+ at the time of the event being enqueued, some of the parameters could be
+ placeholder objects which are later replaced when the events are delivered
+ to the real animator, and the real objects are returned.
 \layout Subsection
 
 Exceptions
+\layout Standard
+
+The queue does little to no processing of input data itself.
+ However, in order to prevent the algorithm from being able to enqueue events
+ which will later fail when delivered to a real animator, the queue does
+ the same bounds and sanity checks that the real animators do, such as 
+\family typewriter 
+InputTooLongException
+\family default 
+, 
+\family typewriter 
+InvalidLocationException
+\family default 
+ and 
+\family typewriter 
+ItemDeletedException
+\family default 
+ for the 
+\family typewriter 
+VectorQueue
+\family default 
+, and 
+\family typewriter 
+NonSquareMatrixException
+\family default 
+ and 
+\family typewriter 
+InvalidLocationException 
+\family default 
+for the 
+\family typewriter 
+GraphQueue
+\family default 
+.
+ The queue implementation does throw one exception, 
+\family typewriter 
+NoSuchStateException
+\family default 
+, when the shell attempts to advance the state forward or backwards when
+ there is no such later or previous state.
 \layout Section
 
 Shell
 \layout Subsection
 
+
+\family typewriter 
+AlgorithmCatalog
+\family default 
+, 
+\family typewriter 
+StaticAlgorithmCatalog
+\layout Standard
+
+Written by Robert McQueen, the 
+\family typewriter 
+AlgorithmCatalog
+\family default 
+ abstract class defines a 
+\family typewriter 
+getAvailableAlgorithms() 
+\family default 
+method to fetch all of the available algorithms, and an 
+\family typewriter 
+AvailableAlgorithm
+\family default 
+ inner class to represent one of them.
+ As well as returning the algorithm's name in the 
+\family typewriter 
+toString()
+\family default 
+ method, this inner class implements 
+\family typewriter 
+getDescription()
+\family default 
+ and 
+\family typewriter 
+getType()
+\family default 
+ (such as 
+\begin_inset Quotes eld
+\end_inset 
+
+Graph
+\begin_inset Quotes erd
+\end_inset 
+
+ or 
+\begin_inset Quotes eld
+\end_inset 
+
+Vector
+\begin_inset Quotes erd
+\end_inset 
+
+) methods for the shell to build a list of the available algorithms.
+ This inner class also provides an abstract factory role, allowing the shell
+ to use the 
+\family typewriter 
+getInputPanel()
+\family default 
+, 
+\family typewriter 
+getAlgorithm()
+\family default 
+, 
+\family typewriter 
+getQueue()
+\family default 
+ and 
+\family typewriter 
+getAnimator()
+\family default 
+ methods to get the appropriate user interface to gather the input for the
+ algorithm, instantiate an instance of the algorithm, and create instances
+ of the appropriate vector or graph queue and animator classes for this
+ algorithm.
+\layout Standard
+
+The intention here is to avoid the need for the shell to deal specially
+ with different kinds of algorithms, and provide one place in which new
+ algorithms, animators, queues and input panels can be added to the system.
+ The current implementation of this is 
+\family typewriter 
+StaticAlgorithmCatalog
+\family default 
+, which has a string list of the algorithms to interrogate, and finds them
+ by introspection.
+ The interface is designed such that algorithms or any of the other classes
+ could be loaded dynamically, or downloaded from the network, in a more
+ advanced implementation of the catalog.
+\layout Subsection
+
+
+\family typewriter 
+Shell and Button, Choose, VectorInput and GraphInput Panels
+\layout Standard
+
+Written by Robert McQueen, the shell provides the user interface for the
+ entire system, guiding the user through a wizard-like interface to choose
+ an algorithm, input its data, and view the animation.
+ It is made up of a singleton supervisor class, 
+\family typewriter 
+Shell
+\family default 
+, which contains the 
+\family typewriter 
+main()
+\family default 
+ method which instantiates the singleton and invokes its 
+\family typewriter 
+run()
+\family default 
+ method in the Swing event dispatch thread.
+ All method calls which manipulate the Swing UI must be made from this thread,
+ and this thread must not be blocked by any component of the UI.
+\layout Standard
+
+The shell first creates a 
+\family typewriter 
+JFrame
+\family default 
+ to be the main window of the program, and divides it into two areas, one
+ main area which can contain one of a variety of 
+\family typewriter 
+ShellPanel
+\family default 
+s depending on the shell's mode, and a 
+\family typewriter 
+ButtonPanel
+\family default 
+ which remains constantly present along the bottom, and can be configured
+ to whichever buttons are required by the current panel.
+ The shell provides two buttons which are always visible, 
+\begin_inset Quotes eld
+\end_inset 
+
+Exit
+\begin_inset Quotes erd
+\end_inset 
+
+ to leave the program, and 
+\begin_inset Quotes eld
+\end_inset 
+
+Restart
+\begin_inset Quotes erd
+\end_inset 
+
+ to return to the initial state of the interface.
+ The remaining entries on the button bar are created by the main panel calling
+ an update method, providing a list of buttons.
+ When these buttons are clicked, the Shell passes the event down to the
+ current 
+\family typewriter 
+ShellPanel
+\family default 
+ which implements the 
+\family typewriter 
+ActionListener
+\family default 
+ interface.
+\layout Standard
+
+After this initialisation, the shell enters 
+\emph on 
+choose
+\emph default 
+ mode, and loads the main panel with an instance of 
+\family typewriter 
+ChoosePanel
+\family default 
+.
+ This uses the shell's instance of 
+\family typewriter 
+StaticAlgorithmCatalog
+\family default 
+ to build a tree of the available algorithms, and shows their description
+ to the user.
+ When an algorithm has been selected, the 
+\family typewriter 
+AvailableAlgorithm
+\family default 
+ class is passed to the shell with the 
+\family typewriter 
+setChoice()
+\family default 
+ method, and the shell is advanced to 
+\emph on 
+input
+\emph default 
+ mode when the user clicks 
+\begin_inset Quotes eld
+\end_inset 
+
+Next
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Standard
+
+To enter 
+\emph on 
+input
+\emph default 
+ mode, the 
+\family typewriter 
+getInputPanel()
+\family default 
+ method is used on the 
+\family typewriter 
+AvailableAlgorithm
+\family default 
+ choice to get the appropriate input panel (initially one of either 
+\family typewriter 
+VectorInputPanel 
+\family default 
+or 
+\family typewriter 
+GraphInputPanel
+\family default 
+) and display it in the main panel.
+ The user then enters the data, and clicks the 
+\begin_inset Quotes eld
+\end_inset 
+
+Next
+\begin_inset Quotes erd
+\end_inset 
+
+ button.
+ The input panel uses the 
+\family typewriter 
+getAlgorithm()
+\family default 
+ method on the 
+\family typewriter 
+AvailableAlgorithm
+\family default 
+ choice to create the algorithm, and passes it to the shell with the 
+\family typewriter 
+setAlgorithm()
+\family default 
+ method before advancing the shell to 
+\emph on 
+animate
+\emph default 
+ mode.
+\layout Standard
+
+The 
+\family typewriter 
+AnimatorPanel
+\family default 
+ uses 
+\family typewriter 
+getQueue()
+\family default 
+ and 
+\family typewriter 
+getAnimator()
+\family default 
+ on the 
+\family typewriter 
+AvailableAlgorithm
+\family default 
+ choice, to get a matching pair of 
+\family typewriter 
+GraphQueue
+\family default 
+ and 
+\family typewriter 
+ShellGraphAnimator
+\family default 
+, or 
+\family typewriter 
+VectorQueue
+\family default 
+ and 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+.
+ The panel is filled with the animator canvas, and a list to show the step
+ descriptions provided to the shell by the algorithm using the 
+\family typewriter 
+setSteps()
+\family default 
+ and 
+\family typewriter 
+setCurrentStep()
+\family default 
+ methods, and a space to show the messages given by the 
+\family typewriter 
+showMessage()
+\family default 
+ animator method.
+ These methods are called on the 
+\family typewriter 
+Shell
+\family default 
+ object when they are delivered to the 
+\family typewriter 
+ShellGraphAnimator
+\family default 
+ or 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+, and passed down to the 
+\family typewriter 
+AnimatorPanel
+\family default 
+ if the shell is in 
+\emph on 
+animate
+\emph default 
+ mode.
+\layout Standard
+
+A thread is created which calls 
+\family typewriter 
+execute()
+\family default 
+ on the algorithm, storing up events and states on the queue object.
+ The shell then instructs the queue to dispatch these events to the animator
+ stage by stage, and polls the queue to see when animation has completed
+ and prevent the Swing event dispatch thread from being blocked.
+ At each stage, the user can return to the previous stage by clicking the
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+Previous
+\begin_inset Quotes erd
+\end_inset 
+
+ button, resume play forwards with the 
+\begin_inset Quotes eld
+\end_inset 
+
+Next
+\begin_inset Quotes erd
+\end_inset 
+
+ button, stop it with the 
+\begin_inset Quotes eld
+\end_inset 
+
+Stop
+\begin_inset Quotes erd
+\end_inset 
+
+ button, etc.
+ These are implemented by using the methods of the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface.
+\layout Subsection
+
 Interface 
 \family typewriter 
-AnimatorShell
+ShellAnimator
+\layout Standard
+
+This interface contains the methods which the shell uses to control the
+ animator when the events are being run off the queue.
+ Because most of the control and invocation of the animator is done within
+ the queue's threads, this is a simple interface.
+ Currently it contains a method 
+\family typewriter 
+setFps()
+\family default 
+ to allow the shell to control the speed of animation, and a 
+\family typewriter 
+fastForward()
+\family default 
+ to try and flush the queue of pending animation events as quickly as possible.
 \layout Subsection
 
 
@@ -690,7 +1426,15 @@ ShellGraphAnimator
 
 This class was written by Steven Cooper.
  It is the class which does the actual graphical work for graph algorithms,
- for example the Kruskal and Dijkstra.
+ for example the 
+\family typewriter 
+Kruskal
+\family default 
+ and 
+\family typewriter 
+Dijkstra
+\family default 
+ classes.
  Its constructor is the same format as 
 \family typewriter 
 ShellVectorAnimator
@@ -784,22 +1528,12 @@ Nearly all of the style options used in displaying the graph are stored
  on an n-sided polygon, and there is currently no alternative to this.
 \layout Standard
 
-Currently, the fastForward method is suffers the same problem as found in
- the same method on ShellVectorAnimator.
-\layout Subsection
-
-
+Currently, the 
 \family typewriter 
-Shell
-\layout Subsection
-
-
-\family typewriter 
-AlgorithmCatalog
+fastForward
 \family default 
-, 
-\family typewriter 
-StaticAlgorithmCatalog
+ method suffers the same problem as found in the same method on ShellVectorAnima
+tor.
 \layout Subsection
 
 Exceptions
@@ -830,12 +1564,34 @@ ShellVectorAnimator
 \family default 
  and, if it arises, an error message is printed on 
 \family typewriter 
-System.out
+System.err
 \family default 
  for debugging purposes.
  This can only arise due to a programming error in 
 \family typewriter 
 ShellVectorAnimator
 \family default 
+ or 
+\family typewriter 
+ShellGraphAnimator
+\family default 
 .
+\layout Subsubsection
+
+
+\family typewriter 
+InvalidModeException
+\layout Standard
+
+This exception is called either when a user of the shell attempts to move
+ the shell to a mode before the prerequisites for the mode have been met,
+ such as requesting 
+\emph on 
+input
+\emph default 
+ mode before an algorithm choice has been made, or when an unrecognised
+ mode is requested by the user of the shell.
+ Given that the only other parts of the program requesting shell mode changes
+ are other members of the shell package, this exception being thrown implies
+ the presence of a bug!
 \the_end
