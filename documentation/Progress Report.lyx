@@ -177,18 +177,27 @@ Changes from specification
 \layout Subsection
 
 Algorithm Package
+\layout Itemize
+
+API changed to move provision of initial data and animator moved to constructors
+ instead.
 \layout Standard
-
-* Provision of initial data and animator moved to constructors instead.
-\layout Subsection
-
-Animator Package
-\layout Subsection
 
 Vector Animator
 \layout Itemize
 
-Markers and Pointers merged into Arrows.
+\family typewriter 
+Markers
+\family default 
+ and 
+\family typewriter 
+Pointers
+\family default 
+ merged into 
+\family typewriter 
+Arrows
+\family default 
+ for ease of implementation.
 \layout Itemize
 
 Copy element from one pointer to another method changed to take offsets
@@ -196,32 +205,51 @@ Copy element from one pointer to another method changed to take offsets
 \layout Itemize
 
 Specific compare two elements method removed vector primitives; un-necessary
- since you can just use highlight pointer.
+ since you can just flash arrows.
 \layout Itemize
 
-Delete element method removed; vector lengths are invariant for sorting
- algorithms (moved to project extensions list).
+Delete element method removed, variable vector lengths aren't necessary
+ for the sorting algorithms we plan to implement.
 \layout Itemize
 
-Split vector method also removed, for similar reason (preserve invariant
- length).
+Split vector method also removed, for similar reasons.
 \layout Itemize
 
-Boolean highlight supplemented with a few seconds of flashing (for both
- arrows and vector elements).
+Boolean highlight of Arrows supplemented with a few seconds of flashing (for
+both arrows and vector elements).
+\layout Itemize
+
+Flash element method added.
 \layout Standard
 
-* Highlight element method added.
-\newline 
+Shell Package
+\layout Itemize
 
-\newline 
+It's not possible to use introspection to enumerate classes within a package,
+ due to the way the class loaders work.
+ Instead, an 
+\family typewriter 
+AlgorithmCatalog
+\family default 
+ interface will be created (see below).
+\layout Standard
+
 Include difficulties - refer to specification DO STUFF FOR THIS
 \layout Section
 
 Code status
 \layout Standard
 
-(Written/tested/to do etc) Include authors
+The latest copy of our code is available from our CVS repository, which
+ is viewable on-line at:
+\layout Quote
+
+
+\family typewriter 
+http://ned.ucam.org/cgi-bin/viewcvs.cgi/alpha/src/org/ucam/ned/teamalpha/
+\layout Standard
+
+This section contains a brief report from the authors of each package.
 \layout Subsection
 
 Algorithms (Sid)
@@ -305,6 +333,32 @@ Moving elements between separate vectors
 \layout Itemize
 
 Highlighting of vector columns (for Radix sort)
+\layout Standard
+
+A class 
+\family typewriter 
+GenericQueue
+\family default 
+ has been written, to provide the common functionality which is used by
+ both the 
+\family typewriter 
+GraphQueue
+\family default 
+ and 
+\family typewriter 
+VectorQueue
+\family default 
+ classes.
+ It implements an inner class 
+\family typewriter 
+State
+\family default 
+ to store each simulated state that the algorithm requests, and each of
+ these contains a linked list of 
+\family typewriter 
+Event
+\family default 
+ 
 \layout Standard
 
 There are also likely to be a few more small changes to the API (for instance
@@ -432,11 +486,52 @@ The data input screen
  step at a time, with the user choosing when to move on.
 \layout Enumerate
 
-The animation screen (Diagram 3): This will show the animation of the algorithm,
- along with a description of what is happening at each step.
- There will be 'Next' and 'Previous' buttons to step through the algorithm,
- as well as a 'Restart' button to return to the first step, and an 'Exit'
- button to return to the algorithm select screen.
+the animation screen (Diagram 3)
+\begin_deeper 
+\layout Itemize
+
+This will show the animation of the algorithm, along with a description
+ of what is happening at each step.
+ There will be 'Next', 'Previous', 'Play' and 'Pause' buttons to step through
+ the algorithm, as well as a 'Restart' button to return to the first step,
+ and an 'Exit' button to return to the algorithm select screen.
+\end_deeper 
+\layout Standard
+
+In place of the introspection, which hasn't proved possible, the shell will
+ internally make use of a 
+\family typewriter 
+AlgorithmCatalog
+\family default 
+ interface, which provides methods to enumerate the available algorithms,
+ load them into the JVM, and instantiate the appropriate 
+\family typewriter 
+Queue
+\family default 
+ and 
+\family typewriter 
+Animator
+\family default 
+ classes for the shell.
+ 
+\layout Section
+
+Examples of code
+\layout Standard
+
+Explain what they do - refer to specification
+\layout Subsection
+
+Algorithms
+\layout Subsection
+
+Animators
+\layout Subsection
+
+Queues
+\layout Subsection
+
+Shell
 \layout Section
 
 Test results
@@ -454,7 +549,7 @@ Documentation
 
 The user guide has been written by Graham, but will be updated in more detail
  as the project takes shape.
- The developers guide for adding new algorithms to the system has been written
+ The developers guide for adding new algorithms to the system is being written
  by Neofytos, again this will be updated in more detail as the project progresse
 s.
  Current copies of both have been submitted.
