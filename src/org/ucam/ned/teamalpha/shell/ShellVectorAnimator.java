@@ -277,7 +277,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#highlightElement(int)
 		 */
-		public void highlightElement(int elt) {
+		public void flashElement(int elt) {
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FLASH, this, elt));
@@ -394,21 +394,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			if (label.length() > 4) label = label.substring(0,3); 
 			this.label = label;
 		}
-		
-		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setOffset(int)
-		 */
-		public void setOffset(int offset) {
-			this.position = offset;
-		}
-		
-		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setBoundary(boolean)
-		 */
-		public void setBoundary(boolean boundary) {
-			this.boundary = boundary;
-		}
-		
+			
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#move(int, boolean)
 		 */
@@ -431,7 +417,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#highlight()
 		 */
-		public void highlight() {
+		public void flash() {
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_FLASH, this));
@@ -1240,7 +1226,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		VectorAnimator.Arrow a2 = v.createArrow("A2", 2, false);
 		v.moveElement(2,2);
 		v.moveElement(0,5);
-		a.highlight();
+		a.flash();
 		a.move(0, false);
 		v.copyElement(4,3);
 		v.swapElements(2,6);
@@ -1252,18 +1238,18 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		v2.swapElements(7,2);
 		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
 		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
-		a3.highlight();
+		a3.flash();
 		a3.move(8, true);
-		v2.highlightElement(4);
+		v2.flashElement(4);
 		v.delete();
 		a3.delete();
 		app.restoreState(s);
 		v2.swapElements(7,2);
 		a3 = v2.createArrow("A3", 6, true);
 		a4 = v2.createArrow("A4", 2, false);
-		a3.highlight();
+		a3.flash();
 		a3.move(8, true);
-		v2.highlightElement(4);
+		v2.flashElement(4);
 		v.delete();
 		a3.delete();
 	}

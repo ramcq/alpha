@@ -48,6 +48,11 @@ public class VectorQueue extends VectorAnimator implements AnimatorQueue {
 			q.enqueue(this, "delete", args);
 		}
 
+		public void flashElement(int offset) {
+			Object[] args = { new Primitive(offset) };
+			q.enqueue(this, "flashElement", args);
+		}
+		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#moveElement(int, int)
 		 */
@@ -81,16 +86,6 @@ public class VectorQueue extends VectorAnimator implements AnimatorQueue {
 		}
 
 		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#splitVector(int)
-		 */
-		public VectorAnimator.Vector splitVector(int offset) {
-			VectorAnimator.Vector ret = new VectorQueue.Vector();
-			Object[] args = { new Primitive(offset) };
-			q.enqueue(this, "splitVector", args, ret);
-			return ret;
-		}
-
-		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, int)
 		 */
 		public void swapElements(int offset1, int offset2) {
@@ -117,22 +112,6 @@ public class VectorQueue extends VectorAnimator implements AnimatorQueue {
 		}
 
 		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setBoundary(boolean)
-		 */
-		public void setBoundary(boolean boundary) {
-			Object[] args = { new Primitive(boundary) };
-			q.enqueue(this, "setBoundary", args);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setHighlight(boolean)
-		 */
-		public void setHighlight(boolean highlight) {
-			Object[] args = { new Primitive(highlight) };
-			q.enqueue(this, "setHighlight", args);
-		}
-
-		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setLabel(java.lang.String)
 		 */
 		public void setLabel(String label) {
@@ -143,9 +122,17 @@ public class VectorQueue extends VectorAnimator implements AnimatorQueue {
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setOffset(int)
 		 */
-		public void setOffset(int offset) {
-			Object[] args = { new Primitive(offset) };
-			q.enqueue(this, "setOffset", args);
+		public void move(int offset, boolean boundary) {
+			Object[] args = { new Primitive(offset), new Primitive(boundary) };
+			q.enqueue(this, "move", args);
+		}
+		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setOffset(int)
+		 */
+		public void flash() {
+			Object[] args = { };
+			q.enqueue(this, "flash", args);
 		}
 	}
 	

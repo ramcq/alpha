@@ -8,8 +8,6 @@ package org.ucam.ned.teamalpha.test;
 
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.animators.Animator;
-import org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow;
-import org.ucam.ned.teamalpha.animators.VectorAnimator.Vector;
 
 /**
  * @author zrll2
@@ -46,7 +44,7 @@ public class TestVectorAnimator extends VectorAnimator {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(int[])
 	 */
-	public Vector createVector(int[] values) {
+	public VectorAnimator.Vector createVector(int[] values) {
 		print("Creating vectors: [");
 		for (int i=0; i<values.length; i++) {
 			System.out.print(values[i] + ", ");
@@ -58,7 +56,7 @@ public class TestVectorAnimator extends VectorAnimator {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(java.lang.String, int[])
 	 */
-	public Vector createVector(String label, int[] values) {
+	public VectorAnimator.Vector createVector(String label, int[] values) {
 		print("Creating " + label + " : [");
 		for (int i=0; i<values.length; i++) {
 			System.out.print(values[i] + ", ");
@@ -124,7 +122,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void copyElement(int offsetfrom, Vector target, int offsetto) {
+		public void copyElement(int offsetfrom, VectorAnimator.Vector target, int offsetto) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -132,7 +130,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
 		 */
-		public Arrow createArrow(int offset, boolean boundary) {
+		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -140,7 +138,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
-		public Arrow createArrow(String label, int offset, boolean boundary) {
+		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -186,11 +184,11 @@ public class TestVectorAnimator extends VectorAnimator {
 		}
 		
 		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#splitVector(int)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#flashElement(int)
 		 */
-		public Vector splitVector(int offset) {
+		public void flashElement(int offset) {
 			// TODO Auto-generated method stub
-			return null;
+
 		}
 		
 		/* (non-Javadoc)
@@ -204,7 +202,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void swapElements(int offset1, Vector target, int offset2) {
+		public void swapElements(int offset1, VectorAnimator.Vector target, int offset2) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -227,23 +225,7 @@ public class TestVectorAnimator extends VectorAnimator {
 			// TODO Auto-generated method stub
 			
 		}
-		
-		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setBoundary(boolean)
-		 */
-		public void setBoundary(boolean boundary) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setHighlight(boolean)
-		 */
-		public void setHighlight(boolean highlight) {
-			// TODO Auto-generated method stub
-			
-		}
-		
+				
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setLabel(java.lang.String)
 		 */
@@ -253,9 +235,9 @@ public class TestVectorAnimator extends VectorAnimator {
 		}
 		
 		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setOffset(int)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#flash
 		 */
-		public void setOffset(int offset) {
+		public void flash() {
 			// TODO Auto-generated method stub
 			
 		}

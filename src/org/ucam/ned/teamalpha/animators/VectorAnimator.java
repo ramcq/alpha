@@ -101,7 +101,14 @@ public abstract class VectorAnimator extends Animator {
 			VectorAnimator.Vector target,
 			int offset2);
 
-		public abstract void highlightElement(int element);
+		/**
+		 * Flash an element to draw attention to it.
+		 * 
+		 * @param offset
+		 *  the element of the vector to flash 
+		 */
+		public abstract void flashElement(int offset);
+		
 		/**
 		 * Highlight a given digit of all the values in the vector.
 		 * 
@@ -169,25 +176,15 @@ public abstract class VectorAnimator extends Animator {
 		 * @param offset
 		 *            the offset to move to, can be equal to the vector length
 		 *            if the arrow points at boundaries
-		 */
-		public abstract void setOffset(int offset);
-
-		/**
-		 * Control whether the arrow points to boundaries before the given
-		 * offset, or at the value at the given offset.
-		 * 
-		 * @param boundary
+		 * 	@param boundary
 		 *            true to point at the boundary before the offset
 		 */
-		public abstract void setBoundary(boolean boundary);
+		public abstract void move(int offset, boolean boundary);
 
 		/**
-		 * Highlight the arrow to indicate something exciting going on.
-		 * 
+		 * Flash the arrow to indicate something exciting going on.
 		 */
-		public abstract void highlight();
-		
-		public abstract void move(int newpos, boolean boundary);
+		public abstract void flash();
 	}
 
 	/**
