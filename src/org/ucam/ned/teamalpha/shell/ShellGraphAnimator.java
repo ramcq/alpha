@@ -33,24 +33,12 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  */
 /*
  * TODO: bug fixes:
- * problem with gradient -> infinity with 3 node graph ({trig,cast to int} functions rounding error)
- * check the polygon drawing with curve edges?
+ * IMPORTANT TODO BEFORE STEVE HAND TESTS IT: problem with gradient -> infinity with 3 node graph ({trig,cast to int} functions rounding error)
  * SID: Functionality to delete edges altogether?
- * 
- * Done:
- * SID: Make the nodes larger 
- * SID: Node labels overwrite on update
- * SID: Thicker lines so it is easier to see changes
- * SID: Node labels different colour/weight than edge labels (IMPORTANT)
  *
- */
-/*
  * Progress log:
- *	current time use: ~27 hours (?)
- *  current problems: none
- *  past problems: all nodes being appearing drawn on same point 
- * 						- fixed, was just drawing the same node repeatedly due to flaw in actionperformed method
- * currently implemented api:
+ *	current time use: ~34 hours (?)
+ *  currently implemented api:
  * 		createGraph
  * 		setNodeLabel
  * 		setNodeShade
@@ -60,9 +48,7 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * 		restoreState
  * 		label drawing
  *		flashing
- *
  */
-
 public class ShellGraphAnimator extends GraphAnimator implements ActionListener, ShellAnimator {
 	
 	private Shell shell; // reference to the shell singleton
