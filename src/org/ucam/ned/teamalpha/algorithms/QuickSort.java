@@ -74,7 +74,7 @@ public class QuickSort extends VectorAlgorithm {
 			anim.setCurrentStep(0);
 			anim.saveState();
 			// Select the pivot by the median of first, middle and last element
-			pivotLoc = (low + high)/2; 
+			pivotLoc = pickMedian(low, high);
 			pivot = a[pivotLoc];
 			
 			// ANIM: Point arrow at area we are working on
@@ -204,6 +204,24 @@ public class QuickSort extends VectorAlgorithm {
 		a[j] = tmp;
 	}
 
+	
+	private int pickMedian(int l, int h) {
+		int aa = l;
+		int bb = (l+ h)/2;
+		int cc = (h);
+		
+		int A = a[aa];
+		int B = a[bb];
+		int C = a[cc];
+		
+		anim.showMessage("Select median of <strong>" + A + "</strong>, <strong>" + B + "</strong> and <strong>" + C + "</strong> for pivot.");
+		
+		if ((B>A && A>C) || (C>A && A>B)) return aa;
+		if ((C>B && B>A) || (A>B && B>C)) return bb;
+		return cc;
+	  
+	}
+	
 	/**
 	 * Returns a contiguous subset of an array between two markers.
 	 * @param l
@@ -265,6 +283,8 @@ public class QuickSort extends VectorAlgorithm {
 			// ANIM: Display the final, sorted vector
 			VectorAnimator.Vector v =  this.anim.createVector(a);
 			v.setLabel("DONE!");
+			
+			anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
 			
 			anim.setCurrentStep(6);
 			
