@@ -174,44 +174,43 @@ smh22@cam.ac.uk
 \layout Section
 
 Changes from specification
-\layout Standard
+\layout Subsection
 
 Algorithm Package
 \layout Standard
 
 * Provision of initial data and animator moved to constructors instead.
-\newline 
+\layout Subsection
+
 Animator Package
-\newline 
+\layout Subsection
+
 Vector Animator
-\layout Standard
+\layout Itemize
 
-* Markers and Pointers merged into Arrows.
-\layout Standard
+Markers and Pointers merged into Arrows.
+\layout Itemize
 
-* Copy element from one pointer to another method changed to take offsets
+Copy element from one pointer to another method changed to take offsets
  rather than pointers.
-\layout Standard
+\layout Itemize
 
-* Specific compare two elements method removed vector primitives; un-necessary
+Specific compare two elements method removed vector primitives; un-necessary
  since you can just use highlight pointer.
-\layout Standard
+\layout Itemize
 
-* Delete element method removed; vector lengths are invariant for sorting
+Delete element method removed; vector lengths are invariant for sorting
  algorithms (moved to project extensions list).
-\layout Standard
+\layout Itemize
 
-* Split vector method also removed, for similar reason (preserve invariant
+Split vector method also removed, for similar reason (preserve invariant
  length).
+\layout Itemize
+
+Boolean highlight supplemented with a few seconds of flashing (for both
+ arrows and vector elements).
 \layout Standard
 
-* Boolean highlight replaced with a few seconds of flashing.
-\layout Standard
-
-* Highlight element method added.
-\newline 
-
-\newline 
 Include difficulties - refer to specification
 \layout Section
 
@@ -221,10 +220,7 @@ Code status
 (Written/tested/to do etc) Include authors
 \layout Subsection
 
-Algorithms
-\layout Standard
-
-Sid
+Algorithms (Sid)
 \layout Standard
 
 Four out of the five have been written, the fifth is in progress.
@@ -232,29 +228,163 @@ Four out of the five have been written, the fifth is in progress.
 \layout Subsection
 
 Animators
-\layout Standard
+\layout Subsubsection
 
-Graph animators - Steven 
+Graph animators (Steven)
 \layout Standard
 
 Almost complete, only highlighting nodes and edges and algorithm step messages
  have to be completed.
  The messages will be completed when the shell has been finished.
  Untested.
-\newline 
+\layout Subsubsection
 
-\newline 
-Vector animators- Andrew
+Vector animators (Andrew)
 \layout Standard
 
-Almost complete.
- Untested.
+The vast majority of this class has now been completed.
+ It has been subjected to cursory, informal testing, including a preliminary
+ linkup with Rob's queue class.
+\layout Standard
+
+It was decided to break each animation primitive into even simpler animation
+ events (e.g.
+ moving an element out of its slot to lie beside the vector, moving an element
+ vertically in this 
+\begin_inset Quotes eld
+\end_inset 
+
+channel
+\begin_inset Quotes erd
+\end_inset 
+
+, etc) which would then be queued internally by the animator and executed
+ sequentially.
+ This makes the system extensible, as there is a single global 
+\family typewriter 
+Timer
+\family default 
+ which sends periodic 
+\family typewriter 
+ActionEvent
+\family default 
+s to the animator to tell it to draw the next frame, at which point a central
+ method (
+\family typewriter 
+actionPerformed()
+\family default 
+) looks at the current animation event (represented by an instance of the
+ 
+\family typewriter 
+AnimationEvent
+\family default 
+ inner class) to see what should be done next.
+ It is a slightly complicated design, especially given that 
+\family typewriter 
+wait
+\family default 
+s and 
+\family typewriter 
+notify
+\family default 
+s have been added to prevent animation primitive methods from exiting until
+ the relevant animation has been completed (for the sake of Rob's queue).
+ However, it works and is still fairly easy to understand, and this, coupled
+ with its extensibility, mean that we will not be changing this fundamental
+ design.
+\layout Standard
+
+The following features have yet to be implemented:
+\layout Itemize
+
+Moving elements between separate vectors
+\layout Itemize
+
+Highlighting of vector columns (for Radix sort)
+\layout Standard
+
+There are also likely to be a few more small changes to the API (for instance
+ adding back in support for a boolean method 
+\family typewriter 
+highlight()
+\family default 
+ on vectors and arrows to indicate a temporary change of colour) and these
+ facilities also have yet to be coded, although the implementation is likely
+ to be fairly simple.
+ There 
+\emph on 
+may
+\emph default 
+ also be an addition which allows the algorithm designer to specify whether
+ an arrow is to be placed on the left or right of a vector: again, the implement
+ation of this will not be difficult, because at present there is a boolean
+ field in each 
+\family typewriter 
+Arrow
+\family default 
+ object which determines this property (at the moment, it is always set
+ to 
+\family typewriter 
+false
+\family default 
+, so that all all arrows appear on the right of their vectors): all that
+ is required is to allow the user to set this at the time of arrow creation.
+ (It will not be possible to alter this property after creation time.) A
+ facility to alter the colour of an arrow may also be provided (at the moment
+ they are all blue).
+\layout Standard
+
+A problem has also been discovered with saving and restoring the animator
+ state, when this is done by the queue in order to roll back to a previous
+ algorithm step (checkpoint).
+ The problem occurs when a new vector has been created since the last checkpoint.
+ If the queue then attempts to restore the animator to the state before
+ the vector was created, and run the algorithm again from that point, the
+ 
+\family typewriter 
+createVector()
+\family default 
+ method will be called again to create the same vector.
+ This would not be a problem, were it not for the fact that the animator
+ decides where to place new vectors on the basis of an integer field, 
+\family typewriter 
+highestColUsed
+\family default 
+, which tracks how many vectors there currently are on the canvas.
+ The animator places the new vector to the right of what it thinks is the
+ right-most vector: unfortunately, if the state is rolled back, this variable
+ is not restored to its value at the time of the checkpoint, so the new
+ vector is drawn to the right of its previous position and the whole restore
+ mechanism breaks.
+\layout Standard
+
+This will be remedied by using a more advanced way of laying out vectors
+ on screen, which will keep track of which columns are vacant and insert
+ newly-created vectors into the left-most free column.
+ This will also solve a problem related to the deletion of vectors and arrows:
+ at present, the space occupied by a deleted vector will be permanently
+ left blank, and cannot be filled by another vector.
+\layout Standard
+
+Finally, there is a more fundamental problem with this class in that it
+ is not easy to change the format or layout of the canvas.
+ For example, it would be difficult to change the width of vectors, or the
+ size of the text, or the height of elements, or the gap between vectors,
+ without altering myriad numbers within the class.
+ If time permits, the code should be tidied up to put basic dimensions in
+ global variables, to make them easier to change.
+\layout Standard
+
+More testing needs to be done on this class: all animation primitives need
+ to be exhaustively tested, especially the ones involving moving arrows
+ very close together (it is unclear whether they will be redrawn correctly).
+ Input of extreme data (e.g.
+ very long vectors, large vector elements, or long arrow labels) is also
+ a concern.
+ The person responsible for the testing of this class is Alan.
 \layout Subsection
 
-Queues
-\layout Standard
-
-Rob
+Queues (Rob)
 \layout Standard
 
 Functionally complete.
@@ -267,54 +397,45 @@ Shell
 The user interface which will be implemented by the shell has been designed,
  and a proof of concept created.
  This has yet to be written though.
-\newline 
+\layout Standard
 
-\newline 
 There will be three main screens in the system:
-\layout Itemize
+\layout Enumerate
 
-the algorithm selection screen (Diagram 1)
-\begin_deeper 
-\layout Itemize
 
-This will be the screen that appears first when the system is loaded.
+\emph on 
+The algorithm selection screen
+\emph default 
+ (Diagram 1): this will be the screen that appears first when the system
+ is loaded.
  It will have a list of available algorithms, with a description of each
  algorithm showing when the algorithm is selected.
  There will be a 'Next' button which when clicked will advance to the data
  input screen.
-\end_deeper 
-\layout Itemize
+ 
+\layout Enumerate
 
-the data input screen (Diagram 2)
-\begin_deeper 
-\layout Itemize
 
-This will have some text boxes for user input, the number of boxes will
- depend on the algorithm used.
+\emph on 
+The data input screen
+\emph default 
+ (Diagram 2): this will have some text boxes for user input, the number
+ of boxes will depend on the algorithm used.
  It will have a 'Random' button to generate random input, a 'Back' button
  to return to the algorithm select menu, and two buttons to start the algorithm.
  The 'Run Automatically' button will start the algorithm and run it through
  to completion, the 'Run Manually' button will animate the algorithm one
  step at a time, with the user choosing when to move on.
-\end_deeper 
-\layout Itemize
+\layout Enumerate
 
-the animation screen (Diagram 3)
-\begin_deeper 
-\layout Itemize
-
-This will show the animation of the algorithm, along with a description
- of what is happening at each step.
+The animation screen (Diagram 3): This will show the animation of the algorithm,
+ along with a description of what is happening at each step.
  There will be 'Next' and 'Previous' buttons to step through the algorithm,
  as well as a 'Restart' button to return to the first step, and an 'Exit'
  button to return to the algorithm select screen.
-\end_deeper 
 \layout Section
 
 Test results
-\layout Standard
-
-Richard, Alan
 \layout Standard
 
 Say what we are testing it for and how we are testing it
