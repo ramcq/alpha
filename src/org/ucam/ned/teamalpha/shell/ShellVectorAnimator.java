@@ -19,11 +19,12 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator.Vector;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class ShellVectorAnimator extends VectorAnimator implements ActionListener {
+public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionListener {
 	
 	// Vector inner class
 	public class Vector {
 		static final int maxSize = 20;
+		static final int maxElementLength = 6; // Maximum number of digits in any element
 		private final int top = 50;
 		private final int width = 50;
 		private int bottom;
@@ -31,7 +32,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private int right;
 		private int size;
 		private String label;
-		private int[] contents;
+		private String[] contents;
 		
 		Vector(int[] values) {
 			size = values.length;
@@ -39,11 +40,18 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			
 			// This vector will be in a new column, so increase the value of the highest column in use
 			highestColUsed++;
-			left = highestColUsed * 75; // the x position of the left of the new vector
+			left = 70 + (highestColUsed * 120); // the x position of the left of the new vector
 			right = left + width; // the x position of the right of the new vector
 			bottom = top + (size * 20); // the y position of the bottom of the new vector
 			label = "Unnamed";
-			contents = values;
+			
+			contents = new String[20];
+			// Pad contents with spaces to ensure right alignment
+			for (int i=0; i<size; i++) {
+				contents[i] = String.valueOf(values[i]);
+				int len = contents[i].length();
+				for (int j=0; j<(maxElementLength-len); j++) { contents[i] = " ".concat(contents[i]); } 
+			}
 		}
 		
 		Vector(String label, int[] values) {
@@ -52,11 +60,19 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			
 			// This vector will be in a new column, so increase the value of the highest column in use
 			highestColUsed++;
-			left = highestColUsed * 75; // the x position of the left of the new vector
+			left = 70 + (highestColUsed * 120); // the x position of the left of the new vector
 			right = left + width; // the x position of the right of the new vector
 			bottom = top + (size * 20); // the y position of the bottom of the new vector
 			this.label = label;
-			contents = values;
+
+			contents = new String[20];
+			
+			// Pad contents with spaces to ensure right alignment
+			for (int i=0; i<size; i++) {
+				contents[i] = String.valueOf(values[i]);
+				int len = contents[i].length();
+				for (int j=0; j<(maxElementLength-len); j++) { contents[i] = " ".concat(contents[i]); } 
+			}
 		}
 		
 		public void delete() {
@@ -105,14 +121,19 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	private static final int fps = 30;	// Animation framerate
 	private Timer timer;	// timer for animation events
-	private int highestColUsed; // stores the highest column which has a vector in it
+	private int highestColUsed = -1; // stores the highest column which has a vector in it
 	
-	private Graphics out; // Graphics object we are passed from the shell
+	private Component outc; // Component we will be drawing into
+	private Graphics outg; // Graphics object we are passed from the shell
 	private Image bi; // buffered image for double buffering
 	
+	// Temporary test vectors
+	private Vector v, v2;
+	
 	// Constructor
-	ShellVectorAnimator(Graphics g) {
-		out = g;
+	ShellVectorAnimator(Component c) {
+		outc = c;
+		outg = c.getGraphics();
 		
 		int delay = (fps > 0) ? (1000 / fps) : 100;	// Frame time in ms
 		System.out.println("Delay = " + delay);
@@ -125,6 +146,11 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		timer.setRepeats(true);
 		// Combine into a single ActionEvent in case of backlog
 		timer.setCoalesce(true);
+		
+		int[] test = {1,2,3,4,10,22,76};
+		int[] test2 = {456, 3423, 43, 7676,2,0,99,235};
+		v = new Vector("Vector1", test);
+		v2 = new Vector("Vector2", test2);
 	}
 	
 	// This method is executed on each animation frame
@@ -132,26 +158,28 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		Graphics gr;
 		
 		// Make sure buffered image is the same size as the application window
-		// !! PROBLEM !!
-		/*if (bi == null ||
-			(! (bi.getWidth(this) == out.get getSize().width
-			&& bi.getHeight(this) == getSize().height)))
+		if (bi == null ||
+			(! (bi.getWidth(outc) == outc.getSize().width
+			&& bi.getHeight(outc) == outc.getSize().height)))
 		{
-			bi = this.createImage(getSize().width, getSize().height);
-		}*/
+			bi = outc.createImage(outc.getSize().width, outc.getSize().height);
+		}
 		
 		gr = bi.getGraphics();
-		
-		/*// Clear animation area
-		if (firstTime) {
-			gr.setColor(bgcolour);
-			gr.fillRect(0,0,500,500);
-			firstTime = false;
-		}*/
-				
-		// Draw our buffered image out to the actual window
-		panel.getGraphics().drawImage(bi,0,0,this);
 
+		// Meat of the method is here: what actions to carry out on each frame
+		// Question: should we make public methods synchronised in order that the shell can sleep while I 
+		// carry out each primitive and then wake up to give me a new primitive when I'm finished?
+		// Question: what is the thread I'm going to be running in, and do I ever have to sleep?
+		
+		drawVectorSkeleton(v, gr);
+		drawVectorContents(v, gr);
+		drawVectorSkeleton(v2,gr);
+		drawVectorContents(v2,gr);
+		
+		
+		// Draw our buffered image out to the actual window
+		outg.drawImage(bi,0,0,outc);
 	}
 	
 	public void startAnimation() {
@@ -162,7 +190,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		if (timer.isRunning()) timer.stop();
 	}
 
-	// SHOULD BE PRIVATE
 	private void drawVectorSkeleton(Vector v, Graphics g) {
 		//g.setColor(Color.red);
 		
@@ -175,17 +202,18 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		// Draw vertical lines
 		g.drawLine(v.left, v.top, v.left, v.bottom);
 		g.drawLine(v.right, v.top, v.right, v.bottom);
+		
+		// Draw label
+		g.setFont(new Font("MonoSpaced", Font.PLAIN, 12));
+		g.drawString(v.label, v.left+5, v.bottom+25);
 	}
 	
-	// SHOULD BE PRIVATE
 	private void drawVectorContents(Vector v, Graphics g) {
 		//g.setColor(fgcolour);
 		
 		g.setFont(new Font("MonoSpaced", Font.PLAIN, 10));
 		for (int i=0; i<v.size; i++) {
-			Integer c = new Integer(v.contents[i]);
-			String val = c.toString();
-			g.drawString(val, v.left+5, v.top+15+(i*20));
+			g.drawString(v.contents[i], v.left+5, v.top+15+(i*20));
 		}
 	}
 	
@@ -218,18 +246,22 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellVectorAnimator test");
 		frame.setSize(500,500);
+		frame.setVisible(true);
 		
 		JPanel panel = new JPanel(true); // lightweight container
+		panel.setSize(500,500);
 		frame.getContentPane().add(panel);
 		panel.setVisible(true);
 		
-		ShellVectorAnimator app = new ShellVectorAnimator(panel.getGraphics());
+		ShellVectorAnimator app = new ShellVectorAnimator(panel);
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 		});
+		
+		app.startAnimation();
 
 	}
 }
