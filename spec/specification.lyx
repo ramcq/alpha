@@ -134,8 +134,8 @@ animation script
 \begin_inset Quotes erd
 \end_inset 
 
- will be written in Java; we are not implementing a special language or
- anything silly like that
+ will be written in Java; we have decided not to opt for writing our own
+ special language.
 \layout Itemize
 
 The user can specify initial data in the following way:
@@ -170,7 +170,7 @@ The auxiliary displays showing the time and space costs of the algorithm
  etc will not be available.
 \layout Section
 
-Facilities to be providedcvs ci alpha 
+Facilities to Be Provided
 \layout Standard
 
 The following facilities will definitely be provided:
@@ -211,7 +211,7 @@ We will be demonstrating the system by implementing the following algorithms:
  (for finding the minimum spanning tree of a set of nodes in a graph).
 \layout Standard
 
-The following facilities will be optionally implemented according to time
+The following facilities will be optionally implemented subject to time
  constraints:
 \layout Itemize
 
@@ -290,7 +290,7 @@ run algorithm using inputted << SHOULD IT BE SPELT LIKE input?>> data
 create animations for each step in the algorithm
 \layout Itemize
 
-akjb (blah blah...)
+akjb
 \layout Standard
 
 Outputs:
