@@ -1,0 +1,19 @@
+User Guide
+
+Animating Algorithms is a program designed to aid your understanding of a variety of sorting and graph based algorithms.  It shows the basic working of the algorithms by animating key steps and giving an explanation of what is happening at each point.  It also allows you to step forward and backwards through the algorithms, allowing you to repeat steps if you want to see an animation again.
+
+To start the program....
+
+At the main menu, there is a drop-down box which lists the algorithms available to animate.  Select one by clicking on it in the list, and then pressing the 'Next' button at the bottom of the screen.  You should now be at the input data menu, which allows you to input initial data for the algorithm you have chosen.  The type of data you can input depends on the algorithm you are using, so follow the instructions given on screen concerning this.  To input data, click on an empty box with the mouse and write data in with the keyboard.  There is also an option to generate random data, to do this simply click on the 'Random' button.  When you are happy with the data being used, select one of the two ways to begin the animation.  If you want the animation to continue on its own all the way through to the end, press the 'Automatic Slide Show' button, if however you want the animation to proceed at your own pace press the 'Manual' button.
+
+If you choose the 'Automatic Slide Show' option, the animation will begin and run until it has finished, at which point it will return to the main menu.  To return to the main menu before the animation finishes, click on the 'Exit' button.  For the 'Manual' option, you will have to click on the 'Next' button after each step in the algorithm to begin the next animation.  To step back in the algorithm, click the 'Previous' button which will take you back one step.  To return to the main menu at any point, click the 'Exit' button.
+
+To exit the program completely, press the 'Quit' button on the main menu.
+
+For more useful information on algorithms, these sources may be useful:
+
+- 'Introduction To Algorithms' by Cormen, Leiserson, Rivest & Stein - A comprehensive look at many algorithms
+
+- www.google.co.uk - Internet search engine
+
+- ...
