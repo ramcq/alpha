@@ -1,4 +1,8 @@
-package org.ucam.ned.alpha.shell;
+package org.ucam.ned.teamalpha.shell;
+
+import org.ucam.ned.teamalpha.algorithms.*;
+import org.ucam.ned.teamalpha.animators.*;
+import org.ucam.ned.teamalpha.queues.*;
 
 public class Shell {
 	static Shell myself = null;

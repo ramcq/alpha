@@ -1,4 +1,4 @@
-package org.ucam.ned.alpha.algorithms;
+package org.ucam.ned.teamalpha.algorithms;
 
 public abstract class SortAlgorithm extends Algorithm {
 }
