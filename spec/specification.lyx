@@ -136,20 +136,21 @@ Background
 
 The field of algorithms and data structures is one of the hardest parts
  of Computer Science to teach.
- When demonstrated on blackboards or overhead projectors, diagrams can get
- extremely messy and hard to follow; even when the steps of an algorithm
- are clearly displayed on paper, it is not always immediately clear what
- operations have been done between each step.
+ When done on blackboards or overhead projectors, diagrams can get extremely
+ messy and hard to follow; even when the steps of an algorithm are clearly
+ displayed on paper, it is not always immediately clear what operations
+ have been done between each step.
 \layout Standard
 
 Computer animation would be an ideal way to demonstrate algorithms: the
- actions taken by the computer at each stage can be clearly demonstrated
+ actions taken by the computer at each stage could be clearly demonstrated
  at whatever level of abstraction is most helpful.
  Users could move through an algorithm's execution at their own speed, going
  especially slowly over difficult steps.
- Critical information can be shown in a clear, intuitive way using colour
- coding, and this can be reinforced with clean, smooth graphical animations
- which show exactly what is going on internally as the algorithm is executed.
+ Critical information could be shown in a clear, intuitive way (for example
+ using colour coding), and this could be reinforced with clean, smooth graphical
+ animations showing exactly what is going on internally as the algorithm
+ is executed.
  The cost of the algorithm in time and space on different sizes of input
  could also be clearly displayed.
 \layout Standard
@@ -174,8 +175,10 @@ animation script
 \begin_inset Quotes erd
 \end_inset 
 
- and the algorithms themselves will be written in Java; we will not implement
- our own special language for describing algorithms.
+ and the algorithms themselves will be written in Java.
+ We will not implement our own special language for describing algorithms;
+ instead, we will document a Java API which permits new algorithms to be
+ animated.
 \layout Itemize
 
 The user will be able to specify initial data in the following ways:
@@ -222,7 +225,7 @@ Facilities to be provided
 There are some facilities that the system will be useless without, and whose
  implementation is therefore essential.
  There are others, however, which are not crucial but will usefully extend
- its functionality.
+ the functionality of the system.
  These facilities will be considered optional and may or may not be implemented,
  subject to time constraints.
 \layout Paragraph
@@ -238,6 +241,9 @@ Clear and smooth graphical animation
 
 Ability to step through algorithms, both forwards and backwards, at the
  click of a mouse
+\layout Itemize
+
+Text explanation of each step as it happens (pseudocode as in a debugger)
 \layout Itemize
 
 Ability to specify the algorithm's initial data or input (plus the ability
@@ -269,7 +275,7 @@ In order to demonstrate the system, we will implement three sorting algorithms
 insertion sort,
 \layout Itemize
 
-quicksort,
+Quicksort,
 \layout Itemize
 
 radix sort,
@@ -288,9 +294,6 @@ Optional facilities
 \layout Itemize
 
 Ability to vary the animation speed (between two reasonable values)
-\layout Itemize
-
-Text explanation of each step as it happens (pseudocode as in a debugger)
 \layout Itemize
 
 Display of the time and space costs of the algorithm (in text or graphical
@@ -519,7 +522,17 @@ These checkpoints are the junctures at which the animation will pause and
  For example, if we were implementing insertion sort, one step might consist
  of the insertion of a single value into the vector: we might want to move
  a pointer along the vector until we find the correct place for the value,
- move all the other data items up to make room, and insert the value.
+ move all the other data items up to make room, insert the value into the
+ gap, and update a pointer showing what portion of the vector is sorted.
+ Clicking the 
+\begin_inset Quotes eld
+\end_inset 
+
+next step
+\begin_inset Quotes erd
+\end_inset 
+
+ button would then animate the insertion of the next item.
 \layout Standard
 
 As the algorithm progresses, the queue builds up a list of all of the animator
@@ -555,11 +568,11 @@ AnimatorQueue
 
 It should be noted that it would not be possible to skip forwards to the
  next checkpoint (without animation) unless the user has gone backwards
- and then forwards again, because the state of the animation canvas will
- not exist yet in this case.
+ and then forwards again, because the state of the animation canvas would
+ not exist yet.
  It would be easier to implement the same basic functionality by simply
- giving the user the ability to change the animation speed instead (a facility
- which is on the 
+ giving the user the ability to change the animation speed (a facility which
+ is on the 
 \begin_inset Quotes eld
 \end_inset 
 
@@ -706,17 +719,25 @@ Outputs
 Animation displayed on screen
 \layout Itemize
 
-Time and space cost display 
-\emph on 
-[optional]
+Pseudocode
 \layout Itemize
 
-Pseudocode 
+Time and space cost display 
 \emph on 
 [optional]
 \layout Section
 
-Specification of Components and Test Requirements
+Specification of components and test requirements
+\layout Standard
+
+This section has the same structure as the one on overall system architecture.
+ We will deal with system components grouped by package.
+ For each class (or type of class) we will describe its purpose and intended
+ function, its inputs and outputs, its main public methods, and we will
+ suggest a possible test strategy.
+ The lists of public methods are not exhaustive and may be subject to change:
+ these sections are designed to remove the need for separately-submitted
+ abstract classes.
 \layout Subsection
 
 Algorithms
@@ -725,15 +746,23 @@ Algorithms
 Purpose
 \layout Standard
 
-Each algorithm class implements a certain algorithm which can be displayed
- to the user, as well as including the code to animate and explain this
- algorithm to the user as it executes.
+Each concrete algorithm class (inheriting from 
+\family typewriter 
+GraphAlgorithm
+\family default 
+ or 
+\family typewriter 
+VectorAlgorithm
+\family default 
+ as appropriate) implements a certain algorithm which can be displayed to
+ the user, as well as including the code to animate and explain this algorithm
+ to the user as it executes.
 \layout Subsubsection*
 
 Inputs
 \layout Standard
 
-The algorithm recieves its initial data, and an instance of an object which
+The algorithm receives its initial data, and an instance of an object which
  extends the 
 \family typewriter 
 Animator
@@ -760,7 +789,7 @@ Animator
  an explanation to the user of the execution of the algorithm.
 \layout Subsubsection*
 
-Public Methods
+Public methods
 \layout Itemize
 
 
@@ -838,7 +867,30 @@ Checkpoint
  using the memento design pattern.
 \layout Subsubsection*
 
-Public Methods (
+Inputs
+\layout Standard
+
+The animator will take input from the queue (concrete events to be animated)
+ and from the shell (instructions such as 
+\begin_inset Quotes eld
+\end_inset 
+
+alter animation speed
+\begin_inset Quotes erd
+\end_inset 
+
+).
+\layout Subsubsection*
+
+Outputs
+\layout Standard
+
+The animator will output a graphical animation canvas to the shell.
+ It will also give to the shell any text which is included with each event,
+ such as an explanation of an event or a piece of pseudo-code.
+\layout Subsubsection*
+
+Public methods (
 \family typewriter 
 Animator
 \family default 
@@ -882,7 +934,7 @@ void restoreState(Checkpoint)
  was taken
 \layout Subsubsection*
 
-Public Methods (
+Public methods (
 \family typewriter 
 GraphAnimator
 \family default 
@@ -916,7 +968,7 @@ Highlight path (to indicate current focus of algorithm)
 Shade path (to indicate membership of a set of nodes or paths)
 \layout Subsubsection*
 
-Public Methods (
+Public methods (
 \family typewriter 
 VectorAnimator
 \family default 
@@ -936,6 +988,9 @@ Swap elements at two pointers
 \layout Itemize
 
 Copy element from one ponter to another
+\layout Itemize
+
+Compare two elements (uses pointers to indicate which are being compared)
 \layout Itemize
 
 Delete element at pointer
@@ -959,7 +1014,7 @@ Create marker (with label and position)
 Delete marker
 \layout Itemize
 
-Change marker label
+Change marker label or colour
 \layout Itemize
 
 Move marker
@@ -977,7 +1032,7 @@ Create pointer (with label and position)
 Delete pointer
 \layout Itemize
 
-Change pointer label
+Change pointer label or colour
 \layout Itemize
 
 Move pointer
@@ -998,7 +1053,7 @@ Inputs
 Outputs
 \layout Subsubsection*
 
-Public Methods
+Public methods
 \layout Subsubsection*
 
 Testing
@@ -1015,12 +1070,12 @@ The shell is a collection of classes that contain all of the code to implement
  The shell allows the user to choose an algorithm and input or generate
  data, and then uses classes from the other packages which run the relevant
  algorithm and queue the animation primitives.
- The shell also contains the classes to finally render output to the display,
- which are extended from the abstract 
+ The shell also contains the classes to render output to the display, which
+ are extended from the abstract subclasses of 
 \family typewriter 
 Animator
 \family default 
- subclasses.
+.
  These animators will implement an internal interface which allows the shell
  to control playback speed, pausing, etc, independently of which type of
  animation is being implemented.
@@ -1029,14 +1084,19 @@ Animator
 Inputs
 \layout Standard
 
-The shell will accept two main areas of initial input, the algorithm choice,
- and the provision of data for the algorithm.
+The shell will accept, from the user, the algorithm choice and the provision
+ of initial data for the algorithm.
  When the animation has been prepared and being presented, a series of animation
  playback options such as previous, next, play and pause will be provided
  to the user.
  The shell can also make use of Java introspection to enumerate the available
  algorithms within the algorithm package, and use this to present the list
  to the user.
+\layout Standard
+
+The shell will also take input from the animator class (which will provide
+ a graphical animation canvas which needs to be displayed, along with the
+ textual information associated with each animation event).
 \layout Subsubsection*
 
 Outputs
@@ -1045,10 +1105,19 @@ Outputs
 As a graphical component, the shell produces all of its output on screen,
  but this can be broken down into two categories.
  One is interaction whilst the user selects an algorithm and enters data,
- and the other is the actual display of the animation on screen.
+ and the other is the actual display of the animation (and associated informatio
+n) on screen.
+\layout Standard
+
+The shell will also instantiate most of the other objects required, such
+ as the algorithm.
+ It will pass the algorithm its initial data.
+ It will also talk to the queue (e.g.
+ to tell it to move backwards and forwards) and to the animator itself (e.g.
+ to alter animation speed).
 \layout Subsubsection*
 
-Public Methods
+Public methods
 \layout Itemize
 
 
@@ -1101,6 +1170,17 @@ must
 \emph default 
  allow the user to repeat animations, not just flick back and forth between
  states);
+\layout Itemize
+
+all other features on the 
+\begin_inset Quotes eld
+\end_inset 
+
+essential
+\begin_inset Quotes erd
+\end_inset 
+
+ list must be implemented;
 \layout Itemize
 
 the user documentation must explain how to use the system as it is currently
