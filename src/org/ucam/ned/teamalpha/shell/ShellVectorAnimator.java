@@ -1880,7 +1880,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		if (movingUp) drawArrow(a, g, a.colour, -intermediateOffset[0], true);
 		else drawArrow(a, g, a.colour, intermediateOffset[0], true);
 		
-		repaint(areaLeft, a.vector.top, 60, 20*a.vector.size);
+		repaint(areaLeft, a.vector.top-10, 60, (20*a.vector.size)+20);
 	}
 	
 	/* (non-Javadoc)
