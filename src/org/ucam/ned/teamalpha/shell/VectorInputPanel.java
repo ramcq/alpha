@@ -151,7 +151,9 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		row.add(Box.createHorizontalGlue());
 		
 		cells = new JPanel(new GridLayout(0, 5, 5, 5));
-		cells.setBorder(BorderFactory.createTitledBorder("Enter integers for algorithm"));
+		cells.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createTitledBorder("Enter integers for algorithm"),
+				BorderFactory.createEmptyBorder(3, 3, 3, 3)));
 		values = new int[20];
 		makeCells(10);
 		

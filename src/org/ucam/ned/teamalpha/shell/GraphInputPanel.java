@@ -180,7 +180,9 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.add(Box.createHorizontalGlue());
 		
 		cells = new JPanel();
-		cells.setBorder(BorderFactory.createTitledBorder("Enter cost matrix for algorithm"));
+		cells.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createTitledBorder("Enter cost matrix for algorithm"),
+				BorderFactory.createEmptyBorder(3, 3, 3, 3)));
 		values = new int[64];
 		makeCells(nodesDefault);
 		
