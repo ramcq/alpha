@@ -1,10 +1,10 @@
 /*
  * Created on Feb 5, 2004
  *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
  
+// TODO: add exceptions, make sure everything works properly if algorithm does something stupid
+// 	(addresses an offset not in the vector, makes labels too long, creates vectors too long etc)
 // TODO: fix fast forward to next checkpoint (currently completely broken)
 // TODO: add column highlighting for vectors (for radix sort)
 package org.ucam.ned.teamalpha.shell;
@@ -26,9 +26,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.ucam.ned.teamalpha.animators.Animator;
+import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.animators.InputTooLongException;
 import org.ucam.ned.teamalpha.animators.ItemDeletedException;
-import org.ucam.ned.teamalpha.animators.VectorAnimator;
+import org.ucam.ned.teamalpha.animators.InvalidLocationException;
 
 /**
  * @author am502
@@ -36,8 +37,10 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
  * This is the class which is given animation primitives by the queue and actually does the animation on screen.
  * When it receives a primitive, it breaks it down into even more fundamental events (see ShellVectorAnimator.AnimationEvent)
  * and executes these events sequentially. It can also save and restore its state using the State inner class.
- * Its constructor takes a Component, which in most cases will be something like a JFrame or JPanel. It calls getGraphics() on this
- * and uses double buffering to do smooth animations on this object.
+ * Its constructor takes a Container, which in most cases will be a JPanel. It creates a new JPanel with an overridden
+ * paintComponent() method which ensures that the canvas redraws properly after being obscured.
+ * The system maintains a BufferedImage for this redrawing, and also for the purpose of 
+ * double buffering to prevent flicker during animation.
  * 
  * The main drawback of the design of this class is that it is difficult to change the size or positioning of vectors without editing
  * a great many variables. Later versions might solve this problem, and use java.awt.Graphics2D instead of java.awt.Graphics
@@ -153,8 +156,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
 		 */
-		public void copyElement(int from, int to) throws ItemDeletedException {
+		public void copyElement(int from, int to) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has already been deleted!");
+			if ((!isValidOffset(from)) | (!isValidOffset(to))) throw new InvalidLocationException("Invalid offset. Vector length is "+size+", from was "+from+", to was "+to);
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					// Move element out to channel
@@ -179,9 +183,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void copyElement(int from, VectorAnimator.Vector v, int to) throws ItemDeletedException {
+		public void copyElement(int from, VectorAnimator.Vector v, int to) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			Vector vec = (Vector) v;
+			if ((!isValidOffset(from)) | (!vec.isValidOffset(to))) throw new InvalidLocationException("Invalid parameter: this vector has size "+size+", from is "+from+", destination has size "+vec.size+", to is "+to);
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, true));
@@ -204,8 +209,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#moveElement(int, int)
 		 */
 		// TODO: do we actually want this?
-		public void moveElement(int from, int to) throws ItemDeletedException {
+		public void moveElement(int from, int to) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
+			if ((!isValidOffset(from)) | (!isValidOffset(to))) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", from is "+from+", to is "+to);
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					// Move element out to channel
@@ -230,8 +236,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setElement(int, int)
 		 */
-		public void setElement(int elt, int value) throws ItemDeletedException {
+		public void setElement(int elt, int value) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
+			if (!isValidOffset(elt)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", elt is "+elt);
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_CHANGE, this, elt, value));
@@ -252,8 +259,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, int)
 		 */
-		public void swapElements(int elt1, int elt2) throws ItemDeletedException {
+		public void swapElements(int elt1, int elt2) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
+			if ((!isValidOffset(elt1)) | (!isValidOffset(elt2))) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", elt1 is "+elt1+", elt2 is "+elt2);
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					// Move both elements out to channels
@@ -278,8 +286,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) throws ItemDeletedException {
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
+			if (!isValidArrowPos(position, boundary)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", arrow position was ("+position+", "+boundary+")");
 			synchronized (ShellVectorAnimator.this) {
 				Arrow res = new Arrow(this, label, position, boundary);
 				arrows.add(res);
@@ -302,15 +311,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(int position, boolean boundary) throws ItemDeletedException {
+		public VectorAnimator.Arrow createArrow(int position, boolean boundary) throws ItemDeletedException, InvalidLocationException {
 			return createArrow("", position, boundary);
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#highlightElement(int)
 		 */
-		public void flashElement(int elt) throws ItemDeletedException {
+		public void flashElement(int elt) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
+			if (!isValidOffset(elt)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", elt is "+elt);
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FLASH, this, elt));
@@ -330,7 +340,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setHighlightedDigit(int)
 		 */
-		public void setHighlightedDigit(int column) {
+		public void setHighlightedDigit(int column) throws InvalidLocationException {
 		}
 		
 		/**
@@ -359,6 +369,36 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					System.out.println(e);
 				}
 			}
+		}
+		
+		/**
+		 * Checks a given integer to see if it is a valid offset for this vector
+		 * @param o
+		 * 	The offset to be checked
+		 * @return
+		 * 	True if the offset is valid, false if not (i.e. the offset is negative or too large)
+		 */
+		private boolean isValidOffset(int o) {
+			return !(o<0 | o>size);
+		}
+		
+		/**
+		 * Checks a given (position, boundary) pair to see if it is reasonable to place an arrow
+		 * at this location.
+		 * @param pos
+		 * 	The position of the arrow
+		 * @param boundary
+		 * 	True if the arrow is to point at the boundary between elements pos-1 and pos;
+		 * 	false if it is to point directly at element pos.
+		 * @return
+		 * 	True if this arrow would point at an actual vector position;
+		 * 	false if it would be out of bounds.
+		 */
+		private boolean isValidArrowPos(int pos, boolean boundary) {
+			boolean res = true;
+			if (boundary) res = ((pos>=0) && (pos<=size+1));
+			else res = ((pos>=0) && (pos<=size));
+			return res;
 		}
 		
 		VectorState getState() {
@@ -479,8 +519,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#move(int, boolean)
 		 */
-		public void move(int newpos, boolean boundary) throws ItemDeletedException {
+		public void move(int newpos, boolean boundary) throws ItemDeletedException, InvalidLocationException {
 			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
+			if (!vector.isValidArrowPos(newpos, boundary)) throw new InvalidLocationException("Invalid parameter: vector has size "+vector.size+", arrow position given is ("+newpos+", "+boundary+")");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_MOVE, this, newpos, boundary));
@@ -1402,7 +1443,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * 	The number of elements in the vector
 	 * @return A new Vector of the right size and label with all elements initialized to zero
 	 */
-	public VectorAnimator.Vector createVector(String label, int size) {
+	public VectorAnimator.Vector createVector(String label, int size) throws InputTooLongException {
 		int[] c = new int[size];
 		for (int i=0; i<size; i++) c[i] = 0;
 		return createVector(label, c);
@@ -1414,7 +1455,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * @param size The number of elements in the vector
 	 * @return A new unlabelled Vector of the right size with all elements initialized to zero
 	 */
-	public VectorAnimator.Vector createVector(int size) {
+	public VectorAnimator.Vector createVector(int size) throws InputTooLongException {
 		return createVector("Unnamed", size);
 	}
 	
@@ -1593,7 +1634,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		//v.delete();
 		//a3.delete();
 		}
-		catch (ItemDeletedException e) {
+		catch (Exception e) {
 			System.out.println(e);
 		}
 	}
