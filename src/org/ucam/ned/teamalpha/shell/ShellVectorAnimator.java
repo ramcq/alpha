@@ -66,10 +66,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * @author am502
 	 */
 	public class Vector extends VectorAnimator.Vector {
-		static final int maxSize = 20;
-		static final int maxElementLength = 6; // Maximum number of digits in any element
-		static final int maxArrowWidth = 20; // Maximum size an arrow can be
 		static final int width = 50; // width of vector in pixels
+		final int maxElementLength = String.valueOf(VectorAnimator.elementMax).length();
 		
 		private boolean visible = true;
 		private final int top = 50; // y coordinate of top of vector
@@ -91,8 +89,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	If more than 20 elements are specified, InputTooLongException will be thrown.
 		 */
 		Vector(int[] values) throws InputTooLongException, TooManyVectorsException {
-			size = values.length;
-			if (size > maxSize) throw new InputTooLongException("Maximum size is "+ maxSize);
+			VectorAnimator.vectorCheck(values); // check for invalid input
+			this.size = values.length;
 			
 			// Work out where to place the vector
 			for (int i=0; i<colsOccupied.length; i++) {
@@ -267,9 +265,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setElement(int, int)
 		 */
-		public void setElement(int elt, int value) throws ItemDeletedException, InvalidLocationException {
+		public void setElement(int elt, int value) throws ItemDeletedException, InvalidLocationException, InputTooLongException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			if (!isValidOffset(elt)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", elt is "+elt);
+			VectorAnimator.elementCheck(elt);
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_CHANGE, this, elt, value));
@@ -382,6 +381,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setHighlightedDigit(int)
 		 */
+		// TODO
 		public void setHighlightedDigit(int column) throws InvalidLocationException {
 		}
 		
@@ -873,6 +873,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * Wait a number of milliseconds
 		 */
 		public static final int WAIT = 17;
+		/**
+		 * Change the animation speed by a certain factor.
+		 */
+		public static final int SET_FPS_FACTOR = 18;
 
 		private int type;
 		// Arguments
@@ -882,7 +886,28 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private int arg;
 		private boolean b1;
 		private boolean b2;
+		private double darg;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param type
+		 * 	Event type (expected to be SET_FPS_FACTOR)
+		 * @param factor
+		 * 	The factor by which the FPS rate is to be multiplied
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
+		AnimationEvent(int type, double factor) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.SET_FPS_FACTOR) {
+				this.type = type;
+				this.darg = factor;
+			}
+			else throw new InvalidAnimationEventException("Invalid event of type "+type);
+		}
+		
 		/**
 		 * Constructor
 		 * @param type
@@ -1210,7 +1235,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
-	private int fps = 100;	// Animation framerate
+	private int basefps = 100;	// Basic animation framerate
+	private double fpsfactor = 1; // algorithm-defined FPS factor
 	private javax.swing.Timer timer;	// timer for animation events
 	//private int highestColUsed = -1; // stores the highest column which has a vector in it
 	// Placement information: which of the possible positions a vector
@@ -1243,7 +1269,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		shell = Shell.getInstance();
 		outc = new JPanel() {
 			public void paintComponent(Graphics g) {
-				g.drawImage(bi,0,0,outc);
+				try {
+					g.drawImage(bi,0,0,outc);
+				}
+				catch (Exception e) {
+					System.out.println(e);
+				}
 			}
 		}; // a JPanel with a redefined paintComponent method for redrawing the canvas after the window has been obscured
 		outc.setSize(c.getSize().width, c.getSize().height);
@@ -1251,6 +1282,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		outc.setVisible(true);
 		outg = outc.getGraphics(); // get a Graphics object for us to animate on
 		
+		int fps = (int) (basefps * fpsfactor);
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
 		
@@ -1333,7 +1365,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				case AnimationEvent.ELT_CHANGE:
 					currentEvent.v1.contents[currentEvent.e1] = String.valueOf(currentEvent.arg);
 					int len = currentEvent.v1.contents[currentEvent.e1].length();
-					for (int j=0; j<Vector.maxElementLength-len; j++) currentEvent.v1.contents[currentEvent.e1] = " ".concat(currentEvent.v1.contents[currentEvent.e1]);
+					for (int j=0; j<currentEvent.v1.maxElementLength-len; j++) currentEvent.v1.contents[currentEvent.e1] = " ".concat(currentEvent.v1.contents[currentEvent.e1]);
 					currentEvent = null;
 					break;
 				case AnimationEvent.ELT_FROM_CHANNEL:
@@ -1415,9 +1447,19 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 						intermediateOffset = 0;
 						System.out.println("Finished waiting!");
 					}
-					System.out.println("Waiting");
+					break;
+				case AnimationEvent.SET_FPS_FACTOR:
+					fpsfactor = currentEvent.darg;
+					int fps = (int) (fpsfactor * basefps);
+					int delay = (fps > 0) ? (1000 / fps) : 100;
+					System.out.println("Delay is "+delay+" ms");
+					stopAnimation();
+					timer.setDelay(delay);
+					startAnimation();
+					currentEvent = null;
 					break;
 				default:
+					System.out.println("Unsupported event type "+currentEvent.type);
 					break;
 			}
 		}
@@ -1443,10 +1485,13 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * 	New frame rate (frames per second)
 	 */
 	public void setFPS(int fps) {
-		this.fps = fps;
-		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
+		basefps = fps;
+		int newfps = (int) (basefps * fpsfactor); 
+		int delay = (newfps > 0) ? (1000 / newfps) : 10;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
+		stopAnimation();
 		timer.setDelay(delay);
+		startAnimation();
 	}
 	
 	/**
@@ -1857,7 +1902,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				else ShellVectorAnimator.this.notify();
 			}
 			catch (InvalidAnimationEventException e) {
-				System.err.println(e);
+				System.out.println(e);
 			}
 			return res;
 		}
@@ -1989,7 +2034,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * 	Time to pause for in ms
 	 */
 	public void waitFor(int time) {
-		int frames = time * fps / 1000; // number of frames to wait for
+		int fps = (int) (basefps*fpsfactor);
+		int frames = (time / 1000) * fps; // number of frames to wait for
+		System.out.println("Waiting for "+frames);
 		synchronized (this) {
 			try {
 				eventQueue.addLast(new AnimationEvent(AnimationEvent.WAIT, frames));
@@ -2006,6 +2053,23 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 
+	public void setFPSFactor(double f) {
+		synchronized(this) {
+			try {
+				eventQueue.addLast(new AnimationEvent(AnimationEvent.SET_FPS_FACTOR, f));
+				if (draw) startAnimation();
+				else notify();
+				while (!eventQueue.isEmpty()) wait();
+			}
+			catch (InvalidAnimationEventException e) {
+				System.out.println(e);
+			}
+			catch (InterruptedException e) {
+				System.out.println(e);
+			}
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
 	 */
@@ -2107,6 +2171,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		v2.copyElement(3, v, 5);
 		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
 		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
+		app.setFPSFactor(0.25);
 		a3.flash();
 		a3.move(8, true);
 		v2.flashElement(4);
@@ -2125,8 +2190,17 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		//a3.delete();
 		VectorAnimator.Vector v3 = app.createVector("New!!", t2);
 		}
-		catch (Exception e) {
-			System.err.println(e);
+		catch (InputTooLongException e) {
+			System.out.println(e);
+		}
+		catch (TooManyVectorsException e) {
+			System.out.println(e);
+		}
+		catch (InvalidLocationException e) {
+			System.out.println(e);
+		}
+		catch (ItemDeletedException e) {
+			System.out.println(e);
 		}
 	}
 }
