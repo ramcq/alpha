@@ -673,7 +673,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private LinkedList arrows = new LinkedList(); // an array of all Arrows currently known to the animator
 	
 	// Constructor
-	ShellVectorAnimator(Component c) {
+	public ShellVectorAnimator(Component c) {
 		outc = c;
 		outg = c.getGraphics();
 		
@@ -1220,7 +1220,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		});
 		
 		int[] t1 = {6,35,4,728,23,233,88};
-		app.startAnimation();
 		VectorAnimator.Vector v = app.createVector("V1", t1);
 		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
 		VectorAnimator.Arrow a2 = v.createArrow("A2", 2, false);
