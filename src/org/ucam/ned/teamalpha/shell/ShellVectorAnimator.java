@@ -1887,7 +1887,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		// Draw label
 		g.setFont(new Font("Monospaced", Font.PLAIN, 10));
 		if (a.left) {
-			g.drawString(a.label, left-20, ypos+5);
+			g.drawString(a.label, left-25, ypos+5);
 		}
 		else {
 			g.drawString(a.label, right+8, ypos+5);
@@ -1897,12 +1897,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	// Clear the area where an arrow was and redraw it
 	private void redrawArrow(Arrow a, Graphics g) {
 		if (!a.visible) return;
-		int left = (a.left) ? a.vector.left - 9 : a.vector.right+1;
+		int left = (a.left) ? a.vector.left - 10 : a.vector.right+1;
 		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
 
 		// Clear arrow area
 		g.setColor(bgcolour);
-		g.fillRect(left, ypos-5, 60, 10);
+		g.fillRect(left, ypos-5, 9, 9);
 				
 		if (!a.deleted) drawArrow(a, g);
 	}
