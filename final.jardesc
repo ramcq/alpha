@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jardesc>
+    <jar path="/home/robot101/animating-algorithms.jar"/>
+    <options overwrite="false" compress="true" exportErrors="true" exportWarnings="true" saveDescription="true" descriptionLocation="/Alpha/final.jardesc" useSourceFolders="false" buildIfNeeded="true"/>
+    <manifest manifestVersion="1.0" usesManifest="true" reuseManifest="false" saveManifest="false" generateManifest="true" manifestLocation="" mainClassHandleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{Shell.java[Shell">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="true">
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.animators{NonSquareMatrixException.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.algorithms{InsertionSort.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.animators{TooManyVectorsException.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.queues{GraphQueue.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.queues{NoSuchStateException.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{AnimatorPanel.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.animators{GraphAnimator.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.algorithms{BiDirBubbleSort.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{ButtonPanel.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.animators{VectorAnimator.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.animators{InvalidLocationException.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{Shell.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{ChoosePanel.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.algorithms{QuickSort.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{InvalidAnimationEventException.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{ShellGraphAnimator.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{StaticAlgorithmCatalog.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{GraphInputPanel.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.algorithms{VectorAlgorithm.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.queues{VectorQueue.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.algorithms{Algorithm.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{InvalidModeException.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.animators{InputTooLongException.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.queues{Primitive.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.animators{Animator.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.algorithms{GraphAlgorithm.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{AlgorithmCatalog.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.queues{AnimatorQueue.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.queues{GenericQueue.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{VectorInputPanel.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{ShellAnimator.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{ShellPanel.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.shell{ShellVectorAnimator.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.animators{ItemDeletedException.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.algorithms{Dijkstra.java"/>
+        <javaElement handleIdentifier="=Alpha/src&lt;org.ucam.ned.teamalpha.algorithms{Kruskal.java"/>
+    </selectedElements>
+</jardesc>
