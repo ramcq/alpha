@@ -192,12 +192,17 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			if ((!isValidOffset(from)) | (!isValidOffset(to))) throw new InvalidLocationException("Invalid offset. Vector length is "+size+", from was "+from+", to was "+to);
 			synchronized (ShellVectorAnimator.this) {
 				try {
-					// Move element out to channel
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, true));
-					// Move element vertically within channel
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, null, to, true));
-					// Move element horizontally into new position
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
+					if (Math.abs(from-to) == 1) {
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_PLACE, this, from, to, true));
+					}
+					else {
+						// Move element out to channel
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, true));
+						// Move element vertically within channel
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, null, to, true));
+						// Move element horizontally into new position
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
+					}
 					if (draw) startAnimation();
 					else ShellVectorAnimator.this.notify();
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
@@ -251,7 +256,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					if (Math.abs(from-to) == 1) {
-						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_PLACE, this, from, to));
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_PLACE, this, from, to, false));
 					}
 					else {
 						// Move element out to channel
@@ -1106,8 +1111,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 * 	thrown externally.
 		 */
 		AnimationEvent(int type, Vector v, int e, int arg) throws InvalidAnimationEventException {
-			if (type == AnimationEvent.ELT_CHANGE
-				|| type == AnimationEvent.ELT_VERT_IN_PLACE) {
+			if (type == AnimationEvent.ELT_CHANGE) {
 				this.type = type;
 				this.v1 = v;
 				this.v2 = null;
@@ -1123,6 +1127,18 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				this.e2 = arg;
 			}
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
+		}
+		
+		AnimationEvent(int type, Vector v, int from, int to, boolean copy) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.ELT_VERT_IN_PLACE) {
+				this.type = type;
+				this.v1 = v;
+				this.v2 = null;
+				this.e1 = from;
+				this.e2 = to;
+				this.b1 = copy;
+			}
+			else throw new InvalidAnimationEventException("Invalid event of type "+type);
 		}
 		
 		/**
@@ -1359,7 +1375,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.v2, currentEvent.e2, currentEvent.b1, true);
 					break;
 				case AnimationEvent.ELT_VERT_IN_PLACE:
-					moveElementVerticallyInPlace(big, currentEvent.v1, currentEvent.e1, currentEvent.e2);
+					moveElementVerticallyInPlace(big, currentEvent.v1, currentEvent.e1, currentEvent.e2, currentEvent.b1);
 					break;
 				case AnimationEvent.ELT_FLASH:
 					intermediateOffset += 1;
@@ -1699,7 +1715,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		else g.drawString(v.contents[from], areaLeft, startY - intermediateOffset);
 	}
 
-	private void moveElementVerticallyInPlace(Graphics g, Vector v, int from, int to) {
+	private void moveElementVerticallyInPlace(Graphics g, Vector v, int from, int to, boolean copy) {
 		int startY = v.top + (20*from) + 15;
 		int endY = v.top + (20*to) + 15;
 		
@@ -1715,6 +1731,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		// Clear destination
 		g.setColor(bgcolour);
 		g.fillRect(v.left+1, v.top+(to*20)+1, 48, 18);
+	
+		if (!copy) {
+			// Clear source
+			g.fillRect(v.left+1, v.top+(from*20)+1, 48, 18);
+		}
 		
 		intermediateOffset += 1;
 		
