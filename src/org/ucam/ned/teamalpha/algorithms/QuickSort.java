@@ -95,7 +95,7 @@ public class QuickSort extends VectorAlgorithm {
 					
 					COMPARES++;
 					
-					anim.showMessage("If <strong>" + a[i] + "</strong><<strong>" + pivot + "</strong> swap.");
+					anim.showMessage("If <strong>" + a[i] + "</strong> &lt; <strong>" + pivot + "</strong> swap.");
 					
 					// ANIM: Move the low-end pointer down
 					anim.setCurrentStep(1);
@@ -107,7 +107,7 @@ public class QuickSort extends VectorAlgorithm {
 					
 					COMPARES++;
 					
-					anim.showMessage("If <strong>" + a[i] + "</strong>><strong>" + pivot + "</strong> swap.");
+					anim.showMessage("If <strong>" + a[i] + "</strong> &gt; <strong>" + pivot + "</strong> swap.");
 					
 					// ANIM: Move the high-end pointer up
 					anim.setCurrentStep(2);
@@ -148,7 +148,7 @@ public class QuickSort extends VectorAlgorithm {
 					
 					// Move pointers in place for next run
 					// ANIM: Move the low-end pointer down
-					aLow.move(i-low +1, false);
+					if (i < high) aLow.move(i-low +1, false);
 					++i;
 					
 					// ANIM: Move the high-end pointer up
