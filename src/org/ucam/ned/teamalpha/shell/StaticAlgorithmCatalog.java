@@ -6,14 +6,17 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
+import java.lang.reflect.Method;
+
 import javax.swing.JPanel;
 
-import org.ucam.ned.teamalpha.algorithms.GraphAlgorithm;
 import org.ucam.ned.teamalpha.algorithms.Algorithm;
-import org.ucam.ned.teamalpha.algorithms.VectorAlgorithm;
-
 import org.ucam.ned.teamalpha.animators.Animator;
+import org.ucam.ned.teamalpha.animators.GraphAnimator;
+import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.queues.AnimatorQueue;
+import org.ucam.ned.teamalpha.queues.GraphQueue;
+import org.ucam.ned.teamalpha.queues.VectorQueue;
 
 /**
  * @author ram48
@@ -24,35 +27,44 @@ import org.ucam.ned.teamalpha.queues.AnimatorQueue;
 public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 	private static final String[] algorithms = { "Dijkstra", "InsertionSort", "Kruskal", "QuickSort", "RadixSort" };
 	
-	private static final int GRAPH = 0;
-	private static final int VECTOR = 1;
+	private static final int GRAPH = 1;
+	private static final int VECTOR = 2;
 	
 	public class AvailableAlgorithm extends AlgorithmCatalog.AvailableAlgorithm {
 		private int type;
+		private Class klass;
 		private String name;
 		private String desc;
 		
-		private AvailableAlgorithm(int type, String name, String desc) {
+		private AvailableAlgorithm(int type, Class klass, String name, String desc) {
 			this.type = type;
+			this.klass = klass;
 			this.name = name;
 			this.desc = desc;
 		}
 		
 		public Algorithm getAlgorithm(JPanel panel) {
 			switch (type) {
-				case GRAPH:
-					return new GraphAlgorithm;
-					break;
-				case VECTOR:
-					break;
-				default:
-					break;
+			case GRAPH:
+				break;
+			case VECTOR:
+				break;
+			default:
+				break;
 			}
+			
 			return null;
 		}
 
 		public Animator getAnimator(JPanel panel) {
-			
+			switch (type) {
+			case GRAPH:
+				return new ShellGraphAnimator(panel);
+			case VECTOR:
+				return new ShellVectorAnimator(panel);
+			default:
+				return null;
+			}
 		}
 
 		public String getDescription() {
@@ -64,18 +76,47 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 		}
 
 		public AnimatorQueue getQueue(Animator anim) {
-			
-			// TODO Auto-generated method stub
-			return null;
+			switch (type) {
+			case GRAPH:
+				return new GraphQueue((GraphAnimator) anim);
+			case VECTOR:
+				return new VectorQueue((VectorAnimator) anim);
+			default:
+				return null;
+			}
 		}
-}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.shell.AlgorithmCatalog#getAvailableAlgorithms()
-	 */
-	public AlgorithmCatalog.AvailableAlgorithm[] getAvailableAlgorithms() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
+	public AlgorithmCatalog.AvailableAlgorithm[] getAvailableAlgorithms() {
+		AvailableAlgorithm[] available = new AvailableAlgorithm[algorithms.length];
+		Class[] emptyclass = {};
+		Object[] emptyobject = {};
+		
+		for (int i=0; i<algorithms.length; i++) {
+			try {
+				Class algo = Class.forName("org.ucam.ned.teamalpha.algorithms." + algorithms[i]);
+			
+				Method getName = algo.getMethod("getName", emptyclass);
+				Method getDescription = algo.getMethod("getDescription", emptyclass);
+			
+				String name = (String) getName.invoke(null, emptyobject);
+				String desc = (String) getDescription.invoke(null, emptyobject);
+			
+				available[i] = new AvailableAlgorithm(0, algo, name, desc);
+			} catch (Exception e) {
+				System.err.println("failed to get algorithm " + algorithms[i] + ": " + e);
+			}
+		}
+
+		return available;
+	}
+	
+	public static void main(String[] args) {
+		AlgorithmCatalog a = new StaticAlgorithmCatalog();
+		AlgorithmCatalog.AvailableAlgorithm[] as = a.getAvailableAlgorithms();
+		for (int i = 0; i < as.length; i++) {
+			if (as[i] != null)
+				System.out.println(as[i].getName() + ": " + as[i].getDescription());
+		}
+	}
 }
