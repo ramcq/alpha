@@ -6,6 +6,7 @@
  */
  
  // Note to self: what does this do when minimised / obscured when the timer is not running?
+ 
 package org.ucam.ned.teamalpha.shell;
 
 import java.util.*;
@@ -74,8 +75,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					// Redraw the vector
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.VECTOR_CHANGE, this));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -91,8 +96,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					// Move element horizontally into new position
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -111,8 +120,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					// Move element horizontally into new position
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -124,8 +137,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_CHANGE, this, elt, value));
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, elt, true));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -141,15 +158,21 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					// Move both elements in to new positions
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.TWO_FROM_CHANNEL, this, elt1, elt2));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
 		}
 		
+		// I'm not implementing this. The effect can be achieved with a couple of moves.
 		public void swapElements(int elt1, VectorAnimator.Vector v, int elt2) {
 		}
+		// There is no way in hell I am doing this. You never actually split an array anyway.
 		public VectorAnimator.Vector splitVector(int offset) {
 			return null;
 		}
@@ -161,8 +184,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, res));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 				return res;
@@ -221,8 +248,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_MOVE, this, newpos, boundary));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -234,8 +265,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_FLASH, this));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -444,7 +479,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	}
 	
 	// This method is executed on each animation frame
-	public void actionPerformed(ActionEvent a) {
+	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
 		outg.drawImage(bi,0,0,outc);
 
@@ -462,6 +497,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				System.out.println("Nothing to do, stopping Timer");
 				currentEvent = null;
 				stopAnimation();
+				notify();
 			}
 		}
 		
@@ -720,7 +756,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		intermediateOffset += 1;
 		
 		// boundary of affected area
-		int areaLeft = a.left ? a.vector.left - 61 : a.vector.right + 1;
+		int areaLeft = a.left ? a.vector.left - 60 : a.vector.right + 1;
 		
 		// clear affected area
 		g.setColor(bgcolour);
@@ -771,7 +807,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	}
 	
 	private void drawArrow(Arrow a, Graphics g, Color c, int yoffset) {
-		int left = (a.left) ? a.vector.left - 5 : a.vector.right+1;
+		int left = (a.left) ? a.vector.left - 9 : a.vector.right+1;
 		int right = left + 8;
 		int ypos = (a.boundary) ? a.vector.top + (a.position*20) + yoffset : a.vector.top + (a.position*20) + 10 + yoffset;
 		
@@ -790,7 +826,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		// Draw label
 		g.setFont(new Font("Monospaced", Font.PLAIN, 10));
 		if (a.left) {
-			g.drawString(a.label, left-8, ypos+5);
+			g.drawString(a.label, left-20, ypos+5);
 		}
 		else {
 			g.drawString(a.label, right+8, ypos+5);
@@ -799,7 +835,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	private void redrawArrow(Arrow a, Graphics g) {
 		if (!a.visible) return;
-		int left = (a.left) ? a.vector.left - 5 : a.vector.right+1;
+		int left = (a.left) ? a.vector.left - 9 : a.vector.right+1;
 		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
 
 		// Clear arrow area
@@ -876,22 +912,39 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		int[] t1 = {6,35,4,728,23,233,88};
 		app.startAnimation();
 		VectorAnimator.Vector v = app.createVector("V1", t1);
+		System.out.println("Back");
 		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
+		System.out.println("Back");
 		VectorAnimator.Arrow a2 = v.createArrow("A2", 2, false);
+		System.out.println("Back");
 		v.moveElement(2,2);
+		System.out.println("Back");
 		v.moveElement(0,5);
+		System.out.println("Back");
 		a.setHighlight(true);
+		System.out.println("Back");
 		a.move(0, false);
+		System.out.println("Back");
 		v.copyElement(4,3);
+		System.out.println("Back");
 		v.swapElements(2,6);
+		System.out.println("Back");
 		v.setElement(0,100);
+		System.out.println("Back");
 		a2.move(6, true);
+		System.out.println("Back");
 		int[] t2 = {34,72,76667,257,878,99112,6,17};
 		VectorAnimator.Vector v2 = app.createVector("V2", t2);
+		System.out.println("Back");
 		v2.swapElements(7,2);
+		System.out.println("Back");
 		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
+		System.out.println("Back");
 		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
+		System.out.println("Back");
 		a3.setHighlight(true);
+		System.out.println("Back");
 		a3.move(8, true);
+		System.out.println("Back");
 	}
 }
