@@ -166,10 +166,20 @@ As an extention of the merits of communication, we learned that working
  Everyone had to have some idea of what was going on, so that when people
  were unavailable for some reason the whole project did not have to be held
  up.
+\layout Itemize
+
+Good planning is very important as it helps to find problems early, and
+ fixing problems is easier the earlier you find them.
+ Many problems found during the later stages of the project could probably
+ have been avoided if the planning and design had been better.
+ 
 \layout Section
 
 Summary of work undertaken
-\layout Subsection
+\layout Subsection*
+
+Manager
+\layout Subsubsection*
 
 Graham
 \layout Standard
@@ -179,21 +189,10 @@ Graham was the manager of the project, and so was in charge of organising
  He also had a role as a documenter, producing the User Guide among other
  things.
  
-\layout Subsection
+\layout Subsection*
 
-Steven
-\layout Standard
-
-Steven coded the graph animator module, one of the most challenging parts
- of the project.
-\layout Subsection
-
-Richard
-\layout Standard
-
-Richard tested the algorithms and the graph animator, as well as doing integrati
-on testing on the whole system.
-\layout Subsection
+Coders
+\layout Subsubsection*
 
 Rob
 \layout Standard
@@ -203,7 +202,7 @@ Rob was heavily involved with the design of the system, coming up with many
  He coded the queueing mechanism and the shell and also set up and maintained
  the CVS repositary in his role as librarian.
  
-\layout Subsection
+\layout Subsubsection*
 
 Andrew
 \layout Standard
@@ -213,7 +212,42 @@ Andrew also came up with many design plans for the system.
  other things he was involved in making sure documents were completed and
  handed in on time to the right place.
  
-\layout Subsection
+\layout Subsubsection*
+
+Sid
+\layout Standard
+
+Sid coded all of the algorithms and also helped out Rob with the shell,
+ making sure all the modules integrated together properly.
+ 
+\layout Subsubsection*
+
+Steven
+\layout Standard
+
+Steven coded the graph animator module, one of the most challenging parts
+ of the project.
+\layout Subsection*
+
+Testers
+\layout Subsubsection*
+
+Richard
+\layout Standard
+
+Richard tested the algorithms and the graph animator, as well as doing integrati
+on testing on the whole system.
+\layout Subsubsection*
+
+Alan
+\layout Standard
+
+Alan tested the vector animator as well as performing various other module
+ and integration tests.
+\layout Subsection*
+
+Documenter
+\layout Subsubsection*
 
 Neofytos
 \layout Standard
@@ -222,20 +256,6 @@ Neofytos was a documenter, and so was involved in writing up many of the
  documents such as the Developers Guide.
  He also wrote the algorithm explanations that appear during animation to
  help explain what the algorithm is doing.
-\layout Subsection
-
-Sid
-\layout Standard
-
-Sid coded all of the algorithms and also helped out Rob with the shell.
- 
-\layout Subsection
-
-Alan
-\layout Standard
-
-Alan tested the vector animator as well as performing various other module
- and integration tests.
 \layout Section
 
 Random final report stuff

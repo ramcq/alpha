@@ -32,7 +32,19 @@ Animating Algorithms: Individual Report
 Graham Le Page (gpl26)
 \layout Section
 
+Introduction
+\layout Standard
+
+This is my individual report for the "Animating Algorithms" (Topic 8.5) Computer
+ Science Tripos Part IB / Part II (General) group project.
+ I am a member of group "Alpha".
+ This project is being overseen by Steven Hand (smh22@cam.ac.uk).
+\layout Section
+
 My contribution
+\layout Subsection*
+
+Manager
 \layout Standard
 
 I was the manager of the Animating Algorithms project.
@@ -45,25 +57,100 @@ I was the manager of the Animating Algorithms project.
  plans were available for other members to cover their work.
 \layout Standard
 
+An example of this is this plan of action from the Progress Report which
+ shows who had to do what job and when they had to have it done by:
+\layout Subsubsection*
+
+Plan of action
+\layout Standard
+
+To be completed by Sunday 15th Feb:
+\layout Itemize
+
+Finish off last parts of
+\layout Itemize
+
+algorithms - Sid
+\begin_deeper 
+\layout Itemize
+
+animator - Steven and Andrew
+\layout Itemize
+
+queue and threading - Rob
+\end_deeper 
+\layout Standard
+
+To be completed by Wednesday 18th Feb:
+\layout Itemize
+
+Write and test shell - Rob and Sid
+\layout Itemize
+
+Fully test modules - Richard and Alan
+\layout Standard
+
+To be completed by Wednesday 25th Feb:
+\layout Itemize
+
+Integrate all modules together - Sid, Steven, Andrew and Rob
+\layout Itemize
+
+Fully test entire program - Richard and Alan
+\layout Itemize
+
+Complete User Guide - Graham
+\layout Itemize
+
+Complete Developers Guide - Neofytos
+\layout Itemize
+
+Write final report - Graham
+\layout Itemize
+
+Write individual reports - Everyone
+\layout Standard
+
+Important dates:
+\layout Itemize
+
+Thursday 26th Feb - Hand in final report
+\layout Itemize
+
+Friday 27th Feb - Final review meeting with supervisor
+\layout Itemize
+
+Monday 1st Mar - Deadline for code completion
+\layout Itemize
+
+Wednesday 3rd Mar - Group presentation
+\layout Subsection*
+
+Documenter
+\layout Standard
+
 I also wrote some of the documentation, including large parts of the Specificati
 on, Progress Report, User Guide and the Final Report.
- For the User Guide this involved making sure that the project could be
- used by anyone who had read the document, so making sure that it contained
- details of what would happen if a button was pressed, for example.
+ This involved using LaTex for the first time, and then showing other people
+ how to use it.
+ The actual documents involved making sure that the project could be used
+ by anyone who had read the documentation, so for example in the User Guide
+ making sure that it contained details of what would happen if a button
+ was pressed, for example.
  It also involved working closely with the coders in particular in order
- to implement the user interface and document it properly.
- 
+ to implement the user interface and document it properly, and working with
+ Neofytos to proof read each others documentation.
 \layout Section
 
 Contribution of others
-\layout Subsection
+\layout Subsection*
 
 Steven
 \layout Itemize
 
 Steven coded the graph animator module, one of the most challenging parts
  of the project.
-\layout Subsection
+\layout Subsection*
 
 Richard
 \layout Itemize
@@ -73,7 +160,7 @@ on testing on the whole system.
  Although not having as much work to do as the coders when they were writing
  modules, he made up for this with a lot of testing when the modules were
  finished.
-\layout Subsection
+\layout Subsection*
 
 Rob
 \layout Itemize
@@ -83,7 +170,7 @@ Rob was heavily involved with the design of the system, coming up with many
  He coded the queueing mechanism and the shell and also set up and maintained
  the CVS repositary in his role as librarian.
  
-\layout Subsection
+\layout Subsection*
 
 Andrew
 \layout Itemize
@@ -94,7 +181,7 @@ Andrew also came up with many design plans for the system.
  were completed and handed in on time to the right place.
  He was always present at group meetings and passed on his knowledge to
  other group members at every opportunity.
-\layout Subsection
+\layout Subsection*
 
 Neofytos
 \layout Itemize
@@ -103,7 +190,7 @@ Neofytos was an enthusiastic documenter, and so was involved in writing
  up many of the documents such as the Developers Guide.
  He also wrote the algorithm explanations that appear during animation to
  help explain what the algorithm is doing.
-\layout Subsection
+\layout Subsection*
 
 Sid
 \layout Itemize
@@ -112,7 +199,7 @@ Sid coded the algorithms and also helped out a great deal with the shell.
  He worked well with the other coders making sure that integration went
  relatively smoothly.
  
-\layout Subsection
+\layout Subsection*
 
 Alan
 \layout Itemize
