@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 
 import javax.swing.JPanel;
 
-import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.queues.AnimatorQueue;
@@ -42,7 +41,7 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 			this.desc = desc;
 		}
 		
-		public ShellPanel getAlgorithm() {
+		public ShellPanel getInputPanel() {
 			switch (type) {
 			case GRAPH:
 				return new GraphInputPanel();
@@ -83,7 +82,7 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 			}
 		}
 		
-		public AnimatorQueue getQueue(Animator anim) {
+		public AnimatorQueue getQueue(ShellAnimator anim) {
 			switch (type) {
 			case GRAPH:
 				return new GraphQueue((GraphAnimator) anim);
