@@ -10,21 +10,12 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
-
 /**
- * main work done by
- * @author am502
- * 
- * edited for graph animation by
- * @author sjc209
- * 
  * This class generates on screen Graphics2D from methods are called on it by the queue
  * Animation is controlled by it's own internal queue, from which events are picked off according to a Timer object
  * The frame is redrawn after each event is resolved
@@ -36,7 +27,10 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * 
  * Edge and Node inner classes are used to store the data for the objects displayed on screen
  * Methods called by the Queue call methods in the inner classes, which add items to the internal queue.
- *
+ * 
+ * @author sjc209
+ * 
+ * 
  */
 
 /*
@@ -85,18 +79,23 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	private int intermediateOffset = 0; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
 	private LinkedList eventQueue; // will hold queue the events we are to perform
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
-	public static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.yellow, Color.darkGray, Color.lightGray};
+	private static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.yellow, Color.darkGray, Color.lightGray};
 		//colours for representing the different node/edge sets
-	public static final int NODE_SIZE = 12; //node width/height
-	public static final int NODE_FONT_SIZE = 18; //node font height
-	public static final int EDGE_FONT_SIZE = 16; //edge font height
-	public static final int EDGE_TYPE_SAMDIR = 0; //edge types
-	public static final int EDGE_TYPE_ONEDIR = 1;
-	public static final int EDGE_TYPE_TWODIR = 2;
-	public static final int EDGE_CURVE_ANGLE = 10; //curvature degree
-	public static final boolean EDGE_LINE_DRAW = false; //set to true to make it draw thin lines
-	public static final int FLASH_TIME = 15; //number of loops when flashing node/edge
-
+	private static final int NODE_SIZE = 12; //constant for specifying node width/height
+	private static final int NODE_FONT_SIZE = 18; //node font height
+	private static final int EDGE_FONT_SIZE = 16; //edge font height
+	private static final int EDGE_TYPE_SAMDIR = 0; //edge types
+	private static final int EDGE_TYPE_ONEDIR = 1;
+	private static final int EDGE_TYPE_TWODIR = 2;
+	private static final int EDGE_CURVE_ANGLE = 10; //curvature degree
+	private static final boolean EDGE_LINE_DRAW = false; //set to true to make it draw thin lines
+	private static final int FLASH_TIME = 15; //number of loops when flashing node/edge
+	private static final int GRAPH_DIM = 10; //graph dimension
+	/**
+	 * @author Steven
+	 *
+	 * Class for storing the properties, and adding animation events to the internal queue, for an individual node.
+	 */
 	public class Node /*implements Serializable*/{
 		int Nodewidth=NODE_SIZE;
 		int Nodeheight=NODE_SIZE; //nodes always circular 
@@ -105,9 +104,16 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int set; //set node belongs to
 		int id;
 		int oldlen;
-		private String label; 
-		/*
-		 * called by creategraph api to initialise node data 
+		String label; 
+		/**
+		 * Method called by creategraph api to initialise node data 
+		 *
+		 * @param x
+					x coordinate of corner of node
+		 * @param y
+					y coordinate of corner of node
+		 * @param i
+					id of node
 		 */
 		public void nodesetdata(int x, int y, int i) {
 			this.x = x;
@@ -117,19 +123,27 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.id = i;
 			this.oldlen = 0;
 		}
-		
-		public void delete() {
-			
-		}
 		/*
-		 * called by nodesetlabel api to set label and update display
+		 * Delete node from display (permanent)
+		 * Not implemented
+		 */
+	/*	public void delete() {
+			
+		}*/
+		/**
+		 * Method called by nodesetlabel api to set label and update display
+		 *
+		 * @param label
+		 *			the new label for the node
 		 */
 		public void setlabel(String label) {
 			this.oldlen = this.label.length();
 			this.label = label;
 			this.drawlabel();
 		}
-		//put a drawing event on the animation queue
+		/**
+		 * Method for putting a drawing event on the animation queue to display the change in node label
+		 */
 		public void drawlabel() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -145,18 +159,26 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}
 		}
-		
-		public void highlightNode() {
-			
-		}
 		/*
-		 * called by the setNodeShade api 
+		 * Depreciated
+		 */
+	/*	public void highlightNode() {
+			
+		}*/
+		/**
+		 * Method called by the setNodeShade api to change the colour of a node
+		 * @param set
+		 *			value indicating which set the node now belongs to, which determines which colour it will be. Values outside the range 0-9 will have no effect
 		 */
 		public void setNodeshade(int set) {
-			this.set = set;
-			this.drawNode();
+			if (set<10 && set>-1) {
+				this.set = set;
+				this.drawNode();
+			}
 		}
-		//put a drawing event on the animation queue
+		/**
+		 * 	Method to put a drawing event on the animation queue to redraw the node
+		 */
 		public void drawNode() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -172,6 +194,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}
 		}
+		
+		/**
+		 * Method to add a flash node event to the internal animation queue
+		 */
 		public void flash() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -187,25 +213,44 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}			
 		}
+		/**
+		 * Method to copy the data of one node to another - used in the save/restore state mechanism
+		 * @param n
+		 *			the node containing the data to be copied
+		 */
 		public void nodecopy(Node n) {
 			this.x = n.x; 
 			this.y = n.y; 
 			this.set = n.set;
-			this.label = n.label; 		
+			this.label = n.label; 
+			this.id = n.id;
+			this.oldlen = n.oldlen;
 		}
 	}
 	
+	/**
+	 * @author Steven
+	 *
+	 * Class which holds the data for a connection between two nodes.
+	 * Note: any two nodes should only have one Edge class 'connecting' them, even if there are two edges connecting them because there are different weightings for each direction
+	 */
 	public class Edge /*implements Serializable*/ {
 		int x1,x2; 
 		int y1,y2; //coordinates for two end points of lines
 		int set1,set2; //set the edges belong to, determines colour
 		int nd1, nd2;
-		private String label1;
-		private String label2;//two different paths
+		String label1;
+		String label2;//two different paths
 		int type; //SAMDIR, ONEDIR, TWODIR
 		int toshade;
-		/*
-		 * called by creategraph api to initialise node data 
+		/**
+		 * Method called by creategraph api to initialise node data 
+		 * @param n1
+		 * 			the id of the first node that the edge connects to
+		 * @param n2
+		 * 			the id of the second node that the edge connects to
+		 * @param cost
+		 * 			the cost of the edge, which is the label to display next to the edge
 		 */
 		public void edgesetdata(int n1, int n2, String cost) {
 			this.x1 = nodelist[n1].x;
@@ -220,12 +265,17 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.type = EDGE_TYPE_ONEDIR;
 			this.toshade = 0;
 		}
-		
-		public void delete() {
-			
-		}
 		/*
-		 * called by edgesetlabel api to set label and update display
+		 * Cause permanent deletion of edge data
+		 * Not implemented
+		 */
+	/*	public void delete() {
+			
+		}*/
+		/**
+		 * Method called by createGraph api in order to transform a one directional edge into either bidirectional edge which has the same weight each way, or changing it so that it will actually display two different (curved) edges with different costs
+		 * @param label
+		 *			specifies what the label for the other direction of the edge is. WARNING: this must be string equal to the previous label in order to change it to a bidirectional edge
 		 */
 		public void addpath (String label) {
 			this.label2 = label;
@@ -236,17 +286,27 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				this.type = EDGE_TYPE_TWODIR;
 			}
 		}
-		
+		/**
+		 * Method called by edgeSetlabel api to set label and update display
+		 * @param label
+		 *			specifies what the new label is
+		 */		
 		public void setlabel(String label) {
 			this.label1 = label;
 			this.drawlabel();
 		}
+		/**
+		 * Method called by edgeSetlabel api to set label for other direction of edge and update display
+		 * @param label
+		 *			specifies what the new label is. This will only cause a display change if the Edge is set as type = EDGE_TYPE_TWODIR
+		 */
 		public void setaltlabel(String label) {
 			this.label2 = label;
 			this.drawlabel();
 		}
-		
-		//put a drawing event on the animation queue
+		/**
+		 * Method for putting a drawing event on the animation queue to redraw the edge label
+		 */
 		public void drawlabel() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -262,25 +322,38 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}
 		}
-		/*
-		 * called by the setEdgeShade api 
+		/**
+		 * Method called by the setEdgeShade api to change the colour of an edge
+		 * @param set
+		 *			value indicating which set the edge now belongs to, which determines which colour it will be. Values outside the range 0-9 will have no effect
 		 */
 		public void setEdgeshade(int set) {
-			this.set1 = set;
-			this.toshade = 0;
-			this.drawEdgeShade();
-		}
-		public void setEdgeshade2(int set) {
-			if (this.type == EDGE_TYPE_SAMDIR) {
+			if (set<10 && set>-1) {
 				this.set1 = set;
+				this.toshade = 0;
+				this.drawEdgeShade();
 			}
-			else {
-				this.set2 = set;
-			}
-			this.toshade = 1;
-			this.drawEdgeShade();
 		}
-		//put a drawing event on the animation queue
+		/**
+		 * Method called by the setEdgeShade api to change the colour of the second edge for cases when the two paths between nodes have different weights
+		 * @param set
+		 *			value indicating which set the edge now belongs to, which determines which colour it will be. Values outside the range 0-9 will have no effect
+		 */
+		public void setEdgeshade2(int set) {
+			if (set<10 && set>-1) {
+				if (this.type == EDGE_TYPE_SAMDIR) {
+					this.set1 = set;
+				}
+				else {
+					this.set2 = set;
+				}
+				this.toshade = 1;
+				this.drawEdgeShade();
+			}
+		}
+		/**
+		 * Method to put a drawing event on the animation queue to redraw the edge.
+		 */
 		public void drawEdge() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -296,6 +369,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}
 		}
+		/**
+		 * Method to put a shading event on the animation queue to animate the incremental shading of an edge
+		 */
 		public void drawEdgeShade() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -311,14 +387,23 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}
 		}
+		/**
+		 * Method to cause an edge to flash for a set time period.
+		 */
 		public void altflash() {
 			this.toshade = 0;
 			this.drawEdgeFlash();
 		}
+		/**
+		 * Method to cause an edge to flash. This is the alternate version to flash the second path when the two different directions have different weights.
+		 */
 		public void flash() {
 			this.toshade = 1;
 			this.drawEdgeFlash();
 		}
+		/**
+		 * Method to put a flash event on the animation queue to cause the edge to flash for a set time period.
+		 */
 		public void drawEdgeFlash() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -334,7 +419,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}
 		}
-
+		
+		/**
+		 * Method to copy the data from one edge onto the current edge. Used in save/resore state api.
+		 * @param e
+		 */
 		public void edgecopy(Edge e) {
 			this.x1 = e.x1;
 			this.y1 = e.y1;
@@ -351,16 +440,44 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 	}
 
+	/**
+	 * @author Steven
+	 *
+	 * Class that processes the animation events as they are pulled off the queue
+	 */
 	public class AnimationEvent {
-		public static final int GRAPH_REDRAW = 0; //not sure whether needed - currently drawing each node/edge as separate events
+		/**
+		 * Redraw entire graph from scratch
+		 */
+		public static final int GRAPH_REDRAW = 0; //Currently not used - currently drawing each node/edge as separate events
+		/**
+		 * Redraw single node
+		 */
 		public static final int NODE_REDRAW = 1;
+		/**
+		 * Redraw connections between two nodes
+		 */
 		public static final int EDGE_REDRAW = 2;
+		/**
+		 * Redraw a single node label
+		 */
 		public static final int NODE_LABEL_REDRAW = 3;
+		/**
+		 * Redraw single edge label
+		 */
 		public static final int EDGE_LABEL_REDRAW = 4;
+		/**
+		 * Animate an edge being shaded
+		 */
 		public static final int EDGE_SHADE_REDRAW = 5;
+		/**
+		 * Animate a node being flashed
+		 */
 		public static final int NODE_FLASH = 6;
-		public static final int EDGE_FLASH = 7;
-		
+		/**
+		 * Animate an edge being flashed
+		 */
+		public static final int EDGE_FLASH = 7;		
 		private int type;
 		private Node n1;
 		private Edge e1;
@@ -383,7 +500,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 	}
-	
+	/**
+	 * Constructor
+	 * @param c
+	 * 			A container for us to use as a canvas.
+	 */
 	public ShellGraphAnimator(Container c) {
 		outc = new JPanel() {
 			public void paintComponent(Graphics2D g) {
@@ -422,6 +543,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		big.setColor(fgcolour);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
 		outg.drawImage(bi,0,0,outc);
@@ -514,23 +638,42 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					break;
 			}
 		}
-	}
-	
+	}	
+	/**
+	 * Method to start timer, causing animation events to be taken from the queue
+	 */
 	public void startAnimation() {
 		if (!timer.isRunning()) timer.start();
 	}
-	
+	/**
+	 * Method to stop timer, causing animation events to no longer be executed
+	 */
 	public void stopAnimation() {
 		if (timer.isRunning()) timer.stop();
 	}
-	//draw node on screen
-	public void drawNode(Node n, Graphics2D g) {
+	/**
+	 * Draw node on screen
+	 * @param n
+	 *			Node to be drawn
+	 * @param g
+	 *			Graphics object to draw on
+	 */
+	private void drawNode(Node n, Graphics2D g) {
 		g.setColor(SET_COLOUR[n.set]);
 		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
 		g.setColor(fgcolour);		
 		drawNodelabel(n, g);
 	}
-	public void drawFlashNode(Node n, boolean fset, Graphics2D g) {
+	/**
+	 * Draw a node flashing
+	 * @param n
+	 *			Node to be drawn
+	 * @param fset
+	 *			Colour setting
+	 * @param g
+	 *			Graphics object to draw on
+	 */
+	private void drawFlashNode(Node n, boolean fset, Graphics2D g) {
 		if (fset == true) {
 			g.setColor(Color.black);
 		}
@@ -541,8 +684,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		g.setColor(fgcolour);		
 		drawNodelabel(n, g);
 	}
-	//draw edge on screen	
-	public void drawEdge(Edge e, Graphics2D g) {
+	/**
+	 * Draw edge on screen
+	 * @param e
+	 *			Edge to be drawn
+	 * @param g
+	 *			Graphics object to draw on
+	 */
+	private void drawEdge(Edge e, Graphics2D g) {
 		if (e.type == EDGE_TYPE_SAMDIR) {
 			g.setColor(SET_COLOUR[e.set1]);
 			edrawLine(e.x1, e.y1, e.x2, e.y2, g);
@@ -563,8 +712,26 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNode(nodelist[e.nd1],g);
 		drawNode(nodelist[e.nd2],g);
 	}
-	
-	public void drawcurve (int x1,int y1,int x2,int y2,int set, double limit, String label,Graphics2D g) {
+	/**
+	 * Draws a curve between two points
+	 * @param x1
+	 * 			X coorinate of first point
+	 * @param y1
+	 * 			Y coorinate of first point
+	 * @param x2
+	 * 			X coorinate of second point
+	 * @param y2
+	 * 			Y coorinate of second point
+	 * @param set
+	 * 			colour to be drawn
+	 * @param limit
+	 * 			how far to draw, used for incrimental shading animation
+	 * @param label
+	 * 			label for the curve (weight of edge)
+	 * @param g
+	 *			Graphics object to draw on
+	 */
+	private void drawcurve (int x1,int y1,int x2,int y2,int set, double limit, String label,Graphics2D g) {
 		g.setColor(SET_COLOUR[set]);
 		//calculate midpoint of line
 		int sx = (int) (x1 - (x1 - x2)/2);
@@ -639,10 +806,22 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		while (i <= limit);
 		g.setColor(fgcolour);
 	}
-	/* 
-	 * Method for drawing arrows on straight lines
+	/**
+	 * Draws an arrow on a straight line to indicate one directional edges
+	 * @param x1
+	 * 			X coorinate of first point
+	 * @param y1
+	 * 			Y coorinate of first point
+	 * @param x2
+	 * 			X coorinate of second point
+	 * @param y2
+	 * 			Y coorinate of second point
+	 * @param set
+	 * 			colour to be drawn
+	 * @param g
+	 *			Graphics object to draw on
 	 */
-	public void drawarrow (int x1, int y1, int x2, int y2, int set, Graphics2D g) {
+	private void drawarrow (int x1, int y1, int x2, int y2, int set, Graphics2D g) {
 		g.setColor(SET_COLOUR[set]);
 		int x = (int) (x1 - ((x1 - x2))/2);
 		int y = (int) (y1 - ((y1 - y2))/2);
@@ -703,10 +882,34 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		g.fillPolygon(xpoints, ypoints,3);
 		g.setColor(fgcolour);
 	}
-	/* 
+	/** 
 	 * Method for drawing arrows on curves
+	 * @param x1
+	 * 			X coorinate of first point - one point of curve section
+	 * @param y1
+	 * 			Y coorinate of first point - one point of curve section
+	 * @param x2
+	 * 			X coorinate of second point - other point of curve section
+	 * @param y2
+	 * 			Y coorinate of second point - other point of curve section
+	 * @param x3
+	 * 			X coorinate of third point - one curve end point
+	 * @param y3
+	 * 			Y coorinate of third point - one curve end point
+	 * @param x4
+	 * 			X coorinate of fourth point - other curve end point
+	 * @param y4
+	 * 			Y coorinate of fourth point - other curve end point
+	 * @param set
+	 * 			colour to be drawn
+	 * @param limit
+	 * 			how far to draw, used for incrimental shading animation
+	 * @param label
+	 * 			label for the curve (weight of edge)
+	 * @param g
+	 *			Graphics object to draw on
 	 */
-	public void drawarrow (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int set, Graphics2D g) {
+	private void drawarrow (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int set, Graphics2D g) {
 		g.setColor(SET_COLOUR[set]);
 		int x = (int) x1;
 		int y = (int) y1;
@@ -714,19 +917,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int arsize = 5;
 		if (x3 != x4 && y3 != y4){
 			double grad = (double) ((x3-x4)/(y3-y4));
-/*			if (x3>x4) {
-				sx3 = (int)(x2 - arsize * grad);
-				sy3 = (int)(y2 + arsize * grad);
-			}
-			else {
-				sx3 = (int)(x2 + arsize * grad);
-				sy3 = (int)(y2 - arsize * grad);
-			}
-			grad = (-1 / grad);
-			sx1 = (int)(x - arsize * grad);
-			sy1 = (int)(y - arsize * grad);
-			sx2 = (int)(x + arsize * grad);
-			sy2 = (int)(y + arsize * grad); */
 			if ((x3>x4 && y3>y4) || (x4>x3 && y4>y3)) {
 				if (x3>x4 && y3>y4) {
 					sx3 = (int)(x2 - arsize * grad);
@@ -791,9 +981,16 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		g.fillPolygon(xpoints, ypoints,3);
 		g.setColor(fgcolour);
 	}
-		
-	//incrementally shade an edge on screen	
-	public void drawEdgeShade(Edge e, Graphics2D g, int t) {
+	/**
+	 * Draws an section of an edge on screen - used to animate the edge being shaded
+	 * @param e
+	 *			Edge to be drawn
+	 * @param g
+	 *			Graphics object to draw on
+	 * @param t
+	 * 			Amount of edge to draw
+	 */	
+	private void drawEdgeShade(Edge e, Graphics2D g, int t) {
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
 			int sx1,sy1,sx2,sy2;
 			if (e.toshade == 1) {
@@ -825,7 +1022,16 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNode(nodelist[e.nd1],g);
 		drawNode(nodelist[e.nd2],g);
 	}
-	public void drawFlashEdge(Edge e, boolean fset, Graphics2D g) {
+	/**
+	 * Draws edge when flashing
+	 * @param e
+	 *			Edge to be drawn
+	 * @param fset
+	 * 			determines colour
+	 * @param g
+	 *			Graphics object to draw on
+	 */
+	private void drawFlashEdge(Edge e, boolean fset, Graphics2D g) {
 		int sx1,sx2,sy1,sy2;
 		if (fset == true) {
 			g.setColor(Color.black);
@@ -862,10 +1068,15 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNode(nodelist[e.nd1],g);
 		drawNode(nodelist[e.nd2],g);
 	}
-	
-	//draw edge label on screen
-	public void drawEdgelabel(Edge e, Graphics2D g) {
-		//pos. TODO need to blank current label?
+	/**
+	 * Draw edge label on screen
+	 * @param e
+	 *			Edge to be drawn
+	 * @param g
+	 *			Graphics object to draw on
+	 */
+	private void drawEdgelabel(Edge e, Graphics2D g) {
+		//pos. TODO need to blank current label? (will need more edge redrawing, potential endless draw problem since drawing label currently called by drawing edge
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
 			int x = (int) (e.x1 - (numnodes * (e.x1 - e.x2)/13));
 			int y = (int) (e.y1 - (numnodes * (e.y1 - e.y2)/13));
@@ -876,22 +1087,58 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			drawcurve(e.x2,e.y2,e.x1,e.y1,e.set2,1.0,e.label2,g);
 		}
 	}
-	//clear old label before drawing new one
-	public void clrNodelabel(Node n, Graphics2D g) {
+	/**
+	 * Clear space to draw node label on screen
+	 * @param e
+	 *			Node to be drawn
+	 * @param g
+	 *			Graphics object to draw on
+	 */
+	private void clrNodelabel(Node n, Graphics2D g) {
 		g.setColor(bgcolour);
 		g.fillRect(n.x- n.Nodewidth,n.y- n.Nodeheight-NODE_FONT_SIZE,NODE_FONT_SIZE*n.oldlen,NODE_FONT_SIZE);
 	}	
-	//draw node label on screen
-	public void drawNodelabel(Node n, Graphics2D g) {
+	/**
+	 * Draw node label on screen
+	 * @param e
+	 *			Node to be drawn
+	 * @param g
+	 *			Graphics object to draw on
+	 */private void drawNodelabel(Node n, Graphics2D g) {
 		drawlabel(n.x - n.Nodewidth,n.y - n.Nodeheight,n.label,g,NODE_FONT_SIZE);
 	}
-	//actual method for drawing text on screen
-	public void drawlabel(int x,int y,String label, Graphics2D g, int Fsize) {
+	/**
+	 * Draws text on screen
+	 * @param x
+	 * 		 	X position of text
+	 * @param y
+	 * 		 	Y position of text
+	 * @param label
+	 * 			Text to be drawn
+	 * @param g
+	 *			Graphics object to draw on
+	 * @param Fsize
+	 * 			Font size for text
+	 */
+	private void drawlabel(int x,int y,String label, Graphics2D g, int Fsize) {
 		g.setColor(fgcolour);
 		g.setFont(new Font("MonoSpaced", Font.BOLD, Fsize));
 		g.drawString(label, x, y);
 	}
-	public void edrawLine(int x1,int y1,int x2,int y2, Graphics2D g) {
+	/**
+	 * Method to draw sections of edges. Draws a line between two points.
+	 * @param x1
+	 * 			X coordinate of first point
+	 * @param y1
+	 * 			Y coordinate of first point
+	 * @param x2
+	 * 			X coordinate of second point
+	 * @param y2
+	 * 			Y coordinate of second point
+	 * @param g
+	 *			Graphics object to draw on
+	 */
+	private void edrawLine(int x1,int y1,int x2,int y2, Graphics2D g) {
 		if (EDGE_LINE_DRAW == true) {
 			g.drawLine(x1, y1, x2, y2);
 		}
@@ -916,14 +1163,25 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		}
 	}
-	public void drawGraph(Graphics2D g) {
+	private void drawGraph(Graphics2D g) {
 		// currently unused method
 	}
 	//implementation of abstract methods
-	public Node[] nodelist = new Node[10];
-	public Edge[][] edgematrix = new Edge[10][10];
-	public int numnodes;
-	
+	/**
+	 * Array storing all node data
+	 */
+	public Node[] nodelist = new Node[GRAPH_DIM];
+	/**
+	 * Array storing all edge data
+	 */
+	public Edge[][] edgematrix = new Edge[GRAPH_DIM][GRAPH_DIM];
+	/**
+	 * Specifies the number of nodes out of the total GRAPH_DIM that are being used
+	 */
+	public int numnodes;	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#createGraph(int[][])
+	 */
 	public void createGraph(int[][] costs) throws NonSquareMatrixException {
 		//NonSquareMatrixException.isSquare(costs);
 		int[] arrlentst = (int[]) costs[0].clone();
@@ -986,19 +1244,27 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}		
 		}
 	}
-	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setNodeLabel(int, java.lang.String)
+	 */
 	public void setNodeLabel(int id, String label){
 		nodelist[id].setlabel(label);
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setNodeHighlight(int, boolean)
+	 */
 	public void setNodeHighlight(int Node, boolean highlight){
 		// Not included any more, replaced by flashing
 	}
-	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashNode(int)
+	 */
 	public void flashNode(int Node) {
 		nodelist[Node].flash();
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashEdge(int, int)
+	 */
 	public void flashEdge(int from, int to) {
 		if (edgematrix[from][to].type == EDGE_TYPE_TWODIR) {
 			if (from>to) {
@@ -1012,11 +1278,15 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			edgematrix[from][to].flash();
 		}
 	}
-	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setNodeShade(int, int)
+	 */
 	public void setNodeShade(int id, int set){
 		nodelist[id].setNodeshade(set);
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setEdgeLabel(int, int, java.lang.String)
+	 */
 	public void setEdgeLabel(int from, int to, String label){
 		if (edgematrix[from][to].type == EDGE_TYPE_TWODIR) {
 			if (from>to) {
@@ -1030,11 +1300,15 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			edgematrix[from][to].setlabel(label);
 		}
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setEdgeHighlight(int, int, boolean)
+	 */
 	public void setEdgeHighlight(int from, int to, boolean highlight) {
 		// no longer used
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setEdgeShade(int, int, int)
+	 */
 	public void setEdgeShade(int from, int to, int set) {
 		if (edgematrix[from][to].type == EDGE_TYPE_ONEDIR) {
 			edgematrix[from][to].setEdgeshade(set);
@@ -1048,9 +1322,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		}
 	}
-	/* class for storing the animator state, used to save state
-	 * so that it can be resumed again later.
-	 * Used by saveState and restoreState api
+	/**
+	 * @author Steven
+	 * An object which stores the internal states of all the nodes and edges in the animator. This is used by the save and restore state api to allow backtracking.
 	 */
 	public class State extends Animator.State { 
 		private Edge[][] edges;
@@ -1061,39 +1335,62 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.nodes = nodes;
 			this.numnodes = numnodes;
 		}
+		/**
+		 * @return returns node data stored in the state
+		 */
 		public Node[] getNodes() {
 			return this.nodes;
 		}
+		/**
+		 * @return returns edge data stored in the state
+		 */
 		public Edge[][] getEdges() {
 			return this.edges;
 		}
+		/**
+		 * @return returns number of nodes used by the data stored in the state
+		 */
 		public int getNumNodes() {
 			return this.numnodes;
 		}
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setSteps(java.lang.String[])
+	 */
 	public void setSteps(String[] steps) {
 		// TODO Auto-generated method stub	
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setCurrentStep(int)
+	 */
 	public void setCurrentStep(int step) {
 		// TODO Auto-generated method stub		
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#showMessage(java.lang.String)
+	 */
 	public void showMessage(String msg) {
 		// TODO Auto-generated method stub		
 	}
-	
+	/*
+	 * not used
+	 */
 	public void drawImage() {
 		outg.drawImage(bi,0,0,outc);
-	}
-	
+	}	
+	/**
+	 * Method to conrol the speed of the animation display
+	 * @param fps
+	 * 			Sets new frame rate for animation in frames per second
+	 */
 	public void setFPS(int fps) {
 		this.fps = fps;
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
 		timer.setDelay(delay);
 	}
-	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
+	 */
 	public synchronized Animator.State saveState() {
 		Node[] snodelist = new Node[10];
 		Edge[][] sedgematrix = new Edge[10][10];
@@ -1110,7 +1407,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		stopAnimation();
 		return new State(snodelist,sedgematrix,numnodes);
 	}
-
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
+	 */
 	public synchronized void restoreState(Animator.State s) {
 		State ts = (State) s;
 		//reset animation to displaying nothing
