@@ -67,8 +67,10 @@ public class AnimatorPanel extends ShellPanel {
 		
 		// add a the animator to the top box
 		animator = choice.getAnimator();
-		animator.setPreferredSize(new Dimension(500,500));
-		animator.setBorder(BorderFactory.createLoweredBevelBorder());
+		animator.setPreferredSize(new Dimension(500,480));
+		animator.setBorder(BorderFactory.createLineBorder(java.awt.Color.black, 2));
+		System.out.println("Animator minimumSize is "+animator.getMinimumSize());
+		System.out.println("Animator maximumSize is "+animator.getMaximumSize());
 		top.add(animator);
 		
 		// and a 5 pixel gap
@@ -79,7 +81,8 @@ public class AnimatorPanel extends ShellPanel {
 		//top.add(steps);
 		
 		// add five pixel gap
-		add(Box.createRigidArea(new Dimension(5,0)));
+		//add(Box.createRigidArea(new Dimension(5,0)));
+		add(Box.createVerticalStrut(5));
 		
 		// create bottom message area
 		message = new JTextPane();

@@ -181,11 +181,14 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		// make the top panel and add
 		main = new JPanel();
 		main.setOpaque(true);
+		//main.setMaximumSize(new Dimension(10000, 10000));
+		//main.setAlignmentX(0.0f); // align left
 		//main.setPreferredSize(new Dimension(800, 500));
 		contentPane.add(main);
 		
 		// add five pixel gap
-		contentPane.add(Box.createRigidArea(new Dimension(5,0)));		
+		//contentPane.add(Box.createRigidArea(new Dimension(5,0)));
+		contentPane.add(Box.createVerticalStrut(5));
 		
 		// add separator
 		JPanel separator = new JPanel();
@@ -195,7 +198,8 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		contentPane.add(separator);
 		
 		// add five pixel gap
-		contentPane.add(Box.createRigidArea(new Dimension(5,0)));
+		//contentPane.add(Box.createRigidArea(new Dimension(5,0)));
+		contentPane.add(Box.createVerticalStrut(5));
 		
 		// add button panel
 		buttons = new ButtonPanel();
