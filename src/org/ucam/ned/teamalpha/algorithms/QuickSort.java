@@ -70,7 +70,7 @@ public class QuickSort extends VectorAlgorithm {
 			pivot = a[pivotLoc];
 			
 			// ANIM: Point arrow at area we are working on
-			aPivot = curr.createArrow("Piv", pivotLoc, false, true);
+			aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
 			aPivot.flash();
 			//aPivot.delete();
 
@@ -110,17 +110,17 @@ public class QuickSort extends VectorAlgorithm {
 						if (i == pivotLoc) {
 							pivotLoc = j;
 							
-							/*aPivot.delete();
+							aPivot.delete();
 							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
-							*/
-							aPivot.move(pivotLoc-low, false);
+							
+							//aPivot.move(pivotLoc-low, false);
 						} else if (j == pivotLoc) {
 							pivotLoc = i;
 							
-							/*aPivot.delete();
+							aPivot.delete();
 							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
-							*/
-							aPivot.move(pivotLoc-low, false);
+							
+							//aPivot.move(pivotLoc-low, false);
 						}
 					}
 					
