@@ -6,8 +6,6 @@
  */
 package org.ucam.ned.teamalpha.test;
 
-import java.io.IOException;
-
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.animators.Animator;
 
@@ -95,16 +93,19 @@ public class TestVectorAnimator extends VectorAnimator {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
 	 */
-	public Animator.State saveState() throws IOException {		
+	public Animator.State saveState() {		
 		println("State saved!");
-		return TestVectorAnimator.State(state++);
+		return new TestVectorAnimator.State(state++);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
 	 */
-	public void restoreState(State state) throws IOException {
+	public void restoreState(State state) {
 		// TODO Auto-generated method stub
+		System.out.println("Restoring state" + state + "...");
+	}
+	public void restoreState(Animator.State state) {
 		System.out.println("Restoring state" + state + "...");
 	}
 }
