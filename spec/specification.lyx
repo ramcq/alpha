@@ -305,7 +305,107 @@ Animators
 \layout Standard
 
 This package contains a set of abstract classes descended from Animator
- which specify the animation primitives supported by each 
+ which have methods and inner classes to specify the animation primitives
+ necessary for each group of algorithms.
+ There will initially be two classes descended from Animator, GraphAnimator
+ and SortAnimator, which will specify the methods necessary for the following
+ primitives.
+\layout Subsubsection
+
+Graph Animator Primitives
+\layout Paragraph
+
+Node
+\layout Itemize
+
+Create node (with label)
+\layout Itemize
+
+Delete node
+\layout Itemize
+
+Change node label
+\layout Itemize
+
+Highlight node (to indicate current focus of algorithm)
+\layout Itemize
+
+Shade node (to indicate membership of a set of nodes or paths)
+\layout Paragraph
+
+Path (joins two nodes)
+\layout Itemize
+
+Create path (with cost, label and origin/destination nodes)
+\layout Itemize
+
+Delete path
+\layout Itemize
+
+Change path label
+\layout Itemize
+
+Highlight path (to indicate current focus of algorithm)
+\layout Itemize
+
+Shade path (to indicate membership of a set of nodes or paths)
+\layout Subsubsection
+
+Sort Animator Primitives
+\layout Paragraph
+
+Vector (array of numbers)
+\layout Itemize
+
+Create vector (with data and label)
+\layout Itemize
+
+Delete vector
+\layout Itemize
+
+Change vector label
+\layout Itemize
+
+Swap elements at two pointers
+\layout Itemize
+
+Split vector into two at a marker (for Quicksort)
+\layout Paragraph
+
+Marker (points at a boundary between two entries in the vector)
+\layout Itemize
+
+Create marker (with label and position)
+\layout Itemize
+
+Delete marker
+\layout Itemize
+
+Change marker label
+\layout Itemize
+
+Move marker
+\layout Itemize
+
+Highlight marker (to indicate current focus of algorithm)
+\layout Paragraph
+
+Pointer (points at a specific entry in the vector)
+\layout Itemize
+
+Create pointer (with label and position)
+\layout Itemize
+
+Delete pointer
+\layout Itemize
+
+Change pointer label
+\layout Itemize
+
+Move pointer
+\layout Itemize
+
+Highlight pointer (to indicate current focus of algorithm)
 \layout Subsection
 
 Queues
