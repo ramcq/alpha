@@ -112,6 +112,8 @@ public class AnimatorPanel extends ShellPanel {
 							System.err.println(ex);
 						}
 				} else {
+					play = false;
+					buttons.setText(1, "Play");
 					buttons.setEnabled(0, queue.hasPrev());
 					buttons.setEnabled(1, queue.hasNext());
 					buttons.setEnabled(2, queue.hasNext());
