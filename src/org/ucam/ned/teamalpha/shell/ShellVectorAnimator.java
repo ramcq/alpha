@@ -105,11 +105,11 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public void moveElement(int from, int to) {
 			try {
 				// Move element out to channel
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, false, false));
+				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, false));
 				// Move element vertically within channel
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, to, false));
+				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, to, true));
 				// Move element horizontally into new position
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, false));
+				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
 			}
 			catch (InvalidAnimationEventException e) {
 				System.out.println(e);
@@ -119,6 +119,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public void setElement(int elt, int value) {
 			try {
 				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_CHANGE, this, elt, value));
+				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, elt, true));
 			}
 			catch (InvalidAnimationEventException e) {
 				System.out.println(e);
@@ -183,6 +184,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public static final int ARROW_MOVE = 5; // moving an arrow
 		public static final int ELT_CHANGE = 6; // changing an element in some manner (so it has to be redrawn)
 		public static final int ARROW_CHANGE = 7; // changing an arrow in some manner (so it has to be redrawn)
+
 		private int type;
 		// Arguments
 		private Vector v1, v2;
@@ -334,9 +336,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 
 		// Now comes the meat of the method: what should we do each frame?
 				
-		//moveElementToChannel(big, v, 4, true);
-		//moveElementToChannel(big, v, 6, false);
-		
 		// If we need a new event, get it
 		if (currentEvent == null) {
 			System.out.println("We need a new event");
@@ -359,27 +358,31 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				case AnimationEvent.ARROW_MOVE:
 					break;
 				case AnimationEvent.ELT_CHANGE:
+					currentEvent.v1.contents[currentEvent.e1] = String.valueOf(currentEvent.arg);
+					int len = currentEvent.v1.contents[currentEvent.e1].length();
+					for (int j=0; j<Vector.maxElementLength-len; j++) currentEvent.v1.contents[currentEvent.e1] = " ".concat(currentEvent.v1.contents[currentEvent.e1]);
+					currentEvent = null;
 					break;
 				case AnimationEvent.ELT_FROM_CHANNEL:
-					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.b1);
+					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.b1, true);
 					break;
 				case AnimationEvent.ELT_TO_CHANNEL:
-					moveElementToChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.b1, currentEvent.b2);
+					moveElementToChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.b1, currentEvent.b2, true);
 					break;
 				case AnimationEvent.ELT_VERT_IN_CHANNEL:
-					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.e2, currentEvent.b1);
+					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.e2, currentEvent.b1, true);
 					break;
 				case AnimationEvent.TWO_FROM_CHANNEL:
-					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, false);
-					moveElementFromChannel(big, currentEvent.v1, currentEvent.e2, true);
+					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, false, false);
+					moveElementFromChannel(big, currentEvent.v1, currentEvent.e2, true, true);
 					break;
 				case AnimationEvent.TWO_TO_CHANNEL:
-					moveElementToChannel(big, currentEvent.v1, currentEvent.e1, true, false);
-					moveElementToChannel(big, currentEvent.v1, currentEvent.e2, false, false);
+					moveElementToChannel(big, currentEvent.v1, currentEvent.e1, true, false, false);
+					moveElementToChannel(big, currentEvent.v1, currentEvent.e2, false, false, true);
 					break;
 				case AnimationEvent.TWO_VERT_IN_CHANNEL:
-					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.f1, true);
-					moveElementInChannel(big, currentEvent.v1, currentEvent.e2, currentEvent.f2, false);
+					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.f1, true, false);
+					moveElementInChannel(big, currentEvent.v1, currentEvent.e2, currentEvent.f2, false, true);
 					break;
 				default:
 					break;
@@ -430,10 +433,11 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	// Method to move an element of a vector horizontally left or right to lie beside the vector in one of the
 	// vertical channels
-	private void moveElementToChannel(Graphics g, Vector v, int element, boolean left, boolean copy) {
-		if (intermediateOffset > 65) { // are we done?
+	private void moveElementToChannel(Graphics g, Vector v, int element, boolean left, boolean copy, boolean cancelEvent) {
+		if ((left && intermediateOffset > 75)
+			|| (!left && intermediateOffset > 65)) { // are we done?
 			intermediateOffset = 0;
-			currentEvent = null;
+			if (cancelEvent) currentEvent = null;
 			System.out.println("Done moving out");
 			return;
 		}
@@ -462,7 +466,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
-	public void moveElementInChannel(Graphics g, Vector v, int from, int to, boolean left) {
+	public void moveElementInChannel(Graphics g, Vector v, int from, int to, boolean left, boolean cancelEvent) {
 		int startY = v.top + (20*from) + 15;
 		int endY = v.top + (20*to) + 15;
 		int areaLeft = left ? v.left - 70 : v.right + 20;
@@ -470,9 +474,18 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		
 		if (Math.abs(intermediateOffset) >= Math.abs(startY-endY)) { // are we done?
 			System.out.println("Done moving vertically");
-			intermediateOffset = 0;
-			currentEvent = null;
-			v.contents[to] = v.contents[from]; 
+			if (cancelEvent) {
+				intermediateOffset = 0; 
+				if (currentEvent.type == AnimationEvent.TWO_VERT_IN_CHANNEL) {
+					System.out.println("We are swapping, so swap elements");
+					String t = v.contents[from];
+					v.contents[from] = v.contents[to];
+					v.contents[to] = t;
+				}
+				else v.contents[to] = v.contents[from];
+				System.out.println("Nullify currentEvent");
+				currentEvent = null;
+			} 
 			return;
 		}
 		
@@ -480,24 +493,27 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		g.setColor(bgcolour);
 		g.fillRect(areaLeft, v.top, 50, 20*v.size);
 		
-		if (startY > endY) intermediateOffset -= 1;
-		else intermediateOffset += 1;
+		intermediateOffset += 1;
 		
 		g.setColor(fgcolour);
-		g.drawString(v.contents[from], areaLeft, startY + intermediateOffset);
+		if (startY < endY) g.drawString(v.contents[from], areaLeft, startY + intermediateOffset);
+		else g.drawString(v.contents[from], areaLeft, startY - intermediateOffset);
 	}
 	
-	public void moveElementFromChannel(Graphics g, Vector v, int to, boolean left) {
+	public void moveElementFromChannel(Graphics g, Vector v, int to, boolean left, boolean cancelEvent) {
 		int textYPos = v.top + (20*to) + 15;
 		int areaTop = v.top + (20*to) + 1;
 		int areaLeft = left ? v.left - 70 : v.left + 1;
 		int areaWidth = 119;
 		int areaHeight = 19;
 
-		if (intermediateOffset >= 70) { // we are done
-			intermediateOffset = 0;
-			currentEvent = null;
-			System.out.println("Done moving back in");
+		if ((left && intermediateOffset >= 75)
+			|| (!left && intermediateOffset >= 65)) { // we are done
+			if (cancelEvent) {
+				intermediateOffset = 0;
+				currentEvent = null;
+				System.out.println("Done moving back in");
+			}
 			return;
 		}
 		intermediateOffset += 1;
@@ -511,8 +527,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		
 		// Redraw text
 		g.setColor(fgcolour);
-		if (left) g.drawString(v.contents[to], v.left-65+intermediateOffset, textYPos);
-		else g.drawString(v.contents[to], v.left+75-intermediateOffset, textYPos);
+		if (left) g.drawString(v.contents[to], v.left-70+intermediateOffset, textYPos);
+		else g.drawString(v.contents[to], v.left+70-intermediateOffset, textYPos);
 	}
 	
 	public VectorAnimator.Vector createVector(int[] values) {
@@ -567,7 +583,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		VectorAnimator.Vector v = app.createVector("Vector 1", t1);
 		v.moveElement(0,5);
 		v.copyElement(4,3);
-		//v.swapElements(2,3);
+		v.swapElements(2,6);
+		v.setElement(0,100);
 		app.startAnimation();
 
 	}
