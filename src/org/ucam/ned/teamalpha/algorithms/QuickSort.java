@@ -24,7 +24,6 @@ public class QuickSort extends VectorAlgorithm {
 	 * 	The offset of the lower bound of the array sector
 	 * 	that is to be sorted in this current pass.
 	 * @param high
-	 * 
 	 * 	The offset of the upper bound of the array sector
 	 * 	that is to be sorted in this current pass.
 	 */
@@ -41,7 +40,6 @@ public class QuickSort extends VectorAlgorithm {
 			// Partition the vector
 			while( i <= j )
 			{
-
 				// Search for elements to swap
 				while( ( i < high ) && ( a[i] < pivot ) )	++i; // TODO: Move the arrow right
 				while( ( j > low ) && ( a[j] > pivot ) ) --j; // TODO: Move the arrow left

@@ -1,8 +1,5 @@
 /*
  * Created on Feb 4, 2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package org.ucam.ned.teamalpha.algorithms;
 
@@ -11,43 +8,54 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
 /**
  * @author sas58
  *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * An applet animating this algorithm may be found at: 
+ * http://ciips.ee.uwa.edu.au/~morris/Year2/PLDS210/sorting.html
  */
 public class InsertionSort extends VectorAlgorithm {
 	
 	int[] a;
 	VectorAnimator anim;
 	
+	/**
+	 * The method that implements the insertion sort. The algorithm
+	 * involves partitioning the vector into two, one section sorted and
+	 * the other unsorted. At each stage, the head of the unsorted list
+	 * is removed and added to the sorted list such that it remains sorted.
+	 */
+	
 	private void sort() {
-		/* Pre-condition: a contains n items to be sorted */
 		int i, j, v;
 		
 		int n = a.length;
-		/* Initially, the first item is considered 'sorted' */
-		/* i divides a into a sorted region, x<i, and an
-		 unsorted one, x >= i */
+		
+		// Vector is split into sorted elements and those yet to be sorted about i
 		for(i=1;i<n;i++) {
-			/* Select the item at the beginning of the
-			 as yet unsorted section */
+			
+			// TODO: Partition the vector about the point i
+			// Pick the first element in a and move to the sorted section
 			v = a[i];
-			/* Work backwards through the array, finding where v 
-			 should go */
+			
+			// Work backwards through the sorted list till the correct position is found
 			j = i;
-			/* If this element is greater than v,
-			 move it up one */
+			
+			// Find insertion point
 			while ( a[j-1] > v ) {
-				a[j] = a[j-1]; j = j-1;
-				if ( j <= 0 ) break;
+				a[j] = a[j-1]; 				//TODO: Shift elements down to make space
+				j = j-1; 						//TODO: Move pointer along sorted section
+				if ( j <= 0 ) break; 	//TODO: Position found
 			}
-			/* Stopped when a[j-1] <= v, so put v at position j */
-			a[j] = v;
+			// Correct insertion point found, insert here
+			a[j] = v;						//TODO: Place element into slot at j
 		}
 	}
 	
 	/**
+	 * Constructor for the InsertionSort algorithm
 	 * @param va
+	 * 	The vector animator that will handle the generated animation
+	 * 	primitives
 	 * @param values
+	 * 	An array of the elements that are to be sorted.
 	 */
 	public InsertionSort(VectorAnimator va, int[] values) {
 		super(va, values);
