@@ -5,4 +5,5 @@ public interface AnimatorQueue {
 	void prev() throws NoSuchStateException;
 	boolean hasNext();
 	boolean hasPrev();
+	boolean isBusy();
 }
