@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
+import org.ucam.ned.teamalpha.animators.InvalidLocationException;
 
 /**
  * @author Sid
@@ -217,11 +218,17 @@ public class Dijkstra extends GraphAlgorithm {
 		
 		setShortestDist(first, 0);
 		// ANIM: Update the cost
-		anim.setNodeLabel(first.index, Integer.toString(getShortestDist(first)));
-		
-		addToUnFinished(first);
-		// ANIM: Add to unfinished set
-		anim.setNodeShade(first.index, WORKINGSETID);
+		try {
+			anim.setNodeLabel(first.index, Integer.toString(getShortestDist(first)));
+			
+			addToUnFinished(first);
+			// ANIM: Add to unfinished set
+			anim.setNodeShade(first.index, WORKINGSETID);
+		} catch (InvalidLocationException ile) {
+			System.out.println(ile);
+		} catch (InterruptedException ie) {
+			System.out.println(ie);
+		}
 	}
 	
 	/**
@@ -235,53 +242,59 @@ public class Dijkstra extends GraphAlgorithm {
 		// TODO: anim.setNodeHighlight(n.index, true);
 		anim.setCurrentStep(1);
 		
-		for (Iterator i = map.getDestinations(n).iterator(); i.hasNext();) {
-			Node m = map.nodeAt(((Integer)i.next()).intValue());
-			
-			// skip node already settled
-			if (isDone(m)) continue;
-			
-			// ANIM: Highlight the node we are looking at
-			anim.flashNode(m.index);
-			// TODO: anim.setNodeHighlight(m.index, true);
-			// ANIM: Highlight the edge we are looking at
-			// TODO: anim.setEdgeHighlight(n.index, m.index, true);
-			
-			if (getShortestDist(m) > getShortestDist(n)+ map.getDist(n, m)) {
-				// assign new shortest distance and mark unFinished
-				// ANIM: Get rid of old edge if there is one
-				try {
-					anim.setEdgeShade(getPredecessor(m).index, m.index, EXCLUDEDEDGE);
-					// ANIM: removing a longer route
-					anim.setCurrentStep(3);
-					anim.saveState();
-				} catch (NullPointerException e) {
-					// There is no predecessor yet.
+		try {
+		
+			for (Iterator i = map.getDestinations(n).iterator(); i.hasNext();) {
+				Node m = map.nodeAt(((Integer)i.next()).intValue());
+				
+				// skip node already settled
+				if (isDone(m)) continue;
+				
+				// ANIM: Highlight the node we are looking at
+				anim.flashNode(m.index);
+				// TODO: anim.setNodeHighlight(m.index, true);
+				// ANIM: Highlight the edge we are looking at
+				// TODO: anim.setEdgeHighlight(n.index, m.index, true);
+				
+				if (getShortestDist(m) > getShortestDist(n)+ map.getDist(n, m)) {
+					// assign new shortest distance and mark unFinished
+					// ANIM: Get rid of old edge if there is one
+					try {
+						anim.setEdgeShade(getPredecessor(m).index, m.index, EXCLUDEDEDGE);
+						// ANIM: removing a longer route
+						anim.setCurrentStep(3);
+						anim.saveState();
+					} catch (NullPointerException e) {
+						// There is no predecessor yet.
+					}
+					
+					setShortestDist(m, getShortestDist(n) + map.getDist(n, m));
+					// ANIM: Set the new node cost
+					anim.setNodeLabel(m.index, Integer.toString(getShortestDist(m)));
+					
+					addToUnFinished(m);
+					// ANIM: Change the node shade
+					anim.setCurrentStep(2);
+					anim.setNodeShade(m.index, WORKINGSETID);
+					
+					// assign predecessor in shortest path
+					setPredecessor(m, n);
+					// ANIM: Unhighlight node
+					// TODO: anim.setEdgeHighlight(n.index, m.index, false);
+					// ANIM: and then add an edge here
+					anim.setEdgeShade(n.index, m.index, INCLUDEDEDGE);
 				}
 				
-				setShortestDist(m, getShortestDist(n) + map.getDist(n, m));
-				// ANIM: Set the new node cost
-				anim.setNodeLabel(m.index, Integer.toString(getShortestDist(m)));
-				
-				addToUnFinished(m);
-				// ANIM: Change the node shade
-				anim.setCurrentStep(2);
-				anim.setNodeShade(m.index, WORKINGSETID);
-				
-				// assign predecessor in shortest path
-				setPredecessor(m, n);
-				// ANIM: Unhighlight node
-				// TODO: anim.setEdgeHighlight(n.index, m.index, false);
-				// ANIM: and then add an edge here
-				anim.setEdgeShade(n.index, m.index, INCLUDEDEDGE);
+				// ANIM: Unhighlight the node/edge we were looking at
+				// TODO: anim.setNodeHighlight(m.index, false);
 			}
-			
-			// ANIM: Unhighlight the node/edge we were looking at
-			// TODO: anim.setNodeHighlight(m.index, false);
-		}  
 		
-		// ANIM: Unhighlight the node we were working with
-		// TODO: anim.setNodeHighlight(n.index, false);
+		} catch (InvalidLocationException ile) {
+			System.out.println(ile);
+		} catch (InterruptedException ie) {
+			System.out.println(ie);
+		}
+		
 	}
 	
 	/**
@@ -339,7 +352,13 @@ public class Dijkstra extends GraphAlgorithm {
 			// ANIM: Set node shade to finished
 			anim.setCurrentStep(4);
 			anim.saveState();
-			anim.setNodeShade(u.index, FINISHEDSETID);
+			try {
+				anim.setNodeShade(u.index, FINISHEDSETID);
+			} catch (InvalidLocationException ile) {
+				System.out.println(ile);
+			} catch (InterruptedException ie) {
+				System.out.println(ie);
+			}
 			
 			processNeighbours(u);
 		}
