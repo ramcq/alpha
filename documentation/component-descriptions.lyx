@@ -136,7 +136,7 @@ This class find the minimum spanning tree of a graph using Kruskal's method.
 Animators
 \layout Subsection
 
-Abstract classes (
+Interfaces (
 \family typewriter 
 Animator
 \family default 
@@ -160,8 +160,7 @@ The
 \family typewriter 
 Animator
 \family default 
- abstract class provides the API for the methods that all animators have
- in common.
+ interface provides the API for the methods that all animators have in common.
  These include the methods 
 \family typewriter 
 setSteps()
@@ -216,8 +215,8 @@ The
 \family typewriter 
 GraphAnimator
 \family default 
- abstract class provides the fairly simple API for the graph animation primitive
-s, including 
+ interface provides the fairly simple API for the graph animation primitives,
+ including 
 \family typewriter 
 createGraph()
 \family default 
@@ -235,7 +234,7 @@ The
 \family typewriter 
 VectorAnimator
 \family default 
- abstract class, and its inner classes 
+ interface, and its nested interfaces 
 \family typewriter 
 Vector
 \family default 
@@ -452,7 +451,7 @@ VectorQueue
 \family default 
  classes.
  Its functionality breaks down into two parts.
- The first is to expose an interface which the 
+ The first is to expose an mechanism which the 
 \family typewriter 
 GraphQueue 
 \family default 
@@ -465,7 +464,7 @@ and
 \family typewriter 
 enqueue()
 \family default 
- function which allows the graph and vector queue classes to queue a method
+ function which allow the graph and vector queue classes to queue a method
  call, with the subject object, method name, arguments, and if one is necessary,
  the placeholder object that the queue will return from the method call.
  The 
@@ -529,14 +528,25 @@ prev()
 VectorQueue, GraphQueue
 \layout Standard
 
-These are simple classes with a series of stub method calls and stub inner
- classes, each of which merely call
+These are simple classes descended from 
+\family typewriter 
+GenericQueue
+\family default 
+ with a series of stub method calls and stub inner classes from the 
+\family typewriter 
+VectorAnimator
+\family default 
+ or 
+\family typewriter 
+GraphAnimator
+\family default 
+ interfaces, each of which merely call
 \family typewriter 
  enqueue()
 \family default 
- on the generic queue, to store the animation methods call.
- Methods which return instances of the inner classes instead return the
- stub inner classes, which the 
+, to store the animation methods called.
+ Methods which return instances of the inner classes instead return instances
+ the stub inner classes, which the 
 \family typewriter 
 GenericQueue
 \family default 
@@ -973,16 +983,16 @@ AnimatorQueue
  interface.
 \layout Subsection
 
-Interface 
+
 \family typewriter 
 ShellAnimator
 \layout Standard
 
-This interface contains the methods which the shell uses to control the
- animator when the events are being run off the queue.
+This abstract class defines the methods which the shell uses to control
+ the animator when the events are being run off the queue.
  Because most of the control and invocation of the animator is done within
- the queue's threads, this is a simple interface.
- Currently it contains a method 
+ the queue's threads, this is a simple class.
+ Currently it defines a method 
 \family typewriter 
 setFps()
 \family default 
@@ -991,6 +1001,25 @@ setFps()
 fastForward()
 \family default 
  to try and flush the queue of pending animation events as quickly as possible.
+ It also adds the 
+\family typewriter 
+setSteps()
+\family default 
+, 
+\family typewriter 
+setCurrentStep()
+\family default 
+ and 
+\family typewriter 
+showMessage()
+\family default 
+ methods which are common to both 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+ and 
+\family typewriter 
+ShellGraphAnimator.
 \layout Subsection
 
 
@@ -1001,29 +1030,25 @@ ShellVectorAnimator
 This class was written by Andrew Medworth.
  It is the class which does the actual graphical work for vector algorithms,
  such as the sort algorithms we implemented.
- Its constructor takes a 
-\family typewriter 
-Container
-\family default 
-, which will normally be a 
-\family typewriter 
-JFrame
-\family default 
-, and instantiates its own 
+ It extends 
 \family typewriter 
 JPanel
 \family default 
- to go inside this.
- It overrides the 
+ and overrides the 
 \family typewriter 
 paintComponent(Graphics)
 \family default 
- method of the 
+ method with a method which redraws the current animation canvas, held in
+ a 
 \family typewriter 
-JPanel
+BufferedImage
 \family default 
- with a method which redraws the current animation canvas, thus causing
- the canvas to be redrawn if it is ever obscured.
+, thus causing the canvas to be redrawn if it is ever obscured, and allowing
+ the whole canvas to be redrawn with 
+\family typewriter 
+repaint()
+\family default 
+.
 \layout Standard
 
 Animation is done using a 
@@ -1131,18 +1156,8 @@ s until the queue is filled again, by animation primitives called by the
 ).
 \layout Standard
 
-The 
-\family typewriter 
-awt
-\family default 
- library does not directly support double buffering, and there is no equivalent
- of the 
-\family typewriter 
-Graphics
-\family default 
- class in Swing, which does support double buffering throughout.
- In order to facilitate flicker-free animation, therefore, the animator
- maintains a 
+In order to facilitate flicker-free animation, the animator maintains a
+ 
 \family typewriter 
 BufferedImage
 \family default 
@@ -1161,7 +1176,11 @@ actionPerformed
 \family typewriter 
 BufferedImage
 \family default 
- is written out to the screen.
+ is written out to the screen by calling 
+\family typewriter 
+repaint()
+\family default 
+.
  This 
 \family typewriter 
 BufferedImage
@@ -1171,15 +1190,11 @@ BufferedImage
 \family typewriter 
 Timer
 \family default 
- is not running: in fact, this is precisely what the overridden 
+ is not running: in fact, this is handled by the 
 \family typewriter 
 paintComponent
 \family default 
- method on the 
-\family typewriter 
-JPanel
-\family default 
- instantiated in the constructor does.
+ method in the same way.
 \layout Standard
 
 Vectors and arrows are represented by instances of the inner classes 
@@ -1435,17 +1450,12 @@ Kruskal
 Dijkstra
 \family default 
  classes.
- Its constructor is the same format as 
+ Its general mode of operation is similar to 
 \family typewriter 
 ShellVectorAnimator
 \family default 
-.
- Also, a timer is used to control the animation using an event queue in
- the same way as 
-\family typewriter 
-ShellVectorAnimator
-\family default 
-.
+ --- a timer is used to control the animation using an event queue in the
+ same way.
 \layout Standard
 
 Data for nodes and edges displayed are represented by arrays of instances
