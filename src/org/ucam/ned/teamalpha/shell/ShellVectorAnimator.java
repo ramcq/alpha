@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
@@ -1176,7 +1177,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		System.out.println("Delay = " + delay + " ms");
 		
 		// Instantiate timer (gives us ActionEvents at regular intervals)
-		timer = new javax.swing.Timer(delay, this);
+		timer = new Timer(delay, this);
 		// Fire first event immediately
 		timer.setInitialDelay(0);
 		// Fire events continuously
