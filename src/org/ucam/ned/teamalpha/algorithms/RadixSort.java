@@ -125,14 +125,31 @@ public class RadixSort extends VectorAlgorithm {
 	
 	
 	public class IntVector extends Vector {
+		/**
+		 * Appends an <code>int</code> to the <code>IntVector</code>.
+		 * @param i
+		 * 	The <code>int</code> that is to be appended.
+		 */
 		public void add(int i) {
 			this.add(new Integer(i));
 		}
 		
+		/**
+		 * Retrieves an element at the specified index <code>i</code>
+		 * from the <code>IntVector</code>.
+		 * @param i
+		 * 	The offset of the element required.
+		 * @return
+		 * 	The element at the specified offset.
+		 */
 		public int getFrom(int i) {
 			return ((Integer)(this.elementAt(i))).intValue();
 		}
 		
+		/**
+		 * Constructor. Simply calls the constructor for the <class>Vector</class>.
+		 *
+		 */
 		public IntVector() {
 			super();
 		}
