@@ -33,7 +33,7 @@ Steven Cooper (
 \family typewriter 
 sjc209
 \family default 
-), Graham LePage (
+), Graham Le Page (
 \family typewriter 
 gpl26
 \family default 
@@ -124,15 +124,56 @@ Clearly, a system to animate any conceivable algorithm working on any imaginable
 \layout Section
 
 Assumptions
-\layout Standard
+\layout Itemize
 
-Any clarifications of / assumptions about the specification should go here
+The 
+\begin_inset Quotes eld
+\end_inset 
+
+animation script
+\begin_inset Quotes erd
+\end_inset 
+
+ will be written in Java; we are not implementing a special language or
+ anything silly like that
+\layout Itemize
+
+The user can specify initial data in the following way:
+\begin_deeper 
+\layout Itemize
+
+For 
+\emph on 
+vectors
+\emph default 
+: the size of the initial array (up to a maximum of 20 elements), and the
+ initial contents of each cell (which must be 
+\family typewriter 
+int
+\family default 
+s: there is no need to demonstrate algorithms on multiple data types).
+ There will be no option to invert the ordering, as this will not aid understand
+ing of the algorithm.
+\layout Itemize
+
+For 
+\emph on 
+graphs
+\emph default 
+: the ability to specify the number of nodes (up to a maximum of 10), and
+ input the elements of the connectivity matrix (which must all be integers).
+\end_deeper 
+\layout Itemize
+
+The auxiliary displays showing the time and space costs of the algorithm
+ will be implemented in text (as opposed to anything graphical); history
+ etc will not be available.
 \layout Section
 
 Facilities to be provided
 \layout Standard
 
-The following list needs to be completed and tidied up:
+The following facilities will definitely be provided:
 \layout Itemize
 
 Support for algorithms on vectors, lists and graphs
@@ -145,7 +186,8 @@ Ability to step through algorithms, both forwards and backwards, at user's
  speed
 \layout Itemize
 
-Ability to specify initial data / input
+Ability to specify initial data / input (plus ability to generate random
+ initial data)
 \layout Itemize
 
 Ability to add new algorithms with relative ease using existing animation
@@ -157,19 +199,46 @@ Well-documented API for creation of new animation primitives and data structures
  from the ones done here
 \layout Itemize
 
-Graphical display of the time and space costs of the algorithm
-\layout Itemize
-
 Cross-platform operation using Java
 \layout Itemize
 
 Easy-to-use graphical user interface
+\layout Itemize
+
+We will be demonstrating the system by implementing the following algorithms:
+ insertion sort, Quicksort, radix sort, Dijkstra's algorithm (for finding
+ the shortest path between two nodes in a graph), and Kruskal's algorithm
+ (for finding the minimum spanning tree of a set of nodes in a graph).
+\layout Standard
+
+The following facilities will be optionally implemented according to time
+ constraints:
+\layout Itemize
+
+Ability to vary animation speed (between two reasonable values)
+\layout Itemize
+
+Text explanation of each step as it happens (pseudocode)
+\layout Itemize
+
+Display of the time and space costs of the algorithm
+\layout Itemize
+
+A graph editor which allows the user to place the nodes on the animation
+ canvas, and to specify the edges connecting the nodes using mouse clicks
+\layout Itemize
+
+Support for bipartite graphs
+\layout Itemize
+
+Some more algorithms?
 \layout Section
 
 Environment
 \layout Standard
 
-The system will be written in Java, using the Eclipse IDE.
+The system will be written in Java 2.0, using the Eclipse IDE.
+ The GUI will be implemented in the Swing windowing toolkit.
  Version control will be provided by 
 \family typewriter 
 cvs
@@ -180,13 +249,138 @@ cvs
 Overall system architecture
 \layout Standard
 
-To include UML Use Case diagram, UML Class diagram, etc etc
+What the major components (classes) are and how they will fit together (to
+ include UML Use Case diagram, UML Class diagram, and all the usual gimmicks).
+\layout Standard
+
+show diagram, explain diagram in detail, explain why diagram is the way
+ it is
 \layout Section
 
-Inputs, functions, outputs
+Inputs, functions, outputs (fold this section into the next?)
+\layout Standard
+
+<<SNIP?>>
+\layout Standard
+
+User inputs:
+\layout Itemize
+
+Input initial algorithm data (keyboard input for vector elements
+\layout Itemize
+
+animation speed (?)
+\layout Itemize
+
+generate random data
+\layout Itemize
+
+choose algorithm
+\layout Itemize
+
+step forwards/backwards in algorithm
+\layout Standard
+
+Functions:
+\layout Itemize
+
+run algorithm using inputted data
+\layout Itemize
+
+create animations for each step in the algorithm
+\layout Itemize
+
+akjb
+\layout Standard
+
+Outputs:
+\layout Itemize
+
+animation displayed on screen
+\layout Itemize
+
+display adjusted when back/next buttons are used
+\layout Standard
+
+<</SNIP?>>
 \layout Section
 
 Specification of components and test requirements
+\layout Standard
+
+For each major class in the system:
+\layout Itemize
+
+Its inputs
+\layout Itemize
+
+Its outputs
+\layout Itemize
+
+Its major public methods (replicating some of the stuff in the abstract
+ class listings)
+\layout Itemize
+
+What it is supposed to do, i.e.
+ what functionality is it supposed to provide to the user, or to other classes
+\layout Itemize
+
+How it should be tested
+\layout Subsection
+
+User interface / shell
+\layout Subsection
+
+Actual animator
+\layout Subsection
+
+Animation queuer thingy
+\layout Standard
+
+We will be implementing the following animation primitives for vectors:
+\layout Itemize
+
+Create new vector
+\layout Itemize
+
+Yadda
+\layout Standard
+
+We will be implementing the following animation primitives for graphs:
+\layout Itemize
+
+Yodda
+\layout Itemize
+
+Yudda
+\layout Standard
+
+Test requirements: (move these to appropriate classes)
+\layout Itemize
+
+make sure algorithms work correctly and produce the right result in all
+ circumstances, even when dealing with extreme data eg.
+ all 0's
+\layout Itemize
+
+make sure valid inputs are dealt with sensibly
+\layout Itemize
+
+make sure invalid (i.e.
+ non-integers in vectors) inputs are dealt with sensibly
+\layout Itemize
+
+make sure the display shows the correct information at each step
+\layout Itemize
+
+make sure the next/back buttons work, eg.
+ what happens if they are pressed during animations
+\layout Itemize
+
+make sure the graphical user interface works correctly
+\layout Subsection
+
+The algorithms themselves
 \layout Section
 
 Final acceptance criteria
@@ -198,26 +392,25 @@ To be discussed
 Division of tasks
 \layout Itemize
 
-Manager
+Manager: Graham Le Page
 \layout Itemize
 
-Librarian
+Librarian: Robert McQueen
 \layout Itemize
 
-Secretary
+Secretary: Andrew Medworth
 \layout Itemize
 
-Documentation
+User documentation: Neofytos Mylona, Graham Le Page, Alan Treanor (backup:
+ Andrew Medworth)
 \layout Itemize
 
-Design
+Design: Everyone
 \layout Itemize
 
-Coding
+Coding: Robert McQueen, Steven Cooper, Andrew Medworth, Sidath Senanayake
+ (backup: Zhan Li)
 \layout Itemize
 
-Troubleshooting
-\layout Itemize
-
-Arrangements for covering each other
+Troubleshooting / testing: Zhan Li, Alan Treanor (backup: everyone!)
 \the_end
