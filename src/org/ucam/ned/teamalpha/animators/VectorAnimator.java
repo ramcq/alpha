@@ -179,7 +179,7 @@ public abstract class VectorAnimator extends Animator {
 	 *            the array of initial values
 	 * @return a reference to the vector created
 	 */
-	public abstract VectorAnimator.Vector createVector(int[] values) throws InputTooLongException;
+	public abstract VectorAnimator.Vector createVector(int[] values) throws InputTooLongException, TooManyVectorsException;
 
 	/**
 	 * Create a new vector with a label and place it on the animation canvas.
@@ -190,5 +190,5 @@ public abstract class VectorAnimator extends Animator {
 	 *            the array of initial values
 	 * @return a reference to the vector created
 	 */
-	public abstract VectorAnimator.Vector createVector(String label, int[] values) throws InputTooLongException;
+	public abstract VectorAnimator.Vector createVector(String label, int[] values) throws InputTooLongException, TooManyVectorsException;
 }
