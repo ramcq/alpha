@@ -68,6 +68,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	public class Vector implements VectorAnimator.Vector {
 		static final int width = 50; // width of vector in pixels
 		final int maxElementLength = String.valueOf(InputTooLongException.elementMax).length();
+		final int maxLabelLength = 10;
 		
 		private boolean visible = true;
 		private final int top = 30; // y coordinate of top of vector
@@ -132,7 +133,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 */
 		Vector(String label, int[] values) throws InputTooLongException, TooManyVectorsException {
 			this(values);
-			this.label = (label.length() <= maxElementLength) ? label : label.substring(0,maxElementLength-1);
+			this.label = (label.length() <= maxLabelLength) ? label : label.substring(0,maxLabelLength-1);
 		}
 		
 		/* (non-Javadoc)
@@ -163,7 +164,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			if (!visible) throw new ItemDeletedException("Arrow "+label+" already deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
-					this.label = (label.length() <= maxElementLength) ? label : label.substring(0,maxElementLength-1);
+					this.label = (label.length() <= maxLabelLength) ? label : label.substring(0,maxLabelLength-1);
 					// Redraw the vector
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.VECTOR_CHANGE, this));
 					if (draw) startAnimation();
