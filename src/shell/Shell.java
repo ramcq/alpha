@@ -1,3 +1,5 @@
+package shell;
+
 public class Shell {
 	static Shell myself = null;
 	
