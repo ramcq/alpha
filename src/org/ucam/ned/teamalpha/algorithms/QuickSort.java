@@ -213,7 +213,17 @@ public class QuickSort extends VectorAlgorithm {
 		a[j] = tmp;
 	}
 
-	
+	/**
+	 * Picks the median of 3 elements in the vector between the two parameters. The lowest
+	 * highest and middle elements are cosidered.
+	 * 
+	 * @param l
+	 * 	The lower bound of the section of the array to be checked.
+	 * @param h
+	 * 	The higher bound of the section of the array to be checked.
+	 * @return
+	 * 	The index of the median element between these two bounds.
+	 */
 	private int pickMedian(int l, int h) {
 		int aa = l;
 		int bb = (l+ h)/2;
