@@ -184,6 +184,12 @@ All five of the proposed algorithms have been implemented and tested by
  testers; these are stored in the folder TestData under the file ConnectivityMat
 rices.txt.
  The code produced the correct results with this data.
+\layout Standard
+
+Most of the algorithms have been commented at points where animator primitives
+ will be called.
+ During the integration phase, these comments will be replaced with additions
+ to AnimatorQueues.
 \layout Subsection
 
 Animators
