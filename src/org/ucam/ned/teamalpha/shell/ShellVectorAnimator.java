@@ -3,9 +3,7 @@
  *
  */
  
-// TODO: call repaint less often
-// TODO: move as much as possible up to ShellAnimator
-// TODO: fix fast forward to next checkpoint (currently completely broken)
+// TODO: fix fast forward to next checkpoint
 // TODO: add column highlighting for vectors (for radix sort)
 package org.ucam.ned.teamalpha.shell;
 
@@ -1567,7 +1565,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		int topOfElement = v.top + (20 * element) + 1;
 		int bottomOfElement = topOfElement + 19;
-		int leftOfAffectedArea = left ? v.left - 70 : v.left+1; // the left of the area we will have to clear each time
+		int leftOfAffectedArea = left ? v.left - 80 : v.left+1; // the left of the area we will have to clear each time
 		int widthOfAffectedArea = 119;
 		int heightOfAffectedArea = 19;
 		
