@@ -28,7 +28,7 @@ public class QuickSort extends VectorAlgorithm {
 	 * 	The offset of the upper bound of the array sector
 	 * 	that is to be sorted in this current pass.
 	 */
-	private void quick(int low, int high)	{
+	private void quick(int low, int high) throws Exception {
 		int i = low;
 		int j = high;
 		int pivot;
@@ -121,7 +121,11 @@ public class QuickSort extends VectorAlgorithm {
 	 */
 	public void execute(Animator anim) {
 		this.anim = (VectorAnimator) anim;
-		quick(0, a.length - 1);
+		try {
+			quick(0, a.length - 1);
+		} catch (Exception e) {
+			System.err.println("quicksort died: " + e);
+		}
 	}
 
 }
