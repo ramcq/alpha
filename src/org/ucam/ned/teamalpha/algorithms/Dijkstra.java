@@ -19,10 +19,8 @@ import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 
 /**
- * @author sas58
+ * @author Sid
  *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class Dijkstra extends GraphAlgorithm {
 	// To handle the infinite distance:
@@ -256,6 +254,7 @@ public class Dijkstra extends GraphAlgorithm {
 					anim.setEdgeShade(getPredecessor(m).index, m.index, EXCLUDEDEDGE);
 					// ANIM: removing a longer route
 					anim.setCurrentStep(3);
+					anim.saveState();
 				} catch (NullPointerException e) {
 					// There is no predecessor yet.
 				}
@@ -335,6 +334,7 @@ public class Dijkstra extends GraphAlgorithm {
 			finished.add(u);
 			// ANIM: Set node shade to finished
 			anim.setCurrentStep(4);
+			anim.saveState();
 			anim.setNodeShade(u.index, FINISHEDSETID);
 			
 			processNeighbours(u);
