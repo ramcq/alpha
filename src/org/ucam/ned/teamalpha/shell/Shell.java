@@ -1,9 +1,5 @@
 package org.ucam.ned.teamalpha.shell;
 
-import org.ucam.ned.teamalpha.algorithms.*;
-import org.ucam.ned.teamalpha.animators.*;
-import org.ucam.ned.teamalpha.queues.*;
-
 public class Shell {
 	static Shell myself = null;
 	
@@ -31,10 +27,4 @@ public class Shell {
 			System.err.println(e);
 		}
 	}
-	
-	public void setSteps(String[] steps) {};
-	
-	public void setCurrentStep(int step) {};
-	
-	public void showMessage(String msg) {};
 }

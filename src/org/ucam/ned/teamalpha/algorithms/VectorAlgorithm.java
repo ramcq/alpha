@@ -1,6 +1,6 @@
 package org.ucam.ned.teamalpha.algorithms;
 
-import org.ucam.ned.teamalpha.animators.*;
+import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
  * @author ram48

@@ -3,8 +3,8 @@ package org.ucam.ned.teamalpha.animators;
 /**
  * @author ram48
  * 
- * An abstract class containing all of the methods which are implemented by all
- * types of animator.
+ * An abstract base class containing all of the methods which are implemented
+ * by all types of animator.
  */
 public abstract class Animator {
 	/**
@@ -44,20 +44,22 @@ public abstract class Animator {
 
 	/**
 	 * Indicates the end of a logical step in the algorithm, and saves the
-	 * state of the animator into a State object which can later be used with
-	 * restoreState() to set the state back to the time this method was called.
+	 * state of the animator into a <class>State</class> object which can
+	 * later be used with restoreState() to set the state back to the time this
+	 * method was called.
 	 * 
-	 * @return a State object which can later be used with restoreState to
-	 *         restore the state of the animator
+	 * @return a <class>State</class> object which can later be used with
+	 *         restoreState to restore the state of the animator
 	 */
 	public abstract Animator.State saveState();
 
 	/**
 	 * Restores the state of the animator to that which it was in when the
-	 * saveState() method was called to generate the given State object.
+	 * saveState() method was called to generate the given <class>State
+	 * </class> object.
 	 * 
 	 * @param state
-	 *            a State object from the saveState() method
+	 *            a <class>State</class> object from the saveState() method
 	 */
 	public abstract void restoreState(State state);
 }
