@@ -447,7 +447,7 @@ public class GUITest extends javax.swing.JFrame {
 	}
 	
 	private String nextRandomInt() {
-		int i = r.nextInt(RANDBOUND<<1) - (RANDBOUND);
+		int i = r.nextInt(RANDBOUND);
 		return Integer.toString(i);
 	}
 }
