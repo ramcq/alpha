@@ -15,6 +15,11 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
 public class Kruskal extends GraphAlgorithm {
 	private GraphAnimator anim;
 	
+	// Set up the colours for each type of edge
+	private static int UNTOUCHED = 0;		// Blue
+	private static int CYCLECAUSING = 3; 	// Red
+	private static int INCLUDED = 2;		// Orange
+	
 	class Edge {
 		String name;
 		int weight;
@@ -49,7 +54,7 @@ public class Kruskal extends GraphAlgorithm {
 	// We need to convert this data into an array of edges and 
 	// nodes.
 	
-	private int[][] costs;
+	private int[][] costMatrix;
 	private Vector edges;
 	private Vector nodes;
 	
@@ -57,7 +62,7 @@ public class Kruskal extends GraphAlgorithm {
 	int[][] result;
 	
 	/**
-	 * This function converts a list of costs into a list of all the
+	 * This function converts a list of costMatrix into a list of all the
 	 * possible edges there are in the graph. It then sorts them
 	 * according to weight. The sort is accomplished through an
 	 * implementation of insertion sort as the edges are added to the
@@ -69,9 +74,9 @@ public class Kruskal extends GraphAlgorithm {
 		
 		for(int i=0; i<dim; i++) {
 			for(int j=0; j<dim; j++) {
-				if (costs[i][j] != 0) {
+				if (costMatrix[i][j] != 0) {
 					// Need to add an edge
-					Edge e = new Edge("",costs[i][j],i,j); //TODO Enter an appropriate name
+					Edge e = new Edge("",costMatrix[i][j],i,j); //TODO Enter an appropriate name
 					
 					// Add with an insertion sort
 					for(int k=0; k<edges.size(); k++) {
@@ -137,10 +142,12 @@ public class Kruskal extends GraphAlgorithm {
 		if (update && (i!=j)) {
 			// Join tree j to i
 			((Node)nodes.elementAt(j)).parent = i;
+
 		}
 		
 		// Return true false if they share the same root: joining would 
 		// result in a cycle.
+		
 		return (i != j);
 	}
 	
@@ -154,7 +161,7 @@ public class Kruskal extends GraphAlgorithm {
 			// We are done if we are out of edges
 			if (edges.isEmpty()) break;
 			
-			// Get the cheaest edge
+			// Get the cheapest edge
 			Edge e = (Edge)edges.remove(0);
 			
 			// Check whether addition will cause a cycle and update
@@ -162,6 +169,12 @@ public class Kruskal extends GraphAlgorithm {
 			n1 = e.node1; n2 = e.node2;
 			if (acyclic(n1, n2, true)) {
 				result[n1][n2] = 1;
+				
+				//ANIM: Add edge to the graph
+				anim.setEdgeShade(n1,n2,INCLUDED);
+			} else if (!(result[n1][n2] == 1 || result[n2][n1] == 1 )) {
+				//ANIM: Show that edge causes a cycle if not already in tree
+				anim.setEdgeShade(n1,n2,CYCLECAUSING);
 			}
 			
 			
@@ -171,10 +184,18 @@ public class Kruskal extends GraphAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
-	public void execute(Animator anim) {
-		this.anim = (GraphAnimator) anim;
+	public void execute(Animator a) {
+		this.anim = (GraphAnimator) a;
 		buildN();
 		buildE();
+		
+		// ANIM: Set up the graphanimator with the costs
+		try {
+			anim.createGraph(costMatrix);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
 		kruskalsAlgo();
 		print();
 
@@ -182,7 +203,7 @@ public class Kruskal extends GraphAlgorithm {
 	
 	public Kruskal(int[][] costs) {
 		super(costs);
-		this.costs = costs;
+		this.costMatrix = costs;
 		this.dim = costs.length;
 		this.result = new int[dim][dim];
 		this.edges = new Vector();

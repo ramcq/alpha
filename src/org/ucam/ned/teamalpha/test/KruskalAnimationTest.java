@@ -1,5 +1,5 @@
 /*
- * Created on Feb 19, 2004
+ * Created on Feb 21, 2004
  *
  * To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
@@ -12,8 +12,9 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.ucam.ned.teamalpha.algorithms.Dijkstra;
+
 import org.ucam.ned.teamalpha.algorithms.GraphAlgorithm;
+import org.ucam.ned.teamalpha.algorithms.Kruskal;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 import org.ucam.ned.teamalpha.shell.ShellGraphAnimator;
@@ -24,11 +25,11 @@ import org.ucam.ned.teamalpha.shell.ShellGraphAnimator;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class DijkstraAnimationTest{
+public class KruskalAnimationTest {
 
 	
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("Dijkstra Animation test");
+		JFrame frame = new JFrame("Kruskal Animation test");
 		frame.setSize(500,500);
 		frame.setVisible(true);
 		JPanel panel = new JPanel(true); // lightweight container
@@ -59,14 +60,14 @@ public class DijkstraAnimationTest{
 		}*/
 				
 		
-/*		int[][] c = {{ 0,  0, 13,  0, 16,  8},
+		int[][] c = {{ 0,  0, 13,  0, 16,  8},
 				 { 0,  0,  0,  6,  0, 10},
 			  	 {13,  0,  0, 14,  0, 11},
 				 { 0,  6, 14,  0,  5, 17},
 				 {16,  0,  0,  5,  0,  7},
-				 { 8, 10, 11, 17,  7,  0}};*/
+				 { 8, 10, 11, 17,  7,  0}};
 		
- 		int[][] c = {{0,	33,	10,	56,	0,	0,	0,	0,	0,	0},
+/* 		int[][] c = {{0,	33,	10,	56,	0,	0,	0,	0,	0,	0},
  				{33,	0,	0,	13,	21,	0,	0,	0,	0,	0},
 				{10,	0,	0,	23,	0,	24,	65,	0,	0,	0},
 				{56,	13,	23,	0,	51,	0,	20,	0,	0,	0},
@@ -75,7 +76,7 @@ public class DijkstraAnimationTest{
 				{0,	0,	65,	20,	17,	40,	0,	99,	45,	42},
 				{0,	0,	0,	0,	35,	0,	99,	0,	0,	0},
 				{0,	0,	0,	0,	0,	72,	45,	0,	0,	83},
-				{0,	0,	0,	0,	0,	0,	42,	0,	83,	0}};
+				{0,	0,	0,	0,	0,	0,	42,	0,	83,	0}};*/
 		
 /*		try { app.createGraph(c); }
 		catch (NonSquareMatrixException e) {
@@ -83,7 +84,7 @@ public class DijkstraAnimationTest{
 		}*/
 		
 		anim.setFPS(20);
-		Dijkstra d = new Dijkstra(c);
-		d.execute(anim);
+		Kruskal k = new Kruskal(c);
+		k.execute(anim);
 	}
 }

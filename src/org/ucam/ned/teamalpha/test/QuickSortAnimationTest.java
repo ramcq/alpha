@@ -23,7 +23,7 @@ public class QuickSortAnimationTest {
 	static int[] data = {12,34, 1,40,23,456,45,-12};
 	
 	public static void main(String[] args) {	
-		JFrame frame = new JFrame("InsertionSort test");
+		JFrame frame = new JFrame("QuickSort Animation test");
 		frame.setSize(5000,500);
 		frame.setVisible(true);
 		

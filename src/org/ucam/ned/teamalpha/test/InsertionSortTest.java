@@ -21,7 +21,7 @@ public class InsertionSortTest {
 	static int[] data = {12,34, 1,1494,23,456,45,-12};
 	
 	public static void main(String[] args) {	
-		JFrame frame = new JFrame("InsertionSort test");
+		JFrame frame = new JFrame("InsertionSort Animation test");
 		frame.setSize(500,500);
 		frame.setVisible(true);
 		
