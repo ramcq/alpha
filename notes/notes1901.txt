@@ -1,0 +1,69 @@
+Functional specification and module design
+
+Introduction
+         [- repeat + enlarge project description here]
+
+
+Assumptions
+         - assume people who wish add new algorithms can code java
+         - assume max data lengths ~20 vector elements (?) ~10 graph nodes
+                 Since there is only a set amount that can be displayed on
+screen
+                 Project is to demonstrate algorithms, not produce optimised
+algorithms etc.
+         -
+
+Environment
+         - Java features
+
+
+Program I/O
+
+User inputs:
+         - input list data
+         - input graph data
+         - animation speed (?)
+         - generate random data
+         - choose algorithm
+         - step forwards/backwards in algorithm
+
+Outputs:
+         - animation
+
+
+
+Animation Specification
+
+Sorting Animation Subclass:
+
+Vector:
+         - Create new vector with initial data
+         - Split vector (Quicksort)
+         - Swap two elements of the vector
+         - Insert element (Move to position, p, and shift all other values
+along)
+         - Delete
+
+Pointer:
+         - Create new pointer with initial position, label and
+           whether it points at or inbetween elements
+         - Move pointer
+         - Change pointer colour
+         - Change label
+         - Delete
+
+Graph Animation Subclass:
+
+Node:
+         - Create node (initial label)
+         - Change node label (have more than one label for quicksort?)
+         - Change node colour
+         - Highlight node
+         - Delete node
+
+Path:
+         - Create path. Initial data: cost, label, node1, node2
+         - Change path colour
+         - Highlight path
+         - Change path label
+         - Delete path
