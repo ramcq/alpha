@@ -5,6 +5,7 @@ package org.ucam.ned.teamalpha.algorithms;
 
 import java.util.Vector;
 
+import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
@@ -12,7 +13,7 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
  *
  */
 public class RadixSort extends VectorAlgorithm {
-	
+	private VectorAnimator anim;
 	
 	// The array holding the values to be sorted
 	int a[];
@@ -26,8 +27,8 @@ public class RadixSort extends VectorAlgorithm {
 	 * 	The values that are to be sorted.
 	 * @param values
 	 */
-	public RadixSort(VectorAnimator va, int[] values) {
-		super(va, values);
+	public RadixSort(int[] values) {
+		super(values);
 		this.a = values;
 		this.numDigits = getMaxDigits();
 	}
@@ -118,8 +119,8 @@ public class RadixSort extends VectorAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
-	public void execute() {
-		// TODO Auto-generated method stub
+	public void execute(Animator anim) {
+		this.anim = (VectorAnimator) anim;
 		sort();
 	}
 	

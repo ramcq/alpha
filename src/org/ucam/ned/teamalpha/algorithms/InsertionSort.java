@@ -3,6 +3,7 @@
  */
 package org.ucam.ned.teamalpha.algorithms;
 
+import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
@@ -61,9 +62,8 @@ public class InsertionSort extends VectorAlgorithm {
 	 * @param values
 	 * 	An array of the elements that are to be sorted.
 	 */
-	public InsertionSort(VectorAnimator va, int[] values) {
-		super(va, values);
-		this.anim = va;
+	public InsertionSort(int[] values) {
+		super(values);
 		this.a = values;
 	}
 	
@@ -84,8 +84,8 @@ public class InsertionSort extends VectorAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
-	public void execute() {
+	public void execute(Animator anim) {
+		this.anim = (VectorAnimator) anim;
 		sort();
 	}
-
 }

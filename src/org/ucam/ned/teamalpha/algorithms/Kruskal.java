@@ -4,6 +4,8 @@
 package org.ucam.ned.teamalpha.algorithms;
 
 import java.util.Vector;
+
+import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 
 /**
@@ -11,6 +13,7 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
  *
  */
 public class Kruskal extends GraphAlgorithm {
+	private GraphAnimator anim;
 	
 	class Edge {
 		String name;
@@ -168,7 +171,8 @@ public class Kruskal extends GraphAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
-	public void execute() {
+	public void execute(Animator anim) {
+		this.anim = (GraphAnimator) anim;
 		buildN();
 		buildE();
 		kruskalsAlgo();
@@ -176,8 +180,8 @@ public class Kruskal extends GraphAlgorithm {
 
 	}
 	
-	public Kruskal(GraphAnimator ga, int[][] costs) {
-		super(ga, costs);
+	public Kruskal(int[][] costs) {
+		super(costs);
 		this.costs = costs;
 		this.dim = costs.length;
 		this.result = new int[dim][dim];

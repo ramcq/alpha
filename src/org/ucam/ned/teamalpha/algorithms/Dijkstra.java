@@ -6,8 +6,17 @@
  */
 package org.ucam.ned.teamalpha.algorithms;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
-import java.util.*;
 
 /**
  * @author sas58
@@ -16,7 +25,6 @@ import java.util.*;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class Dijkstra extends GraphAlgorithm {
-	
 	// To handle the infinite distance:
 	static final int INF = Integer.MAX_VALUE;
 	// The index of the node to start from
@@ -270,17 +278,17 @@ public class Dijkstra extends GraphAlgorithm {
 	 * @param costs
 	 * 	The cost matrix.
 	 */
-	public Dijkstra(GraphAnimator ga, int[][] costs) {
-		super(ga, costs);
+	public Dijkstra(int[][] costs) {
+		super(costs);
 		this.costMatrix  = costs;
-		this.anim = ga;
-		execute();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
-	public void execute() {
+	public void execute(Animator a) {
+		this.anim = (GraphAnimator) a;
+		
 		buildData(STARTINDEX, costMatrix);
 		
 		// ANIM: Create animator information
@@ -301,5 +309,4 @@ public class Dijkstra extends GraphAlgorithm {
 			processNeighbours(u);
 		}
 	}
-
 }

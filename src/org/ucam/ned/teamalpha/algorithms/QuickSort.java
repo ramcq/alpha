@@ -4,6 +4,7 @@
  */
 package org.ucam.ned.teamalpha.algorithms;
 
+import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
@@ -95,9 +96,8 @@ public class QuickSort extends VectorAlgorithm {
 	 * @param va
 	 * @param values
 	 */
-	public QuickSort(VectorAnimator va, int[] values) {
-		super(va, values);
-		this.anim = va;
+	public QuickSort(int[] values) {
+		super(values);
 		this.a = values;
 	}
 
@@ -119,7 +119,8 @@ public class QuickSort extends VectorAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
-	public void execute() {
+	public void execute(Animator anim) {
+		this.anim = (VectorAnimator) anim;
 		quick(0, a.length - 1);
 	}
 
