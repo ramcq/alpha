@@ -179,7 +179,7 @@ The auxiliary displays showing the time and space costs of the algorithm,
  animated.
 \layout Section
 
-Facilities to be provided
+Facilities to Be Provided
 \layout Standard
 
 The following facilities will definitely be provided:
@@ -270,12 +270,26 @@ cvs
 .
 \layout Section
 
-Overall system architecture
+Overall System Architecture
 \layout Standard
 
-The main functionality of the system can be broken down into four areas,
- algorithms, animators, queues and shell, which will be represented as packages
- in Java.
+The main functionality of the system can be broken down into four areas:
+\layout Itemize
+
+Algorithms: (can anyone put just a line of explanation here for each of
+ these areas?)
+\layout Itemize
+
+Animators
+\layout Itemize
+
+Queues
+\layout Itemize
+
+Shell
+\layout Standard
+
+which will be represented as packages in Java.
  The following sections contain a brief description of each package, the
  classes within, and their interactions.
 \layout Subsection
@@ -426,7 +440,7 @@ show diagram, explain diagram in detail, explain why diagram is the way
  it is
 \layout Section
 
-Overall inputs, functions, and outputs
+Overall Inputs, Functions, and Outputs
 \layout Standard
 
 User inputs:
