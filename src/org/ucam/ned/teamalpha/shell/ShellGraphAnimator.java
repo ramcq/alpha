@@ -1,10 +1,22 @@
 package org.ucam.ned.teamalpha.shell;
-import java.util.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
+import org.ucam.ned.teamalpha.animators.InvalidAnimationEventException;
 
 
 /**
@@ -40,9 +52,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	private double Nodeangle;
 	private int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
-	private Component outc; // Component we will be drawing into
+	private JPanel outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
-	private Image bi; // buffered image for double buffering
+	private BufferedImage bi; // buffered image for double buffering
 	private Graphics big; // corresponding graphics to bi
 	private Color fgcolour = Color.black;
 	private Color bgcolour = Color.white;
@@ -295,9 +307,16 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 	}
 	
-	ShellGraphAnimator(Component c) {
-		outc = c;
-		outg = c.getGraphics();
+	ShellGraphAnimator(Container c) {
+		outc = new JPanel() {
+			public void paintComponent(Graphics g) {
+				g.drawImage(bi,0,0,outc);
+			}
+		};
+		outc.setSize(c.getSize().width, c.getSize().height);
+		c.add(outc);
+		outc.setVisible(true);
+		outg = outc.getGraphics();
 		int delay = (fps > 0) ? (1000 / fps) : 100;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
 		// Instantiate timer (gives us ActionEvents at regular intervals)
@@ -315,7 +334,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		if (bi == null ||
 				(! (bi.getWidth(outc) == outc.getSize().width
 						&& bi.getHeight(outc) == outc.getSize().height))) {
-			bi = outc.createImage(outc.getSize().width, outc.getSize().height);
+			bi = (BufferedImage) outc.createImage(outc.getSize().width, outc.getSize().height);
 		}
 		// Create Graphics object from buffered image (we will work on this all the time and flush it out on every frame)
 		big = bi.getGraphics();
