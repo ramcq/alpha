@@ -164,9 +164,6 @@ Clearly, a system to animate any conceivable algorithm working on any imaginable
 \layout Section
 
 Assumptions
-\layout Standard
-
-[?write this up as proper writing not bullet points?]
 \layout Itemize
 
 The 
@@ -293,10 +290,6 @@ Implementations of more algorithms, e.g.
 \layout Section
 
 Environment
-\layout Standard
-
-Based on our current knowledge and the availability of development tools,
- we have decided that:
 \layout Itemize
 
 The system will be written in Java 2 using the Eclipse IDE.
@@ -395,7 +388,7 @@ SortAlgorithm
  the initial data for the algorithm and instructing it to execute.
 \layout Subsection
 
-Animatorsusing mouse) 
+Animators
 \layout Standard
 
 
