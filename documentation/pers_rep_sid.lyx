@@ -1,0 +1,151 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Personal Report
+\layout Author
+
+Sidath Senanayake (sas58) Project: Animating Algorithms Team: Alpha
+\layout Section
+
+Personal Work
+\layout Standard
+
+In brief, I believe that I played a significant role in the development
+ of this project and delivered all that was required of me.
+ I also took on the work of other members when they had problems or ran
+ out of time.
+\layout Standard
+
+A rough outline of my contributions:
+\layout Itemize
+
+Was an active member in the design of the overall specification
+\layout Itemize
+
+Contributed to the design of the APIs
+\layout Itemize
+
+Implemented and tested the code of all 6 algorithms
+\layout Itemize
+
+Created a mock up of the GUI to try out some initial prototype design ideas
+\layout Itemize
+
+Designed the animations themselves, and wrote descriptions of each step
+\layout Itemize
+
+Performed tests on the interfaces
+\layout Itemize
+
+(minor) Provided help in the way the developer documentation was to be written
+\layout Standard
+
+My code may be found at http://ned.ucam.org/cgi-bin/viewcvs.cgi/alpha/src/org/ucam/
+ned/teamalpha under the 
+\family typewriter 
+test
+\family default 
+ and 
+\family typewriter 
+algorithms
+\family default 
+ packages.
+\layout Section
+
+Member assessment
+\layout Subsection
+
+Graham
+\layout Standard
+
+Graham wrote the majority of the user documentation and acted as the group
+ manager.
+ As the manager, he was supportive of others' ideas and many important decisions
+ were made by Rob and Andrew.
+ The user documentation is largely his work.
+\layout Subsection
+
+Rob
+\layout Standard
+
+Rob was probably the single most important member of the team.
+ He played a vital role in all design decisions, from the intial specification
+ document to the APIs.
+ He also coded and tested extensively implementing most of the shell as
+ well as implementing the APIs as abstract classes.
+ In addition to all this, Rob set up the CVS server and managed the Wiki
+ page.
+ He was a source of ideas and help on both Java and the tools that we used.
+ A commendable performance overall.
+\layout Subsection
+
+Andrew
+\layout Standard
+
+Andrew worked in many departments.
+ As secretary he was punctual and kept at us until we had our submissions
+ in order.
+ As a developer, he played an important part in the overall design and coded
+ one of the hardest parts of the project--the animator.
+\layout Subsection
+
+Neofytos
+\layout Standard
+
+Neo wrote the developer documentation and came up with conceptual sketches
+ of the GUI.
+ When collecting information for the developer documentation, he made sure
+ that he understood our code thoroughly.
+ His ideas on the GUI were used in the final design.
+ Neo also wrote a lot of the intial specification document.
+\layout Subsection
+
+Richard
+\layout Standard
+
+Richard helped in the intial drafting stages of the specification.
+ Although classed as a tester, he didn't get testing till late in the project,
+ and this inconvenienced coders as they had to write their own test code.
+ When he did begin testing, he showed enthusiasm and some results.
+\layout Subsection
+
+Steve
+\layout Standard
+
+Steve played a part in the intial design of the specification document and
+ the API.
+ He modified Andrew's animator code to produce the graph animator code.
+ His classes are functional and work fine, but should have spent a little
+ more time making his code cleaner.
+\layout Subsection
+
+Alan
+\layout Standard
+
+Alan was a tester, and was involved in testing the vector animator.
+ He compiled and submitted an error report to Andrew.
+\the_end
