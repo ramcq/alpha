@@ -177,8 +177,8 @@ animation script
 
  and the algorithms themselves will be written in Java.
  We will not implement our own special language for describing algorithms;
- instead, we will document a Java API which permits new algorithms to be
- animated.
+ instead, we will implement document a Java API which permits new algorithms
+ to be animated.
 \layout Itemize
 
 The user will be able to specify initial data in the following ways:
@@ -239,16 +239,15 @@ Support for algorithms on vectors and graphs
 Clear and smooth graphical animation
 \layout Itemize
 
+Text explanation of each step as it happens
+\layout Itemize
+
 Ability to step through algorithms, both forwards and backwards, at the
  click of a mouse
 \layout Itemize
 
-Text explanation of each step as it happens (pseudocode as in a debugger)
-\layout Itemize
-
 Ability to specify the algorithm's initial data or input (plus the ability
- to generate random initial data and special cases such as all entries in
- a vector being the same)
+ to generate random initial data)
 \layout Itemize
 
 Ability to add new algorithms using existing animation primitives (by writing
@@ -267,8 +266,8 @@ Cross-platform operation using Java
 User-friendly interface
 \layout Itemize
 
-In order to demonstrate the system, we will implement three sorting algorithms
- and two graph algorithms:
+In order to demonstrate the system, we will initially implement three sorting
+ algorithms and two graph algorithms:
 \begin_deeper 
 \layout Itemize
 
@@ -369,9 +368,7 @@ collapsed false
 
 \end_inset 
 
-UML Class diagram for package 
-\family typewriter 
-Algorithm
+UML class diagram for algorithm package
 \end_inset 
 
 
@@ -438,13 +435,7 @@ collapsed false
 
 \end_inset 
 
-UML Class diagram for packages 
-\family typewriter 
-Animator
-\family default 
- and 
-\family typewriter 
-Queue
+UML class diagram for animator and queue packages
 \end_inset 
 
 
@@ -724,7 +715,12 @@ Outputs
 Animation displayed on screen
 \layout Itemize
 
-Pseudocode
+Textual explanation of steps
+\layout Itemize
+
+Pseudocode 
+\emph on 
+[optional]
 \layout Itemize
 
 Time and space cost display 
@@ -735,7 +731,7 @@ Time and space cost display
 Specification of components and test requirements
 \layout Standard
 
-This section has the same structure as the one on overall system architecture.
+This section has a similar structure to the one on overall system architecture.
  We will deal with system components grouped by package.
  For each class (or type of class) we will describe its purpose and intended
  function, its inputs and outputs, its main public methods, and we will
@@ -773,7 +769,7 @@ The algorithm receives its initial data, and an instance of an object which
 Animator
 \family default 
  appropriate to the class of algorithm.
- For example, a sort algorithm could recieve a vector of integers, and an
+ For example, a sort algorithm could receive a vector of integers, and an
  instance of a 
 \family typewriter 
 VectorAnimator
@@ -794,7 +790,11 @@ Animator
  an explanation to the user of the execution of the algorithm.
 \layout Subsubsection*
 
-Public methods
+Public methods in abstract 
+\family typewriter 
+Algorithm
+\family default 
+ class
 \layout Itemize
 
 
@@ -831,8 +831,8 @@ void execute()
 Testing
 \layout Standard
 
-Each algorithm can be tested indepdently of the main system by making a
- test program that provides a 
+Each algorithm can be tested independently of the main system by making
+ a test program that provides a 
 \family typewriter 
 TestAnimator
 \family default 
@@ -862,7 +862,7 @@ The animator abstract classes define all of the methods which are available
 \family typewriter 
 Animator
 \family default 
- classes for graph and vector animation primitives.
+ subclasses for graph and vector animation primitives.
  Actual drawing implementations of these abstract classes must support the
  ability to save their state to an opaque 
 \family typewriter 
@@ -872,34 +872,11 @@ Checkpoint
  using the memento design pattern.
 \layout Subsubsection*
 
-Inputs
-\layout Standard
-
-The animator will take input from the queue (concrete events to be animated)
- and from the shell (instructions such as 
-\begin_inset Quotes eld
-\end_inset 
-
-alter animation speed
-\begin_inset Quotes erd
-\end_inset 
-
-).
-\layout Subsubsection*
-
-Outputs
-\layout Standard
-
-The animator will output a graphical animation canvas to the shell.
- It will also give to the shell any text which is included with each event,
- such as an explanation of an event or a piece of pseudo-code.
-\layout Subsubsection*
-
-Public methods (
+Public methods in abstract 
 \family typewriter 
 Animator
 \family default 
-)
+ class
 \layout Itemize
 
 
@@ -925,13 +902,6 @@ void showMessage(String)
 
 
 \family typewriter 
-void pause()
-\family default 
- --- freeze animation
-\layout Itemize
-
-
-\family typewriter 
 Checkpoint saveState()
 \family default 
  --- save the state of the animator so this stage of the algorithm can be
@@ -946,11 +916,14 @@ void restoreState(Checkpoint)
  was taken
 \layout Subsubsection*
 
-Public methods (
+Public methods to be provided by abstract 
 \family typewriter 
 GraphAnimator
 \family default 
-)
+ class
+\layout Paragraph
+
+Graph
 \layout Itemize
 
 Create graph (specify nodes and paths with costs and labels)
@@ -980,17 +953,17 @@ Highlight path (to indicate current focus of algorithm)
 Shade path (to indicate membership of a set of nodes or paths)
 \layout Subsubsection*
 
-Public methods (
+Public methods to be provided by abstract 
 \family typewriter 
 VectorAnimator
 \family default 
-)
-\layout Itemize
-
-Create vector (with initial data and label)
+ class
 \layout Paragraph
 
 Vector (array of numbers)
+\layout Itemize
+
+Create vector (with initial data and label)
 \layout Itemize
 
 Change vector label
@@ -999,7 +972,7 @@ Change vector label
 Swap elements at two pointers
 \layout Itemize
 
-Copy element from one ponter to another
+Copy element from one pointer to another
 \layout Itemize
 
 Compare two elements (uses pointers to indicate which are being compared)
@@ -1026,7 +999,7 @@ Create marker (with label and position)
 Delete marker
 \layout Itemize
 
-Change marker label or colour
+Change marker label
 \layout Itemize
 
 Move marker
@@ -1044,7 +1017,7 @@ Create pointer (with label and position)
 Delete pointer
 \layout Itemize
 
-Change pointer label or colour
+Change pointer label
 \layout Itemize
 
 Move pointer
@@ -1086,7 +1059,11 @@ Outputs
 Animation events to the actual animator for display.
 \layout Subsubsection*
 
-Public methods
+Public methods in 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface
 \layout Itemize
 
 
@@ -1136,6 +1113,11 @@ Animator
  These animators will implement an internal interface which allows the shell
  to control playback speed, pausing, etc, independently of which type of
  animation is being implemented.
+ The shell will instantiate all of the objects as required, such as the
+ algorithm, queue and actual animator classes, will pass data between components
+, such as the algorithm's initial data, and control the queue and animator
+ objects to e.g.
+ move between steps, and pause or adjust animation speed.
 \layout Subsubsection*
 
 Inputs
@@ -1149,11 +1131,6 @@ The shell will accept, from the user, the algorithm choice and the provision
  The shell can also make use of Java introspection to enumerate the available
  algorithms within the algorithm package, and use this to present the list
  to the user.
-\layout Standard
-
-The shell will also take input from the animator class (which will provide
- a graphical animation canvas which needs to be displayed, along with the
- textual information associated with each animation event).
 \layout Subsubsection*
 
 Outputs
@@ -1164,17 +1141,13 @@ As a graphical component, the shell produces all of its output on screen,
  One is interaction whilst the user selects an algorithm and enters data,
  and the other is the actual display of the animation (and associated informatio
 n) on screen.
-\layout Standard
-
-The shell will also instantiate most of the other objects required, such
- as the algorithm.
- It will pass the algorithm its initial data.
- It will also talk to the queue (e.g.
- to tell it to move backwards and forwards) and to the animator itself (e.g.
- to alter animation speed).
 \layout Subsubsection*
 
-Public methods
+Public methods in 
+\family typewriter 
+Shell
+\family default 
+ class
 \layout Itemize
 
 
@@ -1221,12 +1194,7 @@ the system must compute each step of the algorithm correctly using the data
 
 the system must animate each step of the algorithm on the screen, allowing
  the user to review each step individually and move forwards and backwards
- at will (the system 
-\emph on 
-must
-\emph default 
- allow the user to repeat animations, not just flick back and forth between
- states);
+ at will;
 \layout Itemize
 
 all other features on the 
