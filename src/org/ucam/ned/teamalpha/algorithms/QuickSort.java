@@ -69,6 +69,7 @@ public class QuickSort extends VectorAlgorithm {
 
 			// ANIM: Find the pivot element
 			anim.setCurrentStep(0);
+			anim.saveState();
 			// Select the pivot by the median of first, middle and last element
 			pivotLoc = (low + high)/2; 
 			pivot = a[pivotLoc];
@@ -115,6 +116,7 @@ public class QuickSort extends VectorAlgorithm {
 						SWAPS++;
 						// ANIM: Swap the elements
 						anim.setCurrentStep(3);
+						anim.saveState();
 						curr.swapElements(i-low, j-low);
 						
 						// Check for a moved pivot element and sort out
@@ -148,6 +150,7 @@ public class QuickSort extends VectorAlgorithm {
 			
 			// ANIM: Anounce partition found
 			anim.setCurrentStep(4);
+			anim.saveState();
 			
 			// ANIM: Highlight the split location
 			aSplitLocation = curr.createArrow("Spl", i-low, true);
@@ -156,12 +159,14 @@ public class QuickSort extends VectorAlgorithm {
 			
 			// ANIM: Copy the values of curr across
 			anim.setCurrentStep(5);
+			anim.saveState();
+			anim.wait();
 			
-			anim.setFpsFactor(10000.0f);
+/*			anim.setFpsFactor(10000.0f);
 			for (int k=0; k<=high-low; k++) {
 				curr.copyElement(k, v, low+k);
 			}
-			anim.setFpsFactor(1.0f);
+			anim.setFpsFactor(1.0f);*/
 			
 			// ANIM: Remove all
 			curr.delete();
