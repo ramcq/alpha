@@ -30,15 +30,16 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 /*
  * TODO: bug fixes:
  * problem with gradient -> infinity with 3 node graph ({trig,cast to int} functions rounding error)
- * potential edge overlap problem (scale label distance along edge according to number of nodes?)
- * SID: Make the nodes larger
+ * check the polygon drawing with curve edges?
  * SID: Functionality to delete edges altogether?
- * SID: Node labels overwrite on update
  * SID: Node labels different colour/weight than edge labels (IMPORTANT)
+ * 
+ * Done:
+ * SID: Make the nodes larger 
+ * SID: Node labels overwrite on update
  * SID: Thicker lines so it is easier to see changes
+ *
  */
-
-
 /*
  * Progress log:
  *	current time use: ~27 hours (?)
@@ -74,27 +75,34 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
 	public static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.yellow, Color.darkGray, Color.lightGray};
 		//colours for representing the different node/edge sets
-	public static final int NODE_SIZE = 6; //node width/height
+	public static final int NODE_SIZE = 12; //node width/height
+	public static final int NODE_FONT_SIZE = 16; //node font height
+	public static final int EDGE_FONT_SIZE = 14; //edge font height
 	public static final int EDGE_TYPE_SAMDIR = 0;
 	public static final int EDGE_TYPE_ONEDIR = 1;
 	public static final int EDGE_TYPE_TWODIR = 2;
 	public static final int EDGE_CURVE_ANGLE = 10; //degrees
-	
+	public static final boolean EDGE_LINE_DRAW = false;
+
 	public class Node /*implements Serializable*/{
 		int Nodewidth=NODE_SIZE;
 		int Nodeheight=NODE_SIZE; //nodes always circular 
 		int x; 
 		int y; //position of top left corner of square containing node
 		int set; //set node belongs to
+		int id;
+		int oldlen;
 		private String label; 
 		/*
 		 * called by creategraph api to initialise node data 
 		 */
-		public void nodesetdata(int x, int y) {
+		public void nodesetdata(int x, int y, int i) {
 			this.x = x;
 			this.y = y;
 			this.set = 0;
 			this.label = "";
+			this.id = i;
+			this.oldlen = 0;
 		}
 		
 		public void delete() {
@@ -104,6 +112,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		 * called by nodesetlabel api to set label and update display
 		 */
 		public void setlabel(String label) {
+			this.oldlen = this.label.length();
 			this.label = label;
 			this.drawlabel();
 		}
@@ -373,7 +382,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		outc.setVisible(true);
 		outg = outc.getGraphics();
 		int delay = (fps > 0) ? (1000 / fps) : 100;	// Frame time in ms
-		System.out.println("Delay = " + delay + " ms");
 		// Instantiate timer (gives us ActionEvents at regular intervals)
 		timer = new javax.swing.Timer(delay, this);
 		// Fire first event immediately
@@ -405,14 +413,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		// Now comes the meat of the method: what should we do each frame?
 		// If we need a new event, get it
 		if (currentEvent == null) {
-			System.out.println("We need a new event");
 			try {
 				currentEvent = (AnimationEvent) eventQueue.removeFirst();
-				System.out.println("New event has type " + currentEvent.type);
 			}
 			catch (NoSuchElementException e) {
 				// No new events to animate, go to sleep or whatever
-				System.out.println("Nothing to do, stopping Timer");
 				currentEvent = null;
 				stopAnimation();
 				notify();
@@ -430,7 +435,16 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					currentEvent = null;
 					break;
 				case AnimationEvent.NODE_LABEL_REDRAW:
-					drawNodelabel(currentEvent.n1, big);
+					clrNodelabel(currentEvent.n1, big);
+					for (int i=0; i<10; i++) {
+						if (edgematrix[i][currentEvent.n1.id] != null) {
+		 					drawEdge(edgematrix[i][currentEvent.n1.id],big);
+						}
+						if (edgematrix[currentEvent.n1.id][i] != null) {
+		 					drawEdge(edgematrix[currentEvent.n1.id][i],big);
+						}
+					}
+					drawNode(currentEvent.n1, big);
 					currentEvent = null;
 					break;
 				case AnimationEvent.EDGE_LABEL_REDRAW:
@@ -516,13 +530,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void drawEdge(Edge e, Graphics g) {
 		if (e.type == EDGE_TYPE_SAMDIR) {
 			g.setColor(SET_COLOUR[e.set1]);
-			g.drawLine(e.x1, e.y1, e.x2, e.y2);
+			edrawLine(e.x1, e.y1, e.x2, e.y2, g);
 			g.setColor(fgcolour);
 		}
 		else {
 			if (e.type == EDGE_TYPE_ONEDIR) {
 				g.setColor(SET_COLOUR[e.set1]);
-				g.drawLine(e.x1, e.y1, e.x2, e.y2);
+				edrawLine(e.x1, e.y1, e.x2, e.y2,g);
 				drawarrow(e.x1,e.y1,e.x2,e.y2,e.set1,g);
 				g.setColor(fgcolour);				
 			}
@@ -591,7 +605,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		do
 		{	x = (int)((((1-i)*(1-i)*(1-i))*x1)+(3*i*((1-i)*(1-i))*sx)+(3*(i*i)*(1-i)*sx)+((i*i*i)*x2));
 			y = (int)((((1-i)*(1-i)*(1-i))*y1)+(3*i*((1-i)*(1-i))*sy)+(3*(i*i)*(1-i)*sy)+((i*i*i)*y2));
-			g.drawLine(oldx,oldy,x,y);
+			edrawLine(oldx,oldy,x,y,g);
 			if (arrowdrawn == false && i > 0.5) {
 				drawarrow(oldx,oldy,x,y,x1,y1,x2,y2,set,g);
 				arrowdrawn = true;
@@ -602,7 +616,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			i = i + t;
 			if (labeldrawn == false && i > 0.3) {
 				g.setColor(fgcolour);
-				drawlabel(x,y,label,g);
+				drawlabel(x,y,label,g,EDGE_FONT_SIZE);
 				labeldrawn = true;
 				g.setColor(SET_COLOUR[set]);
 			}	
@@ -776,7 +790,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			g.setColor(SET_COLOUR[e.set1]);
 			int x = (int) (sx1 - (t * (sx1 - sx2))/60.0);
 			int y = (int) (sy1 - (t * (sy1 - sy2))/60.0);
-			g.drawLine(sx1, sy1, x, y);
+			edrawLine(sx1, sy1, x, y, g);
 			if (e.type == EDGE_TYPE_ONEDIR) {
 				drawarrow(e.x1,e.y1,e.x2,e.y2,e.set1,g);
 			}
@@ -813,7 +827,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 			int x = (int) (sx1 - (sx1 - sx2));
 			int y = (int) (sy1 - (sy1 - sy2));
-			g.drawLine(sx1, sy1, x, y);
+			edrawLine(sx1, sy1, x, y,g);
 			if (e.type == EDGE_TYPE_ONEDIR) {
 				drawarrow(e.x1,e.y1,e.x2,e.y2,e.set1,g);
 			}
@@ -836,27 +850,57 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	
 	//draw edge label on screen
 	public void drawEdgelabel(Edge e, Graphics g) {
+		//pos. TODO need to blank current label?
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
-			int x = (int) (e.x1 - (e.x1 - e.x2)/3);
-			int y = (int) (e.y1 - (e.y1 - e.y2)/3);
-			drawlabel(x, y, e.label1, g);
+			int x = (int) (e.x1 - (numnodes * (e.x1 - e.x2)/13));
+			int y = (int) (e.y1 - (numnodes * (e.y1 - e.y2)/13));
+			drawlabel(x, y, e.label1, g, EDGE_FONT_SIZE);
 		}
 		else{
 			drawcurve(e.x1,e.y1,e.x2,e.y2,e.set1,1.0,e.label1,g);
 			drawcurve(e.x2,e.y2,e.x1,e.y1,e.set2,1.0,e.label2,g);
 		}
 	}
+	//clear old label before drawing new one
+	public void clrNodelabel(Node n, Graphics g) {
+		g.setColor(bgcolour);
+		g.fillRect(n.x- n.Nodewidth,n.y- n.Nodeheight-NODE_FONT_SIZE,NODE_FONT_SIZE*n.oldlen,NODE_FONT_SIZE);
+	}	
 	//draw node label on screen
 	public void drawNodelabel(Node n, Graphics g) {
-		drawlabel(n.x - n.Nodewidth,n.y - n.Nodeheight,n.label,g);
+		drawlabel(n.x - n.Nodewidth,n.y - n.Nodeheight,n.label,g,NODE_FONT_SIZE);
 	}
 	//actual method for drawing text on screen
-	public void drawlabel(int x,int y,String label, Graphics g) {
-		//pos. TODO need to blank current label?
-		g.setFont(new Font("MonoSpaced", Font.PLAIN, 14));
+	public void drawlabel(int x,int y,String label, Graphics g, int Fsize) {
+		g.setColor(fgcolour);
+		g.setFont(new Font("MonoSpaced", Font.PLAIN, Fsize));
 		g.drawString(label, x, y);
 	}
-	
+	public void edrawLine(int x1,int y1,int x2,int y2, Graphics g) {
+		if (EDGE_LINE_DRAW == true) {
+			g.drawLine(x1, y1, x2, y2);
+		}
+		else {
+			if (y1-y2 != 0) {
+				double grad = (double)(x1-x2)/(y1-y2);
+				if ((grad > 0.6) && (grad < 1.4)) {
+					int[] xpts = {x1-1,x1+1,x2+1,x2-1};
+					int[] ypts = {y1+1,y1-1,y2-1,y2+1};	
+					g.fillPolygon(xpts,ypts,4);
+				}
+				else {			
+					int[] xpts = {x1-1,x1+1,x2+1,x2-1};
+					int[] ypts = {y1-1,y1+1,y2+1,y2-1};
+					g.fillPolygon(xpts,ypts,4);
+				}
+			}
+			else {
+				int[] xpts = {x1-1,x1+1,x2+1,x2-1};
+				int[] ypts = {y1-1,y1+1,y2+1,y2-1};
+				g.fillPolygon(xpts,ypts,4);
+			}
+		}
+	}
 	public void drawGraph(Graphics g) {
 		// currently unused method
 	}
@@ -883,11 +927,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				//calculate x,y position
 				x = (int) (250 + 200 * java.lang.Math.sin(java.lang.Math.toRadians(currentang)));
 				y = (int) (250 + 200 * java.lang.Math.cos(java.lang.Math.toRadians(currentang)));
-				System.out.println(x + " " + y + " " + java.lang.Math.sin(java.lang.Math.toRadians(currentang)) + " " + java.lang.Math.cos(java.lang.Math.toRadians(currentang)));
 				currentang = currentang + Nodeangle;
 				//fill in node data
 				nodelist[i] = new Node();
-				nodelist[i].nodesetdata(x,y);
+				nodelist[i].nodesetdata(x,y,i);
 				//draw the thing we just made
 				nodelist[i].drawNode();
 			}
@@ -1013,6 +1056,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 	}
 	
+	
+
 	public void setSteps(String[] steps) {
 		// TODO Auto-generated method stub	
 	}
@@ -1032,7 +1077,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void setFPS(int fps) {
 		this.fps = fps;
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
-		System.out.println("Delay = " + delay + " ms");
 		timer.setDelay(delay);
 	}
 	
@@ -1060,13 +1104,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		eventQueue.clear();
 		big.setColor(bgcolour);
 		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
-/*		//clear data
-		for (int i=0;i<numnodes;i++) {
-			nodelist[i] = new Node();
-			for (int j=0;j<numnodes;j++) {
-				edgematrix[i][j] = new Edge();
-			}
-		}*/
 		//load saved data
 		edgematrix = ts.getEdges();
 		nodelist = ts.getNodes();
@@ -1089,16 +1126,15 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		JFrame frame = new JFrame("ShellGraphAnimator test");
 		frame.setSize(500,500);
 		frame.setVisible(true);
-		JPanel panel = new JPanel(true); // lightweight container
-		panel.setSize(500,500);
-		frame.getContentPane().add(panel);
-		panel.setVisible(true);
-		ShellGraphAnimator app = new ShellGraphAnimator(panel);
+		ShellGraphAnimator app = new ShellGraphAnimator(frame.getContentPane());
 		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+				System.exit(0);
+			}
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
-		});
+		});		
 		//current test data
 		int[][] tstcosts = {{0,	33,	10,	56,	0,	0,	0,	0,	0,	0},
 					 {33,	0,	0,	13,	21,	0,	0,	0,	0,	0},
@@ -1114,6 +1150,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		catch (NonSquareMatrixException e) {
 			System.out.println(e);
 		}
+		app.setEdgeShade(2,6,1);	
 	}
 }
    /*
