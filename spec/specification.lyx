@@ -320,7 +320,7 @@ Algorithms
 
 
 \begin_inset Float figure
-placement p
+placement tbp
 wide false
 collapsed false
 
@@ -358,7 +358,8 @@ The classes within this package will ultimately implement the algorithms
  and any other information which is displayed.
 \layout Standard
 
-As can be seen from Figure 
+As can be seen from Figure\SpecialChar ~
+
 \begin_inset LatexCommand \ref{figure:UML-Class-Algorithm}
 
 \end_inset 
@@ -389,6 +390,7 @@ Animators
 
 
 \begin_inset Float figure
+placement tbp
 wide false
 collapsed false
 
@@ -436,7 +438,8 @@ GraphAnimator
 VectorAnimator
 \family default 
 , which will specify the methods necessary for the following primitives.
- (See Figure 
+ (See Figure\SpecialChar ~
+
 \begin_inset LatexCommand \ref{figure:UML-Class-AnimatorQueue}
 
 \end_inset 
@@ -603,32 +606,6 @@ AnimatorQueue
 Shell
 \layout Standard
 
-
-\begin_inset Float figure
-placement p
-wide false
-collapsed false
-
-\layout Standard
-\added_space_bottom smallskip \align center 
-
-\begin_inset Graphics
-	filename PackageShell.eps
-	scale 50
-
-\end_inset 
-
-
-\layout Caption
-
-UML Class diagram for package 
-\family typewriter 
-Shell
-\end_inset 
-
-
-\layout Standard
-
 The shell package implements the interface that is visible to the user.
  The actual implementations of the 
 \family typewriter 
@@ -662,6 +639,44 @@ AnimatorQueue
  can step forwards and backwards through the stages manually.
  After an animation has run to completion, the user can return to the initial
  screen and choose a new algorithm or exit.
+\layout Standard
+
+See Figure\SpecialChar ~
+
+\begin_inset LatexCommand \ref{figure:Data-Flow}
+
+\end_inset 
+
+ for a diagram of how data moves around the system.
+\layout Standard
+
+
+\begin_inset Float figure
+placement tbp
+wide false
+collapsed false
+
+\layout Standard
+\added_space_top smallskip \added_space_bottom smallskip \align center 
+
+\begin_inset Graphics
+	filename DataFlow.eps
+	scale 50
+
+\end_inset 
+
+
+\layout Caption
+
+
+\begin_inset LatexCommand \label{figure:Data-Flow}
+
+\end_inset 
+
+System data flow diagram
+\end_inset 
+
+
 \layout Section
 
 Overall inputs, functions, and outputs
@@ -844,7 +859,7 @@ The division of tasks is described in Table
 
 
 \begin_inset Float table
-placement bp
+placement tbp
 wide false
 collapsed false
 
