@@ -56,26 +56,56 @@ GraphAlgorithm
 
 \family typewriter 
 InsertionSort
+\layout Standard
+
+This class performs an insertion sort on the data passed to it, calling
+ the relevant animator primitives to provide an explanation of each step
+ as well as to dictate how the animation proceeds.
+ It was coded and tested by Sid.
 \layout Subsection
 
 
 \family typewriter 
 QuickSort
+\layout Standard
+
+The class performs a recurcsive quick sort on the supplied data calling
+ on the animator to provide short descriptions of each step and to perform
+ the actual animation that the user sees.
+ It was coded and tested by Sid.
 \layout Subsection
 
 
 \family typewriter 
-RadixSort
+BiDirBubbleSort
+\layout Standard
+
+This class implements a bi directional bubble sort on the supplied data.
+ It also calls on the animator to present brief descriptions of each step
+ and to describe how the animation proceeds.
+ It was coded and tested by Sid.
 \layout Subsection
 
 
 \family typewriter 
 Dijkstra
+\layout Standard
+
+This class implements Dijkstra's algorithm on the supplied data.
+ It calls on the animator class to describe which step it is currently performin
+g and to indicate how the animation should proceed.
+ It was coded and tested by Sid.
 \layout Subsection
 
 
 \family typewriter 
 Kruskal
+\layout Standard
+
+This class find the minimum spanning tree of a graph using Kruskal's method.
+ It also calls on the animator to provide a brief description of what happens
+ at each step and to indicate how the animation proceeds.
+ It was coded and tested by Sid.
 \layout Section
 
 Animators
