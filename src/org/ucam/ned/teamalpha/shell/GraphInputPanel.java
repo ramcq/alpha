@@ -42,7 +42,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 	private int[] values;
 	
 	// Support for bidirectional graphs, FALSE by default
-	boolean bidirectional = true;
+	boolean bidirectional = false;
 	
 	private void makeCells(int num) {
 		fields = new JFormattedTextField[num*num];
