@@ -24,7 +24,7 @@ public class QuickSortAnimationTest {
 	
 	public static void main(String[] args) {	
 		JFrame frame = new JFrame("QuickSort Animation test");
-		frame.setSize(5000,500);
+		frame.setSize(500,500);
 		frame.setVisible(true);
 		
 		ShellVectorAnimator app = new ShellVectorAnimator(frame.getContentPane());

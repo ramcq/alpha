@@ -196,6 +196,13 @@ public class QuickSort extends VectorAlgorithm {
 		
 		try {
 			quick(0, a.length - 1);
+			
+			// Cheap hack to sort out problem due to recursion
+			// ANIM: Display the final, sorted vector
+			VectorAnimator.Vector v =  this.anim.createVector(a);
+			v.setLabel("DONE!");
+			
+			
 		} catch (Exception e) {
 			System.err.println("quicksort died: " + e);
 		}
