@@ -94,6 +94,21 @@ smh22@cam.ac.uk
 \layout Section
 
 General project overview
+\layout Standard
+
+We have now tested the various modules and integrated them into a working
+ program, and completed all of the documentation for the project.
+ The code is available online from our CVS repository at:
+\layout Quote
+
+
+\family typewriter 
+http://ned.ucam.org/cgi-bin/viewcvs.cgi/alpha/src/org/ucam/ned/teamalpha/
+\layout Standard
+
+The other documentation, including the User Guide, Developers Guide, Component
+ Descriptions and Individual Reports from all team members, has been included
+ with this report.
 \layout Subsection
 
 Successes
@@ -112,6 +127,17 @@ We broke the project up into manageable sections which were successfully
 
 We managed to get all the documentation finished and handed in on time for
  project meetings, never missing a deadline.
+\layout Itemize
+
+By working out a critical path analysis, we made sure that if one part of
+ the project would hold up many other parts, this part was given a high
+ priority.
+ An example of this is the animation API's, which were worked on first as
+ otherwise they would have held up many other parts of the coding.
+\layout Itemize
+
+By producing a good specification, we ensured that not much time was wasted
+ when coding trying to work out how the system was going to work.
 \layout Subsection
 
 Failures
@@ -168,7 +194,11 @@ Good planning is very important as it helps to find problems early, and
  fixing problems is easier the earlier you find them.
  Many problems found during the later stages of the project could probably
  have been avoided if the planning and design had been better.
- 
+\layout Itemize
+
+Documentation is also very important, as if you are reading someone else's
+ code it is a lot easier to work out what is going on if it has comments
+ in it that if it is just plain code.
 \layout Section
 
 Summary of work undertaken
@@ -228,11 +258,11 @@ Steven coded the graph animator module, one of the most challenging parts
 Testers
 \layout Subsubsection*
 
-Richard
+Zhan (referred to as Richard in some documentation)
 \layout Standard
 
-Richard tested the algorithms and the graph animator, as well as doing integrati
-on testing on the whole system.
+Zhan tested the algorithms and the graph animator, as well as doing integration
+ testing on the whole system.
 \layout Subsubsection*
 
 Alan
@@ -251,4 +281,12 @@ Neofytos
 Neofytos was a documenter, and so was involved in writing up many of the
  documents such as the Developers Guide.
  He also input many good ideas at the design stage.
+\layout Section
+
+Conclusion
+\layout Standard
+
+I believe our project has been a success, as we have worked together effectively
+, met all the deadlines for overseer meetings, and created a program that
+ satisfies the original criteria for the project.
 \the_end
