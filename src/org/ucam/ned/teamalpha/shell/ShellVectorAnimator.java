@@ -1484,7 +1484,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * @param fps
 	 * 	New frame rate (frames per second)
 	 */
-	public void setFPS(int fps) {
+	public void setFps(int fps) {
 		basefps = fps;
 		int newfps = (int) (basefps * fpsfactor); 
 		int delay = (newfps > 0) ? (1000 / newfps) : 10;	// Frame time in ms
@@ -2053,7 +2053,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 
-	public void setFPSFactor(double f) {
+	public void setFpsFactor(double f) {
 		synchronized(this) {
 			try {
 				eventQueue.addLast(new AnimationEvent(AnimationEvent.SET_FPS_FACTOR, f));
@@ -2171,7 +2171,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		v2.copyElement(3, v, 5);
 		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
 		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
-		app.setFPSFactor(0.25);
+		app.setFpsFactor(0.25);
 		a3.flash();
 		a3.move(8, true);
 		v2.flashElement(4);
