@@ -69,7 +69,9 @@ public class QuickSort extends VectorAlgorithm {
 		curr = anim.createVector("Curr", getArraySection(low,high));
 		
 		if (high > low) {
-
+			
+			anim.showMessage("Move portion we are working on to the right.");
+			
 			// ANIM: Find the pivot element
 			anim.setCurrentStep(0);
 			anim.saveState();
@@ -80,7 +82,6 @@ public class QuickSort extends VectorAlgorithm {
 			// ANIM: Point arrow at area we are working on
 			aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
 			aPivot.flash();
-			//aPivot.delete();
 
 			// ANIM: Create the swapper pointers
 			aLow = curr.createArrow("A", 0, false);
@@ -94,15 +95,19 @@ public class QuickSort extends VectorAlgorithm {
 					
 					COMPARES++;
 					
+					anim.showMessage("If <strong>" + a[i] + "</strong><<strong>" + pivot + "</strong> swap.");
+					
 					// ANIM: Move the low-end pointer down
 					anim.setCurrentStep(1);
-					aLow.move(i-low +1, false);
+					aLow.move(Math.min(i-low +1, high), false);
 					
 					++i;
 				}
 				while( (j > low ) && ( a[j] > pivot ) ) {
 					
 					COMPARES++;
+					
+					anim.showMessage("If <strong>" + a[i] + "</strong>><strong>" + pivot + "</strong> swap.");
 					
 					// ANIM: Move the high-end pointer up
 					anim.setCurrentStep(2);
@@ -119,6 +124,9 @@ public class QuickSort extends VectorAlgorithm {
 						SWAPS++;
 						// ANIM: Swap the elements
 						anim.setCurrentStep(3);
+						
+						anim.showMessage("Swap <strong>" + a[i] + "</strong> and <strong>" + a[j] + "</strong>.");
+						
 						anim.saveState();
 						curr.swapElements(i-low, j-low);
 						
@@ -129,14 +137,12 @@ public class QuickSort extends VectorAlgorithm {
 							aPivot.delete();
 							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
 							
-							//aPivot.move(pivotLoc-low, false);
 						} else if (j == pivotLoc) {
 							pivotLoc = i;
 							
 							aPivot.delete();
 							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
 							
-							//aPivot.move(pivotLoc-low, false);
 						}
 					}
 					
@@ -153,6 +159,9 @@ public class QuickSort extends VectorAlgorithm {
 			
 			// ANIM: Anounce partition found
 			anim.setCurrentStep(4);
+			
+			anim.showMessage("The new partition has been found at <strong>" + (i-low) + "</strong>. Move elements back.");
+			
 			anim.saveState();
 			
 			// ANIM: Highlight the split location
@@ -284,10 +293,9 @@ public class QuickSort extends VectorAlgorithm {
 			VectorAnimator.Vector v =  this.anim.createVector(a);
 			v.setLabel("DONE!");
 			
-			anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
-			
 			anim.setCurrentStep(6);
 			
+			anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
 			
 		} catch (Exception e) {
 			System.err.println("quicksort died: " + e);
