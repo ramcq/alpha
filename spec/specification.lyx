@@ -136,15 +136,15 @@ Background
 
 The field of algorithms and data structures is one of the hardest parts
  of Computer Science to teach.
- When done on blackboards or overhead projectors, diagrams can get extremely
- messy and hard to follow; even when the steps of an algorithm are clearly
- displayed on paper, it is not always immediately clear what operations
- have been done between each step.
+ When demonstrated on blackboards or overhead projectors, diagrams can get
+ extremely messy and hard to follow; even when the steps of an algorithm
+ are clearly displayed on paper, it is not always immediately clear what
+ operations have been done between each step.
 \layout Standard
 
 Computer animation would be an ideal way to demonstrate algorithms: the
- actions taken by the computer at each stage could be clearly demonstrated
- at whatever level of abstraction is most helpful.
+ actions taken by the computer at each stage could be demonstrated at whatever
+ level of abstraction is most helpful.
  Users could move through an algorithm's execution at their own speed, going
  especially slowly over difficult steps.
  Critical information could be shown in a clear, intuitive way (for example
@@ -152,16 +152,16 @@ Computer animation would be an ideal way to demonstrate algorithms: the
  animations showing exactly what is going on internally as the algorithm
  is executed.
  The cost of the algorithm in time and space on different sizes of input
- could also be clearly displayed.
+ could also be displayed.
 \layout Standard
 
 Clearly, a system to animate any conceivable algorithm working on any imaginable
  data structure is well beyond the scope of a six-week project, but we believe
  it should be possible to provide an extensible system with animation primitives
- enabling the illustration of algorithms which operate on vectors and lists
- (for example sorting, searching and heap algorithms) or graphs (for example
- shortest-path and strongly-connected component finding algorithms) within
- the available time.
+ enabling the illustration of algorithms which operate on vectors (for example
+ sorting, and searching algorithms) or graphs (for example shortest-path
+ and strongly-connected component finding algorithms) within the available
+ time.
 \layout Section
 
 Assumptions
@@ -561,7 +561,7 @@ It should be noted that it would not be possible to skip forwards to the
  and then forwards again, because the state of the animation canvas would
  not exist yet.
  This functionality could be simulated by running the animation very rapidly
- when the user wants to skip forwards to reach the next checkpoint state.
+ when the user wants to skip forwards to the next checkpoint state.
 \layout Subsection
 
 Shell
@@ -640,7 +640,7 @@ collapsed false
 
 \end_inset 
 
-System data flow diagram
+Diagram showing data flow between system components
 \end_inset 
 
 
@@ -891,15 +891,15 @@ Public methods to be provided by abstract
 GraphAnimator
 \family default 
  class
-\layout Paragraph
+\layout Standard
 
-Graph
+Animation primitives on the overall graph:
 \layout Itemize
 
 Create graph (specify nodes and paths with costs and labels)
-\layout Paragraph
+\layout Standard
 
-Node
+Animation primitives on a node in the graph:
 \layout Itemize
 
 Change node label
@@ -909,18 +909,18 @@ Highlight node (to indicate current focus of algorithm)
 \layout Itemize
 
 Shade node (to indicate membership of a set of nodes or paths)
-\layout Paragraph
+\layout Standard
 
-Path (joins two nodes)
+Animation primitives on a graph edge (join between two nodes)
 \layout Itemize
 
-Change path label
+Change edge label
 \layout Itemize
 
-Highlight path (to indicate current focus of algorithm)
+Highlight edge (to indicate current focus of algorithm)
 \layout Itemize
 
-Shade path (to indicate membership of a set of nodes or paths)
+Shade edge (to indicate membership of a set of nodes or paths)
 \layout Subsubsection*
 
 Public methods to be provided by abstract 
@@ -928,15 +928,22 @@ Public methods to be provided by abstract
 VectorAnimator
 \family default 
  class
-\layout Paragraph
+\layout Standard
 
-Vector (array of numbers)
+Animation primitives on a vector (array of 
+\family typewriter 
+int
+\family default 
+s):
 \layout Itemize
 
 Create vector (with initial data and label)
 \layout Itemize
 
 Change vector label
+\layout Itemize
+
+Change vector element
 \layout Itemize
 
 Swap elements at two pointers
@@ -951,16 +958,28 @@ Compare two elements (uses pointers to indicate which are being compared)
 Delete element at pointer
 \layout Itemize
 
-Insert element at marker
+Insert element at marker (essentially just several 
+\begin_inset Quotes eld
+\end_inset 
+
+simultaneous
+\begin_inset Quotes erd
+\end_inset 
+
+ copies followed by an element alteration)
 \layout Itemize
 
 Split vector into two at a marker (for Quicksort)
 \layout Itemize
 
 Highlight columns of the vector (for Radix sort)
-\layout Paragraph
+\layout Standard
 
-Marker (points at a boundary between two entries in the vector)
+Animation primitives on a 
+\emph on 
+marker
+\emph default 
+ (an arrow pointing at the boundary between two entries in the vector):
 \layout Itemize
 
 Create marker (with label and position)
@@ -976,9 +995,13 @@ Move marker
 \layout Itemize
 
 Highlight marker (to indicate current focus of algorithm)
-\layout Paragraph
+\layout Standard
 
-Pointer (points at a specific entry in the vector)
+Animation primitives on a 
+\emph on 
+pointer
+\emph default 
+ (an arrow pointing at a specific entry in the vector):
 \layout Itemize
 
 Create pointer (with label and position)
@@ -1013,7 +1036,7 @@ The basic purpose of these classes was described in Section\SpecialChar ~
  animators that are implemented in the shell, and implement a journal-like
  functionality which delays animation primitives until the shell is ready
  for them to be displayed, allows the animator to be rolled back to former
- states, and events replayed to return to latter states.
+ states, and events replayed to return to later states.
  By extending the same abstract parent classes as the actual animators,
  the overhead of the queueing functionality is hidden from the authors of
  the algorithms, who can use the imperative-style animation primitive methods,
@@ -1269,6 +1292,15 @@ The division of tasks is described in Table
  written next to their names will be called upon to perform that task in
  the event that the others cannot complete it on their own, or extra effort
  is needed.
+\begin_inset Foot
+collapsed false
+
+\layout Standard
+
+Document word count: 3939
+\end_inset 
+
+
 \layout Standard
 
 
@@ -1283,7 +1315,7 @@ collapsed false
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0">
+<column alignment="right" valignment="top" leftline="true" width="0(null)">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
