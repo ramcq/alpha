@@ -101,6 +101,7 @@ public abstract class VectorAnimator extends Animator {
 			VectorAnimator.Vector target,
 			int offset2);
 
+		public abstract void highlightElement(int element);
 		/**
 		 * Highlight a given digit of all the values in the vector.
 		 * 
@@ -109,15 +110,6 @@ public abstract class VectorAnimator extends Animator {
 		 *            rightmost digit, and -1 to highlight no digit
 		 */
 		public abstract void setHighlightedDigit(int column);
-
-		/**
-		 * Split a vector before the given offset.
-		 * 
-		 * @param offset
-		 *            the offset of the first value in the new vector
-		 * @return the new vector
-		 */
-		public abstract Vector splitVector(int offset);
 
 		/**
 		 * Create a new arrow pointing at a value in the vector, or the
@@ -192,10 +184,8 @@ public abstract class VectorAnimator extends Animator {
 		/**
 		 * Highlight the arrow to indicate something exciting going on.
 		 * 
-		 * @param highlight
-		 *            true to highlight the arrow
 		 */
-		public abstract void setHighlight(boolean highlight);
+		public abstract void highlight();
 		
 		public abstract void move(int newpos, boolean boundary);
 	}
