@@ -75,7 +75,7 @@ public class ShellGraphAnimator
 			Color.darkGray,
 			Color.lightGray };
 	//colours for representing the different node/edge sets
-	private static final int NODE_SIZE = 6;
+	private static final int NODE_SIZE = 8;
 	//constant for specifying node width/height
 	private static final int NODE_FONT_SIZE = 14; //node font height
 	private static final int EDGE_FONT_SIZE = 12; //edge font height
@@ -95,8 +95,8 @@ public class ShellGraphAnimator
 	 * internal queue, for an individual node.
 	 */
 	public class Node /* implements Serializable */ {
-		int Nodewidth = NODE_SIZE;
-		int Nodeheight = NODE_SIZE; //nodes always circular
+		final int Nodewidth = NODE_SIZE;
+		final int Nodeheight = NODE_SIZE; //nodes always circular
 		int x;
 		int y; //position of top left corner of square containing node
 		int set; //set node belongs to
@@ -1198,7 +1198,7 @@ public class ShellGraphAnimator
 		int Fsize,
 		Color colour) {
 		g.setColor(colour);
-		g.setFont(new Font("MonoSpaced", Font.PLAIN, Fsize));
+		g.setFont(new Font("SansSerif", Font.PLAIN, Fsize));
 		g.drawString(label, x, y);
 	}
 	/**
