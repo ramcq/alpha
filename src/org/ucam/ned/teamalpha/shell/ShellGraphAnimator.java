@@ -45,7 +45,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int y;
 		Color colour;
 		private String label; 
-		public Node Node(int x, int y) {
+		public void Node(int x, int y) {
 			this.x = x;
 			this.y = y;
 			this.colour = NODE_START_COLOUR;
@@ -100,7 +100,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int y1,y2;
 		Color colour;
 		private string label; 
-		public Edge Edge(Node n1, Node n2, String cost) {
+		public void Edge(Node n1, Node n2, String cost) {
 			this.x1 = n1.x /*+3*/;
 			this.x2 = n2.x /*-3*/;
 			this.y1 = n1.y /*+3*/;
@@ -297,7 +297,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				x = 250 + 100 * (int) java.lang.Math.sin(java.lang.Math.toRadians(currentang));
 				y = 250 + 100 * (int) java.lang.Math.cos(java.lang.Math.toRadians(currentang));
 				currentang = currentang + Nodeangle;
-				Nodelist[i] = Node(x,y); /*TODO fix this*/
+				Nodelist[i].Node(x,y); /*TODO fix this*/
 				Nodelist[i].drawNode();
 			}
 			for (int i=0;i<costs.length;i++)
@@ -307,7 +307,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					if (costs[i][j] != 0) {
 						if (i != j) {
 							Integer tmpint = new Integer(costs[i][j]);
-							Edgematrix[i][j] = Edge(Nodelist[i],Nodelist[j],tmpint.toString()); /*TODO fix this*/
+							Edgematrix[i][j].Edge(Nodelist[i],Nodelist[j],tmpint.toString()); /*TODO fix this*/
 							Edgematrix[i][j].drawEdge();
 							Edgematrix[i][j].drawlabel();
 						}
