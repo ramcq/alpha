@@ -3,34 +3,46 @@
  */
 package org.ucam.ned.teamalpha.test;
 
-import org.ucam.ned.teamalpha.algorithms.*;
-import org.ucam.ned.teamalpha.animators.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import org.ucam.ned.teamalpha.algorithms.InsertionSort;
+import org.ucam.ned.teamalpha.shell.ShellVectorAnimator;
 
 /**
  * @author zrll2
  *
  * Testing Sid's InsertionSort class 
  */
-public class InsertionSortTest extends VectorAlgorithm {
+public class InsertionSortTest {
 	
-	static VectorAnimator va;
 	static int[] data = {14,23,456,56,123,12,12,0,3};
 	
 	public static void main(String[] args) {	
-		InsertionSort is = new InsertionSort(va, data);
-		is.execute();	// Sort the data
-		System.out.println("Insertion Sort result: ");	// Print out the result
-		for (int i=0; i<data.length; i++) {
-			System.out.println(data[i]);
-		}
+		JFrame frame = new JFrame("ShellVectorAnimator test");
+		frame.setSize(500,500);
+		frame.setVisible(true);
+		
+		JPanel panel = new JPanel(true); // lightweight container
+		panel.setSize(500,500);
+		frame.getContentPane().add(panel);
+		panel.setVisible(true);
+		
+		ShellVectorAnimator app = new ShellVectorAnimator(panel);
+		
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+				System.exit(0);
+			}
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+		
+		InsertionSort is = new InsertionSort( data);
+		is.execute(app);
 	}
-
-	public InsertionSortTest(VectorAnimator va, int[] values) {
-		super(va, values);
-	}
-	
-	// Has to implement this guy from super class
-	public void execute() {		
-	}
-	
 }
