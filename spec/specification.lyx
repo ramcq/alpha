@@ -824,6 +824,13 @@ The animator abstract classes define all of the methods which are available
 Animator
 \family default 
  classes for graph and vector animation primitives.
+ Actual drawing implementations of these abstract classes must support the
+ ability to save their state to an opaque 
+\family typewriter 
+Checkpoint
+\family default 
+ object which can be later used to restore the animator to a previous state,
+ using the memento design pattern.
 \layout Subsubsection*
 
 Public Methods (
@@ -923,6 +930,9 @@ Change vector label
 Swap elements at two pointers
 \layout Itemize
 
+Copy element from one ponter to another
+\layout Itemize
+
 Delete element at pointer
 \layout Itemize
 
@@ -974,24 +984,6 @@ Highlight pointer (to indicate current focus of algorithm)
 Queues
 \layout Standard
 
-We will be implementing the following animation primitives for vectors:
-\layout Itemize
-
-Create new vector
-\layout Itemize
-
-Yadda
-\layout Standard
-
-We will be implementing the following animation primitives for graphs:
-\layout Itemize
-
-Yodda
-\layout Itemize
-
-Yudda
-\layout Standard
-
 Test requirements: (move these to appropriate classes)
 \layout Itemize
 
@@ -1018,55 +1010,45 @@ make sure the graphical user interface works correctly
 \layout Subsection
 
 Shell
-\layout Paragraph
+\layout Subsubsection*
 
 Purpose
 \layout Standard
 
-The shell is the interface that the user interacts with and hence contains
- all the user interface code.
- The shell accepts input from the user and delegates it to the other packages
- which run the relevant algorithm and render output to the display.
-\layout Paragraph
+The shell is a collection of classes that contain all of the code to implement
+ the interface that the user interacts with.
+ The shell allows the user to choose an algorithm and input or generate
+ data, and then uses classes from the other packages which run the relevant
+ algorithm and queue the animation primitives.
+ The shell also contains the classes to finally render output to the display,
+ which are extended from the abstract 
+\family typewriter 
+Animator
+\family default 
+ subclasses.
+\layout Subsubsection*
 
 Inputs
 \layout Standard
 
-The shell will accept two main types of input.
- These are: the data on which the selected algorithm will operate on and
- the animation playback options (forward, back, change speed of animations
- 
-\emph on 
-[optional]
-\emph default 
-).
-\layout Paragraph
+The shell will accept two main areas of initial input, the algorithm choice,
+ and the provision of data for the algorithm.
+ When the animation has been prepared and being presented, a series of animation
+ playback options such as previous, next, play and pause will be provided
+ to the user.
+ The shell can also make use of Java introspection to enumerate the available
+ algorithms within the algorithm package, and use this to present the list
+ to the user.
+\layout Subsubsection*
 
 Outputs
 \layout Standard
 
-The shell produces two classes of output; one when the user selects an algorithm
- and enters data and the other when the user steps through the animation
- on screen.
- When the user decides on the algorithm and data he wants animated, the
- shell creates an instance of the 
-\family typewriter 
-Algorithm
-\family default 
- object and an instance of the 
-\family typewriter 
-AnimatorQueue
-\family default 
- object.
- Depending on the choice of algorithm, the relevant child objects of each
- are chosen.
- As the user steps through an animation, the shell will call public methods
- on the 
-\family typewriter 
-AnimatorQueue
-\family default 
- object, specifying when to step forward, backward etc.
-\layout Paragraph
+As a graphical component, the shell produces all of its output on screen,
+ but this can be broken down into two categories.
+ One is interaction whilst the user selects an algorithm and enters data,
+ and the other is the actual display of the animation on screen.
+\layout Subsubsection*
 
 Public methods
 \layout Itemize
@@ -1074,34 +1056,26 @@ Public methods
 
 \family typewriter 
 \emph on 
-static
+public static 
 \emph default 
- main
-\layout Paragraph
+void main(String[])
+\family default 
+ --- the entry point of the entire system
+\layout Subsubsection*
 
 Testing
 \layout Standard
 
 Testing is to be broken down into two sections to mirror the two functions
  of the shell.
- For the data entry and algorithm section, the functionality of the relevant
- Swing components will be tested with the use of stub functions to verify
- that the right method calls are being made.
- In addition, the shell's ability to cope with invalid data (such as a 
-\family typewriter 
-String
-\family default 
- entry to a 
-\family typewriter 
-Vector
-\family default 
-) will be tested.
- For the animation section the use of stub functions will be used to ensure
- that the right methods in the 
-\family typewriter 
-AnimatorQueue
-\family default 
- class are called.
+ For algorithm selection and data entry, the functionality of the relevant
+ Swing components will be tested with algorithms containing stub functions
+ to verify that the right method calls are being made.
+ In addition, the shell's ability to cope with invalid user data (such as
+ entering a string into a vector of numbers) will be tested.
+ To test the animation section, further test algorithms will be created
+ which call methods to test all of the animation primitives and combinations
+ thereof.
 \layout Section
 
 Final acceptance criteria
