@@ -47,13 +47,15 @@ public class InsertionSort extends VectorAlgorithm {
 								"Done!"});
 			
 			// ANIM: Create the animator vectors
-			VectorAnimator.Vector sorted = anim.createVector(new int[a.length]);
-			sorted.setLabel("B");
 			VectorAnimator.Vector unsorted = anim.createVector(a);
-			unsorted.setLabel("A");
-			VectorAnimator.Arrow aSorted = sorted.createArrow(0, false, true);
+			unsorted.setLabel("Unsorted");
+			
+			VectorAnimator.Vector sorted = anim.createVector(new int[a.length]);
+			sorted.setLabel("Sorted");
+
+			VectorAnimator.Arrow aSorted = sorted.createArrow(0, false);
 			aSorted.setLabel("Ins");
-			VectorAnimator.Arrow aUnsorted = unsorted.createArrow(0, false);
+			VectorAnimator.Arrow aUnsorted = unsorted.createArrow(0, false, true);
 			aUnsorted.setLabel("Take");
 			
 			// Set the first checkpoint
@@ -62,12 +64,15 @@ public class InsertionSort extends VectorAlgorithm {
 			// Vector is split into sorted elements and those yet to be sorted about i
 			// ANIM: Pick the first element in a and move to the sorted section
 			unsorted.copyElement(0, sorted, 0);
-			aUnsorted.flash();
+			//aUnsorted.flash();
 			
 			for(i=1;i<n;i++) {
 				//ANIM: The arrow points at the element to be inserted
 				anim.saveState();
 				anim.setCurrentStep(0);
+				
+				anim.showMessage("In this pass, inserting <strong>" + a[i] + "</strong>.");
+				
 				aUnsorted.move(i, false);
 								
 				// TODO: Partition the vector about the point i
@@ -93,6 +98,9 @@ public class InsertionSort extends VectorAlgorithm {
 					SWAPS++;
 					anim.saveState();
 					anim.setCurrentStep(2);
+					
+					anim.showMessage("Since <strong>" + a[j] + "</strong>><strong>" + v + "</strong>, shift down to make space.");
+					
 					sorted.moveElement(j-1, j);
 				
 					j = j-1;
@@ -104,12 +112,18 @@ public class InsertionSort extends VectorAlgorithm {
 				// Correct insertion point found, insert here
 				anim.saveState();
 				anim.setCurrentStep(3);
+				
+				anim.showMessage("We have found the insertion point, insert <strong>" + v + "</strong> here.");
+				
 				a[j] = v;
-				aSorted.flash();
+				//aSorted.flash();
 				unsorted.copyElement(i, sorted, j);
 			}
 			// ANIM Annonunce completion
 			sorted.setLabel("DONE!");
+			
+			anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
+			
 			anim.setCurrentStep(4);
 			anim.saveState();
 			
