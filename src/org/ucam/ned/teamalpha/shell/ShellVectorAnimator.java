@@ -456,6 +456,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			private String[] contents;
 			
 			VectorState() {
+				String[] newContents = new String[Vector.this.contents.length];
+				System.arraycopy(Vector.this.contents, 0, newContents, 0, Vector.this.contents.length);
+				
 				this.visible = Vector.this.visible;
 				this.bottom = Vector.this.bottom;
 				this.left = Vector.this.left;
@@ -463,7 +466,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				this.size = Vector.this.size;
 				this.colour = Vector.this.colour;
 				this.label = Vector.this.label;
-				this.contents = Vector.this.contents;
+				this.contents = newContents;
 			}
 			
 			/**
