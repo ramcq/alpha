@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -478,6 +479,10 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 	}
 	
 	public void paintComponent(Graphics g) {
+		Rectangle clipArea = g.getClipBounds();
+		//BufferedImage clip = bi.getSubimage(clipArea);
+		g.setColor(bgcolour);
+		g.fillRect(clipArea.x, clipArea.y, clipArea.width, clipArea.height);
 		g.drawImage(bi,0,0,this);
 	}
 	
