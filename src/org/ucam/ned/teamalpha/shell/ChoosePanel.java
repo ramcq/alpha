@@ -130,7 +130,7 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 		text = new JTextPane();
 		text.setEditable(false);
 		text.setPreferredSize(new Dimension(585, 500));
-		text.setBorder(BorderFactory.createLoweredBevelBorder());
+		text.setBorder(BorderFactory.createEtchedBorder());
 		right.add(text);
 		
 		// set the default text
