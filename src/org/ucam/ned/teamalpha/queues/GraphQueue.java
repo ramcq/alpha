@@ -139,7 +139,7 @@ public class GraphQueue extends GraphAnimator implements AnimatorQueue {
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashNode(int)
 	 */
 	public void flashNode(int Node) {
-		Object[] args = { new Primitive(Node)};
+		Object[] args = { new Primitive(Node) };
 		q.enqueue(this, "flashNode", args);
 	}
 
@@ -149,5 +149,13 @@ public class GraphQueue extends GraphAnimator implements AnimatorQueue {
 	public void flashEdge(int from, int to) {
 		Object[] args = { new Primitive(from), new Primitive(to)};
 		q.enqueue(this, "flashEdge", args);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setFpsFactor(double)
+	 */
+	public void setFpsFactor(double f) {
+		Object[] args = { new Primitive(f) };
+		q.enqueue(this, "setFpsFactor", args);
 	}
 }

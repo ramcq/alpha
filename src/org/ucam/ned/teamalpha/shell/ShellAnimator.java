@@ -12,5 +12,7 @@ package org.ucam.ned.teamalpha.shell;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-interface ShellAnimator {
+public interface ShellAnimator {
+	public void setFps(int fps); 
+	public void fastForward();
 }

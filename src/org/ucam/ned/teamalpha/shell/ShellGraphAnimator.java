@@ -57,8 +57,9 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 public class ShellGraphAnimator extends GraphAnimator implements ActionListener, ShellAnimator {
 	
 	private Shell shell; // reference to the shell singleton
+	private int basefps = 100;	// Basic animation framerate
+	private double fpsfactor = 1; // algorithm-defined FPS factor
 	private double Nodeangle; //calc. according to number of nodes
-	private int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
 	private JPanel outc; // Component we will be drawing into
 	private Graphics2D outg; // Graphics2D object we are passed from the shell
@@ -497,7 +498,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 		outc.setVisible(true);
 		outg = (Graphics2D) outc.getGraphics();
 		outg.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-		int delay = (fps > 0) ? (1000 / fps) : 100;	// Frame time in ms
+		
+		int fps = (int) (basefps * fpsfactor);
+		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
+		System.out.println("Delay = " + delay + " ms");
+		
 		// Instantiate timer (gives us ActionEvents at regular intervals)
 		timer = new javax.swing.Timer(delay, this);
 		// Fire first event immediately
@@ -1372,10 +1377,23 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 	 * @param fps
 	 * 			Sets new frame rate for animation in frames per second
 	 */
-	public void setFPS(int fps) {
-		this.fps = fps;
-		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
+	public void setFps(int fps) {
+		basefps = fps;
+		int newfps = (int) (basefps * fpsfactor); 
+		int delay = (newfps > 0) ? (1000 / newfps) : 10;	// Frame time in ms
+		System.out.println("Delay = " + delay + " ms");
+		stopAnimation();
 		timer.setDelay(delay);
+		startAnimation();
+	}
+	
+	public void setFpsFactor(double f) {
+		fpsfactor = f;
+		setFps(basefps);
+	}
+	
+	public void fastForward() {
+		// TODO: implement
 	}
 	
 	/* (non-Javadoc)

@@ -33,6 +33,8 @@ public abstract class Animator {
 	 */
 	public abstract void setCurrentStep(int step);
 
+	public abstract void setFpsFactor(double f);
+	
 	/**
 	 * Method for the algorithm to show an arbitrary explanatory message to the
 	 * user.

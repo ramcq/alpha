@@ -232,4 +232,8 @@ public class TestVectorAnimator2 extends VectorAnimator {
 	public void restoreState(Animator.State state) {
 		System.out.println("Restoring state");
 	}
+	
+	public void setFpsFactor(double f) {
+		System.out.println("set FPS factor to " + f);
+	}
 }

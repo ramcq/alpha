@@ -251,4 +251,12 @@ public class VectorQueue extends VectorAnimator implements AnimatorQueue {
 	public void prev() throws NoSuchStateException {
 		q.prev();
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setFpsFactor(double)
+	 */
+	public void setFpsFactor(double f) {
+		Object[] args = { new Primitive(f) };
+		q.enqueue(this, "setFpsFactor", args);
+	}
 }

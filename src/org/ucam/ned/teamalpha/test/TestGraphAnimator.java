@@ -129,4 +129,11 @@ public class TestGraphAnimator extends GraphAnimator {
 		System.out.println("flashNode called with node " + node);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setFpsFactor(double)
+	 */
+	public void setFpsFactor(double f) {
+		System.out.println("set FPS factor to " + f);
+	}
+
 }

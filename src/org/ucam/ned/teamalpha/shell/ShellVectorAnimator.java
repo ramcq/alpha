@@ -2053,20 +2053,18 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 
-	public void setFpsFactor(double f) {
-		synchronized(this) {
-			try {
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.SET_FPS_FACTOR, f));
-				if (draw) startAnimation();
-				else notify();
-				while (!eventQueue.isEmpty()) wait();
-			}
-			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
-			}
-			catch (InterruptedException e) {
-				System.out.println(e);
-			}
+	public synchronized void setFpsFactor(double f) {
+		try {
+			eventQueue.addLast(new AnimationEvent(AnimationEvent.SET_FPS_FACTOR, f));
+			if (draw) startAnimation();
+			else notify();
+			while (!eventQueue.isEmpty()) wait();
+		}
+		catch (InvalidAnimationEventException e) {
+			System.out.println(e);
+		}
+		catch (InterruptedException e) {
+			System.out.println(e);
 		}
 	}
 	

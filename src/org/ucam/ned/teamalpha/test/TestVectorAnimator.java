@@ -238,4 +238,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		
 	}
 	
+	public void setFpsFactor(double f) {
+		System.out.println("set FPS factor to " + f);
+	}
 }
