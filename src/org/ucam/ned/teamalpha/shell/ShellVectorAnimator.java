@@ -4,6 +4,8 @@
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
+ 
+ // Note to self: what does this do when minimised / obscured when the timer is not running?
 package org.ucam.ned.teamalpha.shell;
 
 import java.util.*;
@@ -66,78 +68,111 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 		
 		public void setLabel(String label) {
-			this.label = label;
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					this.label = label;
+					// Redraw the vector
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.VECTOR_CHANGE, this));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+			}
 		}
 		
 		public void copyElement(int from, int to) {
-			try {
-				// Move element out to channel
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, true));
-				// Move element vertically within channel
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, to, true));
-				// Move element horizontally into new position
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
-			}
-			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					// Move element out to channel
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, true));
+					// Move element vertically within channel
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, to, true));
+					// Move element horizontally into new position
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
 			}
 		}
+		
 		public void copyElement(int from, VectorAnimator.Vector v, int to) {
 		}
 		
 		public void moveElement(int from, int to) {
-			try {
-				// Move element out to channel
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, false));
-				// Move element vertically within channel
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, to, true));
-				// Move element horizontally into new position
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
-			}
-			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					// Move element out to channel
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, false));
+					// Move element vertically within channel
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, to, true));
+					// Move element horizontally into new position
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
 			}
 		}
 		
 		public void setElement(int elt, int value) {
-			try {
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_CHANGE, this, elt, value));
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, elt, true));
-			}
-			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_CHANGE, this, elt, value));
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, elt, true));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
 			}
 		}
 		
 		public void swapElements(int elt1, int elt2) {
-			try {
-				// Move both elements out to channels
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.TWO_TO_CHANNEL, this, elt1, elt2));
-				// Move both elements vertically to new positions
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.TWO_VERT_IN_CHANNEL, this, elt1, elt2, elt2, elt1));
-				// Move both elements in to new positions
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.TWO_FROM_CHANNEL, this, elt1, elt2));
-			}
-			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					// Move both elements out to channels
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.TWO_TO_CHANNEL, this, elt1, elt2));
+					// Move both elements vertically to new positions
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.TWO_VERT_IN_CHANNEL, this, elt1, elt2, elt2, elt1));
+					// Move both elements in to new positions
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.TWO_FROM_CHANNEL, this, elt1, elt2));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
 			}
 		}
+		
 		public void swapElements(int elt1, VectorAnimator.Vector v, int elt2) {
 		}
 		public VectorAnimator.Vector splitVector(int offset) {
 			return null;
 		}
+		
 		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) {
-			Arrow res = new Arrow(this, label, position, boundary);
-			drawArrow(res, big);
-			return res;
+			synchronized (ShellVectorAnimator.this) {
+				Arrow res = new Arrow(this, label, position, boundary);
+				arrows[numberOfArrows] = res;
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, res));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				return res;
+			}
 		}
 	
 		public VectorAnimator.Arrow createArrow(int position, boolean boundary) {
-			Arrow res = new Arrow(this, position, boundary);
-			drawArrow(res, big);
-			return res;
+			return createArrow("A", position, boundary);
 		}
+		
 		public void setHighlightedDigit(int column) {
 		}
 	}
@@ -150,6 +185,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private Vector vector; // vector with which we are associated
 		private Color colour = Color.blue, altColour = Color.cyan;
 		private boolean left = false; // are we to the left or the right of our vector?
+		private boolean visible = false;
 		
 		Arrow(Vector v, String label, int position, boolean boundary) {
 			this(v, position, boundary);
@@ -180,13 +216,28 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			this.boundary = boundary;
 		}
 		
+		public void move(int newpos, boolean boundary) {
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_MOVE, this, newpos, boundary));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+			}
+		}
+		
 		// Need to discuss API issues here: have a flash() method and a changecolour() method instead?
 		public void setHighlight(boolean highlight) {
-			try {
-				eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_FLASH, this));
-			}
-			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_FLASH, this));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
 			}
 		}
 	}
@@ -208,6 +259,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public static final int ELT_CHANGE = 6; // changing an element in some manner (so it has to be redrawn)
 		public static final int ARROW_CHANGE = 7; // changing an arrow in some manner (so it has to be redrawn)
 		public static final int TWO_ARROW_FLASH = 11; // flash two arrows at once
+		public static final int VECTOR_CHANGE = 12; // just redraw the whole vector
 
 		private int type;
 		// Arguments
@@ -219,12 +271,23 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private boolean b2;
 
 		AnimationEvent(int type, Arrow a) throws InvalidAnimationEventException {
-			if (type == AnimationEvent.ARROW_FLASH) {
+			if (type == AnimationEvent.ARROW_FLASH
+				|| type == AnimationEvent.ARROW_CHANGE) {
 				this.type = type;
 				this.a1 = a;
 				this.a2 = null;
 			}
-			else throw new InvalidAnimationEventException("Invalid event");
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
+		}
+		
+		AnimationEvent(int type, Arrow a, int newpos, boolean boundary) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.ARROW_MOVE) {
+				this.type = type;
+				this.a1 = a;
+				this.e1 = newpos;
+				this.b1 = boundary;
+			}
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
 		AnimationEvent(int type, Arrow a1, Arrow a2) throws InvalidAnimationEventException {
@@ -233,7 +296,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.a1 = a1;
 				this.a2 = a2; 
 			}
-			else throw new InvalidAnimationEventException("Invalid event");
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
+		}
+		
+		AnimationEvent(int type, Vector v) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.VECTOR_CHANGE) {
+				this.type = type;
+				this.v1 = v;
+				this.v2 = null;
+			}
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
 		AnimationEvent(int type, Vector v1, int e1, boolean b1) throws InvalidAnimationEventException {
@@ -244,7 +316,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.e1 = e1;
 				this.b1 = b1;
 			}
-			else throw (new InvalidAnimationEventException("Invalid event"));		
+			else throw (new InvalidAnimationEventException("Invalid event of type " + type));		
 		}
 		
 		AnimationEvent(int type, Vector v1, int e1, boolean b1, boolean b2) throws InvalidAnimationEventException {
@@ -256,7 +328,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.b1 = b1;
 				this.b2 = b2;
 			}
-			else throw new InvalidAnimationEventException("Invalid event");
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
 		AnimationEvent(int type, Vector v1, int e1, int e2) throws InvalidAnimationEventException {
@@ -275,7 +347,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.e1 = e1;
 				this.e2 = e2;
 			}
-			else throw new InvalidAnimationEventException("Invalid event");
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
 		AnimationEvent(int type, Vector v1, int from1, int to1, int from2, int to2) throws InvalidAnimationEventException {
@@ -288,7 +360,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.f1 = to1;
 				this.f2 = to2;
 			}
-			else throw new InvalidAnimationEventException("Invalid event");
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
 		AnimationEvent(int type, Vector v1, int e1, int e2, boolean b1) throws InvalidAnimationEventException {
@@ -300,7 +372,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.e2 = e2;
 				this.b1 = b1;
 			}
-			else throw new InvalidAnimationEventException("Invalid event");
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
 		public int getType() {
@@ -324,7 +396,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private LinkedList eventQueue; // will hold queue the events we are to perform
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
 	private Vector[] vectors = new Vector[10]; // an array of all Vectors currently known to the animator
-	private Arrow[] arrows = new Arrow[50]; // an array of all Arrows currently known to the animator
+	private Arrow[] arrows = new Arrow[10]; // an array of all Arrows currently known to the animator
 	
 	// Constructor
 	ShellVectorAnimator(Component c) {
@@ -387,13 +459,19 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 			catch (NoSuchElementException e) {
 				// No new events to animate, go to sleep or whatever
+				System.out.println("Nothing to do, stopping Timer");
 				currentEvent = null;
+				stopAnimation();
 			}
 		}
 		
 		if (currentEvent != null) {
 			switch(currentEvent.type) {
 				case AnimationEvent.ARROW_CHANGE:
+					System.out.println("Redrawing arrow");
+					currentEvent.a1.visible = true;
+					redrawArrow(currentEvent.a1, big);
+					currentEvent = null;
 					break;
 				case AnimationEvent.ARROW_FLASH:
 					intermediateOffset++;
@@ -405,6 +483,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					}
 					break;
 				case AnimationEvent.ARROW_MOVE:
+					moveArrowVert(big, currentEvent.a1, currentEvent.e1, currentEvent.b1, true);
 					break;
 				case AnimationEvent.ELT_CHANGE:
 					currentEvent.v1.contents[currentEvent.e1] = String.valueOf(currentEvent.arg);
@@ -421,6 +500,21 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				case AnimationEvent.ELT_VERT_IN_CHANNEL:
 					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.e2, currentEvent.b1, true);
 					break;
+				case AnimationEvent.TWO_ARROW_FLASH:
+					intermediateOffset++;
+					if (intermediateOffset % 2 == 0) {
+						drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
+						drawArrow(currentEvent.a2, big, currentEvent.a2.altColour);
+					}
+					else {
+						drawArrow(currentEvent.a1, big, currentEvent.a1.colour);
+						drawArrow(currentEvent.a2, big, currentEvent.a2.colour);
+					}
+					if (intermediateOffset > 60) {
+						intermediateOffset = 0;
+						currentEvent = null;
+					}
+					break;
 				case AnimationEvent.TWO_FROM_CHANNEL:
 					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, false, false);
 					moveElementFromChannel(big, currentEvent.v1, currentEvent.e2, true, true);
@@ -433,11 +527,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.f1, true, false);
 					moveElementInChannel(big, currentEvent.v1, currentEvent.e2, currentEvent.f2, false, true);
 					break;
+				case AnimationEvent.VECTOR_CHANGE:
+					redrawVector(currentEvent.v1, big);
+					currentEvent = null;
+					break;
 				default:
 					break;
 			}
 		}
-		else System.out.println("Nothing to do");
 	}
 	
 	public void startAnimation() {
@@ -451,6 +548,20 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private void drawVector(Vector v, Graphics g) {
 		drawVectorSkeleton(v, g);
 		drawVectorContents(v, g);
+	}
+	
+	private void redrawVector(Vector v, Graphics g) {
+		// Clear vector area
+		g.setColor(bgcolour);
+		g.fillRect(v.left, v.top, Vector.width, (v.size*20)+30);
+		
+		drawVector(v, g);
+	}
+	
+	private void redrawAllVectors(Graphics g) {
+		for (int i=0; i<vectors.length; i++) {
+			if (vectors[i] != null) redrawVector(vectors[i], g);
+		}
 	}
 	
 	private void drawVectorVertical(Vector v, Graphics g) {
@@ -511,6 +622,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 
 		if (copy) drawVectorContents(v,g);
 		
+		redrawAllArrows(g, left, null);
+		
 		g.setColor(fgcolour);
 		if (left) {
 			g.drawString(String.valueOf(v.contents[element]), v.left+5-intermediateOffset, 14+topOfElement);
@@ -547,6 +660,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		g.setColor(bgcolour);
 		g.fillRect(areaLeft, v.top, 50, 20*v.size);
 		
+		redrawAllArrows(g, left, null);
+		
 		intermediateOffset += 1;
 		
 		g.setColor(fgcolour);
@@ -579,24 +694,65 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		// Redraw vertical lines
 		drawVectorVertical(v, g);
 		
+		// Redraw arrows
+		redrawAllArrows(g, left, null);
+		
 		// Redraw text
 		g.setColor(fgcolour);
 		if (left) g.drawString(v.contents[to], v.left-70+intermediateOffset, textYPos);
 		else g.drawString(v.contents[to], v.left+70-intermediateOffset, textYPos);
 	}
 	
+	public void moveArrowVert(Graphics g, Arrow a, int to, boolean boundary, boolean cancelEvent) {
+		int oldypos = a.boundary ? a.vector.top + (20*a.position) : a.vector.top + (20*a.position) + 10;
+		int newypos = boundary ? a.vector.top + (20*to) : a.vector.top + (20*to) + 10;
+		boolean movingUp = (oldypos > newypos);
+		
+		if (intermediateOffset >= Math.abs(oldypos-newypos)) {
+			if (cancelEvent) {
+				currentEvent = null;
+				intermediateOffset = 0;
+			}
+			a.position = to;
+			a.boundary = boundary;
+			return;
+		}
+		intermediateOffset += 1;
+		
+		// boundary of affected area
+		int areaLeft = a.left ? a.vector.left - 61 : a.vector.right + 1;
+		//int areaRight = a.left ? a.vector.left - 1 : a.vector.right + 20;
+		int areaTop = movingUp ? oldypos - intermediateOffset - 15 : oldypos + intermediateOffset - 15;
+		//int areaBottom = areaTop + 10;
+		
+		// clear affected area
+		g.setColor(bgcolour);
+		g.fillRect(areaLeft, areaTop, 60, 30);
+		
+		redrawAllArrows(g, a.left, a);
+		
+		// redraw arrow
+		if (movingUp) drawArrow(a, g, a.colour, -intermediateOffset);
+		else drawArrow(a, g, a.colour, intermediateOffset);
+	}
+	
 	public VectorAnimator.Vector createVector(int[] values) {
-		Vector res = new Vector(values);
-		vectors[highestColUsed] = res;
-		drawVector(res, big);
-		return res;
+		return createVector("Unnamed", values);
 	}
 
 	public VectorAnimator.Vector createVector(String label, int[] values) {
-		Vector res = new Vector(label, values);
-		vectors[highestColUsed] = res;
-		drawVector(res, big);
-		return res;
+		synchronized(this) {
+			Vector res = new Vector(label, values);
+			vectors[highestColUsed] = res;
+			try {
+				eventQueue.addLast(new AnimationEvent(AnimationEvent.VECTOR_CHANGE, res));
+				startAnimation();
+			}
+			catch (InvalidAnimationEventException e) {
+				System.out.println(e);
+			}
+			return res;
+		}
 	}
 	
 	private void drawArrow(Arrow a, Graphics g) {
@@ -604,9 +760,13 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	}
 	
 	private void drawArrow(Arrow a, Graphics g, Color c) {
+		drawArrow(a, g, c, 0);
+	}
+	
+	private void drawArrow(Arrow a, Graphics g, Color c, int yoffset) {
 		int left = (a.left) ? a.vector.left - 5 : a.vector.right+1;
 		int right = left + 8;
-		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
+		int ypos = (a.boundary) ? a.vector.top + (a.position*20) + yoffset : a.vector.top + (a.position*20) + 10 + yoffset;
 		
 		g.setColor(c);
 		// Draw arrow body
@@ -627,6 +787,26 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 		else {
 			g.drawString(a.label, right+8, ypos+5);
+		}
+	}
+	
+	private void redrawArrow(Arrow a, Graphics g) {
+		if (!a.visible) return;
+		int left = (a.left) ? a.vector.left - 5 : a.vector.right+1;
+		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
+
+		// Clear arrow area
+		g.setColor(bgcolour);
+		g.fillRect(left, ypos-5, 8, 10);
+				
+		drawArrow(a, g);
+	}
+	
+	private void redrawAllArrows(Graphics g, boolean left, Arrow notThis) {
+		for (int i=0; i<arrows.length; i++) {
+			if (arrows[i] != null) {
+				if (!(arrows[i].left ^ left) && arrows[i] != notThis) redrawArrow(arrows[i], g);
+			} 
 		}
 	}
 	
@@ -687,15 +867,17 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		});
 		
 		int[] t1 = {6,35,4,728,23,233,88};
+		app.startAnimation();
 		VectorAnimator.Vector v = app.createVector("Vector 1", t1);
+		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
+		VectorAnimator.Arrow a2 = v.createArrow("A2", 2, false);
+		v.moveElement(2,2);
 		v.moveElement(0,5);
+		a.setHighlight(true);
+		a.move(0, false);
 		v.copyElement(4,3);
 		v.swapElements(2,6);
 		v.setElement(0,100);
-		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
-		VectorAnimator.Arrow a2 = v.createArrow("A2", 2, false);
-		a.setHighlight(true);
-		app.startAnimation();
-
+		a2.move(6, true);
 	}
 }
