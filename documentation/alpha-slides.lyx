@@ -142,7 +142,7 @@ Animators
 
 Extend 
 \family typewriter 
-JFrame
+JPanel
 \layout Itemize
 
 Use of 
@@ -199,7 +199,7 @@ During animation, can click buttons to go forward/back
 More implementation detail
 \layout Slide
 
-Evaluation: what didn't go well
+Evaluation: what didn't go well, extensions
 \layout Itemize
 
 {Refer to the Final Report for more stuff on this}
