@@ -1,7 +1,7 @@
 #LyX 1.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 221
 \textclass article
-\language english
+\language british
 \inputencoding auto
 \fontscheme default
 \graphics default
@@ -16,7 +16,7 @@
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
-\paragraph_separation indent
+\paragraph_separation skip
 \defskip medskip
 \quotes_language english
 \quotes_times 2
@@ -177,7 +177,7 @@ animation script
 
  and the algorithms themselves will be written in Java.
  We will not implement our own special language for describing algorithms;
- instead, we will implement document a Java API which permits new algorithms
+ instead, we will implement and document a Java API which permits new algorithms
  to be animated.
 \layout Itemize
 
@@ -210,13 +210,7 @@ graphs
 
 The user will set the input data once, before the animation starts, and
  after that time he/she will not be able to alter the data without starting
- again.
-\layout Itemize
-
-The auxiliary displays showing the time and space costs of the algorithm,
- and the steps and explanation of its behaviour, will be implemented (if
- time permits) with a series of textual messages displayed to the user as
- the algorithm is animated.
+ the algorithm again.
 \layout Section
 
 Facilities to be provided
@@ -228,7 +222,7 @@ There are some facilities that the system will be useless without, and whose
  the functionality of the system.
  These facilities will be considered optional and may or may not be implemented,
  subject to time constraints.
-\layout Paragraph
+\layout Subsection*
 
 Essential facilities
 \layout Itemize
@@ -287,7 +281,7 @@ Dijkstra's algorithm (for finding the shortest path between two nodes in
 Kruskal's algorithm (for finding the minimum spanning tree of a set of nodes
  in a graph).
 \end_deeper 
-\layout Paragraph
+\layout Subsection*
 
 Optional facilities
 \layout Itemize
@@ -453,7 +447,7 @@ The UML class diagram for this package can be seen in Figure\SpecialChar ~
 Animator
 \family default 
  which have methods and inner classes to specify the animation primitives
- necessary for each group of algorithms.
+ available to each group of algorithms.
  There will initially be two classes, 
 \family typewriter 
 GraphAnimator
@@ -462,8 +456,8 @@ GraphAnimator
 \family typewriter 
 VectorAnimator
 \family default 
-, which will specify the methods necessary for the animation primitives
- required for animating graph and vector algorithms.
+, which will specify the methods necessary for animating graph and vector
+ algorithms.
 \layout Subsection
 
 Queues
@@ -497,7 +491,7 @@ VectorQueue
 \family typewriter 
 Animator
 \family default 
- classes (from the Animators package).
+ classes (from the animators package).
  The queues form a layer of abstraction between the algorithms and the actual
  implementation of the animators, and allow the algorithms to run to completion
  before any animation is shown to the user.
@@ -543,9 +537,9 @@ AnimatorQueue
  in sequence on the actual animator.
 \layout Standard
 
-The more important functionality of this package is that, at each checkpoint,
- it stores the state of the animation canvas and the data structures on
- which the algorithm is operating.
+The more important functionality of this package is that, at each checkpoint
+ reached when playing back the stored events, it stores the state of the
+ animation canvas and the data structures of the animator.
  This will allow the user to roll the animator back to previous states so
  the user can revisit previous steps of the algorithm, and the queue retains
  the steps that need to be done to return the animator to subsequent states.
@@ -566,27 +560,17 @@ It should be noted that it would not be possible to skip forwards to the
  next checkpoint (without animation) unless the user has gone backwards
  and then forwards again, because the state of the animation canvas would
  not exist yet.
- It would be easier to implement the same basic functionality by simply
- giving the user the ability to change the animation speed (a facility which
- is on the 
-\begin_inset Quotes eld
-\end_inset 
-
-optional
-\begin_inset Quotes erd
-\end_inset 
-
- list).
- There could be a button which temporarily sets the animation speed to infinity
- until the next checkpoint, for example.
+ This functionality could be simulated by running the animation very rapidly
+ when the user wants to skip forwards to reach the next checkpoint state.
 \layout Subsection
 
 Shell
 \layout Standard
 
-The shell package contains classes which provide the user interface, along
- with the visible elements of the system (such as the actual animation canvas).
- The implementations of the 
+The shell package contains classes which provide the user interface and
+ all of the visible elements of the system (such as the actual animation
+ canvas).
+ The concrete implementations of the 
 \family typewriter 
 GraphAnimator
 \family default 
@@ -594,15 +578,7 @@ GraphAnimator
 \family typewriter 
 VectorAnimator
 \family default 
- abstract classes are here (called 
-\family typewriter 
-ActualGraphAnimator
-\family default 
- and 
-\family typewriter 
-ActualVectorAnimator
-\family default 
- respectively), along with a 
+ abstract classes are here, along with a 
 \family typewriter 
 Shell
 \family default 
@@ -684,7 +660,7 @@ Initial data (keyboard input for vector elements, graph edge costs) including
  data)
 \layout Itemize
 
-Navigation through algorithm using buttons
+Navigation through steps of algorithm using buttons
 \layout Itemize
 
 Animation speed 
@@ -716,11 +692,6 @@ Animation displayed on screen
 \layout Itemize
 
 Textual explanation of steps
-\layout Itemize
-
-Pseudocode 
-\emph on 
-[optional]
 \layout Itemize
 
 Time and space cost display 
@@ -1039,24 +1010,75 @@ The basic purpose of these classes was described in Section\SpecialChar ~
 \end_inset 
 
 .
- In a nutshell, they store animation events as they are created by the algorithm
-, and pass them to the animator class for actual animation when the user
- requests this.
- They also store the algorithm state at checkpoints in order to facilitate
- forward and backward navigation.
+ The queues act as a layer of abstraction between the algorithms and the
+ animators that are implemented in the shell, and implement a journal-like
+ functionality which delays animation primitives until the shell is ready
+ for them to be displayed, allows the animator to be rolled back to former
+ states, and events replayed to return to latter states.
+ By extending the same abstract parent classes as the actual animators,
+ the overhead of the queueing functionality is hidden from the authors of
+ the algorithms, who can use the imperative-style animation primitive methods,
+ but the implementation is rendered simple because ultimately the queue
+ needs only to store and replay similar method calls in sequence.
+\layout Standard
+
+Because the queue classes are descended from the abstract animator classes
+ such as 
+\family typewriter 
+GraphAnimator
+\family default 
+ and 
+\family typewriter 
+VectorAnimator
+\family default 
+, each of these needs a counterpart queue class, namely 
+\family typewriter 
+GraphQueue
+\family default 
+ and 
+\family typewriter 
+VectorQueue
+\family default 
+.
+ To simplify implementation of the queues, and avoid code duplication, a
+ common class will be created for the queue back-end, to manage the storing
+ of checkpoint objects, and queues of objects to represent the intermediate
+ events.
+ The queue classes can use the adapter design pattern, and implement their
+ functionality with this common class.
+ The common class can handle calls to the 
+\family typewriter 
+Animator
+\family default 
+ class easily, and can use introspection to call the animation primitive
+ methods on the actual animator.
+ In this way, the code can be kept generic, and the implementation of queues
+ for new classes of animator kept to a small amount of code.
 \layout Subsubsection*
 
 Inputs
 \layout Standard
 
-Animation events from the algorithm, user input from the shell (e.g.
+A series of method calls from an implementation or an 
+\family typewriter 
+Algorithm
+\family default 
+ class, representing a sequence of changes to be made to the animation canvas
+ between stages of the algorithm.
+ User input via the shell (e.g.
  forward and back instructions).
 \layout Subsubsection*
 
 Outputs
 \layout Standard
 
-Animation events to the actual animator for display.
+The same series of method calls as was provided as input, at the control
+ of the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface, restoring past checkpoints to go back, and re-calling method
+ calls to go forwards.
 \layout Subsubsection*
 
 Public methods in 
@@ -1073,24 +1095,28 @@ void nextCheckpoint()
 
 
 \family typewriter 
-void previousCheckpoint()
+void prevCheckpoint()
 \layout Itemize
 
 
 \family typewriter 
-void enqueueEvent(Event)
+boolean isNextCheckpoint()
+\layout Itemize
+
+
+\family typewriter 
+boolean isPrevCheckpoint()
 \layout Subsubsection*
 
 Testing
 \layout Standard
 
-This will be done by creating a 
-\family typewriter 
-toString()
-\family default 
- method which outputs the current state of the queue in full, and creating
- test classes which pass input events and requests to the queue, printing
- out the internal state at each stage to ensure consistent behaviour.
+Testing of the queue classes requires the existence of a working test algorithm
+ which generates a full variety of animation primitive method calls, and
+ a test animator which displays which method calls are made.
+ A simple test program can then be made to move forwards and backwards through
+ the queued steps, and ensure that the output of the test animator matches
+ the expected changes.
 \layout Subsection
 
 Shell
@@ -1118,6 +1144,18 @@ Animator
 , such as the algorithm's initial data, and control the queue and animator
  objects to e.g.
  move between steps, and pause or adjust animation speed.
+ Where possible, the code that distinguishes between specific types of algorithm
+ (ie those requiring a 
+\family typewriter 
+GraphQueue
+\family default 
+ and a 
+\family typewriter 
+GraphAnimator
+\family default 
+ implementation) will be kept to a minimum, behaving as an abstract factory
+ so that the shell can work for new algorithms and types of algorithm without
+ modification.
 \layout Subsubsection*
 
 Inputs
@@ -1192,9 +1230,9 @@ the system must compute each step of the algorithm correctly using the data
  it receives;
 \layout Itemize
 
-the system must animate each step of the algorithm on the screen, allowing
- the user to review each step individually and move forwards and backwards
- at will;
+the system must animate and explain each step of the algorithm on the screen,
+ allowing the user to review each step individually and move forwards and
+ backwards at will;
 \layout Itemize
 
 all other features on the 
