@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
@@ -250,7 +251,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) {
 			synchronized (ShellVectorAnimator.this) {
 				Arrow res = new Arrow(this, label, position, boundary);
-				arrows[numberOfArrows] = res;
+				arrows.add(res);
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, res));
 					startAnimation();
@@ -298,12 +299,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public void setHighlightedDigit(int column) {
 		}
 		
+		VectorState getState() {
+			return new VectorState();
+		}
+		
 		/**
 		 * @author am502
 		 *
 		 * An inner class which stores the internal state of the Vector for the purposes of importing and exporting state to and from ShellVectorAnimator
 		 */
-		public class VectorState {
+		class VectorState {
 			private boolean visible;
 			private int bottom;
 			private int left;
@@ -441,12 +446,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
+		ArrowState getState() {
+			return new ArrowState();
+		}
+		
 		/**
 		 * @author am502
 		 *
 		 * A class to hold the arrow's internal state, similar to Vector.VectorState. This is for the purpose of saving and restoring the animator state.
 		 */
-		public class ArrowState {
+		class ArrowState {
 			private String label;
 			private int position;
 			private boolean boundary;
@@ -813,13 +822,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					currentEvent = null;
 					break;
 				case AnimationEvent.VECTOR_DELETE:
+					Iterator i = arrows.listIterator();
 					// Delete all arrows associated with this vector
-					for (int i=0; i<arrows.length; i++) {
-						if (arrows[i] != null)
-						if (arrows[i].vector == currentEvent.v1) {
+					while (i.hasNext()) {
+						Arrow arr = (Arrow) i.next();
+						if (arr.vector == currentEvent.v1) {
 							try {
-								arrows[i].deleted = true;
-								eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, arrows[i]));
+								arr.deleted = true;
+								eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, arr));
 							}
 							catch (InvalidAnimationEventException e) {
 								System.out.println(e);
@@ -861,8 +871,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	}
 	
 	private void redrawAllVectors(Graphics g) {
-		for (int i=0; i<vectors.length; i++) {
-			if (vectors[i] != null) redrawVector(vectors[i], g);
+		Iterator i = vectors.listIterator();
+		while (i.hasNext()) {
+			Vector v = (Vector) i.next();
+			redrawVector(v, g);
 		}
 	}
 	
@@ -1047,7 +1059,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		synchronized(this) {
 			try {
 				res = new Vector(label, values);
-				vectors[highestColUsed] = res;
+				vectors.add(res);
 				eventQueue.addLast(new AnimationEvent(AnimationEvent.VECTOR_CHANGE, res));
 				startAnimation();
 			}
@@ -1132,10 +1144,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	}
 	
 	private void redrawAllArrows(Graphics g, boolean left, Arrow notThis) {
-		for (int i=0; i<arrows.length; i++) {
-			if (arrows[i] != null) {
-				if (!(arrows[i].left ^ left) && arrows[i] != notThis) redrawArrow(arrows[i], g);
-			} 
+		Iterator i = arrows.listIterator();
+		while (i.hasNext()) {
+			Arrow arr = (Arrow) i.next();
+			if (!(arr.left ^ left) && arr != notThis) redrawArrow(arr, g); 
 		}
 	}
 	
@@ -1150,17 +1162,27 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 
 	// This method and the next need to be completely rethought!!
 	public synchronized Animator.State saveState() {
+		Vector.VectorState[] vs = new Vector.VectorState[vectors.size()];
+		Arrow.ArrowState[] as = new Arrow.ArrowState[arrows.size()];
+		Iterator vi = vectors.listIterator();
+		Iterator ai = arrows.listIterator();
+		int vc = 0;
+		int ac = 0;
+		
 		stopAnimation();
-		Vector.VectorState[vectors.length] vs;
-		Arrow.ArrowState[arrows.length] as;
-		for (int i=0; i<vectors.length; i++) {
-			if (vectors[i] != null) vs[i] = vectors[i].VectorState();
-			else vs[i] = null;
+		
+		while (vi.hasNext()) {
+			Vector v = (Vector) vi.next();
+			vs[vc] = v.getState();
+			vc++;
 		}
-		for (int i=0; i<arrows.length; i++) {
-			if (arrows[i] != null) as[i] = arrows[i].ArrowState();
-			else as[i] = null;
+		
+		while (ai.hasNext()) {
+			Arrow a = (Arrow) ai.next();
+			as[ac] = a.getState();
+			ac++;
 		}
+
 		return new State(vs, as);
 	}
 	
