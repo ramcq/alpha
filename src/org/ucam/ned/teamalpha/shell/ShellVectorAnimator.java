@@ -70,7 +70,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		final int maxElementLength = String.valueOf(InputTooLongException.elementMax).length();
 		
 		private boolean visible = true;
-		private final int top = 50; // y coordinate of top of vector
+		private final int top = 30; // y coordinate of top of vector
 		private int bottom; // y coordinate of bottom of vector
 		private int col; // column in which this vector resides (left to right, numbered from 0, corresponds to colsOccupied index)
 		private int left; // x coordinate of left of vector
@@ -1201,6 +1201,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	
 	private int basespeed = 100;	// Basic animation framerate
 	private double speedfactor = 1; // algorithm-defined speed factor
+	private int granularity = 2; // number of pixels to move each frame
 	private javax.swing.Timer timer;	// timer for animation events
 	//private int highestColUsed = -1; // stores the highest column which has a vector in it
 	// Placement information: which of the possible positions a vector
@@ -1453,6 +1454,10 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		startAnimation();
 	}
 	
+	public void setGranularity(int g) {
+		granularity = (g > 0) ? g : 1;
+	}
+	
 	/**
 	 * @return the current framerate
 	 */
@@ -1567,14 +1572,16 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * 	finished.
 	 */
 	private void moveElementToChannel(Graphics g, Vector v, int element, boolean left, boolean copy, boolean cancelEvent) {
-		if ((left && intermediateOffset > 75)
-			|| (!left && intermediateOffset > 65)) { // are we done?
+		int dist = left ? 75 : 65; // distance to move
+		if (intermediateOffset > dist) { // are we done?
 			intermediateOffset = 0;
 			if (cancelEvent) currentEvent = null;
 			System.out.println("Done moving out");
 			return;
 		}
-		intermediateOffset += 1;
+		intermediateOffset += granularity;
+		if (intermediateOffset > dist) intermediateOffset = dist+1;
+		
 		int topOfElement = v.top + (20 * element) + 1;
 		int bottomOfElement = topOfElement + 19;
 		int leftOfAffectedArea = left ? v.left - 70 : v.left+1; // the left of the area we will have to clear each time
@@ -1631,8 +1638,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		int endY = v.top + (20*to) + 15;
 		int areaLeft = left ? v.left - 70 : v.right + 20;
 		int areaRight = left ? v.left - 20 : v.right + 70;
+		int dist = Math.abs(startY-endY);
 		
-		if (Math.abs(intermediateOffset) >= Math.abs(startY-endY)) { // are we done?
+		if (intermediateOffset >= dist) { // are we done?
 			System.out.println("Done moving vertically");
 			if (cancelEvent) {
 				intermediateOffset = 0; 
@@ -1658,7 +1666,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		redrawAllArrows(g, left, null);
 		
-		intermediateOffset += 1;
+		intermediateOffset += granularity;
+		if (intermediateOffset > dist) intermediateOffset = dist;
 		
 		g.setColor(fgcolour);
 		if (startY < endY) g.drawString(v.contents[from], areaLeft, startY + intermediateOffset);
@@ -1718,9 +1727,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		int areaLeft = left ? v.left - 70 : v.left + 1;
 		int areaWidth = 119;
 		int areaHeight = 19;
+		int dist = left ? 75 : 65; // distance to move
 
-		if ((left && intermediateOffset >= 75)
-			|| (!left && intermediateOffset >= 65)) { // we are done
+		if (intermediateOffset >= dist) { // we are done
 			if (cancelEvent) {
 				intermediateOffset = 0;
 				currentEvent = null;
@@ -1728,7 +1737,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			}
 			return;
 		}
-		intermediateOffset += 1;
+		intermediateOffset += granularity;
+		if (intermediateOffset > dist) intermediateOffset = dist;
 						
 		// Clear affected area
 		g.setColor(bgcolour);
@@ -1787,7 +1797,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			System.out.println("Done moving back in");
 			return;
 		}
-		intermediateOffset += 1;
+		intermediateOffset += granularity;
+		if (intermediateOffset > dist) intermediateOffset = dist;
 		
 		// Clear affected area
 		g.setColor(bgcolour);
@@ -1844,8 +1855,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		int oldypos = a.boundary ? a.vector.top + (20*a.position) : a.vector.top + (20*a.position) + 10;
 		int newypos = boundary ? a.vector.top + (20*to) : a.vector.top + (20*to) + 10;
 		boolean movingUp = (oldypos > newypos);
+		int dist = Math.abs(oldypos-newypos);
 		
-		if (intermediateOffset >= Math.abs(oldypos-newypos)) {
+		if (intermediateOffset >= dist) {
 			if (cancelEvent) {
 				currentEvent = null;
 				intermediateOffset = 0;
@@ -1854,7 +1866,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			a.boundary = boundary;
 			return;
 		}
-		intermediateOffset += 1;
+		intermediateOffset += granularity;
+		if (intermediateOffset > dist) intermediateOffset = dist;
 		
 		// boundary of affected area
 		int areaLeft = a.left ? a.vector.left - 60 : a.vector.right + 1;
