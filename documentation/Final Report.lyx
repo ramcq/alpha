@@ -209,16 +209,17 @@ Andrew
 \layout Standard
 
 Andrew also came up with many design plans for the system.
- He worked tirelessly coding the vector animator and also had a role as
- secretary, where among other things he was involved in making sure documents
- were completed and handed in on time to the right place.
+ He coded the vector animator and also had a role as secretary, where among
+ other things he was involved in making sure documents were completed and
+ handed in on time to the right place.
+ 
 \layout Subsection
 
 Neofytos
 \layout Standard
 
-Neofytos was an enthusiastic documenter, and so was involved in writing
- up many of the documents such as the Developers Guide.
+Neofytos was a documenter, and so was involved in writing up many of the
+ documents such as the Developers Guide.
  He also wrote the algorithm explanations that appear during animation to
  help explain what the algorithm is doing.
 \layout Subsection
@@ -226,9 +227,7 @@ Neofytos was an enthusiastic documenter, and so was involved in writing
 Sid
 \layout Standard
 
-Sid coded the algorithms and also helped out with the shell.
- He worked well with the other coders making sure that integration went
- relatively smoothly.
+Sid coded all of the algorithms and also helped out Rob with the shell.
  
 \layout Subsection
 

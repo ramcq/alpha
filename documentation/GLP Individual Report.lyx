@@ -29,7 +29,7 @@
 Animating Algorithms: Individual Report
 \layout Author
 
-Graham Le Page
+Graham Le Page (gpl26)
 \layout Section
 
 My contribution
@@ -40,6 +40,9 @@ I was the manager of the Animating Algorithms project.
  to do these jobs, and making sure that all the jobs were completed on time.
  It also involved arranging meetings and making sure the correct documentation
  was finished and handed in on time for the progress meetings.
+ I had to work with every member of the group to make sure they knew what
+ to do and had to make sure that if one member had too much to do then backup
+ plans were available for other members to cover their work.
 \layout Standard
 
 I also wrote some of the documentation, including large parts of the Specificati
@@ -47,12 +50,77 @@ on, Progress Report, User Guide and the Final Report.
  For the User Guide this involved making sure that the project could be
  used by anyone who had read the document, so making sure that it contained
  details of what would happen if a button was pressed, for example.
+ It also involved working closely with the coders in particular in order
+ to implement the user interface and document it properly.
+ 
 \layout Section
 
 Contribution of others
-\layout Standard
+\layout Subsection
 
-etc etc
+Steven
+\layout Itemize
+
+Steven coded the graph animator module, one of the most challenging parts
+ of the project.
+\layout Subsection
+
+Richard
+\layout Itemize
+
+Richard tested the algorithms and the graph animator, as well as doing integrati
+on testing on the whole system.
+ Although not having as much work to do as the coders when they were writing
+ modules, he made up for this with a lot of testing when the modules were
+ finished.
+\layout Subsection
+
+Rob
+\layout Itemize
+
+Rob was heavily involved with the design of the system, coming up with many
+ good ideas for how to structure the system.
+ He coded the queueing mechanism and the shell and also set up and maintained
+ the CVS repositary in his role as librarian.
+ 
+\layout Subsection
+
+Andrew
+\layout Itemize
+
+Andrew also came up with many design plans for the system.
+ He worked tirelessly coding the vector animator and also had a role as
+ secretary, where among other things he was involved in making sure documents
+ were completed and handed in on time to the right place.
+ He was always present at group meetings and passed on his knowledge to
+ other group members at every opportunity.
+\layout Subsection
+
+Neofytos
+\layout Itemize
+
+Neofytos was an enthusiastic documenter, and so was involved in writing
+ up many of the documents such as the Developers Guide.
+ He also wrote the algorithm explanations that appear during animation to
+ help explain what the algorithm is doing.
+\layout Subsection
+
+Sid
+\layout Itemize
+
+Sid coded the algorithms and also helped out a great deal with the shell.
+ He worked well with the other coders making sure that integration went
+ relatively smoothly.
+ 
+\layout Subsection
+
+Alan
+\layout Itemize
+
+Alan tested the vector animator as well as performing various other module
+ and integration tests.
+ He worked especially well with Andrew when debugging the vector animator.
+ 
 \layout Section
 
 Notes
