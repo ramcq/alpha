@@ -3,6 +3,7 @@
  *
  */
  
+// TODO: fix redrawAllArrows for very close arrows
 // TODO: fix fast forward to next checkpoint (currently completely broken)
 // TODO: add column highlighting for vectors (for radix sort)
 package org.ucam.ned.teamalpha.shell;
@@ -868,6 +869,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * Moving an element between vectors
 		 */
 		public static final int ELT_FROM_NEW_VECTOR_CHANNEL = 15;
+		/**
+		 * Wait a number of milliseconds
+		 */
+		public static final int WAIT = 17;
 
 		private int type;
 		// Arguments
@@ -878,6 +883,25 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private boolean b1;
 		private boolean b2;
 
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be WAIT)
+		 * @param time
+		 * 	Time to wait, in <b>frames</b>
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
+		AnimationEvent(int type, int time) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.WAIT) {
+				this.type = type;
+				this.arg = time;
+			}
+			else throw new InvalidAnimationEventException("Invalid event of type "+type);
+		}
+		
 		/**
 		 * Constructor
 		 * @param type
@@ -1384,6 +1408,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					break;
 				case AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL:
 					moveElementFromNewVectorChannel(big, currentEvent.v1, currentEvent.v2, currentEvent.e2, currentEvent.b1);
+					break;
+				case AnimationEvent.WAIT:
+					if (intermediateOffset++>currentEvent.arg) {
+						currentEvent = null;
+						intermediateOffset = 0;
+						System.out.println("Finished waiting!");
+					}
+					System.out.println("Waiting");
 					break;
 				default:
 					break;
@@ -1950,6 +1982,24 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			System.err.println(e);
 		}		
 	}
+	
+	public void waitFor(int time) {
+		int frames = time * fps / 1000; // number of frames to wait for
+		synchronized (this) {
+			try {
+				eventQueue.addLast(new AnimationEvent(AnimationEvent.WAIT, frames));
+				if (draw) startAnimation();
+				else notify();
+				while (!eventQueue.isEmpty()) wait();
+			}
+			catch (InvalidAnimationEventException e) {
+				System.out.println(e);
+			}
+			catch (InterruptedException e) {
+				System.out.println(e);
+			}
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
@@ -2062,6 +2112,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		a3 = v2.createArrow("A3", 6, true);
 		a4 = v2.createArrow("A4", 2, false);
 		a3.flash();
+		app.waitFor(3000);
 		//app.stopFastForward();
 		//a3.move(8, true);
 		//v2.flashElement(4);
