@@ -490,7 +490,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				Vector.this.label = this.label;
 				Vector.this.contents = this.contents;
 				vectors.add(Vector.this);
-				redrawVector(Vector.this, big);
+				redrawVector(Vector.this, big, false);
 			}
 		}
 	}
@@ -728,7 +728,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				Arrow.this.left = this.left;
 				Arrow.this.deleted = this.deleted;
 				arrows.add(Arrow.this);
-				redrawArrow(Arrow.this, big);
+				redrawArrow(Arrow.this, big, false);
 			}
 		}
 	}
@@ -1301,13 +1301,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		if (currentEvent != null) {
 			switch(currentEvent.type) {
 				case AnimationEvent.ARROW_CHANGE:
-					redrawAllArrows(big, currentEvent.a1.left, null);
+					redrawAllArrows(big, currentEvent.a1.left, null, true);
 					currentEvent = null;
 					break;
 				case AnimationEvent.ARROW_FLASH:
 					intermediateOffset[0]++;
-					if (intermediateOffset[0] % 4 < 2) drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
-					else drawArrow(currentEvent.a1, big, currentEvent.a1.colour);
+					if (intermediateOffset[0] % 4 < 2) drawArrow(currentEvent.a1, big, currentEvent.a1.altColour, true);
+					else drawArrow(currentEvent.a1, big, currentEvent.a1.colour, true);
 					if (intermediateOffset[0] > 58) {
 						intermediateOffset[0] = 0;
 						currentEvent = null;
@@ -1317,7 +1317,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					moveArrowVert(big, currentEvent.a1, currentEvent.e1, currentEvent.b1, true);
 					break;
 				case AnimationEvent.ARROW_DELETE:
-					redrawAllArrows(big, currentEvent.a1.left, null);
+					redrawAllArrows(big, currentEvent.a1.left, null, true);
 					currentEvent = null;
 					break;
 				case AnimationEvent.ELT_CHANGE:
@@ -1353,12 +1353,12 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				case AnimationEvent.TWO_ARROW_FLASH:
 					intermediateOffset[0]++;
 					if (intermediateOffset[0] % 4 < 2) {
-						drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
-						drawArrow(currentEvent.a2, big, currentEvent.a2.altColour);
+						drawArrow(currentEvent.a1, big, currentEvent.a1.altColour, true);
+						drawArrow(currentEvent.a2, big, currentEvent.a2.altColour, true);
 					}
 					else {
-						drawArrow(currentEvent.a1, big, currentEvent.a1.colour);
-						drawArrow(currentEvent.a2, big, currentEvent.a2.colour);
+						drawArrow(currentEvent.a1, big, currentEvent.a1.colour, true);
+						drawArrow(currentEvent.a2, big, currentEvent.a2.colour, true);
 					}
 					if (intermediateOffset[0] > 60) {
 						intermediateOffset[0] = 0;
@@ -1378,7 +1378,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					moveElementInChannel(big, currentEvent.v1, currentEvent.e2, null, currentEvent.f2, false, 0);
 					break;
 				case AnimationEvent.VECTOR_CHANGE:
-					redrawVector(currentEvent.v1, big);
+					redrawVector(currentEvent.v1, big, true);
 					currentEvent = null;
 					break;
 				case AnimationEvent.VECTOR_DELETE:
@@ -1396,7 +1396,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 							}
 						};
 					}
-					redrawVector(currentEvent.v1, big);
+					redrawVector(currentEvent.v1, big, true);
 					currentEvent = null;
 					break;
 				case AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL:
@@ -1454,13 +1454,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	}
 	
 	// Draw the vector v on the Graphics object g
-	private void drawVector(Vector v, Graphics g) {
-		drawVectorSkeleton(v, g);
-		drawVectorContents(v, g);
+	private void drawVector(Vector v, Graphics g, boolean redraw) {
+		drawVectorSkeleton(v, g, redraw);
+		drawVectorContents(v, g, redraw);
 	}
 	
 	// Redraw the vector v on the Graphics object g (clear the area and draw again)
-	private void redrawVector(Vector v, Graphics g) {
+	private void redrawVector(Vector v, Graphics g, boolean redraw) {
 		// Area to work on
 		int x = v.left-60;
 		int y = v.top-10;
@@ -1472,33 +1472,33 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.fillRect(x, y, width, height);
 		
 		if (v.visible) {
-			drawVector(v, g);
-			redrawAllArrows(g, true, null);
-			redrawAllArrows(g, false, null);
+			drawVector(v, g, false);
+			redrawAllArrows(g, true, null, false);
+			redrawAllArrows(g, false, null, false);
 		}
 		
-		repaint(x, y, width, height);
+		if (redraw) repaint(x, y, width, height);
 	}
 	
 	// Redraw all vectors known to the animator
-	private void redrawAllVectors(Graphics g) {
+	private void redrawAllVectors(Graphics g, boolean redraw) {
 		Iterator i = vectors.listIterator();
 		while (i.hasNext()) {
 			Vector v = (Vector) i.next();
-			redrawVector(v, g);
+			redrawVector(v, g, redraw);
 		}
 	}
 	
 	// Draw the two vertical lines bounding each vector
-	private void drawVectorVertical(Vector v, Graphics g) {
+	private void drawVectorVertical(Vector v, Graphics g, boolean redraw) {
 		g.setColor(v.colour);
 		g.drawLine(v.left, v.top, v.left, v.bottom);
 		g.drawLine(v.right, v.top, v.right, v.bottom);
-		repaint(v.left-1, v.top, 3, (v.size*20));
+		if (redraw) repaint(v.left-1, v.top, 3, (v.size*20));
 	}
 	
 	// Draw the frame of the vector
-	private void drawVectorSkeleton(Vector v, Graphics g) {
+	private void drawVectorSkeleton(Vector v, Graphics g, boolean redraw) {
 		g.setColor(v.colour);
 		
 		// Draw horizontal lines
@@ -1508,23 +1508,23 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		}
 		
 		// Draw vertical lines
-		drawVectorVertical(v,g);
+		drawVectorVertical(v, g, false);
 		
 		// Draw label
 		g.setFont(new Font("MonoSpaced", Font.PLAIN, 12));
 		g.drawString(v.label, v.left+5, v.bottom+25);
 		
-		repaint(v.top, v.left, Vector.width, (v.size*20)+50);
+		if (redraw) repaint(v.top, v.left, Vector.width, (v.size*20)+50);
 	}
 	
 	// Draw the vector elements in place
-	private void drawVectorContents(Vector v, Graphics g) {
+	private void drawVectorContents(Vector v, Graphics g, boolean redraw) {
 		g.setColor(fgcolour);
 		
 		g.setFont(new Font("MonoSpaced", Font.PLAIN, 10));
 		for (int i=0; i<v.size; i++) {
 			g.drawString(v.contents[i], v.left+5, v.top+15+(i*20));
-			repaint(v.left, v.top+(i*20), Vector.width, 20);
+			if (redraw) repaint(v.left, v.top+(i*20), Vector.width, 20);
 		}
 	}
 	
@@ -1575,11 +1575,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.fillRect(leftOfAffectedArea, topOfElement, widthOfAffectedArea, heightOfAffectedArea);
 		
 		// Redo vertical lines
-		drawVectorVertical(v,g);
+		drawVectorVertical(v, g, true);
 
-		if (copy) drawVectorContents(v,g);
+		if (copy) drawVectorContents(v, g, true);
 		
-		redrawAllArrows(g, left, null);
+		redrawAllArrows(g, left, null, true);
 		
 		g.setColor(fgcolour);
 		if (left) {
@@ -1646,7 +1646,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(bgcolour);
 		g.fillRect(areaLeft, v.top, 50, 20*(Math.max(from,to)+1));
 		
-		redrawAllArrows(g, left, null);
+		redrawAllArrows(g, left, null, true);
 
 		intermediateOffset[which] += granularity;
 		if (intermediateOffset[which] > dist) intermediateOffset[which] = dist;
@@ -1670,7 +1670,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			return;
 		}
 		
-		redrawVector(v, g);
+		redrawVector(v, g, true);
 
 		// Clear destination
 		g.setColor(bgcolour);
@@ -1739,10 +1739,10 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.fillRect(areaLeft, areaTop, areaWidth, areaHeight);
 		
 		// Redraw vertical lines
-		drawVectorVertical(v, g);
+		drawVectorVertical(v, g, true);
 		
 		// Redraw arrows
-		redrawAllArrows(g, left, null);
+		redrawAllArrows(g, left, null, true);
 		
 		// Redraw text
 		g.setColor(fgcolour);
@@ -1800,9 +1800,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.fillRect(areaLeft, areaTop, areaWidth, areaHeight);
 		
 		// Redraw all vectors and arrows
-		redrawAllVectors(g);
-		redrawAllArrows(g, true, null);
-		redrawAllArrows(g, false, null);
+		redrawAllVectors(g, true);
+		redrawAllArrows(g, true, null, true);
+		redrawAllArrows(g, false, null, true);
 		
 		g.setColor(bgcolour);
 		g.fillRect(destVector.left+1, destVector.top+(20*destOffset)+1,48,19);
@@ -1873,11 +1873,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(bgcolour);
 		g.fillRect(areaLeft, a.vector.top-10, 60, (a.vector.size*20)+20);
 		
-		redrawAllArrows(g, a.left, a);
+		redrawAllArrows(g, a.left, a, true);
 		
 		// redraw arrow
-		if (movingUp) drawArrow(a, g, a.colour, -intermediateOffset[0]);
-		else drawArrow(a, g, a.colour, intermediateOffset[0]);
+		if (movingUp) drawArrow(a, g, a.colour, -intermediateOffset[0], true);
+		else drawArrow(a, g, a.colour, intermediateOffset[0], true);
 		
 		repaint(areaLeft, a.vector.top, 60, 20*a.vector.size);
 	}
@@ -1935,18 +1935,18 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	}
 	
 	// Draw an arrow in its default colour
-	private void drawArrow(Arrow a, Graphics g) {
-		drawArrow(a, g, a.colour);
+	private void drawArrow(Arrow a, Graphics g, boolean redraw) {
+		drawArrow(a, g, a.colour, redraw);
 	}
 	
 	// Draw an arrow in a specified colour
-	private void drawArrow(Arrow a, Graphics g, Color c) {
-		drawArrow(a, g, c, 0);
+	private void drawArrow(Arrow a, Graphics g, Color c, boolean redraw) {
+		drawArrow(a, g, c, 0, redraw);
 	}
 	
 	// Draw an arrow in a specified colour at a position yoffset vertically away
 	// from its "proper" location
-	private void drawArrow(Arrow a, Graphics g, Color c, int yoffset) {
+	private void drawArrow(Arrow a, Graphics g, Color c, int yoffset, boolean redraw) {
 		int left = (a.left) ? a.vector.left - 9 : a.vector.right+1;
 		int right = left + 8;
 		int ypos = (a.boundary) ? a.vector.top + (a.position*20) + yoffset : a.vector.top + (a.position*20) + 10 + yoffset;
@@ -1972,11 +1972,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			g.drawString(a.label, right+8, ypos+5);
 		}
 		
-		repaint(left, ypos-4, 25, 8);
+		if (redraw) repaint(left, ypos-4, 25, 8);
 	}
 	
 	// Clear the area where an arrow was and redraw it
-	private void redrawArrow(Arrow a, Graphics g) {
+	private void redrawArrow(Arrow a, Graphics g, boolean redraw) {
 		int left = (a.left) ? a.vector.left - 40 : a.vector.right+1;
 		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
 
@@ -1984,19 +1984,19 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(bgcolour);
 		g.fillRect(left, ypos-5, 40, 12);
 				
-		if (!a.deleted) drawArrow(a, g);
+		if (!a.deleted) drawArrow(a, g, false);
 		
-		repaint(left, ypos-5, 40, 12);
+		if (redraw) repaint(left, ypos-5, 40, 12);
 	}
 	
 	// Redraw all arrows known to the animator
 	// (on the left or right of vectors according to the parameter "left"),
 	// with the exception of notThis
-	private void redrawAllArrows(Graphics g, boolean left, Arrow notThis) {
+	private void redrawAllArrows(Graphics g, boolean left, Arrow notThis, boolean redraw) {
 		Iterator i = arrows.listIterator();
 		while (i.hasNext()) {
 			Arrow arr = (Arrow) i.next();
-			if (!(arr.left ^ left) && arr != notThis) redrawArrow(arr, g); 
+			if (!(arr.left ^ left) && arr != notThis) redrawArrow(arr, g, redraw); 
 		}
 	}
 	
