@@ -1231,12 +1231,12 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	
 	public void paintComponent(Graphics g) {
 		Rectangle clipArea = g.getClipBounds();
+		Rectangle biArea = new Rectangle(0,0,bi.getWidth(), bi.getHeight());
+		Rectangle redraw = biArea.intersection(clipArea);
+		
 		g.setColor(bgcolour);
-		Rectangle biarea = new Rectangle(0,0,bi.getWidth(), bi.getHeight());
-		Rectangle redraw = biarea.intersection(clipArea);
 		g.fillRect(clipArea.x, clipArea.y, clipArea.width, clipArea.height);
 		g.drawImage(bi.getSubimage(redraw.x, redraw.y, redraw.width, redraw.height), redraw.x, redraw.y, this);
-		//g.drawImage(bi,0,0,this);
 	}
 	
 	/**

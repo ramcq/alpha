@@ -527,10 +527,12 @@ public class ShellGraphAnimator
 
 	public void paintComponent(Graphics g) {
 		Rectangle clipArea = g.getClipBounds();
-		//BufferedImage clip = bi.getSubimage(clipArea);
+		Rectangle biArea = new Rectangle(0,0,bi.getWidth(), bi.getHeight());
+		Rectangle redraw = biArea.intersection(clipArea);
+		
 		g.setColor(bgcolour);
 		g.fillRect(clipArea.x, clipArea.y, clipArea.width, clipArea.height);
-		g.drawImage(bi, 0, 0, this);
+		g.drawImage(bi.getSubimage(redraw.x, redraw.y, redraw.width, redraw.height), redraw.x, redraw.y, this);
 	}
 
 	/**
@@ -1197,7 +1199,7 @@ public class ShellGraphAnimator
 		int Fsize,
 		Color colour) {
 		g.setColor(colour);
-		g.setFont(new Font("MonoSpaced", 0, Fsize));
+		g.setFont(new Font("MonoSpaced", Font.PLAIN, Fsize));
 		g.drawString(label, x, y);
 	}
 	/**
