@@ -46,6 +46,7 @@ Animating Algorithms is a program designed to aid your understanding of
  giving an explanation of what is happening at each point.
  It also allows you to step forward and backwards through the algorithms,
  allowing you to repeat steps if you want to see an animation again.
+ This User Guide shows you how to do all of this.
 \layout Section
 
 Starting up
@@ -54,8 +55,7 @@ Starting up
 To start the program....
 \layout Section
 
-Animating an algorithm {make this easy to read, pictures, screenshots, bullet
- points ?}
+Animating an algorithm
 \layout Itemize
 
 When the program starts, you will see this Main Menu:
@@ -149,6 +149,6 @@ ive look at many algorithms
 www.google.co.uk - Internet search engine
 \layout Standard
 
-To learn how to add new algorithms to the current system, read the Developers
- Guide.
+To learn how to add new algorithms to the current system, read the Animating
+ Algorithms: Developers Guide.
 \the_end

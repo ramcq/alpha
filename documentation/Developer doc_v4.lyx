@@ -6,6 +6,7 @@
 \fontscheme default
 \graphics default
 \paperfontsize default
+\spacing single 
 \papersize Default
 \paperpackage a4
 \use_geometry 0
@@ -15,7 +16,7 @@
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
-\paragraph_separation indent
+\paragraph_separation skip
 \defskip medskip
 \quotes_language english
 \quotes_times 2
@@ -25,7 +26,15 @@
 
 \layout Title
 
-Developer Documentation and Extending the Project
+Animating Algorithms: Developers Guide
+\layout Standard
+\pagebreak_bottom 
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
 \layout Section
 
 Introduction
@@ -40,16 +49,17 @@ Any software project is considered successful and flexible if it can be
 on but that would require more effort since it would involve changing all
  the API to adapt to the new animation primitives.
  In addition, the need to extend the API would make the project less flexible.
- Below we concentrate on the procedure that needs to be followed to add
- new algorithms (e.g.
+\layout Standard
+
+Below we concentrate on the procedure that needs to be followed to add new
+ algorithms (e.g.
  Shell Sort, Bubble Sort, Prim's algorithm etc) and ways to implement them.
- In order to make the prochedure clearer to the user we will demonstrate
+ In order to make the procedure clearer to the user we will demonstrate
  it by means of two examples, the first one extending the project to include
- the Bubble sort algorithm.
- (that is a VectorAlgorithm).
+ the Bubble sort algorithm (that is a VectorAlgorithm).
  The second example would involve a graph algorithm such as Prim's (for
  finding the minimum spanning tree of a graph).
- After that it should be clear how the prochedure could be applied to other
+ After that it should be clear how the procedure could be applied to other
  vector and graph algorithms besides Bubble sort and Prim's algorithm.
 \layout Section
 
@@ -66,7 +76,13 @@ We will demonstrate step by step what needs to be done by the user to implement
 \series medium 
 \size normal 
 The idea here is to add the Bubble Sort class into the Algorithms package.
- This is because the Algorithms package contains all that code
+ This is because the Algorithms package contains all th
+\series default 
+\size default 
+e
+\series medium 
+\size normal 
+ code
 \series default 
 \size default 
  (a different class for each algorithm) 
@@ -365,7 +381,7 @@ are
 \size normal 
  included inside the BubbleSort class.
 \layout Enumerate
-
+\pagebreak_bottom 
 
 \series medium 
 \size normal 
@@ -754,7 +770,7 @@ The import statement is again important.
  for a graph on the animation canvas.
  So it is important that this is included inside the Prims class.
 \layout Enumerate
-
+\pagebreak_bottom 
 
 \series medium 
 \size normal 
@@ -768,4 +784,21 @@ inside the catalog
 \series default 
 \size default 
  class which as already mentioned is inside the Shell pckage.
+\layout Section
+
+Useful Information
+\layout Standard
+
+For more useful information on algorithms, these sources may be useful:
+\layout Itemize
+
+'Introduction To Algorithms' by Cormen, Leiserson, Rivest & Stein - A comprehens
+ive look at many algorithms
+\layout Itemize
+
+www.google.co.uk - Internet search engine
+\layout Standard
+
+To learn how to use the system and animate algorithms, read the Animating
+ Algorithms: User Guide.
 \the_end
