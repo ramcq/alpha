@@ -14,6 +14,7 @@ package org.ucam.ned.teamalpha.shell;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -1234,6 +1235,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	private boolean draw = true; // Do we actually want to draw our buffered image out to the screen on each frame, or are we fast-forwarding?
 	
 	public void paintComponent(Graphics g) {
+		Rectangle clipArea = g.getClipBounds();
+		g.setColor(bgcolour);
+		g.fillRect(clipArea.x, clipArea.y, clipArea.width, clipArea.height);
 		g.drawImage(bi,0,0,this);
 	}
 	
