@@ -235,6 +235,7 @@ public class Dijkstra extends GraphAlgorithm {
 	private void processNeighbours(Node n) {
 		// ANIM: Highlight the node we are working with
 		anim.setNodeHighlight(n.index, true);
+		anim.setCurrentStep(1);
 		
 		for (Iterator i = map.getDestinations(n).iterator(); i.hasNext();) {
 			Node m = map.nodeAt(((Integer)i.next()).intValue());
@@ -243,6 +244,7 @@ public class Dijkstra extends GraphAlgorithm {
 			if (isDone(m)) continue;
 			
 			// ANIM: Highlight the node we are looking at
+			anim.flashNode(m.index);
 			anim.setNodeHighlight(m.index, true);
 			// ANIM: Highlight the edge we are looking at
 			anim.setEdgeHighlight(n.index, m.index, true);
@@ -309,9 +311,19 @@ public class Dijkstra extends GraphAlgorithm {
 		// ANIM: Create animator information
 		buildData(STARTINDEX, costMatrix);
 		
+		// ANIM: Set up the set descriptions
+		anim.setSteps(new String[] {
+							"Select cheapest seen node",
+							"Analyse neighbours",
+							"New node found, adding to seen list",
+							"Shorter path found, delete old and update",
+							"Done with node, add to completed",
+							"Done!"});
+		
 		while (!unFinished.isEmpty())
 		{
 			// get the node with the shortest distance
+			anim.setCurrentStep(0);
 			Node u = extractMin();
 			
 			// destination reached, stop (shortest dist pair)
@@ -319,10 +331,14 @@ public class Dijkstra extends GraphAlgorithm {
 			
 			finished.add(u);
 			// ANIM: Set node shade to finished
+			anim.setCurrentStep(4);
 			anim.setNodeShade(u.index, FINISHEDSETID);
 			
 			processNeighbours(u);
 		}
+		
+		// ANIM: Annouce completion
+		anim.setCurrentStep(5);
 	}
 	
 	public static String getName() {

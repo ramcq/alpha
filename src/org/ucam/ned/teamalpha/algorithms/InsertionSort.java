@@ -41,8 +41,6 @@ public class InsertionSort extends VectorAlgorithm {
 								"Move elements to make space",
 								"Insert element",
 								"Done!"});
-			}
-			
 			
 			// ANIM: Create the animator vectors
 			VectorAnimator.Vector sorted = anim.createVector(new int[a.length]);
