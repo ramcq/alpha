@@ -237,7 +237,7 @@ Some more algorithms?
 Environment
 \layout Standard
 
-The system will be written in Java 2.0, using the Eclipse IDE.
+The system will be written using the Java 2 SDK on the Eclipse IDE.
  The GUI will be implemented in the Swing windowing toolkit.
  Version control will be provided by 
 \family typewriter 
@@ -266,7 +266,7 @@ Inputs, functions, outputs (fold this section into the next?)
 User inputs:
 \layout Itemize
 
-Input initial algorithm data (keyboard input for vector elements
+Input initial algorithm data (keyboard input for vector elements)
 \layout Itemize
 
 animation speed (?)
@@ -284,7 +284,7 @@ step forwards/backwards in algorithm
 Functions:
 \layout Itemize
 
-run algorithm using inputted data
+run algorithm using inputted << SHOULD IT BE SPELT LIKE input?>> data
 \layout Itemize
 
 create animations for each step in the algorithm
