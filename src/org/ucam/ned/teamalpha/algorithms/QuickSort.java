@@ -7,7 +7,7 @@ package org.ucam.ned.teamalpha.algorithms;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
- * @author sas58
+ * @author Sid
  *
  */
 public class QuickSort extends VectorAlgorithm {

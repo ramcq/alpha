@@ -6,7 +6,7 @@ package org.ucam.ned.teamalpha.algorithms;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
- * @author sas58
+ * @author Sid
  *
  * An applet animating this algorithm may be found at: 
  * http://ciips.ee.uwa.edu.au/~morris/Year2/PLDS210/sorting.html
