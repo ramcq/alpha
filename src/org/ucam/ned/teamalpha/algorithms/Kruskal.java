@@ -216,6 +216,9 @@ public class Kruskal extends GraphAlgorithm {
 			
 			// Get the cheapest edge
 			anim.setCurrentStep(0);
+			
+			anim.showMessage("Attempt to add the cheapest edge to forest.");
+			
 			Edge e = (Edge)edges.remove(0);
 			
 			// Check whether addition will cause a cycle and update
@@ -225,6 +228,8 @@ public class Kruskal extends GraphAlgorithm {
 				result[n1][n2] = 1;
 				anim.saveState();
 				anim.setCurrentStep(2);
+				
+				anim.showMessage("Cheapest edge of cost <strong>" + costMatrix[n1][n2] + "</strong> doesn't cause a cycle; add.");
 				
 				// ****THIS REMOVES SUPPORT FOR BIDIRECTIONAL EDGES******
 				result[n2][n1] = 1;
@@ -242,6 +247,9 @@ public class Kruskal extends GraphAlgorithm {
 			} else if (!(result[n1][n2] == 1 || result[n2][n1] == 1 )) {
 				//ANIM: Show that edge causes a cycle if not already in tree
 				anim.setCurrentStep(1);
+				
+				anim.showMessage("Cheapest edge of cost <strong>" + costMatrix[n1][n2] + "</strong> causes a cycle; do not add.");
+				
 				anim.saveState();
 				
 				try {
