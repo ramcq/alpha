@@ -1,0 +1,263 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language british
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms: Personal Report
+\layout Author
+
+Zhan Li (zrll2)
+\layout Section
+
+Personal Experience
+\layout Standard
+
+To be honest, this is the first time when I am actually working in a team
+ manner.
+ All previous programming experiences were solely based on self-coding,
+ which were much simpler and there were no communication problems or version
+ conflicts.
+ So, heading towards the end of the Group Project now, I think the team
+ work so far has been positive, and everyone is working towards a common
+ goal.
+ It is amazing how much work we have produced, with considerable amount
+ of time and effort as our input.
+ Before the group project began, my first thoughts were about chaos and
+ messing with code; which occurred a bit at times, but this has been more
+ than compensated by our high motivation and team spirit.
+\layout Standard
+
+Being quite a large project (according to second-year's standard), I have
+ observed several interesting results, many of which will no doubt serve
+ as invaluable experience in future projects:
+\layout Standard
+
+First of all, my primary job is to test the classes written, with a focused
+ attention on the algorithms package, not only because they form a critical
+ part of our project, but also they are concrete classes which can actually
+ be fully tested.
+ The shell package is yet undergoing continuous coding, and it cannot be
+ fully tested until we can get the animation working within it.
+\layout Standard
+
+Initially we decided to have four coders (me being a back-up and was never
+ really used for that purpose), and two testers (me and Alan).
+ As the project progresses I have now realised that having two testers might
+ prove redundant, as some of the testing had been done by the coders themselves
+ when they were creating and debugging the classes, leaving me and Alan
+ with a much-reduced amount of work, as well as some sense of feeling guilty.
+ I think the coders are right in testing parts of their classes where they
+ have a much better insight than us testers.
+ Despite this, we were still able to do a considerable amount of testing,
+ but I have to say that the communication between the coders and testers
+ could have been better, as it is quite often the case that some of the
+ testing classes no longer worked after the coders decided to make some
+ minor changes to the constructors of the algorithm classes.
+ It then took us some time to realise what had happened, and in the future
+ I would try to get informed of the latest changes made in the API.
+\layout Standard
+
+Also many of our meetings' quality could have been better - although some
+ of them were quite inevitable.
+ For example, Alan was unable to attend the first two meetings because he
+ was away for internship interviews.
+ This left him in serious disadvantage later, as he had to catch up with
+ the missing information about our ideas and decisions.
+ Also I should mention that in some of the meetings in the later part of
+ the project, some members of the team did not turn up for some reasons,
+ so it was a bit frustrating to wait there without knowing if they were
+ coming or not.
+ This was probably more due to the communication side; but in general we
+ have maintained a good personal relationship with each other and the team
+ atmosphere is really friendly and humorous.
+ 
+\layout Standard
+
+I would like to end the first part of my personal report here by giving
+ special thanks to our four great coders Rob, Sid, Andy and Steve, who have
+ spent far more time and energy than anyone else into making the algorithms
+ and animators work.
+ Thanks also goes to our excellent manager Graham and documenter Neo for
+ their respective efforts.
+ Team Alpha has been a great team to work in, and I have every confidence
+ that our final system will stand up for the time and effort that each of
+ our team members have put in.
+\layout Section
+
+Current Testing Progress
+\layout Subsection
+
+Algorithms Package
+\layout Subsubsection
+
+GraphAlgorithm
+\layout Itemize
+
+Dijkstra
+\begin_deeper 
+\layout Itemize
+
+DijkstraTest.java: OK
+\layout Itemize
+
+DijkstraAnimationTest.java: excellent!! 
+\end_deeper 
+\layout Itemize
+
+Kruskal 
+\begin_deeper 
+\layout Itemize
+
+KruskalTest.java: NullPointerException
+\layout Itemize
+
+KruskalAnimationTest.java: works fine
+\end_deeper 
+\layout Subsubsection
+
+VectorAlgorithm Test
+\layout Itemize
+
+BiDirBubbleSort
+\begin_deeper 
+\layout Itemize
+
+BiDirBubbleSortTest.java: OK
+\layout Itemize
+
+BidirBubbleSortAnimationTest.java: OK
+\end_deeper 
+\layout Itemize
+
+InsertionSort 
+\begin_deeper 
+\layout Itemize
+
+InsertionSortTest.java: data still seems unsorted, but the animation classes
+ works fine somehow..
+ 
+\layout Itemize
+
+InsertionSortAnimationTest.java: OK 
+\end_deeper 
+\layout Itemize
+
+QuickSort
+\begin_deeper 
+\layout Itemize
+
+QuickSortTest.java: same outcome as InsertionSortTest.java, not sure why...
+ 
+\layout Itemize
+
+QuickSortAnimationTest.java: works beautifully, one of the prettiest I've
+ seen :) 
+\end_deeper 
+\layout Itemize
+
+(RadixSort): troublesome, now regarded as optional 
+\begin_deeper 
+\layout Itemize
+
+RadixSortTest.java: OK
+\layout Itemize
+
+RadixSortAnimationTest.java: not really working, but not crucial as we're
+ abandoning it...
+\end_deeper 
+\layout Subsection
+
+Animators Package
+\layout Standard
+
+Cannot really be fully tested apart from verifying that the abstract methods
+ they provide are sensible:
+\layout Subsubsection
+
+Subclasses for Constructions
+\layout Standard
+
+Basically contains the Animator abstract superclass for two abstract subclasses:
+\layout Itemize
+
+GraphAnimator
+\layout Itemize
+
+VectorAnimator
+\layout Subsubsection
+
+Exception Handling
+\layout Itemize
+
+InputTooLongException 
+\layout Itemize
+
+InvalidLocationException 
+\layout Itemize
+
+ItemDeletedException
+\layout Itemize
+
+NonSquareMatrixException
+\layout Itemize
+
+TooManyVectorsException
+\layout Subsection
+
+Queues Package
+\layout Standard
+
+This package, similar to the previous animators package, are abstractions
+ that cannot be easily tested.
+ But we have reached an agreement on how each individual class / method
+ should be.
+\layout Subsubsection
+
+Concrete Subclasses
+\layout Itemize
+
+GenericQueue (and Primitive)
+\layout Itemize
+
+GraphQueue
+\layout Itemize
+
+VectorQueue
+\layout Subsubsection
+
+Exceptions
+\layout Itemize
+
+NoSuchStateException
+\layout Subsection
+
+Shell Package
+\layout Standard
+
+I've had a look at it, but it seems that it's still partial in the sense
+ that we still can't do the actual animation on it yet, so...good luck to our
+ coders!
+\the_end
