@@ -49,6 +49,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 	
 	public void setChoice(AlgorithmCatalog.AvailableAlgorithm c) {
 		choice = c;
+		setTitle("Animating Algorithms: " + c);
 	}
 	
 	public Algorithm getAlgorithm() {
