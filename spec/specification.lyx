@@ -7,8 +7,8 @@
 \graphics default
 \paperfontsize default
 \spacing single 
-\papersize Default
-\paperpackage a4wide
+\papersize a4paper
+\paperpackage a4
 \use_geometry 0
 \use_amsmath 0
 \paperorientation portrait
@@ -27,18 +27,81 @@
 Animating Algorithms: Project Specification
 \layout Author
 
-Steven Cooper (sjc209), Graham LePage (gpl26), Zhan Li (zrll2), Robert McQueen
- (ram48), Andrew Medworth (am502), Neofytos Mylona (nm314), Sidath Senanayake
- (sas58), Alan Treanor (ajit2)
+Steven Cooper (sjc209), Graham LePage (gpl26), Zhan Li (zrll2), 
+\newline 
+Robert McQueen (ram48), Andrew Medworth (am502), 
+\newline 
+Neofytos Mylona (nm314), Sidath Senanayake (sas58), 
+\newline 
+Alan Treanor (ajit2)
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
 \layout Section
 
 Introduction
+\layout Standard
+
+This is the specification document for the 
+\begin_inset Quotes eld
+\end_inset 
+
+Animating Algorithms
+\begin_inset Quotes erd
+\end_inset 
+
+ (Topic 8.5) Computer Science Tripos Part IB / Part II (General) group project.
+ The authors are the members of group 
+\begin_inset Quotes eld
+\end_inset 
+
+Alpha
+\begin_inset Quotes erd
+\end_inset 
+
+, listed individually above.
 \layout Section
 
 Background
+\layout Standard
+
+Algorithms are one of the hardest parts of Computer Science to teach.
+ When done on blackboards or overhead projectors, diagrams can get extremely
+ messy and hard to follow.
+ Computer animation would be an ideal way to demonstrate algorithms: the
+ actions taken by the computer at each stage can be clearly demonstrated
+ at whatever level of abstraction is most helpful.
+ Users could move through an algorithm's execution at their own speed, going
+ especially slowly over difficult steps.
+ The cost of the algorithm in time and space on different sizes of input
+ could also be clearly displayed.
 \layout Section
 
 Facilities to be provided
+\layout Standard
+
+The following list needs to be completed and tidied up:
+\layout Itemize
+
+Support for algorithms on vectors, lists and graphs
+\layout Itemize
+
+Ability to step through algorithms, both forwards and backwards, at user's
+ speed
+\layout Itemize
+
+Ability to specify initial data / input
+\layout Itemize
+
+Ability to add new algorithms with relative ease
+\layout Itemize
+
+Graphical display of the time and space costs of the algorithm
 \layout Section
 
 Major system components
