@@ -214,9 +214,16 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			if ((!isValidOffset(from)) | (!vec.isValidOffset(to))) throw new InvalidLocationException("Invalid parameter: this vector has size "+size+", from is "+from+", destination has size "+vec.size+", to is "+to);
 			synchronized (ShellVectorAnimator.this) {
 				try {
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, true));
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, vec, to, true));
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL, this, vec, to, true));
+					if (vec.left < this.left) { // are we moving right to left?
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, true));
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, vec, to, true));
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL, this, vec, to, true));
+					}
+					else {
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, false, true));
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, vec, to, false));
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL, this, vec, to, false));
+					}
 					if (draw) startAnimation();
 					else ShellVectorAnimator.this.notify();
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
