@@ -339,6 +339,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				Vector.this.label = this.label;
 				Vector.this.contents = this.contents;
 				vectors.add(Vector.this);
+				redrawVector(Vector.this, big);
 			}
 		}
 	}
@@ -485,6 +486,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				Arrow.this.visible = this.visible;
 				Arrow.this.deleted = this.deleted;
 				arrows.add(Arrow.this);
+				redrawArrow(Arrow.this, big);
 			}
 		}
 	}
@@ -1192,24 +1194,23 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		eventQueue.clear();
 		Vector.VectorState[] vs = st.getVectors();
 		Arrow.ArrowState[] as = st.getArrows();
+		
+		// forget our past ills
 		vectors.clear();
 		arrows.clear();
+		
+		// Clear the whole canvas
+		big.setColor(bgcolour);
+		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+		
+		// restore these states
 		for (int i=0; i<vs.length; i++) {
 			vs[i].restore();
 		}
 		for (int i=0; i<as.length; i++) {
 			as[i].restore();
 		}
-		
-		// Clear the whole canvas
-		big.setColor(bgcolour);
-		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
-
-		// redraw all vectors
-		redrawAllVectors(big);
-		redrawAllArrows(big, true, null);
-		redrawAllArrows(big, false, null);
-		
+			
 		// draw buffered image out
 		outg.drawImage(bi,0,0,outc);
 	}
