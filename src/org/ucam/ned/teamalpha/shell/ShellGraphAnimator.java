@@ -2,7 +2,6 @@ package org.ucam.ned.teamalpha.shell;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -479,10 +478,6 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 	}
 	
 	public void paintComponent(Graphics g) {
-		Rectangle clipArea = g.getClipBounds();
-		//BufferedImage clip = bi.getSubimage(clipArea);
-		g.setColor(bgcolour);
-		g.fillRect(clipArea.x, clipArea.y, clipArea.width, clipArea.height);
 		g.drawImage(bi,0,0,this);
 	}
 	
@@ -807,32 +802,8 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		int sx1 = 0,sy1 = 0,sx2 = 0,sy2 = 0,sx3 = 0,sy3 = 0;
 		int arsize = 4;
 		int arlen = 7;
-		if (((x1-x2 > 1)||(x1-x2 < -1)) && ((y1-y2 > 1)||(y1-y2 < -1))){
-			double grad = ((double)(x2-x1))/((double)(y2-y1));
-			if (((grad < 1) && (grad > 0)) || (grad < -1)) { //(x1>x2 && y1>y2) || (x2>x1 && y2>y1)
-				sx3 = (int)(x + arlen * grad);
-				sy3 = (int)(y + arlen * grad);
-				grad = (-1 / grad);
-				sx1 = (int)(x - arsize * grad);
-				sy1 = (int)(y + arsize * grad);
-				sx2 = (int)(x + arsize * grad);
-				sy2 = (int)(y - arsize * grad);			
-			}
-			else {
-				sx3 = (int)(x + arlen * grad);
-				sy3 = (int)(y + arlen * grad);
-	//			System.out.println(grad + " " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + sx3 + " " + sy3);
-	//			Double tgrad = new Double(grad);
-	//			drawlabel(x,y," " +tgrad.toString(), g, 12, fgcolour);
-				grad = (-1 / grad);
-				sx1 = (int)(x - arsize * grad);
-				sy1 = (int)(y - arsize * grad);
-				sx2 = (int)(x + arsize * grad);
-				sy2 = (int)(y + arsize * grad);		
-			}
-		}
-		else {
-			if ((x1 == x2) || (x1 == x2+1) || (x1+1 == x2)) {
+		if ((x1==x2) || (y1==y2)) { //vertical or horizontal line
+			if (x1 == x2) {
 				sx1 = x - arsize;
 				sy1 = y;
 				sx2 = x + arsize;
@@ -845,7 +816,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 					sy3 = y + arlen;
 				}
 			}
-			if ((y1 == y2) || (y1 == y2+1) || (y1+1 == y2)) {
+			if (y1 == y2) {
 				sx1 = x;
 				sy1 = y - arsize;
 				sx2 = x;
@@ -858,6 +829,18 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 					sx3 = x + arlen;
 				}
 			}
+		}
+		else { //angled line
+			double grad = (((double) (x2-x1)) / ((double)(y2-y1))); //line gradient
+			double c = ((double)y - (grad * (double)x));
+			sx1=(int) (x + arlen);
+			sy1=(int) ((double)sx1 * grad + c);
+			grad = ((-1.0)/(grad));
+			c = (y - (grad * x));
+			sx2=(int) (x + arsize);
+			sy2=(int) ((double)sx2 * grad + c);
+			sx3=(int) (x - arsize);
+			sy3=(int) ((double)sx3 * grad + c);		
 		}
 		int[] xpoints = {sx1,sx2,sx3};
 		int[] ypoints = {sy1,sy2,sy3};
@@ -898,7 +881,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		int sx1 = 0,sy1 = 0,sx2 = 0,sy2 = 0,sx3 = 0,sy3 = 0;
 		int arsize = 5;
 		if (x3 != x4 && y3 != y4){
-			double grad = (double) ((x3-x4)/(y3-y4));
+			double grad =  (((double)(x3-x4))/((double)(y3-y4)));
 			if ((x3>x4 && y3>y4) || (x4>x3 && y4>y3)) {
 				if (x3>x4 && y3>y4) {
 					sx3 = (int)(x2 - arsize * grad);
@@ -1427,7 +1410,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		frame.setVisible(true);
 		
 		//current test data
-		int[][] tstcosts = {{0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+	/*	int[][] tstcosts = {{0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
 				{33,	0,	0,	0,	0,	0,	0,	0,	0,	0},
 				{10,	0,	0,	0,	0,	0,	0,	0,	0,	0},
 				{56,	13,	23,	0,	0,	0,	0,	0,	0,	0},
@@ -1436,7 +1419,8 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 				{0,	0,	65,	20,	17,	40,	0,	0,	0,	0},
 				{0,	0,	0,	0,	35,	0,	99,	0,	0,	0},
 				{0,	0,	0,	0,	0,	72,	45,	0,	0,	0},
-				{0,	0,	0,	0,	0,	0,	42,	0,	83,	0}};
+				{0,	0,	0,	0,	0,	0,	42,	0,	83,	0}}; */
+		int[][] tstcosts = {{0,4,3},{4,0,0},{1,0,0}};
 		try { app.createGraph(tstcosts); }
 		catch (NonSquareMatrixException e) {
 			System.err.println(e);
