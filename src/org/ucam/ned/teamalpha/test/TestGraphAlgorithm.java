@@ -42,11 +42,11 @@ public class TestGraphAlgorithm extends GraphAlgorithm {
 		ga.showMessage("creating graph");
 		ga.createGraph(costs);
 		ga.setCurrentStep(1);
-		ga.setEdgeHighlight(0, 1, true);
+		ga.flashEdge(0, 1);
 		ga.setNodeLabel(0, "node label");
 		ga.setCurrentStep(2);
 		ga.showMessage("doing something exciting");
-		ga.setNodeHighlight(0, false);
+		ga.flashNode(0);
 		ga.setEdgeShade(1, 0, 2);
 		ga.setCurrentStep(3);
 		ga.setNodeShade(1, 2);

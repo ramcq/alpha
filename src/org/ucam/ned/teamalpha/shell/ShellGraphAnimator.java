@@ -1234,12 +1234,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 	public void setNodeLabel(int id, String label){
 		nodelist[id].setlabel(label);
 	}
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setNodeHighlight(int, boolean)
-	 */
-	public void setNodeHighlight(int Node, boolean highlight){
-		// Not included any more, replaced by flashing
-	}
+
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashNode(int)
 	 */
@@ -1284,12 +1279,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 			edgematrix[from][to].setlabel(label);
 		}
 	}
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setEdgeHighlight(int, int, boolean)
-	 */
-	public void setEdgeHighlight(int from, int to, boolean highlight) {
-		// no longer used
-	}
+
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setEdgeShade(int, int, int)
 	 */

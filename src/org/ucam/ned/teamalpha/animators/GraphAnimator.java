@@ -27,16 +27,6 @@ public interface GraphAnimator extends Animator {
 	public void setNodeLabel(int node, String label);
 
 	/**
-	 * Highlight a node to indicate something exciting is happening.
-	 * 
-	 * @param node
-	 *            the requested node
-	 * @param highlight
-	 *            true to highlight the node
-	 */
-	public void setNodeHighlight(int node, boolean highlight);
-
-	/**
 	 * Add a node to a shaded set, to indicate that the algorithm has completed
 	 * work on it, or that is considered for some intermediate step.
 	 * 
@@ -60,18 +50,6 @@ public interface GraphAnimator extends Animator {
 	public void setEdgeLabel(int from, int to, String label);
 
 	/**
-	 * Highlight an edge to indicate something exciting is happening.
-	 * 
-	 * @param from
-	 *            the origin node
-	 * @param to
-	 *            the destination node
-	 * @param highlight
-	 *            true to highlight the node
-	 */
-	public void setEdgeHighlight(int from, int to, boolean highlight);
-
-	/**
 	 * Add an edge to a shaded set, to indicate that the algorithm has
 	 * completed work on it, or that is considered for some intermediate step.
 	 * 
@@ -93,7 +71,7 @@ public interface GraphAnimator extends Animator {
 	public void flashNode(int node);
 	
 	/**
-	 * Flash an edgeto indicate something exciting going on.
+	 * Flash an edge to indicate something exciting going on.
 	 * 
 	 * @param from
 	 * 			the origin node
