@@ -270,7 +270,7 @@ cvs
 .
 \layout Section
 
-Overall System Architecture
+Overall system architecture
 \layout Standard
 
 The main functionality of the system can be broken down into four areas,
@@ -326,10 +326,7 @@ show diagram, explain diagram in detail, explain why diagram is the way
  it is
 \layout Section
 
-Inputs, Functions, Outputs (fold this section into the next?)
-\layout Standard
-
-<<SNIP?>>=======Overall inputs, functions, and outputs>>>>>>> 1.10
+Overall inputs, functions, and outputs
 \layout Standard
 
 User inputs:
