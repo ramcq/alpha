@@ -326,23 +326,23 @@ placement p
 wide false
 collapsed false
 
-\layout Caption
-
-Class diagram for package 
-\family typewriter 
-Algorithm
 \layout Standard
-
+\added_space_bottom smallskip \align center 
 
 \begin_inset Graphics
-	filename PackageAlgorithm.ps
+	filename PackageAlgorithm.eps
 	scale 50
-	BoundingBox 70bp 350bp 480bp 720bp
+	BoundingBox 0bp 0bp 740bp 380bp
 	clip
 
 \end_inset 
 
 
+\layout Caption
+
+Class diagram for package 
+\family typewriter 
+Algorithm
 \end_inset 
 
 
@@ -384,6 +384,16 @@ Animators
 wide false
 collapsed false
 
+\layout Standard
+\added_space_bottom smallskip \align center 
+
+\begin_inset Graphics
+	filename PackageAnimatorQueue.eps
+	scale 50
+
+\end_inset 
+
+
 \layout Caption
 
 Class diagram for packages 
@@ -393,18 +403,6 @@ Animator
  and 
 \family typewriter 
 Queue
-\layout Standard
-
-
-\begin_inset Graphics
-	filename PackageAnimatorAndQueue.ps
-	scale 50
-	BoundingBox 70bp 300bp 450bp 700bp
-	clip
-
-\end_inset 
-
-
 \end_inset 
 
 
@@ -597,18 +595,6 @@ Shell
  
 \emph on 
 (currently incomplete)
-\layout Standard
-
-
-\begin_inset Graphics
-	filename PackageShell_incomplete.ps
-	scale 50
-	BoundingBox 100bp 400bp 550bp 700bp
-	clip
-
-\end_inset 
-
-
 \end_inset 
 
 
@@ -828,7 +814,7 @@ Division of project tasks
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0">
+<column alignment="right" valignment="top" leftline="true" width="0(null)">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
