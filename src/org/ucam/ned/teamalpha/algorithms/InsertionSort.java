@@ -34,6 +34,16 @@ public class InsertionSort extends VectorAlgorithm {
 			
 			int n = a.length;
 			
+			// ANIM: Set up the set descriptions
+			anim.setSteps(new String[] {
+								"Select element from head of unsorted",
+								"Search for insertion point in sorted",
+								"Move elements to make space",
+								"Insert element",
+								"Done!"});
+			}
+			
+			
 			// ANIM: Create the animator vectors
 			VectorAnimator.Vector sorted = anim.createVector(new int[a.length]);
 			sorted.setLabel("B");
@@ -51,6 +61,7 @@ public class InsertionSort extends VectorAlgorithm {
 			
 			for(i=1;i<n;i++) {
 				//ANIM: The arrow points at the element to be inserted
+				anim.setCurrentStep(0);
 				aUnsorted.move(i, false);
 								
 				// TODO: Partition the vector about the point i
@@ -59,26 +70,33 @@ public class InsertionSort extends VectorAlgorithm {
 				// Work backwards through the sorted list till the correct position is found
 				j = i;
 				// ANIM: Have the arrow pointing at the potential insertion point
+				anim.setCurrentStep(1);
 				aSorted.move(j, false);
 				
 				// Find insertion point
 				while ( a[j-1] > v ) {
 					a[j] = a[j-1];
 					// ANIM: Have the arrow pointing at the potential insertion point
+					anim.setCurrentStep(1);
 					aSorted.move(j-1, false);
 					
 					// ANIM: Shift elements to make space
+					anim.setCurrentStep(2);
 					sorted.moveElement(j-1, j);
 				
 					j = j-1;
 					if ( j <= 0 ) break;
 				}
 				// Correct insertion point found, insert here
+				anim.setCurrentStep(3);
 				a[j] = v;
 				aSorted.flash();
 				unsorted.copyElement(i, sorted, j);
 			}
+			// ANIM Annonunce completion
 			sorted.setLabel("DONE!");
+			anim.setCurrentStep(4);
+			
 		} catch (Exception ide) {
 			System.out.println("Oh no.");
 		}
@@ -120,7 +138,7 @@ public class InsertionSort extends VectorAlgorithm {
 		try {
 			sort();
 		} catch (ItemDeletedException e) {
-			System.out.println("Oh no.");
+			System.out.println("Oh no; we're buggered.");
 		}
 	}
 }

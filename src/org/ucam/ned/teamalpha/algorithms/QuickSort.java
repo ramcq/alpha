@@ -9,7 +9,6 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
  * @author Sid
- *
  */
 public class QuickSort extends VectorAlgorithm {
 
@@ -110,12 +109,10 @@ public class QuickSort extends VectorAlgorithm {
 						// Check for a moved pivot element and sort out
 						if (i == pivotLoc) {
 							pivotLoc = j;
-							aPivot.delete();
-							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
+							aPivot.move(pivotLoc, false);
 						} else if (j == pivotLoc) {
 							pivotLoc = i;
-							aPivot.delete();
-							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
+							aPivot.move(pivotLoc, false);
 						}
 					}
 					

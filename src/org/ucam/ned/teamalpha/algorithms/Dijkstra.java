@@ -37,7 +37,7 @@ public class Dijkstra extends GraphAlgorithm {
 	static final int FINISHEDSETID = 3;
 	//Edges
 	static final int EDGEDEFAULT = 0;
-	static final int INCLUDEDEDGE = 1;
+	static final int INCLUDEDEDGE = 3;
 	static final int EXCLUDEDEDGE = 9;
 	
 	

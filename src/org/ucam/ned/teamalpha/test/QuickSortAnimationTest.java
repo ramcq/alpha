@@ -20,7 +20,7 @@ import org.ucam.ned.teamalpha.shell.ShellVectorAnimator;
 
 public class QuickSortAnimationTest {
 	
-	static int[] data = {12,34, 1,40,23,456,45,-12};
+	static int[] data = {12,34, 1,40,23,456,45,-12,56,23,12,89,-5,32,76,49,99};
 	
 	public static void main(String[] args) {	
 		JFrame frame = new JFrame("QuickSort Animation test");

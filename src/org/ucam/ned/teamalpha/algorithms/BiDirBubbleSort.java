@@ -23,6 +23,16 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 	}
 	
 	public void sort() {
+		
+		// ANIM: Set up the set descriptions
+		anim.setSteps(new String[] {
+							"Search downwards for elements out of place",
+							"Search upwards for elements out of place",
+							"Swap elements",
+							"Change direction",
+							"Done"});
+		
+		
 		// Initial variable setup
 		int j;
 		int limit = a.length;
@@ -45,6 +55,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				for (j = st; j < limit; j++) {
 					
 					// ANIM: Move the arrow to the right place
+					anim.setCurrentStep(0);
 					arrowA.move(j, false);
 					
 					if (a[j] > a[j + 1]) {
@@ -53,6 +64,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						a[j + 1] = T;
 						
 						// ANIM: Swap the elements
+						anim.setCurrentStep(2);
 						arrowA.flash();
 						v.flashElement(j+1);
 						v.swapElements(j,j+1);
@@ -70,6 +82,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				arrowA.delete();
 				
 				// OTHER WAY NOW! //
+				anim.setCurrentStep(3);
 				
 				// ANIM: Create the downwards arrow
 				VectorAnimator.Arrow arrowB = v.createArrow("Up", limit-1, false);
@@ -77,6 +90,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				for (j = limit; --j >= st;) {
 					
 					// ANIM: Move the arrow to the right place
+					anim.setCurrentStep(1);
 					arrowB.move(j, false);
 					
 					if (a[j] > a[j + 1]) {
@@ -85,6 +99,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						a[j + 1] = T;
 
 						// ANIM: Swap the elements
+						anim.setCurrentStep(2);
 						arrowB.flash();
 						v.flashElement(j+1);
 						v.swapElements(j,j+1);
@@ -102,6 +117,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 			}
 			
 			v.setLabel("Done!");
+			anim.setCurrentStep(4);
 			
 		} catch (Exception ile) {
 			System.out.println("Animator exception raised");

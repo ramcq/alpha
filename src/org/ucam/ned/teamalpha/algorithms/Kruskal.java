@@ -169,6 +169,13 @@ public class Kruskal extends GraphAlgorithm {
 	}
 	
 	void kruskalsAlgo() {
+		// ANIM: Set up the set descriptions
+		anim.setSteps(new String[] {
+							"Check shortest edge for cycle and add",
+							"Edge causes a cycle, remove",
+							"Add egde to minimum spanning tree",
+							"Done!"});
+	
 		// Variables to hold the indices of the edge's nodes
 		int n1;
 		int n2;
@@ -179,6 +186,7 @@ public class Kruskal extends GraphAlgorithm {
 			if (edges.isEmpty()) break;
 			
 			// Get the cheapest edge
+			anim.setCurrentStep(0);
 			Edge e = (Edge)edges.remove(0);
 			
 			// Check whether addition will cause a cycle and update
@@ -186,6 +194,7 @@ public class Kruskal extends GraphAlgorithm {
 			n1 = e.node1; n2 = e.node2;
 			if (acyclic(n1, n2, true) && result[n1][n2] != 1) {
 				result[n1][n2] = 1;
+				anim.setCurrentStep(2);
 				
 				// THIS REMOVES SUPPORT FOR BIDIRECTIONAL EDGES
 				result[n2][n1] = 1;
@@ -198,11 +207,13 @@ public class Kruskal extends GraphAlgorithm {
 				anim.setEdgeShade(n1,n2,INCLUDED);
 			} else if (!(result[n1][n2] == 1 || result[n2][n1] == 1 )) {
 				//ANIM: Show that edge causes a cycle if not already in tree
+				anim.setCurrentStep(1);
 				anim.setEdgeShade(n1,n2,CYCLECAUSING);
 			}
-			
-			
 		}
+		
+		// ANIM: Announce completion
+		anim.setCurrentStep(3);
 	}
 	
 	/* (non-Javadoc)
