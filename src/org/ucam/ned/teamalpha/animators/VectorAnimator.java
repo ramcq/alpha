@@ -196,6 +196,8 @@ public abstract class VectorAnimator extends Animator {
 		 *            true to highlight the arrow
 		 */
 		public abstract void setHighlight(boolean highlight);
+		
+		public abstract void move(int newpos, boolean boundary);
 	}
 
 	/**
