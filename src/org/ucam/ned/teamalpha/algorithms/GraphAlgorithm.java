@@ -9,16 +9,6 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
  */
 public abstract class GraphAlgorithm extends Algorithm {
 	/**
-	 * A reference to the <class>GraphAnimator</class> which will be used for
-	 * all animation primitives within these algorithms.
-	 */
-	GraphAnimator ga;
-	/**
-	 * A matrix of costs for the edges in the graph.
-	 */
-	int[][] costs;
-
-	/**
 	 * The constructor for <class>GraphAlgorithm</class> which initialises
 	 * the necessary <class>GraphAnimator</class> and initial data members.
 	 * 
@@ -27,8 +17,5 @@ public abstract class GraphAlgorithm extends Algorithm {
 	 * @param costs
 	 *            the initial matrix of costs
 	 */
-	public GraphAlgorithm(GraphAnimator ga, int[][] costs) {
-		this.ga = ga;
-		this.costs = costs;
-	}
+	public GraphAlgorithm(GraphAnimator ga, int[][] costs) { }
 }
