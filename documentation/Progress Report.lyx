@@ -124,7 +124,7 @@ Copy element from one pointer to another method changed to take offsets
  rather than pointers.
 \layout Itemize
 
-Removed vector primitive to compare two elements; un-necessary since you
+Removed vector primitive to compare two elements; unnecessary since you
  can just flash arrows.
 \layout Itemize
 
@@ -441,7 +441,7 @@ prev()
 
 The queue classes are essentially complete, but further consideration will
  be given to making the queue class safe for concurrent operation, because
- it is intended to have the queue invoke the animator in a seperate thread
+ it is intended to have the queue invoke the animator in a separate thread
  to the user interface code itself.
  As stated above, the queue will also need to perform the same checks on
  input data that the animators do, to ensure that no method call which is
