@@ -73,7 +73,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				boolean swapped = false;
 				
 				// ANIM: Create the downwards arrow
-				VectorAnimator.Arrow arrowA = v.createArrow("Down", 0, false);
+				VectorAnimator.Arrow arrowA = v.createArrow("Down", st, false);
 				
 				for (j = st; j < limit; j++) {
 					
@@ -154,6 +154,9 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						
 						swapped = true;
 					}
+					
+					// Move the bottom arrow for Andrew :P
+					bottom.move(limit, true);
 				}
 				if (!swapped) {
 					arrowB.delete();
