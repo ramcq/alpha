@@ -739,7 +739,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * 
 	 * @author am502
 	 */
-	public class State implements Animator.State {
+	public class State extends ShellAnimator.State {
 		private Vector.VectorState[] vectors;
 		private Arrow.ArrowState[] arrows;
 		private boolean[] colsOccupied;
@@ -2083,6 +2083,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		// draw buffered image out
 		repaint();
+		
+		// restore shell steps & message
+		st.restoreShell();
 	}
 	
 	// Test harness, just for fun :-)

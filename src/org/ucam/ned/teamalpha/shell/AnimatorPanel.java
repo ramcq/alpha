@@ -211,6 +211,10 @@ public class AnimatorPanel extends ShellPanel {
 	}
 	
 	public void setCurrentStep(int step) {
-		stepList.setSelectedIndex(step);
+		if (step >= 0) {
+			stepList.setSelectedIndex(step);
+		} else {
+			stepList.clearSelection();
+		}
 	}
 }

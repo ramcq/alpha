@@ -47,8 +47,7 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 public class ShellGraphAnimator
 	extends ShellAnimator
 	implements ActionListener, GraphAnimator {
-	private int basefps = 100; // Basic animation framerate
-	private double fpsfactor = 1; // algorithm-defined FPS factor
+	private int fps = 100; // Basic animation framerate
 	private double Nodeangle; //calc. according to number of nodes
 	private javax.swing.Timer timer; // timer for animation events
 	private BufferedImage bi; // buffered image for double buffering
@@ -541,7 +540,6 @@ public class ShellGraphAnimator
 	public ShellGraphAnimator() {
 		setOpaque(true);
 
-		int fps = (int) (basefps * fpsfactor);
 		int delay = (fps > 0) ? (1000 / fps) : 10; // Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
 
@@ -1426,7 +1424,7 @@ public class ShellGraphAnimator
 	 *         nodes and edges in the animator. This is used by the save and
 	 *         restore state api to allow backtracking.
 	 */
-	public class State implements Animator.State {
+	public class State extends ShellAnimator.State {
 		private Edge[][] edges;
 		private Node[] nodes;
 		private int numnodes;
@@ -1453,27 +1451,6 @@ public class ShellGraphAnimator
 		public int getNumNodes() {
 			return this.numnodes;
 		}
-	}
-
-	/**
-	 * Method to conrol the speed of the animation display
-	 * 
-	 * @param fps
-	 *            Sets new frame rate for animation in frames per second
-	 */
-	public void setFps(int fps) {
-		basefps = fps;
-		int newfps = (int) (basefps * fpsfactor);
-		int delay = (newfps > 0) ? (1000 / newfps) : 10; // Frame time in ms
-		System.out.println("Delay = " + delay + " ms");
-		stopAnimation();
-		timer.setDelay(delay);
-		startAnimation();
-	}
-
-	public void setFpsFactor(double f) {
-		fpsfactor = f;
-		setFps(basefps);
 	}
 
 	public void fastForward() {
@@ -1531,6 +1508,7 @@ public class ShellGraphAnimator
 			}
 		}
 		repaint();
+		ts.restoreShell();
 	}
 
 	//main function purely for module testing

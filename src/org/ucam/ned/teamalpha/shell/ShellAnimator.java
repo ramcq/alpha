@@ -8,9 +8,7 @@ package org.ucam.ned.teamalpha.shell;
 
 import javax.swing.JPanel;
 
-/*import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;*/
+import org.ucam.ned.teamalpha.animators.Animator;
 
 /**
  * @author ram48
@@ -19,32 +17,41 @@ import javax.swing.Timer;*/
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public abstract class ShellAnimator extends JPanel {
-	private Shell shell;
-/*	private RefreshTimer rt;
-	
-	private class RefreshTimer implements ActionListener {
-		private Timer timer;
-		private int delay;
-		RefreshTimer(int fps) {
-			delay = (fps > 0) ? (1000 / fps) : 33;
-			timer = new Timer(delay, this);
-			timer.start();
+	class State implements Animator.State {
+		String[] steps;
+		int step;
+		String msg;
+		
+		State() {
+			this.steps = ShellAnimator.this.steps;
+			this.step = ShellAnimator.this.step;
+			this.msg = ShellAnimator.this.msg;
 		}
 		
-		 (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 
-		public void actionPerformed(ActionEvent e) {
-			repaint();			
+		void restoreShell() {
+			if (steps != null)
+				setSteps(steps);
+			if (step >= 0)
+				setCurrentStep(step);
+			if (msg != null)
+				showMessage(msg);
 		}
-	}*/
+	}
 	
+	private Shell shell;
+	String[] steps;
+	int step;
+	String msg;
+
 	public ShellAnimator() {
 		shell = Shell.getInstance();
-		//rt = new RefreshTimer(10);
+		steps = null;
+		step = -1;
+		msg = null;
 	}
 	
 	public void setSteps(String[] steps) {
+		this.steps = steps;
 		try {
 			shell.setSteps(steps);
 		} catch (InvalidModeException e) {
@@ -53,6 +60,7 @@ public abstract class ShellAnimator extends JPanel {
 	}
 	
 	public void setCurrentStep(int step) {
+		this.step = step;
 		try {
 			shell.setCurrentStep(step);
 		} catch (InvalidModeException e) {
@@ -61,6 +69,7 @@ public abstract class ShellAnimator extends JPanel {
 	}
 	
 	public void showMessage(String msg) {
+		this.msg = msg;
 		try {
 			shell.showMessage(msg);
 		} catch (InvalidModeException e) {
