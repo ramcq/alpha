@@ -31,6 +31,7 @@ public class QuickSort extends VectorAlgorithm {
 	private void quick(int low, int high) throws Exception {
 		int i = low;
 		int j = high;
+		int pivotLoc;
 		int pivot;
 		
 		// ANIM: Set up the set descriptions
@@ -51,7 +52,7 @@ public class QuickSort extends VectorAlgorithm {
 		// ANIM: Create the arrows on main vector
 		VectorAnimator.Arrow aDividerLow = v.createArrow("Low", low, true, true);
 		VectorAnimator.Arrow aDividerHigh = v.createArrow("High", high+1, true, true);
-
+		
 		// ANIM: Create arrows on working vector
 		VectorAnimator.Arrow aHigh;
 		VectorAnimator.Arrow aLow;
@@ -66,12 +67,13 @@ public class QuickSort extends VectorAlgorithm {
 			// ANIM: Find the pivot element
 			anim.setCurrentStep(0);
 			// Select the pivot by the median of first, middle and last element
-			pivot = a[(low + high)/2];
+			pivotLoc = (low + high)/2; 
+			pivot = a[pivotLoc];
 			
 			// ANIM: Point arrow at area we are working on
-			aPivot = curr.createArrow("Pivot", (low+high)/2-low, false);
+			aPivot = curr.createArrow("Piv", pivotLoc, false, true);
 			aPivot.flash();
-			aPivot.delete();
+			//aPivot.delete();
 
 			// ANIM: Create the swapper pointers
 			aLow = curr.createArrow("A", 0, false);
@@ -104,6 +106,17 @@ public class QuickSort extends VectorAlgorithm {
 						// ANIM: Swap the elements
 						anim.setCurrentStep(3);
 						curr.swapElements(i-low, j-low);
+						
+						// Check for a moved pivot element and sort out
+						if (i == pivotLoc) {
+							pivotLoc = j;
+							aPivot.delete();
+							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
+						} else if (j == pivotLoc) {
+							pivotLoc = i;
+							aPivot.delete();
+							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
+						}
 					}
 					
 					// Move pointers in place for next run
@@ -121,7 +134,7 @@ public class QuickSort extends VectorAlgorithm {
 			anim.setCurrentStep(4);
 			
 			// ANIM: Highlight the split location
-			aSplitLocation = curr.createArrow("Split", i-low, true);
+			aSplitLocation = curr.createArrow("Spl", i-low, true);
 			aSplitLocation.flash();
 			
 			
@@ -132,7 +145,7 @@ public class QuickSort extends VectorAlgorithm {
 				curr.copyElement(k, v, low+k);
 			}
 */			
-			// ANIM: Remove both
+			// ANIM: Remove all
 			curr.delete();
 			v.delete();
 			
