@@ -6,6 +6,7 @@
 \fontscheme default
 \graphics default
 \paperfontsize default
+\spacing single 
 \papersize Default
 \paperpackage a4
 \use_geometry 0
@@ -15,7 +16,7 @@
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
-\paragraph_separation indent
+\paragraph_separation skip
 \defskip medskip
 \quotes_language english
 \quotes_times 2
@@ -26,6 +27,14 @@
 \layout Title
 
 Animating Algorithms: User Guide
+\layout Standard
+\pagebreak_bottom 
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
 \layout Section
 
 Introduction
@@ -45,9 +54,10 @@ Starting up
 To start the program....
 \layout Section
 
-Animating an algorithm {make this easier to read, pictures ?}
+Animating an algorithm {make this easier to read, pictures, screenshots,
+ bullet points ?}
 \layout Standard
-
+\noindent 
 At the main menu, there is a drop-down box which lists the algorithms available
  to animate.
  Select one by clicking on it in the list, and then pressing the 'Next'
