@@ -69,7 +69,7 @@ ajit2
 \family default 
 )
 \layout Standard
-\pagebreak_bottom 
+
 
 \begin_inset LatexCommand \tableofcontents{}
 
@@ -176,7 +176,6 @@ animation script
 
  and the algorithms themselves will be written in Java; we will not implement
  our own special language for describing algorithms.
- 
 \layout Itemize
 
 The user will be able to specify initial data in the following ways:
@@ -212,22 +211,23 @@ The user will set the input data once, before the animation starts, and
 \layout Itemize
 
 The auxiliary displays showing the time and space costs of the algorithm,
- and the steps and explanation of its behaviour, will be implemented with
- a series of textual messages displayed to the user as the algorithm is
- animated.
+ and the steps and explanation of its behaviour, will be implemented (if
+ time permits) with a series of textual messages displayed to the user as
+ the algorithm is animated.
 \layout Section
 
 Facilities to be provided
 \layout Standard
 
-There will be some facilities that the system will need to provide.
- Other facilities are optional, as they are not essential to the system
- but will either extend its functionality or add additional features.
- These facilities may or may not be implemented, subject to time constraints.
-\newline 
+There are some facilities that the system will be useless without, and whose
+ implementation is therefore essential.
+ There are others, however, which are not crucial but will usefully extend
+ its functionality.
+ These facilities will be considered optional and may or may not be implemented,
+ subject to time constraints.
+\layout Paragraph
 
-\newline 
-The following facilities will definitely be implemented:
+Essential facilities
 \layout Itemize
 
 Support for algorithms on vectors and graphs
@@ -237,38 +237,57 @@ Clear and smooth graphical animation
 \layout Itemize
 
 Ability to step through algorithms, both forwards and backwards, at the
- user's desired speed
+ click of a mouse
 \layout Itemize
 
-Ability to specify initial data / input (plus ability to generate random
- initial data and special cases such as all entries in a vector being the
- same)
+Ability to specify the algorithm's initial data or input (plus the ability
+ to generate random initial data and special cases such as all entries in
+ a vector being the same)
 \layout Itemize
 
-Ability to add new algorithms using existing animation primitives
+Ability to add new algorithms using existing animation primitives (by writing
+ new Java classes using an existing API)
 \layout Itemize
 
 Well-documented API for creation of new animation primitives and data structures
 , potentially allowing the implementation of different types of algorithm
- from the ones done here
+ from the ones done here (e.g.
+ heap management routines)
 \layout Itemize
 
 Cross-platform operation using Java
 \layout Itemize
 
-Easy-to-use, user-friendly interface
+User-friendly interface
 \layout Itemize
 
-We will be demonstrating the system by implementing the following algorithms:
- insertion sort, Quicksort, radix sort, Dijkstra's algorithm (for finding
- the shortest path between two nodes in a graph), and Kruskal's algorithm
- (for finding the minimum spanning tree of a set of nodes in a graph).
-\layout Standard
-
-The following facilities will optionally be implemented:
+In order to demonstrate the system, we will implement three sorting algorithms
+ and two graph algorithms:
+\begin_deeper 
 \layout Itemize
 
-Ability to vary animation speed (between two reasonable values)
+insertion sort,
+\layout Itemize
+
+Quicksort,
+\layout Itemize
+
+radix sort,
+\layout Itemize
+
+Dijkstra's algorithm (for finding the shortest path between two nodes in
+ a graph), and
+\layout Itemize
+
+Kruskal's algorithm (for finding the minimum spanning tree of a set of nodes
+ in a graph).
+\end_deeper 
+\layout Paragraph
+
+Optional facilities
+\layout Itemize
+
+Ability to vary the animation speed (between two reasonable values)
 \layout Itemize
 
 Text explanation of each step as it happens (pseudocode as in a debugger)
@@ -302,7 +321,11 @@ Version control will be provided by
 \family typewriter 
 cvs
 \family default 
-.
+: the repository will be located on 
+\family typewriter 
+ned.ucam.org
+\family default 
+, a student-operated server located in Corpus Christi College.
 \layout Section
 
 Overall system architecture
@@ -352,26 +375,27 @@ Algorithm
 \layout Standard
 
 The classes within this package will ultimately implement the algorithms
- which the system is able to demonstrate, contain the instructions to the
+ which the system is to animate: they will contain the instructions to the
  other parts of the program for animating the steps that are taken by the
  algorithm, provide the narrative for explaining to the user what is happening,
  and any other information which is displayed.
 \layout Standard
 
-As can be seen from Figure\SpecialChar ~
+The class hierarchy for this package can be seen in Figure\SpecialChar ~
 
 \begin_inset LatexCommand \ref{figure:UML-Class-Algorithm}
 
 \end_inset 
 
-, the abstract class 
+.
+ The abstract class 
 \family typewriter 
 Algorithm
 \family default 
  is the parent class for all of the classes within this package, and an
  abstract class is descended from it for each group of algorithms which
  are being implemented.
- The initial specification is to implement two types of algorithm, 
+ We will implement two types of algorithm, 
 \family typewriter 
 GraphAlgorithm
 \family default 
@@ -381,8 +405,8 @@ VectorAlgorithm
 \family default 
 .
  These abstract classes will specify methods for querying information about
- the algorithm, such as its name, purpose and efficiency, as well as setting
- the initial data for the algorithm and instructing it to execute.
+ the algorithm, such as its name and description, as well as setting the
+ initial data for the algorithm and instructing it to execute.
 \layout Subsection
 
 Animators
@@ -423,7 +447,14 @@ Queue
 
 \layout Standard
 
-This package contains a set of abstract classes descended from 
+The UML class diagram for this package can be seen in Figure\SpecialChar ~
+
+\begin_inset LatexCommand \ref{figure:UML-Class-AnimatorQueue}
+
+\end_inset 
+
+.
+ It contains a set of abstract classes descended from 
 \family typewriter 
 Animator
 \family default 
@@ -439,20 +470,21 @@ VectorAnimator
 \family default 
 , which will specify the methods necessary for the animation primitives
  required for animating graph and vector algorithms.
- (See Figure 
-\begin_inset LatexCommand \ref{figure:UML-Class-AnimatorQueue}
-
-\end_inset 
-
-.)
 \layout Subsection
 
 Queues
 \layout Standard
 
-This package contains an interface 
+The class hierarchy for this package can also be seen in Figure\SpecialChar ~
+
+\begin_inset LatexCommand \ref{figure:UML-Class-AnimatorQueue}
+
+\end_inset 
+
+.
+ It contains an interface
 \family typewriter 
-AnimatorQueue
+ AnimatorQueue
 \family default 
 , initially implemented by two classes 
 \family typewriter 
@@ -466,38 +498,67 @@ VectorQueue
 \family typewriter 
 Animator
 \family default 
- classes.
+ classes (from the Animators package).
  The queues form a layer of abstraction between the algorithms and the actual
  implementation of the animators, and allow the algorithms to run to completion
  before any animation is shown to the user.
  When the algorithm uses an animator primitive, the queue internally records
  the requested action, and returns control to the algorithm.
- The queue hence builds up a list of all of the animator primitives which
- an algorithm used to get between one checkpointed state of the animator
- and the next.
- The shell can then provide an actual implementation of the animator primitives
- to the queue, and use the 
+\layout Standard
+
+Every so often the algorithm will call a special animation primitive which
+ signals a 
+\emph on 
+checkpoint.
+ 
+\emph default 
+These checkpoints are the junctures at which the animation will pause and
+ the user will have the opportunity to go forward or back --- essentially,
+ each sequence of animation primitives between checkpoints constitutes one
+ step of the algorithm.
+ For example, if we were implementing insertion sort, one step might consist
+ of the insertion of a single value into the vector: we might want to move
+ a pointer along the vector until we find the correct place for the value,
+ move all the other data items up to make room, and insert the value.
+\layout Standard
+
+As the algorithm progresses, the queue builds up a list of all of the animator
+ primitives which the algorithm used to get between one checkpointed state
+ of the animator and the next.
+ The shell can then provide the queue with an actual implementation of the
+ animator primitives, and use the 
 \family typewriter 
 AnimatorQueue
 \family default 
  interface to instruct the queue to execute each batch of queued primitives
- on the actual animator.
- The more important functionality of this package is that it also allows
- the user to roll the animator back to previous states so the user can revisit
- previous steps of the algorithm, and the queue retains the steps that need
- to be done to return the animator to subsequent states.
- In this way, next and previous methods in the 
+ in sequence on the actual animator.
+\layout Standard
+
+The more important functionality of this package is that, at each checkpoint,
+ it stores the state of the animation canvas and the data structures on
+ which the algorithm is operating.
+ This will allow the user to roll the animator back to previous states so
+ the user can revisit previous steps of the algorithm, and the queue retains
+ the steps that need to be done to return the animator to subsequent states.
+ There will be methods in the 
 \family typewriter 
 AnimatorQueue
 \family default 
- interface are available to the shell.
+ interface available to the shell which will cause the animation to move
+ forwards and backwards between checkpoints.
+ To move backwards, the state of the canvas and data structures at the previous
+ checkpoint will be restored, and the queue's internal structures will be
+ updated accordingly.
+ To move forwards, the next animation primitives will be executed in sequence
+ until the next checkpoint is reached.
 \layout Subsection
 
 Shell
 \layout Standard
 
-The shell package implements the interface that is visible to the user.
- The actual implementations of the 
+The shell package contains classes which provide the user interface, along
+ with the visible elements of the system (such as the actual animation canvas).
+ The implementations of the 
 \family typewriter 
 GraphAnimator
 \family default 
@@ -505,25 +566,36 @@ GraphAnimator
 \family typewriter 
 VectorAnimator
 \family default 
- abstract classes are here, as well as a 
+ abstract classes are here (called 
+\family typewriter 
+ActualGraphAnimator
+\family default 
+ and 
+\family typewriter 
+ActualVectorAnimator
+\family default 
+ respectively), along with a 
 \family typewriter 
 Shell
 \family default 
- class which contains the entry point for the whole system and the controller
- of main program flow.
- The shell can investigate the algorithm package to see which classes are
- available, and present a list of algorithms for the user to choose from.
+ class which contains the entry point for the whole system and controls
+ the main program flow.
+\layout Standard
+
+The shell can investigate the algorithm package (via introspection) to see
+ which classes are available, and present a list of algorithms for the user
+ to choose from.
  When an algorithm is selected, the shell will allow the user to input the
  initial data for the algorithm, or generate some at random.
- The shell then creates instances of the appropriate animator, wrapped in
- the appropriate queue class, which is provided to the algorithm, which
+ The shell then creates an instance of the appropriate animator, wraps this
+ in the appropriate queue class, and passes this to the algorithm, which
  is then run to completion.
- The shell then displays the animator on screen, will use the 
+ The shell then displays the animator on screen, steps through the algorithm's
+ stages as the user requests them (using the 
 \family typewriter 
 AnimatorQueue
 \family default 
- interface to step through the algorithm's stages, animating the requested
- changes, showing the explanation texts provided by the algorithm, and showing
+ interface), shows any explanatory text provided by the algorithm, and shows
  which step is active.
  The shell will either advance the animation at a preset speed, or the user
  can step forwards and backwards through the stages manually.
@@ -531,13 +603,14 @@ AnimatorQueue
  screen and choose a new algorithm or exit.
 \layout Standard
 
-See Figure\SpecialChar ~
+To clarify the way data moves around the system (and how control is transferred)
+, see Figure\SpecialChar ~
 
 \begin_inset LatexCommand \ref{figure:Data-Flow}
 
 \end_inset 
 
- for a diagram of how data moves around the system.
+.
 \layout Standard
 
 
@@ -580,7 +653,7 @@ Algorithm selection (from the ones implemented)
 
 Initial data (keyboard input for vector elements, graph edge costs) including
  ability to generate random data and special cases (such as already sorted
- data) 
+ data)
 \layout Itemize
 
 Navigation through algorithm using buttons
@@ -625,26 +698,6 @@ Pseudocode
 \layout Section
 
 Specification of Components and Test Requirements
-\layout Standard
-
-For each major class in the system:
-\layout Itemize
-
-Its purpose, including what functionality is it supposed to provide to the
- user or to other classes
-\layout Itemize
-
-Its inputs
-\layout Itemize
-
-Its outputs
-\layout Itemize
-
-Its major public methods (replicating some of the stuff in the abstract
- class listings)
-\layout Itemize
-
-How it should be tested
 \layout Subsection
 
 Algorithms
@@ -1089,7 +1142,7 @@ collapsed false
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0">
+<column alignment="right" valignment="top" leftline="true" width="0(null)">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
