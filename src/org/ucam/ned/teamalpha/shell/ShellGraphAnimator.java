@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
+import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 
 /**
  * main work done by
@@ -809,7 +810,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public Edge[][] edgematrix = new Edge[10][10];
 	public int numnodes;
 	
-	public void createGraph(int[][] costs) {
+	public void createGraph(int[][] costs) throws NonSquareMatrixException {
+		NonSquareMatrixException.isSquare(costs);
 		int[] arrlentst = (int[]) costs[0].clone();
 		//perhaps hardcode positions given number of nodes?
 		//centre is 250,250. 
@@ -1044,7 +1046,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		});
 		//current test data
 		int[][] tstcosts = {{0,0,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
-		app.createGraph(tstcosts);
+		try { app.createGraph(tstcosts); }
+		catch (NonSquareMatrixException e) {
+			System.out.println(e);
+		}
 		Animator.State s = app.saveState();
 		app.setEdgeShade(0,2,1);
 		app.setEdgeShade(2,0,2);
