@@ -1,11 +1,12 @@
 #LyX 1.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 221
 \textclass article
-\language english
+\language british
 \inputencoding auto
 \fontscheme default
 \graphics default
 \paperfontsize default
+\spacing single 
 \papersize Default
 \paperpackage a4
 \use_geometry 0
@@ -15,7 +16,7 @@
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
-\paragraph_separation indent
+\paragraph_separation skip
 \defskip medskip
 \quotes_language english
 \quotes_times 2
@@ -174,17 +175,18 @@ smh22@cam.ac.uk
 \layout Section
 
 Changes from specification
-\layout Subsection
+\layout Paragraph
 
 Algorithm Package
 \layout Itemize
 
 API changed to move provision of initial data and animator moved to constructors
  instead.
-\layout Standard
+\layout Paragraph
 
 Vector Animator
 \layout Itemize
+
 
 \family typewriter 
 Markers
@@ -215,12 +217,12 @@ Delete element method removed, variable vector lengths aren't necessary
 Split vector method also removed, for similar reasons.
 \layout Itemize
 
-Boolean highlight of Arrows supplemented with a few seconds of flashing (for
-both arrows and vector elements).
+Boolean highlight of Arrows supplemented with a few seconds of flashing
+ (forboth arrows and vector elements).
 \layout Itemize
 
 Flash element method added.
-\layout Standard
+\layout Paragraph
 
 Shell Package
 \layout Itemize
@@ -335,32 +337,6 @@ Moving elements between separate vectors
 Highlighting of vector columns (for Radix sort)
 \layout Standard
 
-A class 
-\family typewriter 
-GenericQueue
-\family default 
- has been written, to provide the common functionality which is used by
- both the 
-\family typewriter 
-GraphQueue
-\family default 
- and 
-\family typewriter 
-VectorQueue
-\family default 
- classes.
- It implements an inner class 
-\family typewriter 
-State
-\family default 
- to store each simulated state that the algorithm requests, and each of
- these contains a linked list of 
-\family typewriter 
-Event
-\family default 
- 
-\layout Standard
-
 There are also likely to be a few more small changes to the API (for instance
  adding back in support for a boolean method 
 \family typewriter 
@@ -445,8 +421,33 @@ More testing needs to be done on this class: all animation primitives need
 Queues (Rob)
 \layout Standard
 
-Functionally complete.
+A class 
+\family typewriter 
+GenericQueue
+\family default 
+ has been written, to provide the common functionality which is used by
+ both the 
+\family typewriter 
+GraphQueue
+\family default 
+ and 
+\family typewriter 
+VectorQueue
+\family default 
+ classes.
+ It implements an inner class 
+\family typewriter 
+State
+\family default 
+ to store each simulated state that the algorithm requests, and each of
+ these contains a linked list of 
+\family typewriter 
+Event
+\family default 
+.
+ Functionally complete.
  Untested.
+ 
 \layout Subsection
 
 Shell
