@@ -9,9 +9,8 @@
 // TODO: fix non-redrawing when timer is not running (need equivalent of 
 //		applet paint() method). Maybe have a redraw() method which the shell 
 //		calls whenever the window needs to be redrawn (via a window listener or 
-//		similar?)
+//		similar?) IN PROGRESS
 // TODO: fix fast forward to next checkpoint
-// TODO: add moving elements between vectors
 // TODO: add column highlighting for vectors (for radix sort)
 package org.ucam.ned.teamalpha.shell;
 
@@ -19,7 +18,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -803,11 +801,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	// Constructor
 	public ShellVectorAnimator(Container c) {
 		outc = new JPanel() {
-			public void paint(Graphics g) {
-				Rectangle r = g.getClipBounds();
-				BufferedImage i = bi.getSubimage(r.x, r.y, r.width, r.height);
-				outg.drawImage(i, r.x, r.y, outc);
-//				super.paint(g);
+			public void paintComponent(Graphics g) {
+				g.drawImage(bi,0,0,outc);
 			}
 		}; // lightweight container
 		outc.setSize(c.getSize().width, c.getSize().height);
