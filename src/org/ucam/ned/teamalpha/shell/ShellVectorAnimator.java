@@ -871,10 +871,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 * Wait a number of milliseconds
 		 */
 		public static final int WAIT = 17;
-		/**
-		 * Change the animation speed by a certain factor.
-		 */
-		public static final int SET_FPS_FACTOR = 18;
 
 		private int type;
 		// Arguments
@@ -884,28 +880,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		private int arg;
 		private boolean b1;
 		private boolean b2;
-		private double darg;
 
-		/**
-		 * Constructor
-		 * 
-		 * @param type
-		 * 	Event type (expected to be SET_FPS_FACTOR)
-		 * @param factor
-		 * 	The factor by which the FPS rate is to be multiplied
-		 * @throws InvalidAnimationEventException
-		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
-		 * 	or one of its inner classes. It should be caught within that class and never
-		 * 	thrown externally.
-		 */
-		AnimationEvent(int type, double factor) throws InvalidAnimationEventException {
-			if (type == AnimationEvent.SET_FPS_FACTOR) {
-				this.type = type;
-				this.darg = factor;
-			}
-			else throw new InvalidAnimationEventException("Invalid event of type "+type);
-		}
-		
 		/**
 		 * Constructor
 		 * @param type
@@ -1426,16 +1401,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 						System.out.println("Finished waiting!");
 					}
 					break;
-				case AnimationEvent.SET_FPS_FACTOR:
-					fpsfactor = currentEvent.darg;
-					int fps = (int) (fpsfactor * basefps);
-					int delay = (fps > 0) ? (1000 / fps) : 100;
-					System.out.println("Delay is "+delay+" ms");
-					stopAnimation();
-					timer.setDelay(delay);
-					startAnimation();
-					currentEvent = null;
-					break;
 				default:
 					System.out.println("Unsupported event type "+currentEvent.type);
 					break;
@@ -1458,18 +1423,38 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	}
 	
 	/**
-	 * Sets the frame rate of the animation
+	 * Sets the base frame rate of the animation
 	 * @param fps
 	 * 	New frame rate (frames per second)
 	 */
 	public void setFps(int fps) {
 		basefps = fps;
-		int newfps = (int) (basefps * fpsfactor); 
+		int newfps = getFps();
 		int delay = (newfps > 0) ? (1000 / newfps) : 10;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
 		stopAnimation();
 		timer.setDelay(delay);
 		startAnimation();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setFpsFactor(double)
+	 */
+	public void setFpsFactor(double f) {
+		fpsfactor = f;
+		int fps = getFps();
+		int delay = (fps > 0) ? (1000 / fps) : 100;
+		System.out.println("Delay is "+delay+" ms");
+		stopAnimation();
+		timer.setDelay(delay);
+		startAnimation();
+	}
+	
+	/**
+	 * @return the current framerate
+	 */
+	public int getFps() {
+		return (int) (basefps*fpsfactor);
 	}
 	
 	/**
@@ -1998,21 +1983,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		}
 	}
 
-	public synchronized void setFpsFactor(double f) {
-		try {
-			eventQueue.addLast(new AnimationEvent(AnimationEvent.SET_FPS_FACTOR, f));
-			if (draw) startAnimation();
-			else notify();
-			while (!eventQueue.isEmpty()) wait();
-		}
-		catch (InvalidAnimationEventException e) {
-			System.out.println(e);
-		}
-		catch (InterruptedException e) {
-			System.out.println(e);
-		}
-	}
-	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
 	 */
