@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
-
 /**
  * @author ram48
  *
@@ -19,11 +18,11 @@ import javax.swing.JPanel;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public abstract class ShellPanel extends JPanel implements ActionListener {
-	public ShellPanel(ButtonPanel b) {
+	public ShellPanel() {
 		super();
 	}
 	
-	public ShellPanel(ButtonPanel b, LayoutManager m) {
+	public ShellPanel(LayoutManager m) {
 		super(m);
 	}
 }

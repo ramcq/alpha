@@ -53,8 +53,7 @@ import org.ucam.ned.teamalpha.animators.InvalidLocationException;
  * 
  * @author am502 
  */
-public class ShellVectorAnimator extends VectorAnimator implements ActionListener {
-	
+public class ShellVectorAnimator extends VectorAnimator implements ActionListener, ShellAnimator {
 	/**
 	 * This inner class of ShellVectorAnimator is designed to represent vectors
 	 * in a way which is convenient to ShellVectorAnimator. The queue calls primitives

@@ -12,6 +12,5 @@ package org.ucam.ned.teamalpha.shell;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-interface AnimatorShell {
-
+interface ShellAnimator {
 }

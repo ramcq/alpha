@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 
 import javax.swing.JPanel;
 
-import org.ucam.ned.teamalpha.algorithms.Algorithm;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
@@ -25,7 +24,7 @@ import org.ucam.ned.teamalpha.queues.VectorQueue;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class StaticAlgorithmCatalog extends AlgorithmCatalog {
-	private static final String[] algorithms = { "Dijkstra", "InsertionSort", "Kruskal", "QuickSort", "RadixSort" };
+	private static final String[] algorithms = { "Dijkstra", "Kruskal", "BiDirBubbleSort", "InsertionSort", "QuickSort" };
 	
 	private static final int GRAPH = 1;
 	private static final int VECTOR = 2;
@@ -43,20 +42,18 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 			this.desc = desc;
 		}
 		
-		public Algorithm getAlgorithm(JPanel panel) {
+		public ShellPanel getAlgorithm() {
 			switch (type) {
 			case GRAPH:
-				break;
+				return new GraphInputPanel();
 			case VECTOR:
-				break;
+				return new VectorInputPanel();
 			default:
-				break;
+				return null;
 			}
-			
-			return null;
 		}
 
-		public Animator getAnimator(JPanel panel) {
+		public ShellAnimator getAnimator(JPanel panel) {
 			switch (type) {
 			case GRAPH:
 				return new ShellGraphAnimator(panel);
@@ -67,12 +64,12 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 			}
 		}
 
+		public String toString() {
+			return name;
+		}
+		
 		public String getDescription() {
 			return desc;
-		}
-
-		public String getName() {
-			return name;
 		}
 
 		public String getType() {
@@ -137,7 +134,7 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 		AlgorithmCatalog.AvailableAlgorithm[] as = a.getAvailableAlgorithms();
 		for (int i = 0; i < as.length; i++) {
 			if (as[i] != null)
-				System.out.println(as[i].getType() + ": " + as[i].getName() + ": " + as[i].getDescription());
+				System.out.println(as[i].getType() + ": " + as[i] + ": " + as[i].getDescription());
 		}
 	}
 }

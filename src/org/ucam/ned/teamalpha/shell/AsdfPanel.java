@@ -30,17 +30,17 @@ public class AsdfPanel extends ShellPanel {
 	/**
 	 * 
 	 */
-	public AsdfPanel(ButtonPanel b) {
-		super(b);
-		
-		buttons = b;
-		label = new JLabel();
+	public AsdfPanel() {
+		super();
+				
 		shell = Shell.getInstance();
-		asdf = false;		
+		buttons = shell.getButtonPanel();
 	
 		String[] names = { "asdf", "Next" };
-		b.update(names);
+		buttons.update(names);
 
+		asdf = false;
+		label = new JLabel();
 		asdf();
 		add(label);
 	}
@@ -48,7 +48,11 @@ public class AsdfPanel extends ShellPanel {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Next")) {
 			int mode = shell.getMode();
-			shell.setMode(++mode);
+			try {
+				shell.setMode(++mode);
+			} catch (Exception ex) {
+				System.err.println(ex);
+			}
 		} else if (e.getActionCommand().equals("asdf"))
 			asdf();
 		else if (e.getActionCommand().equals("fdsa"))

@@ -63,7 +63,7 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  *
  */
 
-public class ShellGraphAnimator extends GraphAnimator implements ActionListener {
+public class ShellGraphAnimator extends GraphAnimator implements ActionListener, ShellAnimator {
 	
 	private double Nodeangle; //calc. according to number of nodes
 	private int fps = 100;	// Animation framerate
