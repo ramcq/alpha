@@ -1199,8 +1199,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		}
 	}
 	
-	private int basespeed = 100;	// Basic animation framerate
-	private double speedfactor = 1; // algorithm-defined speed factor
+	private int fps = 100;	// Animation framerate
 	private int granularity = 2; // number of pixels to move each frame
 	private javax.swing.Timer timer;	// timer for animation events
 	//private int highestColUsed = -1; // stores the highest column which has a vector in it
@@ -1238,7 +1237,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		//setSize(500, 500);
 		setOpaque(true);
 		
-		int fps = (int) (basespeed * speedfactor);
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
 		
@@ -1426,43 +1424,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		if (timer.isRunning()) timer.stop();
 	}
 	
-	/**
-	 * Sets the base frame rate of the animation
-	 * @param fps
-	 * 	New frame rate (frames per second)
-	 */
-	public void setFps(int fps) {
-		basespeed = fps;
-		int newfps = getFps();
-		int delay = (newfps > 0) ? (1000 / newfps) : 10;	// Frame time in ms
-		System.out.println("Delay = " + delay + " ms");
-		stopAnimation();
-		timer.setDelay(delay);
-		startAnimation();
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#setFpsFactor(double)
-	 */
-	public void setFpsFactor(double f) {
-		speedfactor = f;
-		int fps = getFps();
-		int delay = (fps > 0) ? (1000 / fps) : 100;
-		System.out.println("Delay is "+delay+" ms");
-		stopAnimation();
-		timer.setDelay(delay);
-		startAnimation();
-	}
-	
 	public void setGranularity(int g) {
 		granularity = (g > 0) ? g : 1;
-	}
-	
-	/**
-	 * @return the current framerate
-	 */
-	public int getFps() {
-		return (int) (basespeed*speedfactor);
 	}
 	
 	/**
@@ -2003,7 +1966,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * 	Time to pause for in ms
 	 */
 	public void waitFor(int time) throws InterruptedException {
-		int fps = (int) (basespeed*speedfactor);
 		int frames = (time / 1000) * fps; // number of frames to wait for
 		System.out.println("Waiting for "+frames);
 		synchronized (this) {
@@ -2125,7 +2087,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		v2.copyElement(3, v, 5);
 		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
 		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
-		app.setFpsFactor(0.25);
 		a3.flash();
 		a3.move(8, true);
 		v2.flashElement(4);

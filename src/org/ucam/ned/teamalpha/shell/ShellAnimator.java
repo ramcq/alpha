@@ -68,7 +68,5 @@ public abstract class ShellAnimator extends JPanel {
 		}		
 	}
 	
-	public abstract void setFps(int fps);
-	
 	public abstract void fastForward() throws InterruptedException;
 }
