@@ -310,14 +310,42 @@ cvs
 Overall system architecture
 \layout Standard
 
-The main functionality of the system can be broken down into four areas,
- algorithms, animators, queues and shell, which will be represented as packages
- in Java.
+The main functionality of the system can be broken down into four areas:
+ algorithms, animators, queues, and shell.
+ Each will be represented as a package in Java.
  The following sections contain a brief description of each package, the
  classes within, and their interactions.
 \layout Subsection
 
 Algorithms
+\layout Standard
+
+
+\begin_inset Float figure
+placement p
+wide false
+collapsed false
+
+\layout Caption
+
+Class diagram for package 
+\family typewriter 
+Algorithm
+\layout Standard
+
+
+\begin_inset Graphics
+	filename PackageAlgorithm.ps
+	scale 50
+	BoundingBox 70bp 350bp 480bp 720bp
+	clip
+
+\end_inset 
+
+
+\end_inset 
+
+
 \layout Standard
 
 The classes within this package will ultimately implement the algorithms
@@ -349,6 +377,36 @@ SortAlgorithm
 \layout Subsection
 
 Animators
+\layout Standard
+
+
+\begin_inset Float figure
+wide false
+collapsed false
+
+\layout Caption
+
+Class diagram for packages 
+\family typewriter 
+Animator
+\family default 
+ and 
+\family typewriter 
+Queue
+\layout Standard
+
+
+\begin_inset Graphics
+	filename PackageAnimatorAndQueue.ps
+	scale 50
+	clip
+
+\end_inset 
+
+
+\end_inset 
+
+
 \layout Standard
 
 This package contains a set of abstract classes descended from 
@@ -522,6 +580,36 @@ AnimatorQueue
 \layout Subsection
 
 Shell
+\layout Standard
+
+
+\begin_inset Float figure
+wide false
+collapsed false
+
+\layout Caption
+
+Class diagram for package 
+\family typewriter 
+Shell
+\family default 
+ 
+\emph on 
+(currently incomplete)
+\layout Standard
+
+
+\begin_inset Graphics
+	filename PackageShell_incomplete.ps
+	scale 50
+	clip
+
+\end_inset 
+
+
+\end_inset 
+
+
 \layout Standard
 
 The shell package implements the interface that is visible to the user.
@@ -738,7 +826,7 @@ Division of project tasks
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0">
+<column alignment="right" valignment="top" leftline="true" width="0(null)">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
