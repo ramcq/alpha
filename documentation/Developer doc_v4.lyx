@@ -42,13 +42,13 @@ on but that would require more effort since it would involve changing all
  In addition, the need to extend the API would make the project less flexible.
  Below we concentrate on the procedure that needs to be used to add new
  algorithms (e.g.
- Shell Sort, Bubble Sort, Prims algorithm etc) and ways to implement them.
+ Shell Sort, Bubble Sort, Prim's algorithm etc) and ways to implement them.
  In order to make the procedure clearer to the user we will demonstrate
  it by means of two examples, the first one extending the project to include
  the bubble sort algorithm.
- (that is VectorAlgorithm).
+ (that is a VectorAlgorithm).
  The second example would involve a graph algorithm such as Prim's (for
- finding the minimum spanning tree).
+ finding the minimum spanning tree of a graph).
  After that it should be clear how the procedure could be applied to other
  vector and graph algorithms besides Bubble sort and Prim's algorithm.
 \layout Section
@@ -86,7 +86,13 @@ The Bubble Sort class must descend from the abstract class VectorAlgorithm
  of the algorithm and also to execute the algorithm.
  This is done so that the algorithms constructor will have a vector animator
  that will handle the generated animation primitives.
- For example,
+ For
+\series default 
+\size default 
+ 
+\series medium 
+\size normal 
+example,
 \series default 
 \size default 
  see Figure\SpecialChar ~
@@ -255,10 +261,7 @@ anim.setSteps(steps);
 
 \family typewriter 
 sort();
-\layout Standard
-
-
-\family typewriter 
+\newline 
 } // the main method that will cause execution of the algorithm
 \layout Caption
 
@@ -309,6 +312,12 @@ The import statement as shown in the sample code is very important and essential
 \size normal 
 The final step would involve adding the algorithm inside the catalog where
  all the existing algorithms are listed.
+
+\series default 
+\size default 
+ The purpose of the catalog is to provide a layer of abstraction between
+ the shell and the algorithms.
+ The Catalog class can be found inside the Shell package.
 \layout Section
 
 GraphAlgorithm Extension
@@ -321,8 +330,13 @@ In this section we will try to give a detailed step by step procedure on
  how the project can be extended with more Graph algorithms.
  The description will involve the implementation of Prim's algorithm as
  a running example.
- We will again assume thatthe user is familiar with Prim's and he is ready
- to implement the algorithm.
+ We will again assume that
+\series default 
+\size default 
+ 
+\series medium 
+\size normal 
+the user is familiar with Prim's and he is ready to implement the algorithm.
 \layout Enumerate
 
 
@@ -330,12 +344,29 @@ In this section we will try to give a detailed step by step procedure on
 \size normal 
 The first step involves adding the class into the Algorithms package.
  The reason is that the Algorithm package holds all the classes that implement
- the projects algorithms.
- So the only thing needed at this stage is for the user to define the Prims
- algorithm class with all those operations that the algorithm performs in
- order to find the minimum spanning tree.
- Arrays could be used in the implementation of Prims as well as the Java
- Vector package for implementing the graph edges and nodes.
+ the project
+\series default 
+\size default 
+'
+\series medium 
+\size normal 
+s algorithms.
+ So the only thing needed at this stage is for the user to define the Prim
+\series default 
+\size default 
+'
+\series medium 
+\size normal 
+s algorithm class with all those operations that the algorithm performs
+ in order to find the minimum spanning tree.
+ Arrays could be used in the implementation of Prim
+\series default 
+\size default 
+'
+\series medium 
+\size normal 
+s as well as the Java Vector package for implementing the graph edges and
+ nodes.
 \series default 
 \size default 
 
@@ -346,13 +377,25 @@ The first step involves adding the class into the Algorithms package.
 
 \series medium 
 \size normal 
-The Prims implementation must descend from the abstract class GraphAlgorithm
- inside the Algorithms package (similarly to the already implemented Kruskal
- and Dijkstra algorithms).
+The Prim
+\series default 
+\size default 
+'
+\series medium 
+\size normal 
+s implementation must descend from the abstract class GraphAlgorithm inside
+ the Algorithms package (similarly to the already implemented Kruskal and
+ Dijkstra algorithms).
  The GraphAlgorithm extends the abstract class Algorithm whose methods have
  already been discussed.
  This is again done so that the algorithms constructor will have a vector
- animator that willhandle all the animation primitives.
+ animator that will
+\series default 
+\size default 
+ 
+\series medium 
+\size normal 
+handle all the animation primitives.
  
 \series default 
 \size default 
@@ -434,7 +477,7 @@ int[][] result;
 
 
 \family typewriter 
-public void prim(){
+public void Prim(){
 \layout Standard
 
 
@@ -466,7 +509,7 @@ public void prim(){
 
 
 \family typewriter 
-public Kruskal(GraphAnimator ga, int[][] costs) {
+public Prim(GraphAnimator ga, int[][] costs) {
 \layout Standard
 
 
@@ -518,7 +561,7 @@ public static String getName() {
 
 
 \family typewriter 
-return "Prims algorithm";
+return "Prim's algorithm";
 \layout Standard
 
 
@@ -552,7 +595,7 @@ public void execute() {
 
 
 \family typewriter 
-String[] steps = { Prims operation, Swapping, Prims operarion, etc };
+String[] steps = { Prim's operation, Swapping, Prims operarion, etc };
 \layout Standard
 
 
@@ -585,8 +628,25 @@ Graph algorithm extension
 \series medium 
 \size normal 
 This step involves the breaking of the algorithm into steps (inside the
- Prims method) so that the user is abke to stepboth forwards and backwards
- during the animation.
+ Prim
+\series default 
+\size default 
+'
+\series medium 
+\size normal 
+s method) so that the user is ab
+\series default 
+\size default 
+l
+\series medium 
+\size normal 
+e to step
+\series default 
+\size default 
+ 
+\series medium 
+\size normal 
+both forwards and backwards during the animation.
  This again requires calling methods on the GraphAnimator at each step so
  that the animation will be synchronized with each logical step of the algorithm.
  These methods animate the particular step.
@@ -626,5 +686,14 @@ The import statement is again important.
 
 \series medium 
 \size normal 
-The final step is to add the algorithm inside the catalog.
+The final step is to add the algorithm 
+\series default 
+\size default 
+(i.e the algorithm class) 
+\series medium 
+\size normal 
+inside the catalog
+\series default 
+\size default 
+ class which as already mentioned is inside the Shell pckage.
 \the_end
