@@ -1,0 +1,163 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms
+\newline 
+Personal report
+\layout Author
+
+Andrew Medworth (
+\family typewriter 
+am502@cam.ac.uk
+\family default 
+)
+\layout Section*
+
+Introduction
+\layout Standard
+
+This is my personal report summarizing my individual contribution to the
+ IB Group Project, 
+\begin_inset Quotes eld
+\end_inset 
+
+Animating Algorithms
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ It also contains a brief summary of the contributions of the other group
+ members, as I see them.
+\layout Section*
+
+My personal contribution to the project
+\layout Standard
+
+My primary responsibility for this project was to write the vector animator:
+ the class which actually performs graphical animations of vector algorithms.
+ This class must, when animation primitive methods are called on it or its
+ inner classes, perform the appropriate animations on screen and then return
+ control to the caller.
+ I have documented this class in the component description document and
+ in 
+\family typewriter 
+javadoc
+\family default 
+: for the purposes of this document, it suffices to say that class runs
+ to over 2000 lines of Java source code, all but a handful of which were
+ written by me.
+ While I am not completely happy with this class, and might take a slightly
+ different approach if starting from scratch (see the component description
+ for an elaboration), I am delighted with what I have managed to achieve
+ overall.
+ Unfortunately, this was done only by spending considerably more than the
+ suggested time, although even in hindsight it is difficult to see how this
+ could have been avoided, as it would have been very difficult for more
+ than one person to collaborate on this one class.
+\layout Standard
+
+I also took the lead in writing the original specification document for
+ the project: I estimate that about half of its almost 4000 words were written
+ by me, and the other half by Rob McQueen, although the other members of
+ the group had a considerable input into the system architecture and design.
+\layout Standard
+
+Other, more minor responsibilities have included filling in as manager for
+ Graham for periods of a few hours while he was not present and acting as
+ group secretary.
+\layout Section*
+
+Summary of the contributions of others
+\layout Subsection*
+
+Rob McQueen
+\layout Standard
+
+Rob's contribution has been absolutely vital.
+ As the most experienced programmer in the group, he played a key role in
+ forming the overall architecture of the project, as well as writing all
+ the queue classes and the shell (the GUI).
+ His help and advice were invaluable, particularly to the other programmers.
+\layout Subsection*
+
+Sidath Senanayake
+\layout Standard
+
+Sid did some excellent work in implementing all the algorithms, providing
+ feedback to me and Steve about how our animators should be behaving, submitting
+ many bug reports (and fixing some himself).
+ He also did a test GUI early in the project.
+ He worked with Neofytos on the algorithm API documentation.
+\layout Subsection*
+
+Steve Cooper
+\layout Standard
+
+Steve wrote the graph animator (the equivalent of my class but for graphs).
+ While he has done well with a difficult task, there were certain disagreements
+ between Steve and the other programmers on a few visualisation issues.
+\layout Subsection*
+
+Graham Le Page
+\layout Standard
+
+Graham was our manager.
+ He did this job very conscientiously, as evidenced by the fact that we
+ have met all the deadlines, and the general success of the project.
+ He also wrote the user manual for the system, as well as playing a role
+ throughout the design and implementation process.
+ He has always been careful to communicate with the other group members
+ in order to maintain an overall picture of the project's progress.
+\layout Subsection*
+
+Neofytos Mylona
+\layout Standard
+
+Neofytos wrote the documentation for the algorithm API, and was involved
+ in the early GUI tests.
+ He was always cheerful and enthusiastic, and worked well with Sid on the
+ documentation.
+ He knew little about TeX at the start of the project, but picked it up
+ very quickly.
+\layout Subsection*
+
+Alan Treanor
+\layout Standard
+
+Alan was responsible for testing my vector animator class.
+ He sent me an excellent bug report, which showed evidence of having done
+ some very exhaustive testing and enabled several obscure bugs to be fixed.
+ He also fixed a few bugs himself.
+\layout Subsection*
+
+Richard Lee
+\layout Standard
+
+I did not work with Richard very much, as he was responsible for testing
+ the graph animator and the algorithms.
+ However, he has reportedly done a good job of this.
+\the_end
