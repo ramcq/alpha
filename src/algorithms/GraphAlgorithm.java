@@ -1,2 +1,2 @@
-public abstract class GraphAnimator extends Animator {
+public abstract class GraphAlgorithm extends Algorithm {
 }

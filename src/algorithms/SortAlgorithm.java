@@ -1,2 +1,2 @@
-public abstract class SortAnimator extends Animator {
+public abstract class SortAlgorithm extends Algorithm {
 }
