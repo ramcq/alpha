@@ -56,6 +56,77 @@ To start the program....
 
 Animating an algorithm {make this easier to read, pictures, screenshots,
  bullet points ?}
+\layout Itemize
+
+When the program starts, you will see this Main Menu:
+\layout Itemize
+
+{Have a screenshot of the Main Menu (Hopefully!)}
+\layout Itemize
+
+On it there is a drop-down box which lists the algorithms which are available
+ for animation.
+ Clicking on one will give a brief description of it, and clicking the 'Next'
+ button at the bottom of the screen will select it, and move to the Input
+ Data Menu, as shown here:
+\layout Itemize
+
+{Have a screenshot of the Input Data Menu (Hopefully!)}
+\layout Itemize
+
+This screen allows you to input some initial data for the algorithm that
+ you have chosen.
+ The type of data you can input depends on the algorithm you are using,
+ as sorting based algorithms use different data to graph based algorithms.
+ The sorting based algorithm input menu looks like this:
+\layout Itemize
+
+{Have a screenshot of the sort input screen (Hopefully!)}
+\layout Itemize
+
+Whereas the graph based input menu looks like this:
+\layout Itemize
+
+{Have a screenshot of the graph input screen (Hopefully!)}
+\layout Itemize
+
+To input data in either of these, click on an empty text box with the mouse
+ and write data in with the keyboard.
+ There is also an option to generate random data, to do this simply click
+ on the 'Random' button.
+ This will automatically fill all of the boxes.
+\layout Itemize
+
+When you are happy with the data being used, you have to select how you
+ want the animation to proceed.
+ To make the animation continue to the end without stopping, click on the
+ 'Automatic Slide Show' button, if however you want the animation to proceed
+ at your own pace press the 'Manual' button.
+ This will go through the algorithm one step at a time and only move on
+ to the next step when you tell it to.
+\layout Itemize
+
+Whichever animation method you choose, the animation screen will appear
+ the same.
+ For sorting based algorithms, the animation screen looks like this:
+\layout Itemize
+
+{Have a screenshot of the graph input screen (Hopefully!)}
+\layout Itemize
+
+For graph based algorithms, the animation screen looks like this:
+\layout Itemize
+
+{Have a screenshot of the graph input screen (Hopefully!)}
+\layout Itemize
+
+If using the 'Manual' method, the 'Next' and 'Previous' buttons allow you
+ to step forwards and backwards through the algorithm, allowing you to view
+ certain steps again in order to aid your understanding of the algorithm.
+\layout Itemize
+
+To exit and return to the Main Menu before the animation has finished, click
+ the 'Exit' button.
 \layout Standard
 \noindent 
 At the main menu, there is a drop-down box which lists the algorithms available

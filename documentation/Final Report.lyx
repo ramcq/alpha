@@ -1,0 +1,179 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms: Final Report
+\layout Author
+
+Steven Cooper (
+\family typewriter 
+sjc209
+\family default 
+), Graham Le Page (
+\family typewriter 
+gpl26
+\family default 
+),
+\newline 
+Zhan Li (
+\family typewriter 
+zrll2
+\family default 
+), Robert McQueen (
+\family typewriter 
+ram48
+\family default 
+),
+\newline 
+Andrew Medworth (
+\family typewriter 
+am502
+\family default 
+), Neofytos Mylona (
+\family typewriter 
+nm314
+\family default 
+),
+\newline 
+Sidath Senanayake (
+\family typewriter 
+sas58
+\family default 
+), Alan Treanor (
+\family typewriter 
+ajit2
+\family default 
+)
+\layout Standard
+
+[Also need:
+\layout Itemize
+
+User Guide
+\layout Itemize
+
+Developers Guide
+\layout Itemize
+
+Finished project logs (Description of modules/testing etc)
+\layout Standard
+
+]
+\newline 
+
+\layout Section
+
+Introduction
+\layout Standard
+
+This is the final report document for the "Animating Algorithms" (Topic
+ 8.5) Computer Science Tripos Part IB / Part II (General) group project.The
+ authors are the members of group "Alpha", listed individually above.
+ This project is being overseen by Steven Hand (
+\family typewriter 
+\series bold 
+smh22@cam.ac.uk
+\family default 
+\series default 
+).
+\layout Section
+
+General project overview
+\layout Standard
+
+Successes/failures
+\layout Standard
+
+Lessons learned
+\layout Section
+
+Summary of work undertaken
+\layout Subsection
+
+Graham
+\layout Standard
+
+what a guy
+\layout Subsection
+
+Steven
+\layout Subsection
+
+Richard
+\layout Subsection
+
+Rob
+\layout Subsection
+
+Andrew
+\layout Subsection
+
+Neofytos
+\layout Subsection
+
+Sid
+\layout Subsection
+
+Alan
+\layout Section
+
+Random final report stuff
+\layout Standard
+
+The final task is to piece the whole system together, test it and ensure
+ that it is adequately documented.
+ The user manual should be written throughout the project, as the design
+ emerges, but will need to be polished at the end of the project.
+\layout Standard
+
+The project manager must submit a final report at the final group meeting,
+ which should describe the project's successes and failures, elaborate on
+ any lessons learned, and include a summary of the work undertaken by different
+ team members in completing the system.
+ It is perfectly reasonable for an individual member not to have written
+ any code but to have worked specically as a librarian or on documentation
+ or testing as long as this was agreed with the other group members and
+ is reported in the delivery document.
+\newline 
+
+\newline 
+
+\layout Standard
+
+4.4 Personal report
+\layout Standard
+
+Each group member must also submit a brief personal report for the final
+ review meeting giving details of their individual contribution to the project.
+ This should include a representative part of their contribution which might
+ be program code or documentation, project management logs or minutes of
+ meetings as appropriate.
+ It should also give a summary assessment of the contributions made by the
+ other members of the group.
+ The group and the personal reports will be retained by the overseer and
+ forwarded directly to the examiners.
+\the_end
