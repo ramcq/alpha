@@ -476,6 +476,11 @@ VectorAnimator
 \layout Subsection
 
 Queues
+\begin_inset LatexCommand \label{sub:Queues-Description}
+
+\end_inset 
+
+
 \layout Standard
 
 The class hierarchy for this package can also be seen in Figure\SpecialChar ~
@@ -920,6 +925,13 @@ void showMessage(String)
 
 
 \family typewriter 
+void pause()
+\family default 
+ --- freeze animation
+\layout Itemize
+
+
+\family typewriter 
 Checkpoint saveState()
 \family default 
  --- save the state of the animator so this stage of the algorithm can be
@@ -1045,18 +1057,63 @@ Queues
 \layout Subsubsection*
 
 Purpose
+\layout Standard
+
+The basic purpose of these classes was described in Section\SpecialChar ~
+
+\begin_inset LatexCommand \ref{sub:Queues-Description}
+
+\end_inset 
+
+.
+ In a nutshell, they store animation events as they are created by the algorithm
+, and pass them to the animator class for actual animation when the user
+ requests this.
+ They also store the algorithm state at checkpoints in order to facilitate
+ forward and backward navigation.
 \layout Subsubsection*
 
 Inputs
+\layout Standard
+
+Animation events from the algorithm, user input from the shell (e.g.
+ forward and back instructions).
 \layout Subsubsection*
 
 Outputs
+\layout Standard
+
+Animation events to the actual animator for display.
 \layout Subsubsection*
 
 Public methods
+\layout Itemize
+
+
+\family typewriter 
+void nextCheckpoint()
+\layout Itemize
+
+
+\family typewriter 
+void previousCheckpoint()
+\layout Itemize
+
+
+\family typewriter 
+void enqueueEvent(Event)
 \layout Subsubsection*
 
 Testing
+\layout Standard
+
+This will be done by creating a 
+\family typewriter 
+toString()
+\family default 
+ method which outputs the current state of the queue in full, and creating
+ test classes which pass input events and requests to the queue, printing
+ out the internal state at each stage to ensure consistent behaviour.
 \layout Subsection
 
 Shell
