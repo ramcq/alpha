@@ -13,25 +13,20 @@ import org.ucam.ned.teamalpha.algorithms.InsertionSort;
 import org.ucam.ned.teamalpha.shell.ShellVectorAnimator;
 
 /**
- * @author zrll2
+ * @author Sid
  *
  * Testing Sid's InsertionSort class 
  */
 public class InsertionSortTest {
 	
-	static int[] data = {14,23,456,56,123,12,12,0,3};
+	static int[] data = {12,34, 1,1494,23,456,45,-12};
 	
 	public static void main(String[] args) {	
-		JFrame frame = new JFrame("ShellVectorAnimator test");
+		JFrame frame = new JFrame("InsertionSort test");
 		frame.setSize(500,500);
 		frame.setVisible(true);
 		
-		JPanel panel = new JPanel(true); // lightweight container
-		panel.setSize(500,500);
-		frame.getContentPane().add(panel);
-		panel.setVisible(true);
-		
-		ShellVectorAnimator app = new ShellVectorAnimator(frame);
+		ShellVectorAnimator app = new ShellVectorAnimator(frame.getContentPane());
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
