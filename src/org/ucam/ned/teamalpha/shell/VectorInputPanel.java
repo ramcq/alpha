@@ -6,6 +6,8 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
+import org.ucam.ned.teamalpha.algorithms.Algorithm;
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -59,7 +61,6 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		
 		cells.revalidate();
 		cells.repaint();
-		shell.pack();
 	}	
 
 	private void updateValues() {
@@ -68,6 +69,17 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		for (int i = 0; i < num.intValue(); i++) {
 			fields[i].setValue(new Integer(values[i]));
 		}
+	}
+	
+	private int[] getValues() {
+		Integer num = (Integer) elements.getSelectedItem();
+		int[] ret = new int[num.intValue()];
+		
+		for (int i = 0; i < num.intValue(); i++) {
+			ret[i] = values[i];
+		}
+		
+		return ret;
 	}
 	
 	/**
@@ -166,7 +178,15 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 			
 			updateValues();
 		} else if (command.equals("Next")) {
+			Object[] args = { getValues() };
+			Algorithm algo = choice.getAlgorithm(args);
 			
+			shell.setAlgorithm(algo);
+			try {
+				shell.setMode(Shell.MODE_ANIMATE);
+			} catch (Exception ex) {
+				System.err.println(ex);
+			}
 		}
 	}
 }

@@ -6,10 +6,12 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import javax.swing.JPanel;
 
+import org.ucam.ned.teamalpha.algorithms.Algorithm;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.queues.AnimatorQueue;
@@ -50,6 +52,25 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 			default:
 				return null;
 			}
+		}
+
+		public Algorithm getAlgorithm(Object[] args) {
+			Algorithm ret = null;
+			
+			try {
+				Class[] argtypes = new Class[args.length];
+				
+				for (int i=0; i < args.length; i++) {
+					argtypes[i] = args[i].getClass();
+				}
+				
+				Constructor cons = klass.getConstructor(argtypes);
+				ret = (Algorithm) cons.newInstance(args);
+			} catch (Exception e) {
+				System.err.println("failed to construct algorithm: "+ e);
+			}
+			
+			return ret;
 		}
 
 		public ShellAnimator getAnimator(JPanel panel) {
