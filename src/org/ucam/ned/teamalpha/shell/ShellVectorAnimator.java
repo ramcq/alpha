@@ -282,18 +282,30 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	public class State extends Animator.State {
 		private byte[] vectors;
 		private byte[] arrows;
+		private int numOfVectors;
+		private int numOfArrows;
 				
-		State(byte[] vectors, byte[] arrows) {
+		State(byte[] vectors, int numv, byte[] arrows, int numa) {
 			this.vectors = vectors;
+			this.numOfVectors = numv;
 			this.arrows = arrows;
+			this.numOfArrows = numa;
 		}
 		
 		public byte[] getVectors() {
 			return vectors;
 		}
 		
+		public int getNumOfVectors() {
+			return numOfVectors;
+		}
+		
 		public byte[] getArrows() {
 			return arrows;
+		}
+		
+		public int getNumOfArrows() {
+			return numOfArrows;
 		}
 	}
 	
@@ -481,7 +493,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		
 		// Clear working area	
 		big.setColor(bgcolour);
-		big.fillRect(0,0,500,500);
+		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
 		big.setColor(fgcolour);
 		/*drawVectorSkeleton(v, big);
 		drawVectorContents(v, big);
@@ -878,7 +890,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	public void showMessage(String msg) {
 	}
 
-	public Animator.State saveState() throws IOException {
+	public synchronized Animator.State saveState() throws IOException {
 		// Open output streams for serialization
 		ByteArrayOutputStream vbaos = new ByteArrayOutputStream();
 		ObjectOutputStream voos = new ObjectOutputStream(vbaos);
@@ -895,43 +907,67 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			if (arrows[i] != null) aoos.writeObject(arrows[i]);
 		}
 				
-		// Get a byte array
+		// Get byte arrays
 		byte[] vects = vbaos.toByteArray();
 		byte[] arrs = abaos.toByteArray();
 		voos.close();
 		aoos.close();
 		
 		// Make the state object and return it
-		State res = new State(vects, arrs);
+		State res = new State(vects, vectors.length, arrs, arrows.length);
 		return res;
 	}
 	
-	public void restoreState(Animator.State s) throws IOException {
+	public synchronized void restoreState(Animator.State s) throws IOException {
+		// Clear vectors, arrows arrays
+		for (int i=0; i<vectors.length; i++) vectors[i] = null;
+		for (int i=0; i<arrows.length; i++) arrows[i] = null;
+		
 		State state = (State) s;
-		byte[] vectors = state.getVectors();
-		ByteArrayInputStream vbais = new ByteArrayInputStream(vectors);
+		byte[] vects = state.getVectors();
+		ByteArrayInputStream vbais = new ByteArrayInputStream(vects);
 		// Open input stream for deserialization
 		ObjectInputStream vois = new ObjectInputStream(vbais);
-		while (true) {
+		for (int i=0; i<state.getNumOfVectors(); i++) {
 			try {
-				Vector v = (Vector) vois.readObject();
-				// Do the appropriate thing with the vector
+				vectors[i] = (Vector) vois.readObject();
 			}
-			catch (Exception e) {
-				// Handle end of stream
-				break;
+			catch (ClassNotFoundException e) {
+				System.out.println(e);
 			}
 		}
-		// Do the same for arrows
+		vois.close();
+
+		byte[] arrs = state.getArrows();
+		ByteArrayInputStream abais = new ByteArrayInputStream(arrs);
+		// Open input stream for deserialization
+		ObjectInputStream aois = new ObjectInputStream(abais);
+		for (int i=0; i<state.getNumOfArrows(); i++) {
+			try {
+				arrows[i] = (Arrow) aois.readObject();
+			}
+			catch (ClassNotFoundException e) {
+				System.out.println(e);
+			}
+		}
+		aois.close();
+		
+		// Clear the whole canvas
+		big.setColor(fgcolour);
+		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+		
+		redrawAllVectors(big);
+		redrawAllArrows(big, true, null);
+		redrawAllArrows(big, false, null);
 	}
 	
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellVectorAnimator test");
-		frame.setSize(500,500);
+		frame.setSize(700,700);
 		frame.setVisible(true);
 		
 		JPanel panel = new JPanel(true); // lightweight container
-		panel.setSize(500,500);
+		panel.setSize(700,700);
 		frame.getContentPane().add(panel);
 		panel.setVisible(true);
 		
