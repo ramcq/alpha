@@ -126,7 +126,25 @@
  	 * @param n
  	 * 	The node to add
  	 */
- 	private void addToUnFinished(Node n) {
+	private void addToUnFinished(Node n) {
+		Node c;
+		
+		for (int i = 0; i<unFinished.size(); i++) {
+			c = (Node)unFinished.elementAt(i);
+			
+			if (c.index == n.index) return;
+			
+			if (getShortestDist(c) > getShortestDist(n)) {
+				// Add the element
+				unFinished.insertElementAt(n, i);
+				return;
+			}
+		}
+		// Just add
+		unFinished.add(n);
+		return;
+	}
+/* 	private void addToUnFinished(Node n) {
  		for (int i = 0; i<unFinished.size(); i++) {
  			if (((Node)unFinished.elementAt(i)).index > n.index) {
  				// Add the element
@@ -141,7 +159,7 @@
  		// Just add
  		unFinished.add(n);
  		return;
- 	}
+ 	}*/
  	
  	/**
  	 * Creates the data for the algorithm
@@ -223,17 +241,17 @@
  	}
  	
  	public static void main(String[] args) {
- 		/*		int[][] c = {{ 0,  0,  0,  0},
+/* 				int[][] c = {{ 0,  0,  0,  0},
  		 { 4,  0,  1,  0},
  		 { 2,  3,  0,  0},
- 		 { 0,  1,  5,  0}};
+ 		 { 0,  1,  5,  0}};*/
  		 
- 		 int[][] c = {{ 0,  0, 13,  0, 16,  8},
- 		 { 0,  0,  0,  6,  0, 10},
- 		 {13,  0,  0, 14,  0, 11},
- 		 { 0,  6, 14,  0,  5, 17},
- 		 {16,  0,  0,  5,  0,  7},
- 		 { 8, 10, 11, 17,  7,  0}};*/
+/* 		 int[][] c = {{ 0,  0, 13,  0, 16,  8},
+			 		  { 0,  0,  0,  6,  0, 10},
+			 	      {13,  0,  0, 14,  0, 11},
+			 		  { 0,  6, 14,  0,  5, 17},
+			 		  {16,  0,  0,  5,  0,  7},
+			 		  { 8, 10, 11, 17,  7,  0}};*/
  		
  		int[][] c = {{0,	33,	10,	56,	0,	0,	0,	0,	0,	0},
  				{33,	0,	0,	13,	21,	0,	0,	0,	0,	0},

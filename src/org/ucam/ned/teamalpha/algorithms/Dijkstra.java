@@ -38,6 +38,7 @@ public class Dijkstra extends GraphAlgorithm {
 	//Edges
 	static final int EDGEDEFAULT = 0;
 	static final int INCLUDEDEDGE = 1;
+	static final int EXCLUDEDEDGE = 2;
 	
 	
 	GraphAnimator anim;
@@ -179,14 +180,16 @@ public class Dijkstra extends GraphAlgorithm {
 	 * 	The node to add
 	 */
 	private void addToUnFinished(Node n) {
+		Node c;
+		
 		for (int i = 0; i<unFinished.size(); i++) {
-			if (((Node)unFinished.elementAt(i)).index > n.index) {
+			c = (Node)unFinished.elementAt(i);
+			
+			if (c.index == n.index) return;
+			
+			if (getShortestDist(c) > getShortestDist(n)) {
 				// Add the element
 				unFinished.insertElementAt(n, i);
-				return;
-			}
-			else if (((Node)unFinished.elementAt(i)).index == n.index) {
-				// Duplicate, so return
 				return;
 			}
 		}
@@ -246,6 +249,12 @@ public class Dijkstra extends GraphAlgorithm {
 			
 			if (getShortestDist(m) > getShortestDist(n)+ map.getDist(n, m)) {
 				// assign new shortest distance and mark unFinished
+				// ANIM: Get rid of old edge if there is one
+				try {
+					anim.setEdgeShade(getPredecessor(m).index, m.index, EXCLUDEDEDGE);
+				} catch (NullPointerException e) {
+					// There is no predecessor yet.
+				}
 				
 				setShortestDist(m, getShortestDist(n) + map.getDist(n, m));
 				// ANIM: Set the new node cost
@@ -257,8 +266,9 @@ public class Dijkstra extends GraphAlgorithm {
 				
 				// assign predecessor in shortest path
 				setPredecessor(m, n);
-				// ANIM: Unhighlight node and then add an edge here
+				// ANIM: Unhighlight node
 				anim.setEdgeHighlight(n.index, m.index, false);
+				// ANIM: and then add an edge here
 				anim.setEdgeShade(n.index, m.index, INCLUDEDEDGE);
 			}
 			
