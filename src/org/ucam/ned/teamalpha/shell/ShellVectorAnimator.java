@@ -338,6 +338,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				Vector.this.colour = this.colour;
 				Vector.this.label = this.label;
 				Vector.this.contents = this.contents;
+				vectors.add(Vector.this);
 			}
 		}
 	}
@@ -359,7 +360,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 		
 		Arrow(Vector v, int position, boolean boundary) {
-			numberOfArrows++;
 			this.vector = v;
 			this.position = position;
 			this.boundary = boundary;
@@ -484,6 +484,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				Arrow.this.left = this.left;
 				Arrow.this.visible = this.visible;
 				Arrow.this.deleted = this.deleted;
+				arrows.add(Arrow.this);
 			}
 		}
 	}
@@ -669,7 +670,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private static final int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
 	private int highestColUsed = -1; // stores the highest column which has a vector in it
-	private int numberOfArrows = -1; // stores the number of Arrows known to the animator (minus one)
 	
 	private Component outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
@@ -1195,19 +1195,23 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		vectors.clear();
 		arrows.clear();
 		for (int i=0; i<vs.length; i++) {
-			vectors.addLast(vs[i]);
+			vs[i].restore();
 		}
 		for (int i=0; i<as.length; i++) {
-			arrows.addLast(as[i]);
+			as[i].restore();
 		}
 		
 		// Clear the whole canvas
 		big.setColor(bgcolour);
 		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
-		
+
+		// redraw all vectors
 		redrawAllVectors(big);
 		redrawAllArrows(big, true, null);
 		redrawAllArrows(big, false, null);
+		
+		// draw buffered image out
+		outg.drawImage(bi,0,0,outc);
 	}
 	
 	public static void main(String[] args) {
@@ -1243,9 +1247,19 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		a2.move(6, true);
 		int[] t2 = {34,72,76667,257,878,99112,6,17};
 		VectorAnimator.Vector v2 = app.createVector("V2", t2);
+		Animator.State s = app.saveState();
 		v2.swapElements(7,2);
 		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
 		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
+		a3.highlight();
+		a3.move(8, true);
+		v2.highlightElement(4);
+		v.delete();
+		a3.delete();
+		app.restoreState(s);
+		v2.swapElements(7,2);
+		a3 = v2.createArrow("A3", 6, true);
+		a4 = v2.createArrow("A4", 2, false);
 		a3.highlight();
 		a3.move(8, true);
 		v2.highlightElement(4);
