@@ -58,7 +58,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 			
 			JFormattedTextField field = new JFormattedTextField(NumberFormat.getIntegerInstance());
 			field.setValue(new Integer(values[k]));
-			field.setColumns(6);
+			field.setColumns(4);
 			field.setHorizontalAlignment(JTextField.CENTER);
 			field.addPropertyChangeListener("value", this);
 			
@@ -209,14 +209,14 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 			int t;
 			
 			for (int i = 0; i < 64; i++) {
-				t = r.nextInt(125);	
+				t = r.nextInt(100);	
 				values[i] = (t<49)?t:0;
 			}
 			
 			updateValues();
 			
 			// DEBUG
-			print(getValues(), 8);
+			print(getValues(), 5);
 			
 			
 		} else if (command.equals("Clear")) {
