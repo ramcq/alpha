@@ -53,14 +53,15 @@ on but that would require more effort since it would involve changing all
 
 Below we concentrate on the procedure that needs to be followed to add new
  algorithms (e.g.
- Shell Sort, Bubble Sort, Prim's algorithm etc) and ways to implement them.
+ ShellSort, RadixSort, Depth-first search algorithm etc) and ways to implement
+ them.
  In order to make the procedure clearer to the user we will demonstrate
  it by means of two examples, the first one extending the project to include
- the Bubble sort algorithm (that is a VectorAlgorithm).
- The second example would involve a graph algorithm such as Prim's (for
- finding the minimum spanning tree of a graph).
+ the ShellSort algorithm (that is a VectorAlgorithm).
+ The second example would involve a graph algorithm such as depth-first
+ search (for traversing all the vertices of the graph).
  After that it should be clear how the procedure could be applied to other
- vector and graph algorithms besides Bubble sort and Prim's algorithm.
+ vector and graph algorithms besides ShellSort and depth-first.
 \layout Section
 
 VectorAlgorithm Extension
@@ -68,14 +69,30 @@ VectorAlgorithm Extension
 
 We will demonstrate step by step what needs to be done by the user to implement
  his own algorithm so that it is easier to follow.
- We will assume that the user is familiar with the algorithm Bubble Sort
- and he is at the point of being ready to implement it.
+ We will assume that the user is familiar with the algorithm ShellSort and
+ he is at the point of being ready to implement it.
+ A brief description of the algorithm is: It is an in-place sort algorithm
+ which repeatedly reorders different, small subsets of the input until the
+ entire array is ordered.
+ On each pass it sorts i sets of n/i items, where n is the total number
+ of items to sort.
+ Each set is every i-th item, e.g set 1 is item 1, 1+i, 1+2i, set 2 is item
+ 2, 2+i, etc.
+ Tupically each set is sorted with an insertionsort.
+ On each successing pass, the increment, i, is reduced until it is 1 for
+ the last pass.
 \layout Enumerate
 
 
 \series medium 
 \size normal 
-The idea here is to add the Bubble Sort class into the Algorithms package.
+The idea here is to add the 
+\series default 
+\size default 
+Shell
+\series medium 
+\size normal 
+Sort class into the Algorithms package.
  This is because the Algorithms package contains all th
 \series default 
 \size default 
@@ -98,10 +115,10 @@ the
  class
 \series default 
 \size default 
- 
+ Shell
 \series medium 
 \size normal 
-BubbleSort inside the package that would actually perform all those operations
+Sort inside the package that would actually perform all those operations
  as described by the algorithm.A data structure that could be used would
  be the array to hold the elements to be sorted and possibly extra arrays
  that would accumulate intermediate results before the sorting is completed.
@@ -110,9 +127,14 @@ BubbleSort inside the package that would actually perform all those operations
 
 \series medium 
 \size normal 
-The BubbleSort class must descend from the abstract class VectorAlgorithm
- inside the Algorithms package (similarly to the already implemented vector
- algorithms).
+The 
+\series default 
+\size default 
+Shell
+\series medium 
+\size normal 
+Sort class must descend from the abstract class VectorAlgorithm inside the
+ Algorithms package (similarly to the already implemented vector algorithms).
  The VectorAlgorithm descends from the abstract class Algorithm that contain
  methods for returning the name of the Algorithm, to return a description
  of the algorithm and also to execute the algorithm.
@@ -169,7 +191,7 @@ import animators.VectorAnimator;
 
 
 \family typewriter 
-public class BubbleSort extends VectorAlgorithm {
+public class ShellSort extends VectorAlgorithm {
 \newline 
 
 \layout Standard
@@ -230,7 +252,7 @@ public void sort(){
 
 
 \family typewriter 
-public BubbleSort(int[] values) { //constructor
+public ShellSort(int[] values) { //constructor
 \layout Standard
 
 
@@ -257,7 +279,7 @@ public static String getName() {
 
 
 \family typewriter 
-return "Bubble sort";
+return "Shell sort";
 \layout Standard
 
 
@@ -296,8 +318,8 @@ this.anim = (VectorAnimator) anim;
 
 
 \family typewriter 
-String[] steps = { BubbleSort operation, Swapping, BubbleSort operarion,
- etc };
+String[] steps = { ShellSort operation, Swapping, ShellSort operarion, etc
+ };
 \layout Standard
 
 
@@ -409,15 +431,32 @@ In this section we will try to give a detailed
 \size normal 
  step by step procedure on how the project can be extended with more Graph
  algorithms.
- The description will involve the implementation of Prim's algorithm as
- a running example.
+ The description will involve the implementation of 
+\series default 
+\size default 
+depth-first
+\series medium 
+\size normal 
+ algorithm as a running example.
  We will again assume that
 \series default 
 \size default 
  
 \series medium 
 \size normal 
-the user is familiar with Prim's and he is ready to implement the algorithm.
+the user is familiar with 
+\series default 
+\size default 
+DepthFirst
+\series medium 
+\size normal 
+ and he is ready to implement the algorithm.
+
+\series default 
+\size default 
+ A brief description of the algorithm is: It is an algorithm which marks
+ all vertexes in a directed graph in the order they are discovered and finished,
+ partitioning the graph into a forest.
 \layout Enumerate
 
 
@@ -432,21 +471,27 @@ The first step involves adding the class into the Algorithms package.
 \series medium 
 \size normal 
 s algorithms.
- So the only thing needed at this stage is for the user to define the Prim
+ So the only thing needed at this stage is for the user to define the 
 \series default 
 \size default 
-'
+DepthFirst
 \series medium 
 \size normal 
-s algorithm class with all those operations that the algorithm performs
- in order to find the minimum spanning tree.
- Arrays could be used in the implementation of Prim
+ algorithm class with all those operations that the algorithm performs in
+ order to 
 \series default 
 \size default 
-'
+reach all the vertices of the graph
 \series medium 
 \size normal 
-s as well as the Java Vector package for implementing the graph edges and
+.
+ Arrays could be used in the implementation of 
+\series default 
+\size default 
+the algorithm
+\series medium 
+\size normal 
+ as well as the Java Vector package for implementing the graph edges and
  nodes.
 \series default 
 \size default 
@@ -458,13 +503,13 @@ s as well as the Java Vector package for implementing the graph edges and
 
 \series medium 
 \size normal 
-The Prim
+The 
 \series default 
 \size default 
-'
+DepthFirst
 \series medium 
 \size normal 
-s implementation must descend from the abstract class GraphAlgorithm inside
+ implementation must descend from the abstract class GraphAlgorithm inside
  the Algorithms package (similarly to the already implemented Kruskal and
  Dijkstra algorithms).
  The GraphAlgorithm extends the abstract class Algorithm whose methods have
@@ -503,7 +548,7 @@ example
  needed for otherwise the compiler would give an error.
 \begin_inset Float figure
 wide false
-collapsed false
+collapsed true
 
 \layout Standard
 
@@ -521,7 +566,7 @@ import animators.GraphAnimatorAnimator;
 
 
 \family typewriter 
-public class Prim extends GraphAlgorithm {
+public class DepthFirst extends GraphAlgorithm {
 \newline 
 
 \layout Standard
@@ -529,11 +574,6 @@ public class Prim extends GraphAlgorithm {
 
 \family typewriter 
 GraphrAnimator anim;
-\layout Standard
-
-
-\family typewriter 
-private int [ ][ ] costs;
 \layout Standard
 
 
@@ -560,7 +600,7 @@ int[][] result;
 
 
 \family typewriter 
-public void Prim(){
+public void search(){
 \layout Standard
 
 
@@ -570,7 +610,7 @@ public void Prim(){
 
 
 \family typewriter 
-// all the arrays and manipulation of data
+// all the vectors and manipulation of data
 \layout Standard
 
 
@@ -592,22 +632,12 @@ public void Prim(){
 
 
 \family typewriter 
-public Prim(GraphAnimator ga, int[][] costs) {
+public DepthFirst(GraphAnimator ga) {
 \layout Standard
 
 
 \family typewriter 
-super(ga, costs);
-\layout Standard
-
-
-\family typewriter 
-this.costs = costs;
-\layout Standard
-
-
-\family typewriter 
-this.dim = costs.length;
+super(ga);
 \layout Standard
 
 
@@ -644,7 +674,7 @@ public static String getName() {
 
 
 \family typewriter 
-return "Prim's algorithm";
+return "DepthFirst algorithm";
 \layout Standard
 
 
@@ -678,7 +708,8 @@ public void execute() {
 
 
 \family typewriter 
-String[] steps = { Prim's operation, Swapping, Prims operarion, etc };
+String[] steps = { DepthFirst's operation, Swapping, DepthFirst's operarion,
+ etc };
 \layout Standard
 
 
@@ -688,7 +719,7 @@ anim.setSteps(steps);
 
 
 \family typewriter 
-sort();
+search();
 \layout Standard
 
 
@@ -711,13 +742,13 @@ Graph algorithm extension
 \series medium 
 \size normal 
 This step involves the breaking of the algorithm into steps (inside the
- Prim
+ 
 \series default 
 \size default 
-'
+search
 \series medium 
 \size normal 
-s method) so that the user is ab
+ method) so that the user is ab
 \series default 
 \size default 
 l
@@ -768,7 +799,13 @@ The import statement is again important.
  implementations require to restore their state.
  The GraphAnimator extends animator that defines all the methods available
  for a graph on the animation canvas.
- So it is important that this is included inside the Prims class.
+ So it is important that this is included inside the 
+\series default 
+\size default 
+DepthFirst
+\series medium 
+\size normal 
+ class.
 \layout Enumerate
 \pagebreak_bottom 
 
