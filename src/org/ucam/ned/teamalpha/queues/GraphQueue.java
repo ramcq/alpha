@@ -3,8 +3,8 @@ package org.ucam.ned.teamalpha.queues;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 
-public class GraphQueue extends GraphAnimator implements AnimatorQueue {
-	public class State extends Animator.State { };
+public class GraphQueue implements GraphAnimator, AnimatorQueue {
+	public class State implements Animator.State { };
 	
 	private GenericQueue q;
 	

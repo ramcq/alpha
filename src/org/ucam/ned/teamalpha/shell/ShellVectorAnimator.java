@@ -50,7 +50,7 @@ import org.ucam.ned.teamalpha.animators.InvalidLocationException;
  * 
  * @author am502 
  */
-public class ShellVectorAnimator extends VectorAnimator implements ActionListener, ShellAnimator {
+public class ShellVectorAnimator extends ShellAnimator implements ActionListener, VectorAnimator {
 	/**
 	 * This inner class of ShellVectorAnimator is designed to represent vectors
 	 * in a way which is convenient to ShellVectorAnimator. The queue calls primitives
@@ -65,9 +65,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * 
 	 * @author am502
 	 */
-	public class Vector extends VectorAnimator.Vector {
+	public class Vector implements VectorAnimator.Vector {
 		static final int width = 50; // width of vector in pixels
-		final int maxElementLength = String.valueOf(VectorAnimator.elementMax).length();
+		final int maxElementLength = String.valueOf(InputTooLongException.elementMax).length();
 		
 		private boolean visible = true;
 		private final int top = 50; // y coordinate of top of vector
@@ -89,7 +89,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	If more than 20 elements are specified, InputTooLongException will be thrown.
 		 */
 		Vector(int[] values) throws InputTooLongException, TooManyVectorsException {
-			VectorAnimator.vectorCheck(values); // check for invalid input
+			InputTooLongException.vectorCheck(values); // check for invalid input
 			this.size = values.length;
 			
 			// Work out where to place the vector
@@ -268,7 +268,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public void setElement(int elt, int value) throws ItemDeletedException, InvalidLocationException, InputTooLongException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			if (!isValidOffset(elt)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", elt is "+elt);
-			VectorAnimator.elementCheck(elt);
+			InputTooLongException.elementCheck(elt);
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_CHANGE, this, elt, value));
@@ -508,7 +508,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * 
 	 * @author am502
 	 */
-	public class Arrow extends VectorAnimator.Arrow {
+	public class Arrow implements VectorAnimator.Arrow {
 		private String label;
 		private int position; // offset in the array at which we are pointing
 		private boolean boundary; // are we pointing between two locations?
@@ -758,7 +758,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * 
 	 * @author am502
 	 */
-	public class State extends Animator.State {
+	public class State implements Animator.State {
 		private Vector.VectorState[] vectors;
 		private Arrow.ArrowState[] arrows;
 		private boolean[] colsOccupied;

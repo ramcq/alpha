@@ -15,9 +15,9 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class TestVectorAnimator extends VectorAnimator {
+public class TestVectorAnimator implements VectorAnimator {
 	
-	public class State extends Animator.State {
+	public class State implements Animator.State {
 		private int state;
 		
 		State(int state) {
@@ -108,7 +108,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		System.out.println("Restoring state" + state + "...");
 	}
 	
-	public class Vector extends VectorAnimator.Vector {
+	public class Vector implements VectorAnimator.Vector {
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
@@ -206,7 +206,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		}
 	}
 	
-	public class Arrow extends org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow {
+	public class Arrow implements VectorAnimator.Arrow {
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()

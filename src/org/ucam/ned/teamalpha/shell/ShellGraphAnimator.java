@@ -54,7 +54,7 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * 		label drawing
  *		flashing
  */
-public class ShellGraphAnimator extends GraphAnimator implements ActionListener, ShellAnimator {
+public class ShellGraphAnimator extends ShellAnimator implements ActionListener, GraphAnimator {
 	
 	private Shell shell; // reference to the shell singleton
 	private int basefps = 100;	// Basic animation framerate
@@ -1310,7 +1310,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 	 * @author Steven
 	 * An object which stores the internal states of all the nodes and edges in the animator. This is used by the save and restore state api to allow backtracking.
 	 */
-	public class State extends Animator.State { 
+	public class State implements Animator.State { 
 		private Edge[][] edges;
 		private Node[] nodes;
 		private int numnodes;

@@ -16,8 +16,8 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class TestGraphAnimator extends GraphAnimator {
-	public class State extends Animator.State {
+public class TestGraphAnimator implements GraphAnimator {
+	public class State implements Animator.State {
 		private int state;
 		
 		State(int state) {

@@ -3,10 +3,10 @@ package org.ucam.ned.teamalpha.queues;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
-public class VectorQueue extends VectorAnimator implements AnimatorQueue {
-	public class State extends Animator.State { };
+public class VectorQueue implements VectorAnimator, AnimatorQueue {
+	public class State implements Animator.State { };
 	
-	public class Vector extends VectorAnimator.Vector {
+	public class Vector implements VectorAnimator.Vector {
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
 		 */
@@ -125,7 +125,7 @@ public class VectorQueue extends VectorAnimator implements AnimatorQueue {
 		}
 	}
 	
-	public class Arrow extends VectorAnimator.Arrow {
+	public class Arrow implements VectorAnimator.Arrow {
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()
 		 */

@@ -6,15 +6,14 @@ package org.ucam.ned.teamalpha.animators;
  * 
  * @author ram48
  */
-public abstract class Animator {
+public interface Animator {
 	/**
 	 * @author ram48
 	 * 
 	 * An abstract class to contain any data structures that actual animator
 	 * implementations require to restore their state.
 	 */
-	public abstract class State {
-	};
+	public interface State { };
 
 	/**
 	 * Method for the algorithm to register a sequence of steps to show to the
@@ -23,7 +22,7 @@ public abstract class Animator {
 	 * @param steps
 	 *            array of string steps
 	 */
-	public abstract void setSteps(String[] steps);
+	public void setSteps(String[] steps);
 
 	/**
 	 * Method for the algorithm to indicate which step is currently active.
@@ -31,7 +30,7 @@ public abstract class Animator {
 	 * @param step
 	 *            index into the steps array of the active step, or -1 for none
 	 */
-	public abstract void setCurrentStep(int step);
+	public void setCurrentStep(int step);
 
 	public abstract void setFpsFactor(double f);
 	
@@ -42,7 +41,7 @@ public abstract class Animator {
 	 * @param msg
 	 *            the message to display
 	 */
-	public abstract void showMessage(String msg);
+	public void showMessage(String msg);
 
 	/**
 	 * Indicates the end of a logical step in the algorithm, and saves the
@@ -53,7 +52,7 @@ public abstract class Animator {
 	 * @return a <class>State</class> object which can later be used with
 	 *         restoreState to restore the state of the animator
 	 */
-	public abstract Animator.State saveState();
+	public Animator.State saveState();
 
 	/**
 	 * Restores the state of the animator to that which it was in when the
@@ -63,5 +62,5 @@ public abstract class Animator {
 	 * @param state
 	 *            a <class>State</class> object from the saveState() method
 	 */
-	public abstract void restoreState(State state);
+	public void restoreState(State state);
 }

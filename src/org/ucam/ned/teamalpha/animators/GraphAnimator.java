@@ -6,7 +6,7 @@ package org.ucam.ned.teamalpha.animators;
  * 
  * @author ram48
  */
-public abstract class GraphAnimator extends Animator {
+public interface GraphAnimator extends Animator {
 	/**
 	 * Draw the graph on the animation canvas.
 	 * 
@@ -14,7 +14,7 @@ public abstract class GraphAnimator extends Animator {
 	 *            a square matrix of edge costs, indexed first by source node,
 	 *            and then by destination node, with 0 for no edge
 	 */
-	public abstract void createGraph(int[][] costs) throws NonSquareMatrixException;
+	public void createGraph(int[][] costs) throws NonSquareMatrixException;
 
 	/**
 	 * Set a text label for a node.
@@ -24,7 +24,7 @@ public abstract class GraphAnimator extends Animator {
 	 * @param label
 	 *            the label
 	 */
-	public abstract void setNodeLabel(int node, String label);
+	public void setNodeLabel(int node, String label);
 
 	/**
 	 * Highlight a node to indicate something exciting is happening.
@@ -34,7 +34,7 @@ public abstract class GraphAnimator extends Animator {
 	 * @param highlight
 	 *            true to highlight the node
 	 */
-	public abstract void setNodeHighlight(int node, boolean highlight);
+	public void setNodeHighlight(int node, boolean highlight);
 
 	/**
 	 * Add a node to a shaded set, to indicate that the algorithm has completed
@@ -45,7 +45,7 @@ public abstract class GraphAnimator extends Animator {
 	 * @param set
 	 *            the number of the set to add it to, 0 to unshade
 	 */
-	public abstract void setNodeShade(int node, int set);
+	public void setNodeShade(int node, int set);
 
 	/**
 	 * Set a text label for an edge.
@@ -57,7 +57,7 @@ public abstract class GraphAnimator extends Animator {
 	 * @param label
 	 *            the label
 	 */
-	public abstract void setEdgeLabel(int from, int to, String label);
+	public void setEdgeLabel(int from, int to, String label);
 
 	/**
 	 * Highlight an edge to indicate something exciting is happening.
@@ -69,7 +69,7 @@ public abstract class GraphAnimator extends Animator {
 	 * @param highlight
 	 *            true to highlight the node
 	 */
-	public abstract void setEdgeHighlight(int from, int to, boolean highlight);
+	public void setEdgeHighlight(int from, int to, boolean highlight);
 
 	/**
 	 * Add an edge to a shaded set, to indicate that the algorithm has
@@ -82,23 +82,23 @@ public abstract class GraphAnimator extends Animator {
 	 * @param set
 	 *            the number of the set to add it to, 0 to unshade it
 	 */
-	public abstract void setEdgeShade(int from, int to, int set);
+	public void setEdgeShade(int from, int to, int set);
 	
 	/**
-	 * causes node to alternate between shade, white, and black for set time period.
+	 * Flash a node to indicate something exciting going on.
 	 * 
 	 * @param node
 	 * 			id of node to be flashed
 	 */
-	public abstract void flashNode(int node);
+	public void flashNode(int node);
+	
 	/**
-	 * causes edge to alternate between shade, white, and black for set time period.
+	 * Flash an edgeto indicate something exciting going on.
 	 * 
 	 * @param from
 	 * 			the origin node
 	 * @param to
 	 * 			the destination node
 	 */
-	public abstract void flashEdge(int from, int to);
-
+	public void flashEdge(int from, int to);
 }
