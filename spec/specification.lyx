@@ -437,124 +437,14 @@ GraphAnimator
 \family typewriter 
 VectorAnimator
 \family default 
-, which will specify the methods necessary for the following primitives.
- (See Figure\SpecialChar ~
-
+, which will specify the methods necessary for the animation primitives
+ required for animating graph and vector algorithms.
+ (See Figure 
 \begin_inset LatexCommand \ref{figure:UML-Class-AnimatorQueue}
 
 \end_inset 
 
 .)
-\layout Subsubsection
-
-Animator Primitives
-\layout Itemize
-
-Define steps of algorithm (a series of strings to explain what the algorithm
- does)
-\layout Itemize
-
-Highlight currently active step
-\layout Itemize
-
-Show text to user (to explain current actions)
-\layout Itemize
-
-Checkpoint (save the state of the animator so this stage of the algorithm
- can be returned to later when required)
-\layout Subsubsection
-
-Graph Animator Primitives
-\layout Itemize
-
-Create graph (specify nodes and paths with costs and labels)
-\layout Paragraph
-
-Node
-\layout Itemize
-
-Change node label
-\layout Itemize
-
-Highlight node (to indicate current focus of algorithm)
-\layout Itemize
-
-Shade node (to indicate membership of a set of nodes or paths)
-\layout Paragraph
-
-Path (joins two nodes)
-\layout Itemize
-
-Change path label
-\layout Itemize
-
-Highlight path (to indicate current focus of algorithm)
-\layout Itemize
-
-Shade path (to indicate membership of a set of nodes or paths)
-\layout Subsubsection
-
-Vector Animator Primitives
-\layout Itemize
-
-Create vector (with initial data and label)
-\layout Paragraph
-
-Vector (array of numbers)
-\layout Itemize
-
-Change vector label
-\layout Itemize
-
-Swap elements at two pointers
-\layout Itemize
-
-Delete element at pointer
-\layout Itemize
-
-Insert element at marker
-\layout Itemize
-
-Split vector into two at a marker (for Quicksort)
-\layout Itemize
-
-Highlight columns of the vector (for Radix sort)
-\layout Paragraph
-
-Marker (points at a boundary between two entries in the vector)
-\layout Itemize
-
-Create marker (with label and position)
-\layout Itemize
-
-Delete marker
-\layout Itemize
-
-Change marker label
-\layout Itemize
-
-Move marker
-\layout Itemize
-
-Highlight marker (to indicate current focus of algorithm)
-\layout Paragraph
-
-Pointer (points at a specific entry in the vector)
-\layout Itemize
-
-Create pointer (with label and position)
-\layout Itemize
-
-Delete pointer
-\layout Itemize
-
-Change pointer label
-\layout Itemize
-
-Move pointer
-\layout Itemize
-
-Highlight pointer (to indicate current focus of algorithm)
 \layout Subsection
 
 Queues
@@ -680,9 +570,9 @@ System data flow diagram
 \layout Section
 
 Overall inputs, functions, and outputs
-\layout Standard
+\layout Subsubsection*
 
-User inputs:
+User inputs
 \layout Itemize
 
 Algorithm selection (from the ones implemented)
@@ -705,9 +595,9 @@ Graph node locations and other layout information (using mouse, in graph
  editor) 
 \emph on 
 [optional]
-\layout Standard
+\layout Subsubsection*
 
-Functions:
+Functions
 \layout Itemize
 
 Simulate algorithm using given initial data, storing the state at each stage
@@ -716,9 +606,9 @@ Simulate algorithm using given initial data, storing the state at each stage
 \layout Itemize
 
 Animate each step in the algorithm when the user moves forward
-\layout Standard
+\layout Subsubsection*
 
-Outputs:
+Outputs
 \layout Itemize
 
 Animation displayed on screen
@@ -758,9 +648,209 @@ How it should be tested
 \layout Subsection
 
 Algorithms
+\layout Subsubsection*
+
+Purpose
+\layout Standard
+
+Each algorithm class implements a certain algorithm which can be displayed
+ to the user, as well as including the code to animate and explain this
+ algorithm to the user as it executes.
+\layout Subsubsection*
+
+Inputs
+\layout Standard
+
+The algorithm recieves its initial data, and an instance of an object which
+ extends the 
+\family typewriter 
+Animator
+\family default 
+ appropriate to the class of algorithm.
+ For example, a sort algorithm could recieve a vector of integers, and an
+ instance of a 
+\family typewriter 
+VectorAnimator
+\family default 
+ class.
+\layout Subsubsection*
+
+Outputs
+\layout Standard
+
+When executed, the algorithm makes a sequence of method calls on the provided
+ object which extends its appropriate 
+\family typewriter 
+Animator
+\family default 
+ abstract class.
+ These method calls represent the sequence of steps necessary to present
+ an explanation to the user of the execution of the algorithm.
+\layout Subsubsection*
+
+Public Methods
+\layout Itemize
+
+
+\family typewriter 
+\emph on 
+static
+\emph default 
+ getName
+\layout Itemize
+
+
+\family typewriter 
+\emph on 
+static
+\emph default 
+ getDescription
+\layout Itemize
+
+
+\family typewriter 
+setAnimator
+\layout Itemize
+
+
+\family typewriter 
+setData
+\layout Itemize
+
+
+\family typewriter 
+run
+\layout Subsubsection*
+
+Testing
+\layout Standard
+
+Each algorithm can be tested indepdently of the main system by implementing
+ a simple program which provides a 
+\family typewriter 
+TestAnimator
+\family default 
+ class, which rather than queueing or animating, merely displays the sequence
+ of method calls which were made by the algorithm.
+ The program can then run the algorithm on a variety of possible inputs
+ to ensure the correct results are generated.
 \layout Subsection
 
 Animators
+\layout Standard
+
+Animator Primitives
+\layout Itemize
+
+Define steps of algorithm (a series of strings to explain what the algorithm
+ does)
+\layout Itemize
+
+Highlight currently active step
+\layout Itemize
+
+Show text to user (to explain current actions)
+\layout Itemize
+
+Checkpoint (save the state of the animator so this stage of the algorithm
+ can be returned to later when required)
+\layout Itemize
+
+Restore (return the animator to the state it was in when a given checkpoint
+ was taken)
+\layout Subsubsection
+
+Graph Animator Primitives
+\layout Itemize
+
+Create graph (specify nodes and paths with costs and labels)
+\layout Paragraph
+
+Node
+\layout Itemize
+
+Change node label
+\layout Itemize
+
+Highlight node (to indicate current focus of algorithm)
+\layout Itemize
+
+Shade node (to indicate membership of a set of nodes or paths)
+\layout Paragraph
+
+Path (joins two nodes)
+\layout Itemize
+
+Change path label
+\layout Itemize
+
+Highlight path (to indicate current focus of algorithm)
+\layout Itemize
+
+Shade path (to indicate membership of a set of nodes or paths)
+\layout Subsubsection
+
+Vector Animator Primitives
+\layout Itemize
+
+Create vector (with initial data and label)
+\layout Paragraph
+
+Vector (array of numbers)
+\layout Itemize
+
+Change vector label
+\layout Itemize
+
+Swap elements at two pointers
+\layout Itemize
+
+Delete element at pointer
+\layout Itemize
+
+Insert element at marker
+\layout Itemize
+
+Split vector into two at a marker (for Quicksort)
+\layout Itemize
+
+Highlight columns of the vector (for Radix sort)
+\layout Paragraph
+
+Marker (points at a boundary between two entries in the vector)
+\layout Itemize
+
+Create marker (with label and position)
+\layout Itemize
+
+Delete marker
+\layout Itemize
+
+Change marker label
+\layout Itemize
+
+Move marker
+\layout Itemize
+
+Highlight marker (to indicate current focus of algorithm)
+\layout Paragraph
+
+Pointer (points at a specific entry in the vector)
+\layout Itemize
+
+Create pointer (with label and position)
+\layout Itemize
+
+Delete pointer
+\layout Itemize
+
+Change pointer label
+\layout Itemize
+
+Move pointer
+\layout Itemize
+
+Highlight pointer (to indicate current focus of algorithm)
 \layout Subsection
 
 Queues
