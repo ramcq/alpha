@@ -21,6 +21,20 @@ public class Shell {
 	}
 
 	public void go() {
-		System.out.println("asdf");
+		try {
+			Class algorithm = Class.forName("org.ucam.ned.teamalpha.algorithms.Algorithm");
+			Class[] algorithms = algorithm.getDeclaredClasses();
+			for (int i = 0; i < algorithms.length; i++) {
+				System.out.println(algorithms[i]);
+			}
+		} catch (ClassNotFoundException e) {
+			System.err.println(e);
+		}
 	}
+	
+	public void setSteps(String[] steps) {};
+	
+	public void setCurrentStep(int step) {};
+	
+	public void showMessage(String msg) {};
 }
