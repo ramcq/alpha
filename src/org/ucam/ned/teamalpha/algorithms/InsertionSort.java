@@ -109,7 +109,7 @@ public class InsertionSort extends VectorAlgorithm {
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getDescription()
 	 */
 	public static String getDescription() {
-		return "TODO [InsertionSort.getDescription] Documenters, figure out a description";
+		return "Right array contains unsorted elements. Flashing arrow indicates which element to consider next. Left array contains the sorted result. The element under consideration in the right array is compared to all the elements in left array in order to find the right place to land. This may inolve moving the elements to make space for the new element.";
 	}
 
 	/* (non-Javadoc)
