@@ -199,7 +199,7 @@ public class Kruskal extends GraphAlgorithm {
 		anim.setSteps(new String[] {
 							"Check shortest edge for cycle and add",
 							"Edge causes a cycle, remove",
-							"Add egde to minimum spanning tree",
+							"Add edge to minimum spanning tree",
 							"Could not find spanning tree",
 							"Done!"});
 	
