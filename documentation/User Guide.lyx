@@ -147,4 +147,8 @@ ive look at many algorithms
 \layout Itemize
 
 www.google.co.uk - Internet search engine
+\layout Standard
+
+To learn how to add new algorithms to the current system, read the Developers
+ Guide.
 \the_end

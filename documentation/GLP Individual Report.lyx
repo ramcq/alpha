@@ -1,0 +1,56 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms: Individual Report
+\layout Author
+
+Graham Le Page
+\layout Section
+
+Stuff
+\layout Standard
+
+More stuff
+\layout Standard
+
+etc etc
+\layout Section
+
+Notes
+\layout Standard
+
+Each group member must also submit a brief personal report for the final
+ review meeting giving details of their individual contribution to the project.
+ This should include a representative part of their contribution which might
+ be program code or documentation, project management logs or minutes of
+ meetings as appropriate.
+ It should also give a summary assessment of the contributions made by the
+ other members of the group.
+ The group and the personal reports will be retained by the overseer and
+ forwarded directly to the examiners.
+\the_end

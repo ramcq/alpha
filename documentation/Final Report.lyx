@@ -79,7 +79,7 @@ User Guide
 Developers Guide
 \layout Itemize
 
-Finished project logs (Description of modules/testing etc)
+Finished project logs (Description of modules/testing javadoc etc)
 \layout Standard
 
 ]
@@ -110,7 +110,8 @@ Successes
 
 We got on well together as a team, there were no big personality conflicts
  and there was generally a good atmosphere between team members.
- Morale was always high, even in stressful times such as before deadlines.
+ Morale and motivation were always high, even in stressful times such as
+ before deadlines.
 \layout Itemize
 
 We managed to get all the documentation finished and handed in on time for
@@ -120,25 +121,51 @@ We managed to get all the documentation finished and handed in on time for
 Failures
 \layout Itemize
 
-Communication
+In depth communication between team members was sometimes lacking, as for
+ example testers and coders did not link up as well as they might have done
+ when testing individual modules.
+ However most of the time everybody knew what everybody else was supposed
+ to be working on, so knew who to ask if they had a specific problem.
+ 
 \layout Itemize
 
-Time planning
+Time planning was a problem, in that some members of the team spent a lot
+ longer working on the project at specific times than other members.
+ This was generally down to the fact that before modules had been written
+ by the coders, the testers couldstuff not test them very much.
+ An improvement to this would be to have the testers do some of the coding
+ when they had no testing to do, which would spread the workload out more
+ easily.
 \layout Itemize
 
-Task planning
+At the first project meeting we had a plan of who was going to be doing
+ each job in the team (coders/ testers etc) but we did not have a specific
+ task allocation saying for example, who would be coding each module.
+ Although this was sorted quickly after the meeting, we should have made
+ a plan for this in the specification stage.
 \layout Standard
 
 Lessons learned
 \layout Itemize
 
-Task planning
+After the first project meeting we made sure that each task had a certain
+ person (or people) assigned to it.
+ This made sure that all the tasks were completed, and also went some way
+ to making sure the workload was spread out as people always had things
+ to do.
 \layout Itemize
 
-Communication
+As the project progressed communication became more important, especially
+ during the integration and testing stages where people needed to know exactly
+ how a module worked, or why it did something a certain way.
+ This definitely improved towards the end of the project.
 \layout Itemize
 
-Working as a team
+As an extention of the merits of communication, we learned that working
+ as a team was very important to the success of the project.
+ Everyone had to have some idea of what was going on, so that when people
+ were unavailable for some reason the whole project did not have to be held
+ up.
 \layout Section
 
 Summary of work undertaken
@@ -147,51 +174,69 @@ Summary of work undertaken
 Graham
 \layout Standard
 
-What a guy!
+Graham was the manager of the project, and so was in charge of organising
+ the rest of the team and making sure that everything got done in time.
+ He also had a role as a documenter, producing the User Guide among other
+ things.
+ 
 \layout Subsection
 
 Steven
 \layout Standard
 
-Coded graph animator.
+Steven coded the graph animator module, one of the most challenging parts
+ of the project.
 \layout Subsection
 
 Richard
 \layout Standard
 
-Tester graph animator.
+Richard tested the algorithms and the graph animator, as well as doing integrati
+on testing on the whole system.
 \layout Subsection
 
 Rob
 \layout Standard
 
-Coded queues and shell.
- Set up CVS etc.
+Rob was heavily involved with the design of the system, coming up with many
+ good ideas for how to structure the system.
+ He coded the queueing mechanism and the shell and also set up and maintained
+ the CVS repositary in his role as librarian.
+ 
 \layout Subsection
 
 Andrew
 \layout Standard
 
-Coded vector animator.
- Secretary as well.
+Andrew also came up with many design plans for the system.
+ He worked tirelessly coding the vector animator and also had a role as
+ secretary, where among other things he was involved in making sure documents
+ were completed and handed in on time to the right place.
 \layout Subsection
 
 Neofytos
 \layout Standard
 
-Documented stuff.
+Neofytos was an enthusiastic documenter, and so was involved in writing
+ up many of the documents such as the Developers Guide.
+ He also wrote the algorithm explanations that appear during animation to
+ help explain what the algorithm is doing.
 \layout Subsection
 
 Sid
 \layout Standard
 
-Coded algorithms and shell.
+Sid coded the algorithms and also helped out with the shell.
+ He worked well with the other coders making sure that integration went
+ relatively smoothly.
+ 
 \layout Subsection
 
 Alan
 \layout Standard
 
-Tested vector animator.
+Alan tested the vector animator as well as performing various other module
+ and integration tests.
 \layout Section
 
 Random final report stuff
