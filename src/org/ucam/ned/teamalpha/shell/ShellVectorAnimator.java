@@ -1453,7 +1453,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private void redrawVector(Vector v, Graphics g) {
 		// Clear vector area
 		g.setColor(bgcolour);
-		g.fillRect(v.left-60, v.top, Vector.width+120, (v.size*20)+30);
+		g.fillRect(v.left-60, v.top-10, Vector.width+120, (v.size*20)+50);
 		
 		if (v.visible) {
 			drawVector(v, g);
