@@ -1,0 +1,264 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language british
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms: Personal Report
+\layout Author
+
+Alan Treanor (
+\family typewriter 
+ajit2
+\family default 
+)
+\layout Section
+
+Personal Contribution
+\layout Standard
+
+I was co-tester (with Zhan Li) of the project, with responsibility for both
+ module and system integration testing.
+ The division of tasks and overall testing strategy were decided upon in
+ conjunction with Zhan, but the actual testing of individual parts was done
+ individually and bugs were resolved in conjunction with the relevant coders.
+\layout Standard
+
+The amount of testing that could be done towards the start of the project
+ was limited due to individual modules still being under development.
+ It would perhaps have been more efficient to spread the testing and coding
+ over a more of the group.
+\layout Subsection
+
+Module Testing
+\layout Standard
+
+As each module was completed, it was tested in isolation by either Zhan
+ or me.
+ The most important (and time-consuming) task was testing the animator modules,
+ as these classes were the most likely to contain non-obvious bugs.
+ I was responsible for testing the Vector Animator class.
+ A simple test harness was coded which simulated an algorithm making calls
+ to this class.
+ A series of steps could then be set out to test different aspects of the
+ Vector Animator class.
+ Some of the tests performed identified bugs which, while unlikely to ever
+ cause problems for any well-thought out algorithm, needed to be fixed because
+ the system specification allows for the user to add their own algorithms.
+ For instance, a user is unlikely to ever intentionally attempt to use an
+ arrow which has been deleted but it is better practice to generate an exception
+ rather than allow it to be 'resurrected'.
+ In testing the module, a test plan was first devised to ensure completeness
+ of testing.
+ This was altered as the testing progressed, in order to fully investigate
+ the cause of bugs.
+ 
+\layout Standard
+
+Some of the bugs found were simple in nature, meaning that I could more
+ quickly rectify them myself than communicate a detailed report to the coder
+ (Andrew Medworth).
+ Other bugs were more serious so it was more time-efficient to refer them
+ back to the coder, who obviously has a more detailed knowledge of the code
+ he has written.
+ As an example of my work, an extract from the bug report for the Vector
+ Animator module is included as an appendix to this report.
+\layout Standard
+
+Other modules were tested in a similar fashion to that outlined above.
+ The general procedure in each case was to create a test harness to simulate
+ the actions of the other classes with which the module being tested interacts,
+ e.g.
+ the algorithms were tested by creating a âstubâ animator, which displayed
+ animation steps as text.
+\layout Subsection
+
+System Integration Testing
+\layout Standard
+
+As modules were completed and designated bug-free, they were integrated
+ and tested.
+ The modules were integrated together in stages, for instance, the Queue
+ module and the Vector Animator module were tested together with a test
+ harness before adding an actual Algorithm into the integration.
+\layout Standard
+
+A plan for the integration testing was drawn up by Zhan and me.
+ It was necessary for the testers to collaborate closely with the developers,
+ as changes were being made to the system as it was being tested.
+\layout Section
+
+Contribution of Other Team Members
+\layout Subsubsection*
+
+Steven Cooper (Graph Animator Developer)
+\layout Standard
+
+Steven contributed well to the project, continuing to work hard right up
+ to the deadline.
+ He took the advice of others on-board with regard to improvements to the
+ Graph Animator.
+\layout Subsubsection*
+
+Graham Le Page (Manager)
+\layout Standard
+
+As manager, Graham was vital importance to the project.
+ He organised meetings, scheduled tasks using elementary critical path analysis
+ techniques, ensured that deadlines were met and redistributed tasks as
+ necessary.
+ Graham also made a significant contribution to the documentation.
+\layout Subsubsection*
+
+Zhan Li (Tester)
+\layout Standard
+
+I worked closely with Richard when planning test strategies and performing
+ systems integration testing.
+ I found him to be an efficient and amicable colleague.
+ 
+\layout Subsubsection*
+
+Robert McQueen (Developer)
+\layout Standard
+
+Robert was very influential in the design of the system.
+ He was an efficient and inventive developer and was always prepared to
+ help the other developers with problems.
+ In his role as librarian, Robert set up and maintained the CVS repository.
+\layout Subsubsection*
+
+Andrew Medworth (Vector Animator Developer)
+\layout Standard
+
+I worked closely with Andrew when testing the Vector Animator.
+ The code he produced was of a very high standard and he fixed bugs in his
+ code quickly.
+\layout Subsubsection*
+
+Neofytos Mylona (Documenter)
+\layout Standard
+
+Neofytos was a system documenter.
+ The documentation produced by him is well-written.
+\layout Subsubsection*
+
+Sidath Senanayake (Developer)
+\layout Standard
+
+Sidath developed the algorithms for the project and decided on what animation
+ steps were necessary to explain the algorithm clearly.
+ His advice was invaluable to the other developers.
+ 
+\layout Section
+
+My bug report for Vector Animator module
+\layout Subsubsection*
+
+*arrow.move(...
+\layout Standard
+
+(a) Allows move of arrow to an occupied position.
+ This is okay if it's what is intended but if this is allowed then need
+ to fix (b) rather than disallow.
+\layout Standard
+
+(b) Move arrow to a position where there's already one and they obscure
+ each other.
+ Either shouldn't be allowed to move to occupied position or should overwrite.
+\layout Subsubsection*
+
+*arrow.flash():
+\layout Standard
+
+Flash operation on arrow does not always end with the label being shown
+ in its normal colour.
+ This means that if the last step involving an arrow is to flash the label,
+ it appears in the dimmed colour.
+ The bug is not present when another arrow op takes place afterwards, presumably
+ because the label is redrawn.
+\layout Subsubsection*
+
+*arrow.setLabel(...):
+\layout Standard
+
+(i) This method trimmed the label to 3 letters (instead of 4) if the param
+ length was >4.
+ I've now changed it to 4 and it works as intended.
+\layout Standard
+
+(ii) The arrow label does not change until another arrow animation even
+ occurs.
+ Presumably need to call a redraw from the setLabel method.
+\layout Subsubsection*
+
+*createArrow(int position, boolean boundary):
+\layout Standard
+
+You've set this to always label the Arrow A, causing duplicate labels.
+ Perhaps the labels could be made incremental (i.e.
+ A, B, C...) by keeping some kind of counter.
+\layout Subsubsection*
+
+*arrow.delete():
+\layout Standard
+
+Arrow is hidden from animation when deleted but can then be brought back
+ to life by performing an operation (e.g.
+ move) on it.
+ Unless this is intended, some kind of exception needs to be thrown.
+\layout Subsubsection*
+
+*vector.delete():
+\layout Standard
+
+Same bug as above.
+ Worse though, because all of the Vector is not redrawn in every vector
+ animation operation, e.g.
+ if setElement after delete, the vector reappears in a part-drawn form.
+\layout Subsubsection*
+
+*createVector(int size) & createVector(String label, int size):
+\layout Standard
+
+These constructors cannot be used externally because they are not defined
+ in the VectorAlgorithm class.
+ I didn't add them myself because, although I couldn't see them being used
+ internally or anything, I thought I may have been missing something.
+\layout Subsubsection*
+
+*createVector(String label, ...):
+\layout Standard
+
+Need to set a limit on the length of labels.
+\layout Subsubsection*
+
+*Other:
+\layout Standard
+
+Need to handle array out of bounds exception for when a vector element that
+ does not exist is referenced.
+ 
+\the_end
