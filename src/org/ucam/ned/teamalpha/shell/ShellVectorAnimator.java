@@ -5,8 +5,6 @@
  
 // TODO: call repaint less often
 // TODO: move as much as possible up to ShellAnimator
-// TODO: make buffered image very large, paint top left
-// TODO: fix redrawAllArrows for very close arrows
 // TODO: fix fast forward to next checkpoint (currently completely broken)
 // TODO: add column highlighting for vectors (for radix sort)
 package org.ucam.ned.teamalpha.shell;
@@ -1924,7 +1922,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(int[])
 	 */
 	public VectorAnimator.Vector createVector(int[] values) throws InputTooLongException, TooManyVectorsException {
-		return createVector(values);
+		return createVector("", values);
 	}
 
 	/* (non-Javadoc)
