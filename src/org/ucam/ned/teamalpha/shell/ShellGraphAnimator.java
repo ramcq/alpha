@@ -31,23 +31,14 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
  * 		saveState
  * 		restoreState
  * 		label drawing
+ *		flashing
  *
  */
-
-/* Current TODO list
- * 
- * Build more animation functionality
- * 			highlighting
- * documentation
- * 
- */
-
-/* work in progress */
 
 public class ShellGraphAnimator extends GraphAnimator implements ActionListener {
 	
 	private double Nodeangle;
-	private static final int fps = 100;	// Animation framerate
+	private int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
 	private Component outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
@@ -456,8 +447,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			if (e.type == EDGE_TYPE_ONEDIR) {
 				g.setColor(SET_COLOUR[e.set1]);
 				g.drawLine(e.x1, e.y1, e.x2, e.y2);
-				g.setColor(fgcolour);
-				//TODO put an arrow on the end
+				drawarrow(e.x1,e.y1,e.x2,e.y2,e.set1,55,g);
+				g.setColor(fgcolour);				
 			}
 			else { 
 				drawcurve(e.x1,e.y1,e.x2,e.y2,e.set1,1.0,e.label1,g);
@@ -474,6 +465,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int sx = (int) (x1 - (x1 - x2)/2);
 		int sy = (int) (y1 - (y1 - y2)/2);
 		boolean labeldrawn = false;
+		boolean arrowdrawn = false;
 		//calculate p1/p2 for bezier
 		//p0 is e.x1,y1 p3 is e.x2,y2
 		if (x1 != x2 && y1 != y2){ //this bit doesn't work
@@ -488,7 +480,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				sy = (int)(sy - 30 * grad);
 			}
 		}
-		else {//this bit works fine
+		else {
 			if (x1 == x2) {
 				if (y1>y2) {
 					sx = (int)(sx - 30);
@@ -527,10 +519,71 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}	
 		}
 		while (i <= limit);
-		//TODO put an arrows on the ends
+/*		if (limit == 1) {
+			drawarrow(oldx,oldy,x,y,set,1,g);
+		}*/
+		//TODO arrow drawing on curves
 		g.setColor(fgcolour);
 	}
 	
+	public void drawarrow (int x1, int y1, int x2, int y2, int set, int div, Graphics g) {
+		g.setColor(SET_COLOUR[set]);
+		int x = (int) (x1 - (div * (x1 - x2))/60.0);
+		int y = (int) (y1 - (div * (y1 - y2))/60.0);
+		int sx1 = 0,sy1 = 0,sx2 = 0,sy2 = 0,sx3 = 0,sy3 = 0;
+		int arsize = 5;
+		if (x1 != x2 && y1 != y2){
+			double grad = (double) ((x1-x2)/(y1-y2));
+			if (x1>x2) {
+				sx3 = (int)(x2 - arsize * grad);
+				sy3 = (int)(y2 + arsize * grad);
+			}
+			else {
+				sx3 = (int)(x2 + arsize * grad);
+				sy3 = (int)(y2 - arsize * grad);
+			}
+			sx3 = (int)(x2 - arsize * grad);
+			sy3 = (int)(y2 + arsize * grad);
+			grad = (-1 / grad);
+			sx1 = (int)(x - arsize * grad);
+			sy1 = (int)(y - arsize * grad);
+			sx2 = (int)(x + arsize * grad);
+			sy2 = (int)(y + arsize * grad);
+		}
+		else {
+			if (x1 == x2) {
+				sx1 = x - arsize;
+				sy1 = y;
+				sx2 = x + arsize;
+				sy2 = y;
+				sx3 = x2;
+				if (y1>y2) {
+					sy3 = y2 + 5;
+				}
+				else {
+					sy3 = y2 - 5;
+				}
+			}
+			if (y1 == y2) {
+				sx1 = x;
+				sy1 = y - arsize;
+				sx2 = x;
+				sy2 = y + arsize;
+				sy3 = y2;
+				if (x1>x2) {
+					sx3 = x2 + 5;
+				}
+				else {
+					sx3 = x2 - 5;
+				}
+			}
+		}
+		int[] xpoints = {sx1,sx2,sx3};
+		int[] ypoints = {sy1,sy2,sy3};
+		g.fillPolygon(xpoints, ypoints,3);
+		g.setColor(fgcolour);
+	}
+		
 	//incrementally shade an edge on screen	
 	public void drawEdgeShade(Edge e, Graphics g, int t) {
 		int sx1,sx2,sy1,sy2;
@@ -604,7 +657,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			drawlabel(x, y, e.label1, g);
 		}
 		else{
-			//TODO draw labels next to the curves
+			drawcurve(e.x1,e.y1,e.x2,e.y2,e.set1,1.0,e.label1,g);
+			drawcurve(e.x2,e.y2,e.x1,e.y1,e.set2,1.0,e.label2,g);
 		}
 	}
 	//draw node label on screen
@@ -613,6 +667,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	//actual method for drawing text on screen
 	public void drawlabel(int x,int y,String label, Graphics g) {
+		//pos. TODO need to blank current label?
 		g.setFont(new Font("MonoSpaced", Font.PLAIN, 14));
 		g.drawString(label, x, y);
 	}
@@ -719,7 +774,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setEdgeHighlight(int from, int to, boolean highlight) {
-		// TODO	
+		// no longer used
 	}
 
 	public void setEdgeShade(int from, int to, int set) {
@@ -771,6 +826,17 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		// TODO Auto-generated method stub		
 	}
 
+	public void drawImage() {
+		outg.drawImage(bi,0,0,outc);
+	}
+	
+	public void setFPS(int fps) {
+		this.fps = fps;
+		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
+		System.out.println("Delay = " + delay + " ms");
+		timer.setDelay(delay);
+	}
+	
 	public synchronized Animator.State saveState() {
 		stopAnimation();
 		return new State(nodelist,edgematrix,numnodes);
@@ -816,10 +882,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		});
 		//current test data
-		int[][] tstcosts = {{0,4,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
+		int[][] tstcosts = {{0,0,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
 		app.createGraph(tstcosts);
 		app.setEdgeShade(0,2,1);
-		app.setEdgeShade(0,1,3);
 		app.setEdgeShade(2,0,2);
 	}
 }
