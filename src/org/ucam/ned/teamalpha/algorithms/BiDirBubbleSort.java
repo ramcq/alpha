@@ -4,7 +4,6 @@
 package org.ucam.ned.teamalpha.algorithms;
 
 import org.ucam.ned.teamalpha.animators.Animator;
-import org.ucam.ned.teamalpha.animators.InvalidLocationException;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
