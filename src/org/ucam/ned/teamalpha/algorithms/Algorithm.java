@@ -1,9 +1,9 @@
 package org.ucam.ned.teamalpha.algorithms;
 
 /**
- * @author ram48
- * 
  * Abstract base class from which all algorithms are descended.
+ * 
+ * @author ram48
  */
 public abstract class Algorithm {
 	/**
@@ -21,7 +21,7 @@ public abstract class Algorithm {
 	public abstract String getDescription();
 
 	/**
-	 * A method to call to execute the algorithm in full, calling all animation
+	 * Executes the algorithm in full, calling all necessary animation
 	 * primitives to demonstrate and explain its execution.
 	 */
 	public abstract void execute();

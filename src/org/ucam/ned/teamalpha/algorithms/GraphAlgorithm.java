@@ -3,9 +3,9 @@ package org.ucam.ned.teamalpha.algorithms;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 
 /**
- * @author ram48
- * 
  * An abstract class from which all graph algorithms are descended.
+ * 
+ * @author ram48
  */
 public abstract class GraphAlgorithm extends Algorithm {
 	/**

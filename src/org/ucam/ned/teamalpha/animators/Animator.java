@@ -1,10 +1,10 @@
 package org.ucam.ned.teamalpha.animators;
 
 /**
- * @author ram48
- * 
  * An abstract base class containing all of the methods which are implemented
  * by all types of animator.
+ * 
+ * @author ram48
  */
 public abstract class Animator {
 	/**

@@ -3,9 +3,9 @@ package org.ucam.ned.teamalpha.algorithms;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
- * @author ram48
- * 
  * An abstract class from which all vector algorithms are descended.
+ * 
+ * @author ram48
  */
 public abstract class VectorAlgorithm extends Algorithm {
 	/**
