@@ -1,0 +1,235 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language british
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 1
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms: Individual Report
+\layout Author
+
+Robert McQueen (ram48)
+\layout Section
+
+Introduction
+\layout Standard
+
+This is my individual report for the "Animating Algorithms" (Topic 8.5) Computer
+ Science Tripos Part IB / Part II (General) group project.
+ I am a member of group "Alpha".
+ This project is being over seen by Steven Hand (smh22@cam.ac.uk).
+\layout Section
+
+My contributions
+\layout Subsection
+
+Designer
+\layout Standard
+
+During the early stages of the project, I worked closely with the other
+ programmers (Andrew, Sid and Steven) to decide what were practical goals
+ for the project, and the design choices and system structure necessary
+ to achieve them.
+ I was responsible for the general division of the project into the algorithm,
+ animator, queue and shell packages, and together with the other programmers,
+ completed the APIs for these packages at an early stage of the project
+ to allow programming tasks to be divided.
+ I contributed several sections to the specification for the parts of the
+ project which I designed and worked on.
+\layout Subsection
+
+Programmer
+\layout Standard
+
+After the APIs and system structure were finalised, I enthusiastically volunteer
+ed to program the queue, which seemed an interesting and challenging element
+ of the project.
+ set about programming the part that seemed most interesting to me --- the
+ queue for method calls on the animators.
+ After this was done I helped Andrew and Sid work out some issues with their
+ classes, worked out any necessary changes to the specification and APIs,
+ including designing and writing the algorithm catalog class, and wrote
+ parts of the progress report to document these.
+\layout Standard
+
+I then noticed the fast-approaching final deadlines, and that work on the
+ shell itself hadn't really commenced.
+ I'd thought that the animator and algorithm components would've been done
+ by this time, and that the shell could be designed quickly and divided
+ up between a few programmers.
+ Unfortunately this didn't quite happen, meaning the testers have been held
+ up by not having finished modules to test, and other programmers project
+ members have been busy with finishing off other parts of the project, leaving
+ me to pick up coding on the shell in somewhat of a hurry.
+ Progress has been fairly fast and I hope to complete it soon, although
+ I have hit upon a challenging bug which currently prevents embedding the
+ animators within the shell.
+ It may require turning the Animator class hierachy into interfaces.
+\layout Subsection
+
+Librarian
+\layout Standard
+
+At the outset, I was responsible for arranging the project's CVS repository
+\begin_inset Foot
+collapsed true
+
+\layout Standard
+
+The CVS repository can be browsed at 
+\family typewriter 
+http://ned.ucam.org/cgi-bin/viewcvs.cgi/alpha/
+\family default 
+.
+\end_inset 
+
+ on 
+\family typewriter 
+ned.ucam.org
+\family default 
+, a system in Corpus Christi College which I am an administrator of, and
+ provided access to the system for the group members to commit their work,
+ and also to use the system as a shell server for people who did not have
+ access to Linux machines.
+ Several of the project members made extensive use of this system to run
+ LyX for editing our documentation and reports.
+ Later on I installed ViewCVS to allow the CVS repository to be browsed
+ on-line, and a project Wiki page
+\begin_inset Foot
+collapsed true
+
+\layout Standard
+
+The project wiki can be found at 
+\family typewriter 
+http://ned.ucam.org/alpha/
+\family default 
+.
+\end_inset 
+
+ which can be edited from within the browser.
+ Unfortunately the latter didn't see much use, and would probably have been
+ more useful in the earlier stages of the project while ideas were discussed
+ --- meetings in person and the occasional e-mail were generally favoured
+ for communication at this stage.
+\layout Section
+
+Contribution of others
+\layout Subsection*
+
+Alan
+\layout Itemize
+
+As one of two testers in the team, Alan was regrettably delayed by the leisurely
+ completion of the first phase of the project, including the algorithms,
+ animators and queue.
+ However, where code has been available, Alan has tested as best he could,
+ and provided useful feedback to the programmers.
+ Specifically, Alan was able to produce test vector algorithms and test
+ them against the vector animator, and provide Andrew with clear problem
+ reports which lead to the addition of a more extensive error checking and
+ exception system to the animator APIs.
+\layout Subsection*
+
+Andrew
+\layout Itemize
+
+Andrew worked closely with me at the beginning of the project to finalise
+ the overall system design, and the interfaces between the parts of the
+ project.
+ After this he contributed hugely to the specification document, providing
+ the initial skeleton and several diagrams and sections.
+ Over the course of a few days he worked miracles to write the bulk of his
+ class, the vector animator, which is by far the most visually impressive
+ part of the project, and one of the larger bodies of code.
+ He subsequently maintained and improved his code a great deal, responding
+ in a timely fashion to various feature requests and bug reports from other
+ members of the project including myself, and aiding other members where
+ he was able.
+\layout Subsection*
+
+Graham
+\layout Itemize
+
+Graham is the project manager, and has been helpful in arranging meetings
+ and ensuring that all members of the team have been aware of what they
+ were supposed to be doing, and the deadlines that we have had to meet.
+ He has also worked with Neofytos to produce the documentation for our project
+ such as the user guide, and diligently herded the other team members to
+ ensure that the required specification and progress reports have all been
+ completed in time.
+\layout Subsection*
+
+Neofytos
+\layout Itemize
+
+Neofytos has kept in close touch with myself and the other programmers to
+ keep abreast of how the system works, and has worked with Graham to create
+ documentation for extending the system, the user guide, and some design
+ concepts for the user interface.
+ Whilst not involved in the programming himself, he has always been present
+ at group meetings, shown a keen interest in how work was progressing, and
+ has been around to witness many milestones in the project's progress.
+\layout Subsection*
+
+Sid
+\layout Itemize
+
+Sid is an enthusiastic member of the programming team, and had a variety
+ of good ideas to suggest during the project design phase.
+ He quickly produced a mock user interface, which has provided me with helpful
+ cues in implementing the shell thus far.
+ This done, he worked tirelessly for day after day to implement every single
+ algorithm which is to be provided by our project, testing each one, and
+ continues to refine his implementations and their animated appearance.
+\layout Subsection*
+
+Steven
+\layout Itemize
+
+Steven took part in the initial meetings and helped steer the design of
+ the project, and then took on the unenviable task of programming the graph
+ animator component.
+ After an initial delay to see what direction Andrew took his vector animator
+ class in, he set about making the necessary modifications to create the
+ graph animator, the first versions of which were produced in fairly short
+ order.
+ He has subsequently worked conscientiously to improve the appearance and
+ complete what was asked of him, ensuring that the graph animator performs
+ as expected.
+\layout Subsection*
+
+Richard
+\layout Itemize
+
+Richard worked with Alan to test parts of the project, and suffered similar
+ difficulties with lack of fully completed modules to test.
+ He created some test harnesses for the algorithms that Sid was writing,
+ and verified that these operated correctly and produced the appropriate
+ results.
+\the_end
