@@ -61,6 +61,7 @@ public class AnimatorPanel extends ShellPanel {
 		
 		// add a the animator to the top box
 		animator = choice.getAnimator();
+		animator.setPreferredSize(new Dimension(500,500));
 		top.add(animator);
 		
 		// and a 5 pixel gap
@@ -94,6 +95,23 @@ public class AnimatorPanel extends ShellPanel {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand();
+		
+		if (command.equals("Next"))
+			if (queue.hasNext())
+				try {
+					queue.next();
+				} catch (Exception ex) {
+					System.err.println(ex);
+				}
+		else if (command.equals("Prev"))
+			if (queue.hasPrev())
+				try {
+					queue.prev();
+				} catch (Exception ex) {
+					System.err.println(ex);
+				}
+		//else if (command.equals(""))
 		// TODO Auto-generated method stub
 
 	}
