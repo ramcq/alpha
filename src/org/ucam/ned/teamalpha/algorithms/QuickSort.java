@@ -13,6 +13,7 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
 public class QuickSort extends VectorAlgorithm {
 
 	private int[] a;
+	VectorAnimator anim;
 	
 	/**
 	 * The core of the quicksort algorithm. <class>quick</class> partitions
@@ -89,6 +90,7 @@ public class QuickSort extends VectorAlgorithm {
 	 */
 	public QuickSort(VectorAnimator va, int[] values) {
 		super(va, values);
+		this.anim = va;
 		this.a = values;
 	}
 
@@ -97,7 +99,7 @@ public class QuickSort extends VectorAlgorithm {
 	 */
 	public static String getName() {
 		// TODO Auto-generated method stub
-		return "QuickSort";
+		return "Quicksort";
 	}
 
 	/* (non-Javadoc)
