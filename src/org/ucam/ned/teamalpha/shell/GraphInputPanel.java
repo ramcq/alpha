@@ -20,11 +20,15 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.ucam.ned.teamalpha.algorithms.Algorithm;
+
 /**
  * @author Sid
  */
 public class GraphInputPanel extends ShellPanel implements PropertyChangeListener {
 
+	int nodesDefault = 5;
+	
 	private Shell shell;
 	private ButtonPanel buttons;
 	private AlgorithmCatalog.AvailableAlgorithm choice;
@@ -40,7 +44,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		numbers = new HashMap();
 
 		cells.removeAll();
-		cells.setLayout(new GridLayout(0, num, num, num));
+		cells.setLayout(new GridLayout(num, num, 5, 5));
 		
 		for (int i = 0; i < num*num; i++) {
 			JFormattedTextField field = new JFormattedTextField(NumberFormat.getIntegerInstance());
@@ -59,18 +63,22 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 
 	private void updateValues() {
 		Integer num = (Integer) elements.getSelectedItem();
-		
-		for (int i = 0; i < num.intValue(); i++) {
+		int nodes = num.intValue();
+		for (int i = 0; i < nodes*nodes; i++) {
 			fields[i].setValue(new Integer(values[i]));
 		}
 	}
 	
-	private int[] getValues() {
+	private int[][] getValues() {
 		Integer num = (Integer) elements.getSelectedItem();
-		int[] ret = new int[num.intValue()];
+		int nodes = num.intValue();
 		
-		for (int i = 0; i < num.intValue(); i++) {
-			ret[i] = values[i];
+		int[][] ret = new int[nodes][nodes];
+		
+		for (int i = 0; i < nodes; i++) {
+			for (int j = 0; j < nodes; j++) {
+				ret[i][j] = values[i*nodes+j];
+			}
 		}
 		
 		return ret;
@@ -109,9 +117,9 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.add(Box.createRigidArea(new Dimension(5,0)));
 		
 		// create drop down list of numbers of elements
-		Integer[] vals = { new Integer(5), new Integer(7), new Integer(9), new Integer(11) };
+		Integer[] vals = { new Integer(3), new Integer(4), new Integer(5), new Integer(8) };
 		elements = new JComboBox(vals);
-		elements.setSelectedIndex(0);
+		elements.setSelectedIndex(2);
 		elements.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Integer i = (Integer) elements.getSelectedItem();
@@ -131,9 +139,9 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.setLayout(new BoxLayout(row, BoxLayout.Y_AXIS));
 		row.add(Box.createHorizontalGlue());
 		
-		cells = new JPanel(new GridLayout(0, 5, 5, 5));
-		values = new int[20];
-		makeCells(5);
+		cells = new JPanel(new GridLayout(0, nodesDefault, nodesDefault, nodesDefault));
+		values = new int[64];
+		makeCells(nodesDefault);
 		
 		row.add(cells);
 		row.add(Box.createHorizontalGlue());
@@ -151,6 +159,15 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		values[num.intValue()] = value.intValue();
 	}
 	
+	public void print(int[][] result, int dim) {
+		for (int i=0; i<dim; i++) {
+			for(int j=0; j<dim; j++) {
+				System.out.print(result[i][j]+"\t");
+			}
+			System.out.println();
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
@@ -159,19 +176,24 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		
 		if (command.equals("Random")) {
 			Random r = new Random();
+			int t;
 			
-			for (int i = 0; i < 20; i++) {
-				values[i] = r.nextInt(100);
+			for (int i = 0; i < 64; i++) {
+				t = r.nextInt(250);	
+				values[i] = (t<99)?t:0;
 			}
 			
 			updateValues();
 		} else if (command.equals("Clear")) {
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 64; i++) {
 				values[i] = 0;
 			}
 			
 			updateValues();
 		} else if (command.equals("Next")) {
+			
+			// print(getValues(), 8); // Test the getValues method
+			
 			Object[] args = { getValues() };
 			Algorithm algo = choice.getAlgorithm(args);
 			
