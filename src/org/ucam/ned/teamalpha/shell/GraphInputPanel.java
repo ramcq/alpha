@@ -110,7 +110,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.add(Box.createHorizontalGlue());
 		
 		// create some explanatory goodness 
-		JLabel label = new JLabel("Select the number of integers:");
+		JLabel label = new JLabel("Select the number of nodes:");
 		row.add(label);
 		
 		// add a 5px gap
