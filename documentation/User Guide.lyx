@@ -61,6 +61,29 @@ Animating an algorithm
 When the program starts, you will see this Main Menu:
 \layout Itemize
 
+{
+\begin_inset Graphics
+	filename /home/gpl26/yay
+
+\end_inset 
+
+}
+\layout Itemize
+
+{to put stuff in from pwf to ned:
+\begin_deeper 
+\layout Itemize
+
+make locally save as eg yay.png
+\layout Itemize
+
+sftp ned.ucam.org
+\layout Itemize
+
+put yay}
+\end_deeper 
+\layout Itemize
+
 {Have a screenshot of the Main Menu (Hopefully!)}
 \layout Itemize
 
