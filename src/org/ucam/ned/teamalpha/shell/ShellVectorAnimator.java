@@ -32,8 +32,6 @@ import org.ucam.ned.teamalpha.animators.ItemDeletedException;
 import org.ucam.ned.teamalpha.animators.InvalidLocationException;
 
 /**
- * @author am502
- *
  * This is the class which is given animation primitives by the queue and actually does the animation on screen.
  * When it receives a primitive, it breaks it down into even more fundamental events (see ShellVectorAnimator.AnimationEvent)
  * and executes these events sequentially. It can also save and restore its state using the State inner class.
@@ -42,13 +40,31 @@ import org.ucam.ned.teamalpha.animators.InvalidLocationException;
  * The system maintains a BufferedImage for this redrawing, and also for the purpose of 
  * double buffering to prevent flicker during animation.
  * 
+ * Animation is done using a Timer, which sends periodic actionEvents causing the next frame to be drawn.
+ * The beauty of this is that it requires very little CPU time.
+ * 
  * The main drawback of the design of this class is that it is difficult to change the size or positioning of vectors without editing
  * a great many variables. Later versions might solve this problem, and use java.awt.Graphics2D instead of java.awt.Graphics
- * for 2D graphics, introducing the possibility of such visual wonders as anti-aliasing. :-) 
+ * for 2D graphics, introducing the possibility of such visual wonders as anti-aliasing. :-)
+ * 
+ * @author am502 
  */
 public class ShellVectorAnimator extends VectorAnimator implements ActionListener {
 	
-	// Vector inner class
+	/**
+	 * This inner class of ShellVectorAnimator is designed to represent vectors
+	 * in a way which is convenient to ShellVectorAnimator. The queue calls primitives
+	 * on instances of this class, and, as they are associated with an instance of
+	 * ShellVectorAnimator, they have the power to add events to the animator's
+	 * internal queue.
+	 * 
+	 * This class also extends VectorAnimator.Vector, to ensure that a consistent API
+	 * is presented. However, many things have been added, including an internal VectorState
+	 * class which stores the current state of each Vector, to enable saving and restoring
+	 * of the overall animator state.
+	 * 
+	 * @author am502
+	 */
 	public class Vector extends VectorAnimator.Vector {
 		static final int maxSize = 20;
 		static final int maxElementLength = 6; // Maximum number of digits in any element
@@ -97,7 +113,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * Constructor for Vector
 		 * 
 		 * @param label
-		 * 	The label of the Vector (should be six characters or fewer)
+		 * 	The label of the Vector (should be six characters or fewer: longer labels will be truncated)
 		 * @param values
 		 * 	The initial values of the vector elements (no more than 20)
 		 * @throws InputTooLongException
@@ -191,7 +207,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, true));
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, vec, to, true));
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL, this, from, vec, to, true));
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL, this, vec, to, true));
 					if (draw) startAnimation();
 					else ShellVectorAnimator.this.notify();
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
@@ -401,6 +417,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			return res;
 		}
 		
+		/**
+		 * This method returns a VectorState object which contains the current state of the
+		 * Vector. This can later be restored by ShellVectorAnimator.restoreState().
+		 * @return
+		 * 	The VectorState object. This is never used by the queue directly: instead it goes
+		 * 	into an ShellVectorAnimator.State object which contains VectorStates and ArrowStates
+		 * 	for all the Vectors and Arrows currently known to the ShellVectorAnimator.
+		 */
 		VectorState getState() {
 			return new VectorState();
 		}
@@ -431,6 +455,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.contents = Vector.this.contents;
 			}
 			
+			/**
+			 * Restore the current state to the enclosing vector (this method is called
+			 * by ShellVectorAnimator.restoreState()).
+			 */
 			public void restore() {
 				Vector.this.visible = this.visible;
 				Vector.this.bottom = this.bottom;
@@ -446,7 +474,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
-	// Arrow inner class
+	/**
+	 * This is the class which stores arrows in a way convenient to ShellVectorAnimator.
+	 * It extends VectorAnimator.Arrow to ensure that the important interface is present,
+	 * but a great deal of functionality is added, such as an internal ArrowState object
+	 * which holds the state of the arrow to facilitate saving and restoring the animator state.
+	 * 
+	 * @author am502
+	 */
 	public class Arrow extends VectorAnimator.Arrow {
 		private String label;
 		private int position; // offset in the array at which we are pointing
@@ -458,12 +493,40 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private boolean visible = false;
 		private boolean deleted = false;
 		
+		/**
+		 * Constructor
+		 * 
+		 * @param v
+		 * 	The Vector we should be pointing at
+		 * @param label
+		 * 	The label of the arrow (should be four characters or fewer; longer labels will be truncated)
+		 * @param position
+		 * 	The initial position of the arrow. If boundary is true, then the arrow will point
+		 * 	directly at element "position" of the Vector v. If false, then the arrow will point
+		 * 	between elements (position-1) and position of the Vector v.
+		 * @param boundary
+		 * 	True if the arrow is to point between two vector elements;
+		 * 	false if it is to point directly at a particular element.
+		 */
 		Arrow(Vector v, String label, int position, boolean boundary) {
 			this(v, position, boundary);
 			if (label.length() > 4) label = label.substring(0,4); 
 			this.label = label;
 		}
 		
+		/**
+		 * Constructor (does not specify a label: default label is blank)
+		 * 
+		 * @param v
+		 * 	The Vector we should be pointing at
+		 * @param position
+		 * 	The initial position of the arrow. If boundary is true, then the arrow will point
+		 * 	directly at element "position" of the Vector v. If false, then the arrow will point
+		 * 	between elements (position-1) and position of the Vector v.
+		 * @param boundary
+		 * 	True if the arrow is to point between two vector elements;
+		 * 	false if it is to point directly at a particular element.
+		 */
 		Arrow(Vector v, int position, boolean boundary) {
 			this.vector = v;
 			this.position = position;
@@ -586,14 +649,23 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
+		/**
+		 * Returns an ArrowState object containing the internal state of this arrow.
+		 * This will facilitate the saving and restoring of the animator state. This method
+		 * is not called directly by the queue; instead, the queue calls ShellVectorAnimator.saveState()
+		 * which then compiles a State object containing all the VectorStates and AnimatorStates
+		 * known to the animator.
+		 * @return
+		 * 	The ArrowState object containing the internal state of the present arrow
+		 */
 		ArrowState getState() {
 			return new ArrowState();
 		}
 		
 		/**
-		 * @author am502
-		 *
 		 * A class to hold the arrow's internal state, similar to Vector.VectorState. This is for the purpose of saving and restoring the animator state.
+		 * 
+		 * @author am502
 		 */
 		class ArrowState {
 			private String label;
@@ -615,6 +687,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.deleted = Arrow.this.deleted;
 			}
 			
+			/**
+			 * Restore the state of the enclosing instance of Arrow to the values
+			 * stored in this object
+			 */
 			public void restore() {
 				Arrow.this.label = this.label;
 				Arrow.this.position = this.position;
@@ -631,56 +707,118 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	}
 	
 	/**
-	 * @author am502
-	 *
 	 * An object which stores the internal states of all the vectors and arrows currently known to the animator. This will allow the animator state to be saved and restored to allow backtracking through the algorithm.
+	 * 
+	 * @author am502
 	 */
-	// State inner class
 	public class State extends Animator.State {
 		private Vector.VectorState[] vectors;
 		private Arrow.ArrowState[] arrows;
 		private int highestColUsed;
 				
+		/**
+		 * Constructor
+		 * 
+		 * @param vectors
+		 * 	An array of all Vectors to be put in the State object
+		 * @param arrows
+		 * 	An array of all the Arrows to be put in the State object
+		 * @param highestColUsed
+		 * 	The value of highestColUsed - new vectors will be placed at position
+		 * 	highestColUsed+1
+		 */
 		State(Vector.VectorState[] vectors, Arrow.ArrowState[] arrows, int highestColUsed) {
 			this.vectors = vectors;
 			this.arrows = arrows;
 			this.highestColUsed = highestColUsed;
 		}
 		
+		/**
+		 * @return
+		 * 	An array of all the VectorState objects contained in this State object
+		 */
 		public Vector.VectorState[] getVectors() {
 			return vectors;
 		}
 		
+		/**
+		 * @return
+		 * 	An array of all the ArrowState objects contained in this State object
+		 */
 		public Arrow.ArrowState[] getArrows() {
 			return arrows;
 		}
 	}
 	
 	/**
-	 * @author am502
-	 *
 	 * This class describes animation events on a level understood by this class, i.e. a very, very basic level (even more basic than the animation primitives provided externally).
 	 * These objects are queued up within the ShellVectorAnimator and executed sequentially.
 	 * There are a great many constructors, each corresponding to a different type of AnimationEvent. Each throws InvalidAnimationEventException
 	 * if an inappropriate constructor is used.
+	 * 
+	 * @author am502
 	 */
-	// AnimationEvent inner class
 	public class AnimationEvent {
-		public static final int ELT_TO_CHANNEL = 0; // moving a single element out from the vector to the side channel
-		public static final int ELT_VERT_IN_CHANNEL = 1; // moving a single element vertically in a channel
-		public static final int ELT_FROM_CHANNEL = 8; // moving a single element from the channel back into the vector
-		public static final int TWO_TO_CHANNEL = 2; // moving two elements at once out to different side channels
-		public static final int TWO_VERT_IN_CHANNEL = 3; // moving two elements at once vertically
-		public static final int TWO_FROM_CHANNEL = 9; // moving two elements at once back into the vector
-		public static final int ARROW_FLASH = 4; // flashing an arrow to highlight it
-		public static final int ARROW_MOVE = 5; // moving an arrow
-		public static final int ELT_CHANGE = 6; // changing an element in some manner (so it has to be redrawn)
-		public static final int ARROW_CHANGE = 7; // changing an arrow in some manner (so it has to be redrawn)
-		public static final int TWO_ARROW_FLASH = 11; // flash two arrows at once
-		public static final int VECTOR_CHANGE = 12; // just redraw the whole vector
-		public static final int ELT_FLASH = 13; // flashing an element to highlight it
-		public static final int VECTOR_DELETE = 14; // deleting a Vector
-		public static final int ELT_FROM_NEW_VECTOR_CHANNEL = 15; // moving an element between vectors
+		/**
+		 * Moving a single element out from the vector to the side channel
+		 */
+		public static final int ELT_TO_CHANNEL = 0;
+		/**
+		 * Moving a single element vertically in a channel
+		 */
+		public static final int ELT_VERT_IN_CHANNEL = 1;
+		/**
+		 * Moving a single element from the channel back into the vector
+		 */
+		public static final int ELT_FROM_CHANNEL = 8;
+		/**
+		 * Moving two elements at once out to different side channels
+		 */
+		public static final int TWO_TO_CHANNEL = 2;
+		/**
+		 * Moving two elements at once vertically
+		 */
+		public static final int TWO_VERT_IN_CHANNEL = 3;
+		/**
+		 * Moving two elements at once back into the vector
+		 */
+		public static final int TWO_FROM_CHANNEL = 9;
+		/**
+		 * Flashing an arrow to highlight it
+		 */
+		public static final int ARROW_FLASH = 4;
+		/**
+		 * Moving an arrow
+		 */
+		public static final int ARROW_MOVE = 5;
+		/**
+		 * Changing an element in some manner (so it has to be redrawn)
+		 */
+		public static final int ELT_CHANGE = 6;
+		/**
+		 * Changing an arrow in some manner (so it has to be redrawn)
+		 */
+		public static final int ARROW_CHANGE = 7;
+		/**
+		 * Flash two arrows at once
+		 */
+		public static final int TWO_ARROW_FLASH = 11;
+		/**
+		 * Just redraw the whole vector
+		 */
+		public static final int VECTOR_CHANGE = 12;
+		/**
+		 * Flashing an element to highlight it
+		 */
+		public static final int ELT_FLASH = 13;
+		/**
+		 * Deleting a Vector
+		 */
+		public static final int VECTOR_DELETE = 14;
+		/**
+		 * Moving an element between vectors
+		 */
+		public static final int ELT_FROM_NEW_VECTOR_CHANNEL = 15;
 
 		private int type;
 		// Arguments
@@ -691,6 +829,17 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private boolean b1;
 		private boolean b2;
 
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (should be either ARROW_FLASH or ARROW_CHANGE)
+		 * @param a
+		 * 	The arrow to be flashed or redrawn
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
 		AnimationEvent(int type, Arrow a) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ARROW_FLASH
 				|| type == AnimationEvent.ARROW_CHANGE) {
@@ -701,6 +850,22 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
+		/**
+		 * Constructor
+		 * 
+		 * @param type
+		 * 	Event type (should be ARROW_MOVE)
+		 * @param a
+		 * 	The Arrow to be moved
+		 * @param newpos
+		 * 	The new position for the arrow (see the Arrow class for positioning rules)
+		 * @param boundary
+		 * 	Whether the new position is on a boundary or not (see the Arrow class)
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
 		AnimationEvent(int type, Arrow a, int newpos, boolean boundary) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ARROW_MOVE) {
 				this.type = type;
@@ -711,6 +876,19 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be TWO_ARROW_FLASH)
+		 * @param a1
+		 * 	The first arrow to be flashed
+		 * @param a2
+		 * 	The second arrow to be flashed
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
 		AnimationEvent(int type, Arrow a1, Arrow a2) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.TWO_ARROW_FLASH) {
 				this.type = type;
@@ -720,6 +898,17 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be VECTOR_CHANGE or VECTOR_DELETE)
+		 * @param v
+		 * 	The Vector to be changed or deleted
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
 		AnimationEvent(int type, Vector v) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.VECTOR_CHANGE
 				|| type == AnimationEvent.VECTOR_DELETE) {
@@ -730,6 +919,19 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be ELT_FLASH)
+		 * @param v
+		 * 	The Vector in which the element lies
+		 * @param e
+		 * 	The offset of the element to be flashed
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
 		AnimationEvent(int type, Vector v, int e) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ELT_FLASH) {
 				this.type = type;
@@ -739,52 +941,122 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
-		AnimationEvent(int type, Vector v1, int e1, boolean b1) throws InvalidAnimationEventException {
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be ELT_FROM_CHANNEL)
+		 * @param v
+		 * 	The Vector in which the element is to be moved
+		 * @param e
+		 * 	The offset into which it is to be moved
+		 * @param left
+		 * 	True if it is to be moved in from the left, false if from the right
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
+		AnimationEvent(int type, Vector v, int e, boolean left) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ELT_FROM_CHANNEL) {
 				this.type = type;
-				this.v1 = v1;
+				this.v1 = v;
 				this.v2 = null;
-				this.e1 = e1;
-				this.b1 = b1;
+				this.e1 = e;
+				this.b1 = left;
 			}
 			else throw (new InvalidAnimationEventException("Invalid event of type " + type));		
 		}
 		
-		AnimationEvent(int type, Vector v1, int e1, boolean left, boolean copy) throws InvalidAnimationEventException {
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be ELT_TO_CHANNEL)
+		 * @param v
+		 * 	The vector from which the element is to be moved
+		 * @param e
+		 * 	The offset of the element to be moved
+		 * @param left
+		 * 	True if the element is to be moved to the left channel, false if to the right
+		 * @param copy
+		 * 	True if the old element should be left in place, false if it should be deleted.
+		 * 	(This should only be false for a compound operation like a swap, as the element
+		 * 	is still part of the Vector internally and so will be redrawn whenever the Vector is
+		 * 	redrawn.)
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
+		AnimationEvent(int type, Vector v, int e, boolean left, boolean copy) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ELT_TO_CHANNEL) {
 				this.type = type;
-				this.v1 = v1;
+				this.v1 = v;
 				this.v2 = null;
-				this.e1 = e1;
+				this.e1 = e;
 				this.b1 = left;
 				this.b2 = copy;
 			}
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
-		AnimationEvent(int type, Vector v1, int e1, int e2) throws InvalidAnimationEventException {
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be ELT_CHANGE, TWO_FROM_CHANNEL or TWO_TO_CHANNEL)
+		 * @param v
+		 * 	The Vector to act upon
+		 * @param e
+		 * 	The element to act upon
+		 * @param arg
+		 * 	The new value of the element if type is ELT_CHANGE; the value of the other element
+		 * 	to act upon if type is TWO_FROM_CHANNEL or TWO_TO_CHANNEL
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
+		AnimationEvent(int type, Vector v, int e, int arg) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ELT_CHANGE) {
 				this.type = type;
-				this.v1 = v1;
+				this.v1 = v;
 				this.v2 = null;
-				this.e1 = e1;
-				this.arg = e2;
+				this.e1 = e;
+				this.arg = arg;
 			}
 			else if (type == AnimationEvent.TWO_FROM_CHANNEL
 			|| type == AnimationEvent.TWO_TO_CHANNEL) {
 				this.type = type;
-				this.v1 = v1;
+				this.v1 = v;
 				this.v2 = null;
-				this.e1 = e1;
-				this.e2 = e2;
+				this.e1 = e;
+				this.e2 = arg;
 			}
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
-		AnimationEvent(int type, Vector v1, int from1, int to1, int from2, int to2) throws InvalidAnimationEventException {
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be TWO_VERT_IN_CHANNEL)
+		 * @param v1
+		 * 	The Vector to act upon
+		 * @param from1
+		 * 	The starting offset of the element in the LEFT channel
+		 * @param to1
+		 * 	The final offset of the element in the LEFT channel
+		 * @param from2
+		 * 	The starting offset of the element in the RIGHT channel
+		 * @param to2
+		 * 	The final offset of the element in the RIGHT channel
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
+		AnimationEvent(int type, Vector v, int from1, int to1, int from2, int to2) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.TWO_VERT_IN_CHANNEL) {
 				this.type = type;
-				this.v1 = v1;
+				this.v1 = v;
 				this.v2 = null;
 				this.e1 = from1;
 				this.e2 = from2;
@@ -794,9 +1066,28 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 		
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be ELT_VERT_IN_CHANNEL)
+		 * @param v1
+		 * 	The Vector where the element currently is (and should be moving beside).
+		 * @param e1
+		 * 	This is the starting offset of the element being moved
+		 * @param v2
+		 * 	This is the destination Vector of the element. If this is the same as v1, it
+		 * 	can either be set to v1 also or left as null.
+		 * @param e2
+		 * 	This is the destination offset of the element.
+		 * @param b1
+		 * 	True if the element is in the left channel; false if it is in the right.
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
 		AnimationEvent(int type, Vector v1, int e1, Vector v2, int e2, boolean b1) throws InvalidAnimationEventException {
-			if (type == AnimationEvent.ELT_VERT_IN_CHANNEL
-			|| type == AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL) {
+			if (type == AnimationEvent.ELT_VERT_IN_CHANNEL) {
 				this.type = type;
 				this.v1 = v1;
 				this.v2 = v2;
@@ -807,6 +1098,39 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			else throw new InvalidAnimationEventException("Invalid event of type "+type);
 		}
 		
+		/**
+		 * Constructor
+		 * @param type
+		 * 	Event type (expected to be ELT_FROM_NEW_VECTOR_CHANNEL)
+		 * @param source
+		 * 	The source vector
+		 * @param dest
+		 * 	The destination vector
+		 * @param destOffset
+		 * 	The destination offset
+		 * @param left
+		 * 	True if the element is on the left of the source vector;
+		 * 	false if it is on the right of the source vector.
+		 * @throws InvalidAnimationEventException
+		 * 	This will only be thrown if there is a mistake in the ShellVectorAnimator class
+		 * 	or one of its inner classes. It should be caught within that class and never
+		 * 	thrown externally.
+		 */
+		AnimationEvent(int type, Vector source, Vector dest, int destOffset, boolean left) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.ELT_FROM_NEW_VECTOR_CHANNEL) {
+				this.type = type;
+				this.v1 = source;
+				this.v2 = dest;
+				this.e2 = destOffset;
+				this.b1 = left;
+			}
+			else throw new InvalidAnimationEventException("Invalid event of type "+type);
+		}
+		
+		/**
+		 * @return
+		 * 	The type of this event
+		 */
 		public int getType() {
 			return type;
 		}
@@ -820,9 +1144,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private Graphics outg; // Graphics object we are passed from the shell
 	private BufferedImage bi; // buffered image for double buffering
 	private Graphics big; // corresponding graphics to bi
-	private Color fgcolour = Color.black;
-	private Color bgcolour = Color.white;
-	//private Color vectorColour = Color.red;
+	private Color fgcolour = Color.black; // foreground colour
+	private Color bgcolour = Color.white; // background colour
 	// Colours to be used for arrows and vectors, in order of preference
 	public static final Color[] vectorGroupColours = {Color.red, Color.blue, Color.darkGray, Color.magenta, Color.orange, Color.pink};
 	public static final Color[] arrowGroupColours = {Color.blue, Color.magenta, Color.orange, Color.pink, Color.darkGray, Color.red};
@@ -833,17 +1156,21 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private LinkedList arrows = new LinkedList(); // an array of all Arrows currently known to the animator
 	private boolean draw = true; // Do we actually want to draw our buffered image out to the screen on each frame, or are we fast-forwarding?
 	
-	// Constructor
+	/**
+	 * Constructor
+	 * @param c
+	 * 	A container for us to use as a canvas. Generally this will be a JFrame, but it can be any Container.
+	 */
 	public ShellVectorAnimator(Container c) {
 		outc = new JPanel() {
 			public void paintComponent(Graphics g) {
 				g.drawImage(bi,0,0,outc);
 			}
-		}; // lightweight container
+		}; // a JPanel with a redefined paintComponent method for redrawing the canvas after the window has been obscured
 		outc.setSize(c.getSize().width, c.getSize().height);
-		c.add(outc);
+		c.add(outc); // add the JPanel to the Container we were given
 		outc.setVisible(true);
-		outg = outc.getGraphics();
+		outg = outc.getGraphics(); // get a Graphics object for us to animate on
 		
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
@@ -876,13 +1203,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		big.setColor(fgcolour);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	// This method is executed on each animation frame
 	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
 		if (draw) outg.drawImage(bi,0,0,outc);
 
-		// Now comes the meat of the method: what should we do each frame?
-				
 		// If we need a new event, get it
 		if (currentEvent == null) {
 			System.out.println("We need a new event");
@@ -899,6 +1227,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
+		// If we have something to do, then do the appropriate thing according to the
+		// type of the current event
 		if (currentEvent != null) {
 			switch(currentEvent.type) {
 				case AnimationEvent.ARROW_CHANGE:
@@ -1004,11 +1334,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
-	// Should these methods be synchronized?
+	/**
+	 * If the Timer is not running, and animation is not in progress, then start it
+	 */
 	public void startAnimation() {
 		if (!timer.isRunning()) timer.start();
 	}
 	
+	/**
+	 * If the Timer is running, and animation is in progress, stop it (pause)
+	 */
 	public void stopAnimation() {
 		if (timer.isRunning()) timer.stop();
 	}
@@ -1052,11 +1387,13 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		startAnimation();
 	}
 	
+	// Draw the vector v on the Graphics object g
 	private void drawVector(Vector v, Graphics g) {
 		drawVectorSkeleton(v, g);
 		drawVectorContents(v, g);
 	}
 	
+	// Redraw the vector v on the Graphics object g (clear the area and draw again)
 	private void redrawVector(Vector v, Graphics g) {
 		// Clear vector area
 		g.setColor(bgcolour);
@@ -1069,6 +1406,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
+	// Redraw all vectors known to the animator
 	private void redrawAllVectors(Graphics g) {
 		Iterator i = vectors.listIterator();
 		while (i.hasNext()) {
@@ -1077,12 +1415,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
+	// Draw the two vertical lines bounding each vector
 	private void drawVectorVertical(Vector v, Graphics g) {
 		g.setColor(v.colour);
 		g.drawLine(v.left, v.top, v.left, v.bottom);
 		g.drawLine(v.right, v.top, v.right, v.bottom);
 	}
 	
+	// Draw the frame of the vector
 	private void drawVectorSkeleton(Vector v, Graphics g) {
 		g.setColor(v.colour);
 		
@@ -1100,6 +1440,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		g.drawString(v.label, v.left+5, v.bottom+25);
 	}
 	
+	// Draw the vector elements in place
 	private void drawVectorContents(Vector v, Graphics g) {
 		g.setColor(fgcolour);
 		
@@ -1459,14 +1800,18 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		return createVector("Unnamed", size);
 	}
 	
+	// Draw an arrow in its default colour
 	private void drawArrow(Arrow a, Graphics g) {
 		drawArrow(a, g, a.colour);
 	}
 	
+	// Draw an arrow in a specified colour
 	private void drawArrow(Arrow a, Graphics g, Color c) {
 		drawArrow(a, g, c, 0);
 	}
 	
+	// Draw an arrow in a specified colour at a position yoffset vertically away
+	// from its "proper" location
 	private void drawArrow(Arrow a, Graphics g, Color c, int yoffset) {
 		int left = (a.left) ? a.vector.left - 9 : a.vector.right+1;
 		int right = left + 8;
@@ -1494,6 +1839,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
+	// Clear the area where an arrow was and redraw it
 	private void redrawArrow(Arrow a, Graphics g) {
 		if (!a.visible) return;
 		int left = (a.left) ? a.vector.left - 9 : a.vector.right+1;
@@ -1506,6 +1852,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		if (!a.deleted) drawArrow(a, g);
 	}
 	
+	// Redraw all arrows known to the animator
+	// (on the left or right of vectors according to the parameter "left"),
+	// with the exception of notThis
 	private void redrawAllArrows(Graphics g, boolean left, Arrow notThis) {
 		Iterator i = arrows.listIterator();
 		while (i.hasNext()) {
@@ -1514,16 +1863,20 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
+	// TODO: what are these for? Can I delete them?
 	public void setSteps(String[] steps) {
 	}
 
 	public void setCurrentStep(int step) {
 	}
 
+	// TODO: what to do about this?
 	public void showMessage(String msg) {
 	}
 
-	// This method and the next need to be completely rethought!!
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
+	 */
 	public synchronized Animator.State saveState() {
 		Vector.VectorState[] vs = new Vector.VectorState[vectors.size()];
 		Arrow.ArrowState[] as = new Arrow.ArrowState[arrows.size()];
@@ -1549,6 +1902,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		return new State(vs, as, highestColUsed);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
+	 */
 	public synchronized void restoreState(Animator.State s) {
 		State st = (State) s;
 		stopAnimation();
@@ -1579,6 +1935,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		outg.drawImage(bi,0,0,outc);
 	}
 	
+	// Test harness, just for fun :-)
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellVectorAnimator test");
 		frame.setSize(500,500);
