@@ -53,10 +53,20 @@ public class TestVectorAnimator2 extends VectorAnimator {
 			return res;
 		}
 
+		public VectorAnimator.Arrow createArrow(int offset, boolean boundary, boolean left) {
+			Arrow res = new Arrow(offset, boundary);
+			return res;
+		}
+		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
 		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary) {
+			Arrow res = new Arrow(label, offset, boundary);
+			return res;
+		}
+		
+		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary, boolean left) {
 			Arrow res = new Arrow(label, offset, boundary);
 			return res;
 		}

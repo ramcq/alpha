@@ -124,19 +124,28 @@ public class TestVectorAnimator extends VectorAnimator {
 			System.out.println("Copying element from " + offsetfrom + " to " + target);
 		}
 		
-		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
-		 */
+		
 		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) {
 			System.out.println("Creating arrow with offset " + offset + " and boundary " + boundary); 
 			return null;
 		}
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
+		 */
+		public VectorAnimator.Arrow createArrow(int offset, boolean boundary, boolean left) {
+			System.out.println("Creating arrow with offset " + offset + " and boundary " + boundary + "with left" + left); 
+			return null;
+		}
 		
+		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary) {
+			System.out.println("Creating " + label + " with offset " + offset + " and boundary " + boundary); 
+			return null;
+		}
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary) {
-			System.out.println("Creating " + label + " with offset " + offset + " and boundary " + boundary); 
+		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary, boolean left) {
+			System.out.println("Creating " + label + " with offset " + offset + " and boundary " + boundary + "with left" + left); 
 			return null;
 		}
 		
