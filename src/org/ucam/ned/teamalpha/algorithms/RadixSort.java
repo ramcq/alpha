@@ -49,14 +49,8 @@ public class RadixSort extends VectorAlgorithm {
 	 * @return
 	 * 	The digit at the given index.
 	 */
-	private int digitAt(int n, int d) {
-		// TODO: Optimise this method!!
-		try {
-			String s = Integer.toString(n);
-			return Character.digit(s.charAt(s.length() - d - 1),10);		
-		} catch (StringIndexOutOfBoundsException e) {
-			return 0;
-		}
+	private static int digitAt(int n, int d) {
+		return (int)(n / Math.pow(10,d)) % 10;
 	}
 	
 	public void sort() {
