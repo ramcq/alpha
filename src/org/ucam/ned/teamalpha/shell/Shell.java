@@ -148,9 +148,11 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 
 	// handles all the button presses from the button panel
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Exit"))
+		String command = e.getActionCommand();
+		
+		if (command.equals("Exit"))
 			System.exit(0);
-		else if (e.getActionCommand().equals("Restart"))
+		else if (command.equals("Restart"))
 			try {
 				choice = null;
 				algorithm = null;
@@ -158,7 +160,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 			} catch (Exception ex) {
 				System.err.println(ex);
 			}
-		else if (panel != null)
+		else if (panel instanceof ActionListener)
 			panel.actionPerformed(e);
 	}
 	
