@@ -147,11 +147,12 @@ public class Kruskal extends GraphAlgorithm {
 			// Now compare with the rest
 			
 			for(int i=1; i<lim; i++) {
-				while (((Node)nodes.elementAt(i)).parent > 0) {
-					i = ((Node)nodes.elementAt(i)).parent;
+				int test = i;
+				while (((Node)nodes.elementAt(test)).parent > 0) {
+					test = ((Node)nodes.elementAt(test)).parent;
 				}
 				
-				if (i != top) return false;
+				if (test != top) return false;
 			}
 			
 			return true;
@@ -192,6 +193,8 @@ public class Kruskal extends GraphAlgorithm {
 	}
 	
 	void kruskalsAlgo() {
+		int TOTALCOST = 0;
+		
 		// ANIM: Set up the set descriptions
 		anim.setSteps(new String[] {
 							"Check shortest edge for cycle and add",
@@ -230,22 +233,40 @@ public class Kruskal extends GraphAlgorithm {
 				touched[n1]=0; touched[n2]=0;
 				
 				//ANIM: Add edge to the graph
-				anim.flashEdge(n1,n2);
-				anim.setEdgeShade(n1,n2,INCLUDED);
+				
+				try {
+					anim.flashEdge(n1,n2);
+					anim.setEdgeShade(n1,n2,INCLUDED);
+				} catch (Exception ex) {}
+				
 			} else if (!(result[n1][n2] == 1 || result[n2][n1] == 1 )) {
 				//ANIM: Show that edge causes a cycle if not already in tree
 				anim.setCurrentStep(1);
 				anim.saveState();
-				anim.setEdgeShade(n1,n2,CYCLECAUSING);
+				
+				try {
+					anim.setEdgeShade(n1,n2,CYCLECAUSING);
+				} catch (Exception ex) {}
+			}
+		}
+		
+		// Calculate the cost of the spanning tree
+		for (int i = 0; i< dim; i++) {
+			for (int j = 0; j<i; j++) {
+				if (result[i][j] == 1) {
+					TOTALCOST += costMatrix[i][j];
+				}
 			}
 		}
 		
 		// ANIM: Announce completion
 		if (finished()) {
 			// We've seen to all nodes
+			anim.showMessage("A spanning tree of cost <strong>" + TOTALCOST + "<strong> was found.");
 			anim.setCurrentStep(4);
 		} else {
 			// Couldn't find a tree
+			anim.showMessage("A spanning tree could not be found.");
 			anim.setCurrentStep(3);
 		}
 			
