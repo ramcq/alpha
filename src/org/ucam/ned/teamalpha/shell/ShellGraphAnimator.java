@@ -357,7 +357,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 	}
 	
-	ShellGraphAnimator(Container c) {
+	public ShellGraphAnimator(Container c) {
 		outc = new JPanel() {
 			public void paintComponent(Graphics g) {
 				g.drawImage(bi,0,0,outc);

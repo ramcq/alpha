@@ -292,7 +292,11 @@ public class Dijkstra extends GraphAlgorithm {
 		buildData(STARTINDEX, costMatrix);
 		
 		// ANIM: Create animator information
-		anim.createGraph(costMatrix);
+		try {
+			anim.createGraph(costMatrix);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		
 		while (!unFinished.isEmpty())
 		{
