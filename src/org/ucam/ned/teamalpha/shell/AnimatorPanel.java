@@ -204,7 +204,7 @@ public class AnimatorPanel extends ShellPanel {
 	public void showMessage(String msg) {
 		message.setText("<FONT FACE=\"SansSerif\">" + msg + "</FONT>");
 	}
-	
+
 	public void setSteps(String[] steps) {
 		stepList.setListData(steps);
 	}
