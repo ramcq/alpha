@@ -104,6 +104,31 @@ public abstract class VectorAnimator extends Animator {
 		public abstract void setHighlightedDigit(int column) throws ItemDeletedException, InvalidLocationException;
 
 		/**
+		 * Create a new arrow pointing at a value in the vector, or the boundary
+		 * between two values.
+		 * 
+		 * @param label
+		 * 	The label of the arrow (4 characters or fewer: longer strings will be truncated)
+		 * @param position
+		 * 	the offset to point at, can be equal to the vector length
+		 * 	if boundary is true
+		 * @param boundary
+		 * 	true to point at the boundary before the offset
+		 * @param left
+		 * 	True if the arrow is to point to the left of the vector
+		 * @return a reference to the new arrow created
+		 * @throws ItemDeletedException
+		 * 	If the vector has been deleted
+		 * @throws InvalidLocationException
+		 * 	If the location given is not within the vector
+		 */
+		public abstract VectorAnimator.Arrow createArrow(
+			String label,
+			int position,
+			boolean boundary,
+			boolean left) throws ItemDeletedException, InvalidLocationException;
+		
+		/**
 		 * Create a new arrow pointing at a value in the vector, or the
 		 * boundary between two values.
 		 * 
@@ -133,6 +158,19 @@ public abstract class VectorAnimator extends Animator {
 			String label,
 			int offset,
 			boolean boundary) throws ItemDeletedException, InvalidLocationException;
+		
+		/**
+		 * @param position
+		 * @param boundary
+		 * @param left
+		 * @return
+		 * @throws ItemDeletedException
+		 * @throws InvalidLocationException
+		 */
+		public abstract VectorAnimator.Arrow createArrow(
+			int position,
+			boolean boundary,
+			boolean left) throws ItemDeletedException, InvalidLocationException;
 	}
 
 	/**

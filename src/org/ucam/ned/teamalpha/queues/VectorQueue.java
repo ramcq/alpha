@@ -24,6 +24,16 @@ public class VectorQueue extends VectorAnimator implements AnimatorQueue {
 		}
 
 		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean, boolean)
+		 */
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary, boolean left) {
+			Arrow ret = new Arrow();
+			Object[] args = {label, new Primitive(position), new Primitive(boundary), new Primitive(left) };
+			q.enqueue(this, "createArrow", args, ret);
+			return ret;
+		}
+		
+		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
 		 */
 		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) {
@@ -33,6 +43,16 @@ public class VectorQueue extends VectorAnimator implements AnimatorQueue {
 			return ret;
 		}
 
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean, boolean)
+		 */
+		public VectorAnimator.Arrow createArrow(int position, boolean boundary, boolean left) {
+			Arrow ret = new Arrow();
+			Object[] args = { new Primitive(position), new Primitive(boundary), new Primitive(left) };
+			q.enqueue(this, "createArrow", args, ret);
+			return ret;
+		}
+		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
