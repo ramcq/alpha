@@ -24,9 +24,8 @@ public class TestGraphAlgorithm extends GraphAlgorithm {
 	 * @param ga
 	 * @param costs
 	 */
-	public TestGraphAlgorithm(GraphAnimator ga, int[][] costs) {
+	public TestGraphAlgorithm(int[][] costs) {
 		super(costs);
-		this.ga = ga;
 		this.costs = costs;
 	}
 
@@ -34,6 +33,7 @@ public class TestGraphAlgorithm extends GraphAlgorithm {
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
 	public void execute(Animator anim) {
+		this.ga = (GraphAnimator) ga;
 		// TODO this sucks, make it do something sensible
 		String[] steps = { "foo", "bar", "baz", "qux" };
 		ga.setSteps(steps);

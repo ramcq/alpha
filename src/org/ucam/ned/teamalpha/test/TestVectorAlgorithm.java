@@ -7,6 +7,7 @@
 package org.ucam.ned.teamalpha.test;
 
 import org.ucam.ned.teamalpha.algorithms.VectorAlgorithm;
+import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
@@ -24,17 +25,17 @@ public class TestVectorAlgorithm extends VectorAlgorithm {
 	* @param values
 	*/
 
-	public TestVectorAlgorithm(VectorAnimator va, int[] values) {
+	public TestVectorAlgorithm(int[] values) {
 		super(values);
-		this.va = va;
 		this.values = values;
 	};
 	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
-	public void execute() {
-	
+	public void execute(Animator anim) {
+		this.va = (VectorAnimator) anim;
+		try {
 		VectorAnimator.Vector v1 = va.createVector("hello", values);
 		VectorAnimator.Arrow a1 = v1.createArrow(1, false);
 		VectorAnimator.Arrow a2 = v1.createArrow(5, false);
@@ -48,8 +49,10 @@ public class TestVectorAlgorithm extends VectorAlgorithm {
 		VectorAnimator.Vector v2 = va.createVector("vector 2", values);
 		v2.delete();
 		v2.setElement(6, 100);
-		
 		//VectorAnimator.Vector v3 = va.createVector("vector 2", values);
+		} catch (Exception e) {
+			System.err.println("test vector algorithm failed: " + e);
+		}
 		
 				
 	}

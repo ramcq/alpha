@@ -32,9 +32,9 @@ public class test {
 		
 		ShellVectorAnimator app = new ShellVectorAnimator(frame);
 			
-		TestVectorAlgorithm testalg = new TestVectorAlgorithm(app, values);	
+		TestVectorAlgorithm testalg = new TestVectorAlgorithm(values);	
 		
-		testalg.execute();
+		testalg.execute(app);
 		
 	}
 	
