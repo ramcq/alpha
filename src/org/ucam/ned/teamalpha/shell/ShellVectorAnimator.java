@@ -6,12 +6,12 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
+import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
-import org.ucam.ned.teamalpha.animators.Animator.State;
-import org.ucam.ned.teamalpha.animators.VectorAnimator.Vector;
 
 /**
  * @author igor
@@ -19,28 +19,32 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator.Vector;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionListener {
+public class ShellVectorAnimator extends VectorAnimator implements ActionListener {
 	
 	// Vector inner class
-	public class Vector {
+	public class Vector extends VectorAnimator.Vector {
 		static final int maxSize = 20;
 		static final int maxElementLength = 6; // Maximum number of digits in any element
-		private final int top = 50;
-		private final int width = 50;
+		static final int maxArrowWidth = 20; // Maximum size an arrow can be
+		static final int width = 50; // width of vector in pixels
+		
+		private final int top = 50; // y coordinate of top of vector
 		private int bottom;
 		private int left;
 		private int right;
-		private int size;
-		private String label;
-		private String[] contents;
+		private int size; // number of elements in vector
+		private Color colour = Color.red; // colour of skeleton and label
+		private String label; // visible label of vector
+		private String[] contents; // the actual elements of the vector (held as space-padded Strings rather than ints)
 		
+		// Can we eliminate the gross redundancy in these two constructors?
 		Vector(int[] values) {
 			size = values.length;
 			if (size > maxSize); // complain
 			
 			// This vector will be in a new column, so increase the value of the highest column in use
 			highestColUsed++;
-			left = 70 + (highestColUsed * 120); // the x position of the left of the new vector
+			left = 80 + (highestColUsed * 190); // the x position of the left of the new vector
 			right = left + width; // the x position of the right of the new vector
 			bottom = top + (size * 20); // the y position of the bottom of the new vector
 			label = "Unnamed";
@@ -60,7 +64,7 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 			
 			// This vector will be in a new column, so increase the value of the highest column in use
 			highestColUsed++;
-			left = 70 + (highestColUsed * 120); // the x position of the left of the new vector
+			left = 80 + (highestColUsed * 190); // the x position of the left of the new vector
 			right = left + width; // the x position of the right of the new vector
 			bottom = top + (size * 20); // the y position of the bottom of the new vector
 			this.label = label;
@@ -84,29 +88,36 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 		
 		public void copyElement(int from, int to) {
 		}
-		public void copyElement(int from, Vector v, int to) {
+		public void copyElement(int from, VectorAnimator.Vector v, int to) {
 		}
+		
 		public void moveElement(int from, int to) {
+			eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, new Object[] {this, new Integer(from), new Boolean(true)}));
+			eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, new Object[] {this, new Integer(from), new Integer(to)}));
+			// and so forth
 		}
+		
 		public void setElement(int elt, int value) {
 		}
 		public void swapElements(int elt1, int elt2) {
 		}
-		public void swapElements(int elt1, Vector v, int elt2) {
+		public void swapElements(int elt1, VectorAnimator.Vector v, int elt2) {
 		}
-		public Vector splitVector(int offset) {
+		public VectorAnimator.Vector splitVector(int offset) {
 			return null;
 		}
-		public Arrow createArrow(int loc, boolean boundary) {
+		public VectorAnimator.Arrow createArrow(int loc, boolean boundary) {
 			return null;
 		}
-		public Arrow createArrow(String label, int loc, boolean boundary) {
+		public VectorAnimator.Arrow createArrow(String label, int loc, boolean boundary) {
 			return null;
+		}
+		public void setHighlightedDigit(int column) {
 		}
 	}
 	
 	// Arrow inner class
-	public class Arrow {
+	public class Arrow extends VectorAnimator.Arrow {
 		public void delete() {
 		}
 		public void setLabel(String label) {
@@ -119,13 +130,50 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 		}
 	}
 	
-	private static final int fps = 30;	// Animation framerate
-	private Timer timer;	// timer for animation events
+	// State inner class
+	public class State extends Animator.State {
+	}
+	
+	// AnimationEvent inner class
+	public class AnimationEvent {
+		public static final int ELT_TO_CHANNEL = 0;
+		public static final int ELT_VERT_IN_CHANNEL = 1;
+		public static final int ARROW_FLASH = 2;
+		public static final int ARROW_MOVE = 3;
+		private int type;
+		private Object[] args;
+		
+		AnimationEvent(int type, Object[] args) {
+			this.type = type;
+			this.args = args;
+		}
+		
+		public int getType() {
+			return type;
+		}
+		
+		public Object[] getArgs() {
+			return args;
+		}
+	}
+	
+	private static final int fps = 2;	// Animation framerate
+	private javax.swing.Timer timer;	// timer for animation events
 	private int highestColUsed = -1; // stores the highest column which has a vector in it
 	
 	private Component outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
 	private Image bi; // buffered image for double buffering
+	private Graphics big; // corresponding graphics to bi
+	private Color fgcolour = Color.black;
+	private Color bgcolour = Color.white;
+	private Color vectorColour = Color.red;
+	private boolean firstTime = true;
+	private int intermediateOffset = 0; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
+	private int count;
+	private LinkedList eventQueue; // will hold queue the events we are to perform
+	private AnimationEvent currentEvent; // the event we are currently executing
+	
 	
 	// Temporary test vectors
 	private Vector v, v2;
@@ -136,10 +184,10 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 		outg = c.getGraphics();
 		
 		int delay = (fps > 0) ? (1000 / fps) : 100;	// Frame time in ms
-		System.out.println("Delay = " + delay);
+		System.out.println("Delay = " + delay + " ms");
 		
 		// Instantiate timer (gives us ActionEvents at regular intervals)
-		timer = new Timer(delay, this);
+		timer = new javax.swing.Timer(delay, this);
 		// Fire first event immediately
 		timer.setInitialDelay(0);
 		// Fire events continuously
@@ -147,6 +195,19 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 		// Combine into a single ActionEvent in case of backlog
 		timer.setCoalesce(true);
 		
+		// Instantiate our event queue
+		eventQueue = new LinkedList();
+		
+		// Make sure buffered image is the same size as the application window
+			 if (bi == null ||
+				 (! (bi.getWidth(outc) == outc.getSize().width
+				 && bi.getHeight(outc) == outc.getSize().height)))
+			 {
+				 bi = outc.createImage(outc.getSize().width, outc.getSize().height);
+			 }
+		
+			 big = bi.getGraphics();
+			 
 		int[] test = {1,2,3,4,10,22,76};
 		int[] test2 = {456, 3423, 43, 7676,2,0,99,235};
 		v = new Vector("Vector1", test);
@@ -155,28 +216,27 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 	
 	// This method is executed on each animation frame
 	public void actionPerformed(ActionEvent a) {
-		Graphics gr;
 		
-		// Make sure buffered image is the same size as the application window
-		if (bi == null ||
-			(! (bi.getWidth(outc) == outc.getSize().width
-			&& bi.getHeight(outc) == outc.getSize().height)))
-		{
-			bi = outc.createImage(outc.getSize().width, outc.getSize().height);
-		}
-		
-		gr = bi.getGraphics();
-
 		// Meat of the method is here: what actions to carry out on each frame
 		// Question: should we make public methods synchronised in order that the shell can sleep while I 
 		// carry out each primitive and then wake up to give me a new primitive when I'm finished?
 		// Question: what is the thread I'm going to be running in, and do I ever have to sleep?
 		
-		drawVectorSkeleton(v, gr);
-		drawVectorContents(v, gr);
-		drawVectorSkeleton(v2,gr);
-		drawVectorContents(v2,gr);
-		
+		if (firstTime) {
+			big.setColor(bgcolour);
+			big.fillRect(0,0,500,500);
+			big.setColor(fgcolour);
+			drawVectorSkeleton(v, big);
+			drawVectorContents(v, big);
+			drawVectorSkeleton(v2,big);
+			drawVectorContents(v2,big);
+			firstTime = false;
+			count = 0;
+		}
+
+		count++;
+		if (count > 6) moveElementToChannel(big, v, 4, true);
+		if (count > 60) count = 0;
 		
 		// Draw our buffered image out to the actual window
 		outg.drawImage(bi,0,0,outc);
@@ -190,8 +250,14 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 		if (timer.isRunning()) timer.stop();
 	}
 
+	private void drawVectorVertical(Vector v, Graphics g) {
+		g.setColor(v.colour);
+		g.drawLine(v.left, v.top, v.left, v.bottom);
+		g.drawLine(v.right, v.top, v.right, v.bottom);
+	}
+	
 	private void drawVectorSkeleton(Vector v, Graphics g) {
-		//g.setColor(Color.red);
+		g.setColor(v.colour);
 		
 		// Draw horizontal lines
 		for (int i=0; i<v.size+1; i++) {
@@ -200,8 +266,7 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 		}
 		
 		// Draw vertical lines
-		g.drawLine(v.left, v.top, v.left, v.bottom);
-		g.drawLine(v.right, v.top, v.right, v.bottom);
+		drawVectorVertical(v,g);
 		
 		// Draw label
 		g.setFont(new Font("MonoSpaced", Font.PLAIN, 12));
@@ -209,7 +274,7 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 	}
 	
 	private void drawVectorContents(Vector v, Graphics g) {
-		//g.setColor(fgcolour);
+		g.setColor(fgcolour);
 		
 		g.setFont(new Font("MonoSpaced", Font.PLAIN, 10));
 		for (int i=0; i<v.size; i++) {
@@ -217,15 +282,44 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 		}
 	}
 	
-/*	PROBLEM HERE!
-	public Vector createVector(int[] values) {
+	// Method to move an element of a vector horizontally left or right to lie beside the vector in one of the
+	// vertical channels
+	private void moveElementToChannel(Graphics g, Vector v, int element, boolean left) {
+		if (intermediateOffset >= 70) { // are we done?
+			intermediateOffset = 0;
+			return;
+		}
+		intermediateOffset += 5;
+		int topOfElement = v.top + (20 * element) + 1;
+		int bottomOfElement = topOfElement + 19;
+		int leftOfAffectedArea = left ? v.left - 70 : v.left+1; // the left of the area we will have to clear each time
+		int rightOfAffectedArea = left ? v.right-1 : v.right+70; // the right of the same area
+		
+		// Clear affected area
+		g.setColor(bgcolour);
+		g.fillRect(leftOfAffectedArea, topOfElement, rightOfAffectedArea-leftOfAffectedArea, 19);
+		
+		// Redo vertical lines
+		drawVectorVertical(v,g);
+		
+		g.setColor(fgcolour);
+		if (left) {
+			g.drawString(String.valueOf(v.contents[element]), v.left-intermediateOffset, 14+topOfElement);
+		}
+		else {
+			g.drawString(v.contents[element], v.left+intermediateOffset, 14+topOfElement);
+		}
+	}
+	
+	public VectorAnimator.Vector createVector(int[] values) {
+		//return ShellVectorAnimator.Vector(values);
 		return null;
 	}
 
-	public Vector createVector(String label, int[] values) {
+	public VectorAnimator.Vector createVector(String label, int[] values) {
+		//return ShellVectorAnimator.Vector(label, values);
 		return null;
 	}
-*/
 
 	public void setSteps(String[] steps) {
 	}
@@ -236,11 +330,11 @@ public class ShellVectorAnimator /*extends VectorAnimator*/ implements ActionLis
 	public void showMessage(String msg) {
 	}
 
-	public State saveState() {
+	public Animator.State saveState() {
 		return null;
 	}
 
-	public void restoreState(State state) {
+	public void restoreState(Animator.State state) {
 	}
 
 	public static void main(String[] args) {
