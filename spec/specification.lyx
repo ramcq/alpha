@@ -8,7 +8,7 @@
 \paperfontsize default
 \spacing single 
 \papersize a4paper
-\paperpackage a4
+\paperpackage a4wide
 \use_geometry 0
 \use_amsmath 0
 \use_natbib 0
@@ -37,37 +37,45 @@ sjc209
 \family typewriter 
 gpl26
 \family default 
-), Zhan Li (
+),
+\newline 
+Zhan Li (
 \family typewriter 
 zrll2
 \family default 
-), 
-\newline 
-Robert McQueen (
+), Robert McQueen (
 \family typewriter 
 ram48
 \family default 
-), Andrew Medworth (
+),
+\newline 
+Andrew Medworth (
 \family typewriter 
 am502
 \family default 
-), 
-\newline 
-Neofytos Mylona (
+), Neofytos Mylona (
 \family typewriter 
 nm314
 \family default 
-), Sidath Senanayake (
+),
+\newline 
+Sidath Senanayake (
 \family typewriter 
 sas58
 \family default 
-), 
-\newline 
-Alan Treanor (
+), Alan Treanor (
 \family typewriter 
 ajit2
 \family default 
 )
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
 \layout Section
 
 Introduction
@@ -90,7 +98,37 @@ Alpha
 \begin_inset Quotes erd
 \end_inset 
 
-, listed individually above.
+, listed individually above
+\begin_inset Foot
+collapsed true
+
+\layout Standard
+
+To obtain group members' email addresses, simply append 
+\begin_inset Quotes eld
+\end_inset 
+
+
+\family typewriter 
+\series bold 
+@cam.ac.uk
+\family default 
+\series default 
+
+\begin_inset Quotes erd
+\end_inset 
+
+ to the usernames in brackets after each person's name.
+\end_inset 
+
+.
+ This project is being overseen by Steven Hand (
+\family typewriter 
+\series bold 
+smh22@cam.ac.uk
+\family default 
+\series default 
+).
 \layout Section
 
 Background
@@ -179,7 +217,7 @@ The auxiliary displays showing the time and space costs of the algorithm,
  animated.
 \layout Section
 
-Facilities to Be Provided
+Facilities to be provided
 \layout Standard
 
 The following facilities will definitely be provided:
@@ -252,15 +290,14 @@ Based on our current knowledge and the availability of development tools,
  we have decided that:
 \layout Itemize
 
-The system will be written using the Java 2 SDK on the Eclipse IDE, a powerful,
- free, open-source Java development environment;
+The system will be written in Java 2 using the Eclipse IDE.
 \layout Itemize
 
-The GUI will be implemented in the Swing windowing toolkit;
+The GUI will be implemented in the Swing windowing toolkit.
 \layout Itemize
 
 Program testing will be done using JUnit, integrated into the Eclipse platform
- as a plugin;
+ as a plugin.
 \layout Itemize
 
 Version control will be provided by 
@@ -270,26 +307,12 @@ cvs
 .
 \layout Section
 
-Overall System Architecture
+Overall system architecture
 \layout Standard
 
-The main functionality of the system can be broken down into four areas:
-\layout Itemize
-
-Algorithms: (can anyone put just a line of explanation here for each of
- these areas?)
-\layout Itemize
-
-Animators
-\layout Itemize
-
-Queues
-\layout Itemize
-
-Shell
-\layout Standard
-
-which will be represented as packages in Java.
+The main functionality of the system can be broken down into four areas,
+ algorithms, animators, queues and shell, which will be represented as packages
+ in Java.
  The following sections contain a brief description of each package, the
  classes within, and their interactions.
 \layout Subsection
@@ -440,7 +463,7 @@ show diagram, explain diagram in detail, explain why diagram is the way
  it is
 \layout Section
 
-Overall Inputs, Functions, and Outputs
+Overall inputs, functions, and outputs
 \layout Standard
 
 User inputs:
