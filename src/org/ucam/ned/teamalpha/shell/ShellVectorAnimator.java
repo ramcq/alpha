@@ -236,6 +236,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			}
 		}
 		
+		// TODO: fix the queue so it finds interfaces
+		public void copyElement(int from, ShellVectorAnimator.Vector v, int to) throws ItemDeletedException, InvalidLocationException {
+			copyElement(from, (VectorAnimator.Vector) v, to);
+		}
+		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#moveElement(int, int)
 		 */
@@ -1219,6 +1224,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	// Placement information: which of the possible positions a vector
 	// can be in are actually occupied? (Allows for ten positions, which should be plenty :)
 	private boolean[] colsOccupied = {false, false, false, false, false, false, false, false, false, false};
+	long lastdraw = 0;
 	
 	private BufferedImage bi; // buffered image for double buffering
 	private Graphics big; // corresponding graphics to bi
@@ -1235,9 +1241,10 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	private boolean draw = true; // Do we actually want to draw our buffered image out to the screen on each frame, or are we fast-forwarding?
 	
 	public void paintComponent(Graphics g) {
-		Rectangle clipArea = g.getClipBounds();
-		g.setColor(bgcolour);
-		g.fillRect(clipArea.x, clipArea.y, clipArea.width, clipArea.height);
+		//Rectangle clipArea = g.getClipBounds();
+		//BufferedImage clip = bi.getSubimage(clipArea);
+		//g.setColor(bgcolour);
+		//g.fillRect(clipArea.x, clipArea.y, clipArea.width, clipArea.height);
 		g.drawImage(bi,0,0,this);
 	}
 	
@@ -1245,7 +1252,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * Constructor
 	 */
 	public ShellVectorAnimator() {
-		setSize(500, 500);
+		//setSize(500, 500);
 		setOpaque(true);
 		
 		int fps = (int) (basespeed * speedfactor);
@@ -1265,7 +1272,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		eventQueue = new LinkedList();
 			
 		// Create Graphics object and buffered image (we will work on this all the time and flush it out on every frame)
-		bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+		bi = new BufferedImage(500, 500, BufferedImage.TYPE_INT_RGB);
 		big = bi.getGraphics();
 		
 		// Clear working area	
@@ -1279,8 +1286,12 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 */
 	// This method is executed on each animation frame
 	public synchronized void actionPerformed(ActionEvent a) {
-		// Draw our buffered image out to the actual window
-		//if (draw) repaint();
+		// Draw our buffered image out to the actual window evey 100ms
+		long now = System.currentTimeMillis();
+		if (draw && (now - lastdraw > 100)) {
+			lastdraw = now;
+			repaint();
+		}
 
 		// If we need a new event, get it
 		if (currentEvent == null) {
