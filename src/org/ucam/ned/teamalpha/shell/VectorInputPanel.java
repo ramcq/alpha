@@ -66,6 +66,16 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		cells.repaint();
 	}	
 
+	private void fillWithRandomVals() {
+		Random r = new Random();
+		
+		for (int i = 0; i < 20; i++) {
+			values[i] = (r.nextInt(150) - 50);
+		}
+		
+		updateValues();
+	}
+	
 	private void updateValues() {
 		Integer num = (Integer) elements.getSelectedItem();
 		
@@ -151,6 +161,9 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		
 		// add vertical glue
 		add(Box.createVerticalGlue());
+		
+		// Fill with random by default
+		fillWithRandomVals();
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {
@@ -168,13 +181,7 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		String command = e.getActionCommand();
 		
 		if (command.equals("Random")) {
-			Random r = new Random();
-			
-			for (int i = 0; i < 20; i++) {
-				values[i] = (r.nextInt(150) - 50);
-			}
-			
-			updateValues();
+			fillWithRandomVals();
 		} else if (command.equals("Clear")) {
 			for (int i = 0; i < 20; i++) {
 				values[i] = 0;

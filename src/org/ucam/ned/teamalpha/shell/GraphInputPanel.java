@@ -74,6 +74,18 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		cells.repaint();
 	}	
 
+	private void fillWithRandomVals() {
+		Random r = new Random();
+		int t;
+		
+		for (int i = 0; i < 64; i++) {
+			t = r.nextInt(100);	
+			values[i] = (t<49)?t:0;
+		}
+		
+		updateValues();
+	}
+	
 	private void updateValues() {
 		Integer num = (Integer) elements.getSelectedItem();
 		int nodes = num.intValue();
@@ -178,6 +190,9 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		
 		// add vertical glue
 		add(Box.createVerticalGlue());
+		
+		// Fill with random values by default
+		fillWithRandomVals();
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {
@@ -205,20 +220,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		String command = e.getActionCommand();
 		
 		if (command.equals("Random")) {
-			Random r = new Random();
-			int t;
-			
-			for (int i = 0; i < 64; i++) {
-				t = r.nextInt(100);	
-				values[i] = (t<49)?t:0;
-			}
-			
-			updateValues();
-			
-			// DEBUG
-			print(getValues(), 5);
-			
-			
+			fillWithRandomVals();
 		} else if (command.equals("Clear")) {
 			for (int i = 0; i < 64; i++) {
 				values[i] = 0;
