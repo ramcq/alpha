@@ -132,7 +132,31 @@ public class Kruskal extends GraphAlgorithm {
 	private boolean finished() {
 		int count=0;
 		for(int i=0; i<dim; count+=touched[i++]);
-		return !(count >0);
+		if (count>0) {
+			return false;
+		} else {
+			// Check predecessors
+			int lim = nodes.size();
+			int top=0;
+			int curr;
+			
+			while (((Node)nodes.elementAt(top)).parent > 0) {
+				top = ((Node)nodes.elementAt(top)).parent;
+			}
+			
+			// Now compare with the rest
+			
+			for(int i=1; i<lim; i++) {
+				while (((Node)nodes.elementAt(i)).parent > 0) {
+					i = ((Node)nodes.elementAt(i)).parent;
+				}
+				
+				if (i != top) return false;
+			}
+			
+			return true;
+			
+		}
 	}
 	
 	/**
@@ -159,7 +183,6 @@ public class Kruskal extends GraphAlgorithm {
 		if (update && (i!=j)) {
 			// Join tree j to i
 			((Node)nodes.elementAt(j)).parent = i;
-
 		}
 		
 		// Return true false if they share the same root: joining would 
@@ -174,6 +197,7 @@ public class Kruskal extends GraphAlgorithm {
 							"Check shortest edge for cycle and add",
 							"Edge causes a cycle, remove",
 							"Add egde to minimum spanning tree",
+							"Could not find spanning tree",
 							"Done!"});
 	
 		// Variables to hold the indices of the edge's nodes
@@ -181,9 +205,11 @@ public class Kruskal extends GraphAlgorithm {
 		int n2;
 		
 		// Loop through the lists of edges adding them as we go:
-		while(!finished()) {
+		while(!(edges.isEmpty())) {
 			// We are done if we are out of edges
-			if (edges.isEmpty()) break;
+			
+			// If we are finished, just quit
+			if (finished()) break;
 			
 			// Get the cheapest edge
 			anim.setCurrentStep(0);
@@ -194,9 +220,10 @@ public class Kruskal extends GraphAlgorithm {
 			n1 = e.node1; n2 = e.node2;
 			if (acyclic(n1, n2, true) && result[n1][n2] != 1) {
 				result[n1][n2] = 1;
+				anim.saveState();
 				anim.setCurrentStep(2);
 				
-				// THIS REMOVES SUPPORT FOR BIDIRECTIONAL EDGES
+				// ****THIS REMOVES SUPPORT FOR BIDIRECTIONAL EDGES******
 				result[n2][n1] = 1;
 				
 				// Flag nodes as in the tree
@@ -208,12 +235,20 @@ public class Kruskal extends GraphAlgorithm {
 			} else if (!(result[n1][n2] == 1 || result[n2][n1] == 1 )) {
 				//ANIM: Show that edge causes a cycle if not already in tree
 				anim.setCurrentStep(1);
+				anim.saveState();
 				anim.setEdgeShade(n1,n2,CYCLECAUSING);
 			}
 		}
 		
 		// ANIM: Announce completion
-		anim.setCurrentStep(3);
+		if (finished()) {
+			// We've seen to all nodes
+			anim.setCurrentStep(4);
+		} else {
+			// Couldn't find a tree
+			anim.setCurrentStep(3);
+		}
+			
 	}
 	
 	/* (non-Javadoc)
