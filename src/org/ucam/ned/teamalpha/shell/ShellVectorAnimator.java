@@ -3,6 +3,8 @@
  *
  */
  
+// TODO: change API so that algorithm can specify whether an arrow should be on the
+//		left or right of a vector
 // TODO: add exceptions, make sure everything works properly if algorithm does something stupid
 // 	(addresses an offset not in the vector, makes labels too long, creates vectors too long etc)
 // TODO: fix fast forward to next checkpoint (currently completely broken)
@@ -26,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import org.ucam.ned.teamalpha.animators.*;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.animators.InputTooLongException;
@@ -75,6 +78,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private boolean visible = true;
 		private final int top = 50; // y coordinate of top of vector
 		private int bottom; // y coordinate of bottom of vector
+		private int col; // column in which this vector resides (left to right, numbered from 0, corresponds to colsOccupied index)
 		private int left; // x coordinate of left of vector
 		private int right; // x coordinate of right of vector
 		private int size; // number of elements in vector
@@ -90,18 +94,28 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	The elements of the new Vector (up to a maximum of 20 elements).
 		 * 	If more than 20 elements are specified, InputTooLongException will be thrown.
 		 */
-		Vector(int[] values) throws InputTooLongException {
+		Vector(int[] values) throws InputTooLongException, TooManyVectorsException {
 			size = values.length;
 			if (size > maxSize) throw new InputTooLongException("Maximum size is "+ maxSize);
 			
-			// This vector will be in a new column, so increase the value of the highest column in use
-			highestColUsed++;
-			left = 80 + (highestColUsed * 190); // the x position of the left of the new vector
+			// Work out where to place the vector
+			for (int i=0; i<colsOccupied.length; i++) {
+				if (!colsOccupied[i]) {
+					left = 80 + (i * 190); // the x position of the left of the vector
+					col = i;
+					colsOccupied[i] = true;
+					break;
+				}
+				else if (i == colsOccupied.length-1) {
+					// If all positions are occupied, throw an exception
+					throw new TooManyVectorsException("There are already "+colsOccupied.length+" vectors on the canvas: there is no room for more!");
+				}
+			}
 			right = left + width; // the x position of the right of the new vector
 			bottom = top + (size * 20); // the y position of the bottom of the new vector
-			label = "Unnamed";
+			label = "NoName";
 			
-			contents = new String[maxSize];
+			contents = new String[size];
 			// Pad contents with spaces to ensure right alignment
 			for (int i=0; i<size; i++) {
 				contents[i] = String.valueOf(values[i]);
@@ -119,8 +133,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	The initial values of the vector elements (no more than 20)
 		 * @throws InputTooLongException
 		 * 	if values is longer than the legal length
+		 * @throws TooManyVectorsException
+		 * 	if all available vector positions are taken
 		 */
-		Vector(String label, int[] values) throws InputTooLongException {
+		Vector(String label, int[] values) throws InputTooLongException, TooManyVectorsException {
 			this(values);
 			this.label = (label.length() <= maxElementLength) ? label : label.substring(0,maxElementLength-1);
 		}
@@ -130,6 +146,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 */
 		public void delete() throws ItemDeletedException {
 			if (!visible) throw new ItemDeletedException("Arrow "+label+" already deleted!");
+			// Register new free space where this vector was
+			colsOccupied[col] = false;
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					this.visible = false;
@@ -715,7 +733,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	public class State extends Animator.State {
 		private Vector.VectorState[] vectors;
 		private Arrow.ArrowState[] arrows;
-		private int highestColUsed;
+		private boolean[] colsOccupied;
 				
 		/**
 		 * Constructor
@@ -724,14 +742,13 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	An array of all Vectors to be put in the State object
 		 * @param arrows
 		 * 	An array of all the Arrows to be put in the State object
-		 * @param highestColUsed
-		 * 	The value of highestColUsed - new vectors will be placed at position
-		 * 	highestColUsed+1
+		 * @param colsOccupied
+		 * 	A boolean array of which columns are currently occupied by vectors
 		 */
-		State(Vector.VectorState[] vectors, Arrow.ArrowState[] arrows, int highestColUsed) {
+		State(Vector.VectorState[] vectors, Arrow.ArrowState[] arrows, boolean[] colsOccupied) {
 			this.vectors = vectors;
 			this.arrows = arrows;
-			this.highestColUsed = highestColUsed;
+			this.colsOccupied = colsOccupied;
 		}
 		
 		/**
@@ -1139,7 +1156,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	private int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
-	private int highestColUsed = -1; // stores the highest column which has a vector in it
+	//private int highestColUsed = -1; // stores the highest column which has a vector in it
+	// Placement information: which of the possible positions a vector
+	// can be in are actually occupied? (Allows for ten positions, which should be plenty :)
+	private boolean[] colsOccupied = {false, false, false, false, false, false, false, false, false, false};
 	
 	private JPanel outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
@@ -1751,14 +1771,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(int[])
 	 */
-	public VectorAnimator.Vector createVector(int[] values) throws InputTooLongException {
+	public VectorAnimator.Vector createVector(int[] values) throws InputTooLongException, TooManyVectorsException {
 		return createVector("Unnamed", values);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(java.lang.String, int[])
 	 */
-	public VectorAnimator.Vector createVector(String label, int[] values) throws InputTooLongException {
+	public VectorAnimator.Vector createVector(String label, int[] values) throws InputTooLongException, TooManyVectorsException {
 		Vector res = null;
 		synchronized(this) {
 			try {
@@ -1784,7 +1804,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * 	The number of elements in the vector
 	 * @return A new Vector of the right size and label with all elements initialized to zero
 	 */
-	public VectorAnimator.Vector createVector(String label, int size) throws InputTooLongException {
+	public VectorAnimator.Vector createVector(String label, int size) throws InputTooLongException, TooManyVectorsException {
 		int[] c = new int[size];
 		for (int i=0; i<size; i++) c[i] = 0;
 		return createVector(label, c);
@@ -1796,7 +1816,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * @param size The number of elements in the vector
 	 * @return A new unlabelled Vector of the right size with all elements initialized to zero
 	 */
-	public VectorAnimator.Vector createVector(int size) throws InputTooLongException {
+	public VectorAnimator.Vector createVector(int size) throws InputTooLongException, TooManyVectorsException {
 		return createVector("Unnamed", size);
 	}
 	
@@ -1899,7 +1919,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			ac++;
 		}
 
-		return new State(vs, as, highestColUsed);
+		return new State(vs, as, colsOccupied);
 	}
 	
 	/* (non-Javadoc)
@@ -1929,7 +1949,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 		
 		// Restore positioning information
-		highestColUsed = st.highestColUsed;
+		colsOccupied = st.colsOccupied;
 		
 		// draw buffered image out
 		outg.drawImage(bi,0,0,outc);
@@ -1990,6 +2010,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		//v2.flashElement(4);
 		//v.delete();
 		//a3.delete();
+		VectorAnimator.Vector v3 = app.createVector("New!!", t2);
 		}
 		catch (Exception e) {
 			System.out.println(e);
