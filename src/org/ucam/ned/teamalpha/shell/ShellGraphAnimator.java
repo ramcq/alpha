@@ -31,6 +31,11 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * TODO: bug fixes:
  * problem with gradient -> infinity with 3 node graph ({trig,cast to int} functions rounding error)
  * potential edge overlap problem (scale label distance along edge according to number of nodes?)
+ * SID: Make the nodes larger
+ * SID: Functionality to delete edges altogether?
+ * SID: Node labels overwrite on update
+ * SID: Node labels different colour/weight than edge labels (IMPORTANT)
+ * SID: Thicker lines so it is easier to see changes
  */
 
 

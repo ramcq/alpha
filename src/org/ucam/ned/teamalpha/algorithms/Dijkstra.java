@@ -34,11 +34,11 @@ public class Dijkstra extends GraphAlgorithm {
 	// Nodes
 	static final int UNTOUCHEDSETID = 0;
 	static final int WORKINGSETID = 1;
-	static final int FINISHEDSETID = 2;
+	static final int FINISHEDSETID = 3;
 	//Edges
 	static final int EDGEDEFAULT = 0;
 	static final int INCLUDEDEDGE = 1;
-	static final int EXCLUDEDEDGE = 2;
+	static final int EXCLUDEDEDGE = 9;
 	
 	
 	GraphAnimator anim;
