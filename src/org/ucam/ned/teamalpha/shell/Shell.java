@@ -46,7 +46,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		return choice;
 	}
 	
-	public synchronized void setChoice(AlgorithmCatalog.AvailableAlgorithm c) {
+	public void setChoice(AlgorithmCatalog.AvailableAlgorithm c) {
 		choice = c;
 	}
 	
@@ -54,7 +54,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		return algorithm;
 	}
 	
-	public synchronized void setAlgorithm(Algorithm a) {
+	public void setAlgorithm(Algorithm a) {
 		algorithm = a;
 	}
 	
@@ -62,7 +62,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		return mode;
 	}
 	
-	public synchronized void setMode(int mode) throws InvalidModeException {
+	public void setMode(int mode) throws InvalidModeException {
 		// if an invalid mode has been requested, do nothing
 		if (mode > MODE_ANIMATE)
 			throw new InvalidModeException("Unknown mode requested: " + mode);
