@@ -168,7 +168,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 	 */
 	public VectorAnimator.Vector createVector(int[] values) {
 		VectorAnimator.Vector ret = new VectorQueue.Vector();
-		Object[] args = { values };
+		int[] newvalues = new int[values.length];
+		System.arraycopy(values, 0, newvalues, 0, values.length);
+		Object[] args = { newvalues };
 		enqueue(this, "createVector", args, ret);
 		return ret;
 	}
@@ -178,7 +180,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 	 */
 	public VectorAnimator.Vector createVector(String label, int[] values) {
 		VectorAnimator.Vector ret = new VectorQueue.Vector();
-		Object[] args = { label, values };
+		int[] newvalues = new int[values.length];
+		System.arraycopy(values, 0, newvalues, 0, values.length);
+		Object[] args = { label, newvalues };
 		enqueue(this, "createVector", args, ret);
 		return ret;
 	}
