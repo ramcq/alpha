@@ -39,29 +39,26 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	private int intermediateOffset = 0; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
 	private LinkedList eventQueue; // will hold queue the events we are to perform
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
-	public static final Color NODE_START_COLOUR = Color.blue;
-	public static final Color NODE_SHADE_COLOUR = Color.green;
-	public static final Color EDGE_START_COLOUR = Color.cyan;
-	public static final Color EDGE_SHADE_COLOUR = Color.orange;
+	public static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.black, Color.darkGray, Color.lightGray};
 	
 	public class Node /*implements Serializable*/{
 		int Nodewidth=6;
 		int Nodeheight=6;
 		int x;
 		int y;
-		Color colour;
+		int set;
 		private String label; 
 		public Node Node(int x, int y) {
 			this.x = x;
 			this.y = y;
-			this.colour = NODE_START_COLOUR;
+			this.set = 0;
 			this.label = "";
 			return this;
 		}
 		public void nodesetdata(int x, int y) {
 			this.x = x;
 			this.y = y;
-			this.colour = NODE_START_COLOUR;
+			this.set = 0;
 			this.label = "";
 		}
 		
@@ -91,15 +88,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 		
 		public void setNodeshade(int set) {
-			switch (set) {
-				case 0:	this.colour = NODE_START_COLOUR;
-						this.drawNode();
-						break;
-				case 1:	this.colour = NODE_SHADE_COLOUR;
-						this.drawNode();
-						break;
-				default: break;	
-			}
+			this.set = set;
 		}
 		
 		public void drawNode() {
@@ -118,7 +107,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public class Edge /*implements Serializable*/ {
 		int x1,x2;
 		int y1,y2;
-		Color colour;
+		int set;
 		private String label; 
 		public Edge Edge(Node n1, Node n2, String cost) {
 			this.x1 = n1.x /*+3*/;
@@ -126,7 +115,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.y1 = n1.y /*+3*/;
 			this.y2 = n2.y /*-3*/;
 			/*make sure it doesn't overlap with nodes.. global constant nodewidth?*/
-			this.colour = EDGE_START_COLOUR;
+			this.set = 0;
 			this.label = cost;
 			return this;
 		}
@@ -137,7 +126,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.y1 = n1.y /*+3*/;
 			this.y2 = n2.y /*-3*/;
 			/*make sure it doesn't overlap with nodes.. global constant nodewidth?*/
-			this.colour = EDGE_START_COLOUR;
+			this.set = 0;
 			this.label = cost;
 		}
 		
@@ -163,15 +152,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 		
 		public void setEdgeshade(int set) {
-			switch (set) {
-			case 0:	this.colour = EDGE_START_COLOUR;
-					this.drawEdge();
-					break;
-			case 1:	this.colour = EDGE_SHADE_COLOUR;
-					this.drawEdge();
-					break;
-			default: break;	
-			}
+			this.set = set;
 		}
 		
 		public void drawEdge() {
@@ -301,14 +282,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	
 	public void drawNode(Node n, Graphics g) {
-		g.setColor(n.colour);
+		g.setColor(SET_COLOUR[n.set]);
 		System.out.println("drawn node at " + n.x + ", " + n.y);
 		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
 		g.setColor(fgcolour);		
 	}
 	
 	public void drawEdge(Edge e, Graphics g) {
-		g.setColor(e.colour);
+		g.setColor(SET_COLOUR[e.set]);
 		System.out.println("drawn edge at " + e.x1 + ", " + e.y1 + " to " + e.x2 + ", " + e.y2);
 		g.drawLine(e.x1, e.y1, e.x2, e.y2);
 		g.setColor(fgcolour);		
@@ -327,8 +308,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	
 	//implementation of abstract methods
-	public Node[] Nodelist = new Node[10];
-	public Edge[][] Edgematrix = new Edge[10][10];
+	public Node[] nodelist = new Node[10];
+	public Edge[][] edgematrix = new Edge[10][10];
 	
 	public void createGraph(int[][] costs) {
 		int[] arrlentst = (int[]) costs[0].clone();
@@ -348,9 +329,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				x = 250 + 100 * (int) java.lang.Math.sin(java.lang.Math.toRadians(currentang));
 				y = 250 + 100 * (int) java.lang.Math.cos(java.lang.Math.toRadians(currentang));
 				currentang = currentang + Nodeangle;
-				Nodelist[i] = new Node();
-				Nodelist[i].nodesetdata(x,y);
-				Nodelist[i].drawNode();
+				nodelist[i] = new Node();
+				nodelist[i].nodesetdata(x,y);
+				nodelist[i].drawNode();
 			}
 			for (int i=0;i<costs.length;i++)
 			{	//create edges
@@ -359,10 +340,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					if (costs[i][j] != 0) {
 						if (i != j) {
 							Integer tmpint = new Integer(costs[i][j]);
-							Edgematrix[i][j] = new Edge();
-							Edgematrix[i][j].edgesetdata(Nodelist[i],Nodelist[j],tmpint.toString());
-							Edgematrix[i][j].drawEdge();
-							Edgematrix[i][j].drawlabel();
+							edgematrix[i][j] = new Edge();
+							edgematrix[i][j].edgesetdata(nodelist[i],nodelist[j],tmpint.toString());
+							edgematrix[i][j].drawEdge();
+							edgematrix[i][j].drawlabel();
 						}
 					}
 				}
@@ -371,7 +352,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	
 	public void setNodeLabel(int id, String label){
-		Nodelist[id].setlabel(label);
+		nodelist[id].setlabel(label);
 	}
 
 	public void setNodeHighlight(int Node, boolean highlight){
@@ -379,11 +360,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setNodeShade(int id, int set){
-		Nodelist[id].setNodeshade(set);
+		nodelist[id].setNodeshade(set);
 	}
 
 	public void setEdgeLabel(int from, int to, String label){
-		Edgematrix[from][to].setlabel(label);
+		edgematrix[from][to].setlabel(label);
 	}
 
 	public void setEdgeHighlight(int from, int to, boolean highlight) {
@@ -391,7 +372,22 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setEdgeShade(int from, int to, int set) {
-		Edgematrix[from][to].setEdgeshade(set);
+		edgematrix[from][to].setEdgeshade(set);
+	}
+	
+	public class State extends Animator.State { 
+		private Edge[][] edges;
+		private Node[] nodes;
+		State(Node[] nodes,Edge[][] edges) {
+			this.edges = edges;
+			this.nodes = nodes;
+		}
+		public Node[] getNodes() {
+			return this.nodes;
+		}
+		public Edge[][] getEdges() {
+			return this.edges;
+		}
 	}
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#setSteps(java.lang.String[])
@@ -420,17 +416,24 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
 	 */
-	public State saveState() {
-		// TODO Auto-generated method stub
-		return null;
+	public synchronized Animator.State saveState() {
+		stopAnimation();
+		return new State(nodelist,edgematrix);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
 	 */
-	public void restoreState(State state) {
-		// TODO Auto-generated method stub
+	public synchronized void restoreState(Animator.State s) {
+		State ts = (State) s;
+		stopAnimation();
+		eventQueue.clear();
+		big.setColor(bgcolour);
+		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+		edgematrix = ts.getEdges();
+		nodelist = ts.getNodes();
 		
+		outg.drawImage(bi,0,0,outc);
 	}
 	
 	public static void main(String[] args) {
