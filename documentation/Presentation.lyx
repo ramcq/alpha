@@ -1,0 +1,89 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Presentation Ideas
+\layout Standard
+
+This document is written as a reference for preparing our presentation on
+ Wednesday.
+ My intention is to break down the presentation in steps (phases) so that
+ it will be easier for our Presenter(Andrew) to prepare (as in the writing
+ of slides) and also easier for other members of the project to add phases
+ or remove them.
+\layout Section
+
+Introduction
+\layout Standard
+
+A gentle introduction so that the audience has an idea about what the program
+ is about, how useful it is, where it can be used and by whom.
+ A slide would be to list the name of the project, its purpose(mainly academic
+ and educational) and who can use this program.
+\layout Section
+
+Implementation
+\layout Standard
+
+A general aproach about how the system has been implemented with possible
+ reference to the queue, the shell, the animators and brief explanation
+ about how they are related.
+ No need for class hierarchies to be mentioned as this would take too much
+ time.
+ We could also explain why we took this aproach and not anything different.
+ A possible slide would be a diagram from our specs indicating the relationship
+ betwwen all of our classes.
+\layout Section
+
+Algorithms
+\layout Standard
+
+In this phase we could talk about which algorithms we have implemented (possibly
+ why we chose them) and then go about to give a demonstration.
+ Demonstartion should only involve our best animated algorithm because if
+ we try to animate everything then this would take too much time.
+ During demo maybe we could give an explanation of the algorithm (reference
+ to the user manual perhaps).
+ A slide could be a screenshot of our animated algorithm in action.
+\layout Section
+
+Challenges
+\layout Standard
+
+People will be interested to hear about the challenges of the project and
+ areas where the coding was hard and tricky such as the Animators.
+ A slide could contain reference to some classes and brief explanations.
+\layout Section
+
+Improvements
+\layout Standard
+
+Given that we had more time then we could mention possible improvements
+ to the project and also extensions such as the addtion of extra algorithms
+ (reference to the Developers Guide of the project).
+ A slide could list in bullet form some suggestions and some extra algorithms
+ than those implemented.
+\the_end
