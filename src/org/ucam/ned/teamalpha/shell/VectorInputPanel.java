@@ -53,7 +53,7 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		for (int i = 0; i < num; i++) {
 			JFormattedTextField field = new JFormattedTextField(NumberFormat.getIntegerInstance());
 			field.setValue(new Integer(values[i]));
-			field.setColumns(6);
+			field.setColumns(4);
 			field.setHorizontalAlignment(JTextField.CENTER);
 			field.addPropertyChangeListener("value", this);
 			
@@ -171,7 +171,7 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 			Random r = new Random();
 			
 			for (int i = 0; i < 20; i++) {
-				values[i] = r.nextInt(100);
+				values[i] = (r.nextInt(150) - 50);
 			}
 			
 			updateValues();
