@@ -1,11 +1,12 @@
 #LyX 1.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 221
 \textclass article
-\language english
+\language british
 \inputencoding auto
 \fontscheme default
 \graphics default
 \paperfontsize default
+\spacing single 
 \papersize Default
 \paperpackage a4
 \use_geometry 0
@@ -68,7 +69,7 @@ Steve
 
 Steve was a very active coder and has coded the Graph Animation API.
  This involved a lot of effort and time and also ability.
- He certainly contributed a very fair amount towards compeltion of this
+ He certainly contributed a very fair amount towards completion of this
  project.
 \layout Subsection
 
@@ -78,7 +79,7 @@ Graham
 Graham was our project manager.
  This involved a lot of effort to try to organise the team properly and
  also to organise meetings and always making sure that things were on track.
- He was also an excellent documentor as he was involved in writing the user
+ He was also an excellent documenter as he was involved in writing the user
  manual and many of the other documents that needed to be submitted by the
  project manager.
 \layout Subsection
@@ -88,7 +89,7 @@ Zhan
 
 Zhan was part of the testing team.
  He was responsible for writing all those classes that would behave as the
- testing prochedures for the actual code that implements the project.
+ testing procedures for the actual code that implements the project.
  Certainly his job was very important and it involved careful work to try
  to design appropriate classes that would perform testing according to all
  the rules of software engineering.
@@ -108,10 +109,10 @@ Sid
 \layout Standard
 
 Sid was among the main programmers of the project.
- He worked amazingly hard to code the algorithms taking also into acount
+ He worked amazingly hard to code the algorithms taking also into account
  efficiency.
  He has also been very helpful to other members of the group always keen
- to explain so that noone would fall behind.
+ to explain so that no one would fall behind.
 \layout Subsection
 
 Alan
