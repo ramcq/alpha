@@ -57,6 +57,9 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 			
 			// The main sorting phase
 			while (st < limit) {
+				
+				anim.showMessage("Update unsorted region markers.");
+				
 				anim.setCurrentStep(4);
 				
 				st++;
@@ -79,6 +82,8 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					anim.setCurrentStep(0);
 					arrowA.move(j, false);
 					
+					anim.showMessage("Search down and check if <strong>" + a[j] + "</strong>><strong>" + a[j+1] + "</strong>.");
+					
 					if (a[j] > a[j + 1]) {
 						COMPARES++;
 						
@@ -89,7 +94,10 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						SWAPS++;
 						// ANIM: Swap the elements
 						anim.setCurrentStep(2);
-						arrowA.flash();
+						
+						anim.showMessage("Swap elements <strong>" + a[j] + "</strong> and <strong>" + a[j+1] + "</strong>.");
+						
+						//arrowA.flash();
 						v.swapElements(j,j+1);
 						
 						swapped = true;
@@ -97,6 +105,9 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				}
 				if (!swapped) {
 					arrowA.delete();
+					
+					anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
+					
 					anim.setCurrentStep(5);
 					v.setLabel("Done!");
 					return;
@@ -107,6 +118,9 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				arrowA.delete();
 				
 				// OTHER WAY NOW! //
+				
+				anim.showMessage("Switching direction.");
+				
 				anim.setCurrentStep(3);
 				anim.saveState();
 				
@@ -119,6 +133,8 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					anim.setCurrentStep(1);
 					arrowB.move(j, false);
 					
+					anim.showMessage("Search down and check if <strong>" + a[j+1] + "</strong>><strong>" + a[j] + "</strong>.");
+					
 					if (a[j] > a[j + 1]) {
 						
 						COMPARES++;
@@ -130,7 +146,10 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						SWAPS++;
 						// ANIM: Swap the elements
 						anim.setCurrentStep(2);
-						arrowB.flash();
+						
+						anim.showMessage("Swap elements <strong>" + a[j+1] + "</strong> and <strong>" + a[j] + "</strong>.");
+						
+						//arrowB.flash();
 						v.swapElements(j,j+1);
 						
 						swapped = true;
@@ -138,6 +157,9 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				}
 				if (!swapped) {
 					arrowB.delete();
+					
+					anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
+					
 					anim.setCurrentStep(5);
 					v.setLabel("Done!");
 					return;
@@ -148,6 +170,9 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 			}
 			
 			v.setLabel("Done!");
+			
+			anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
+			
 			anim.setCurrentStep(5);
 			
 		} catch (Exception ile) {
