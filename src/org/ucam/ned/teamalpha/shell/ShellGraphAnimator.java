@@ -16,6 +16,8 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
  * 
  */
 
+/* work in progress */
+
 public class ShellGraphAnimator {//extends GraphAnimator implements ActionListener {
 	
 	private double nodeangle;
