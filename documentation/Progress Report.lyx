@@ -176,8 +176,14 @@ This section contains a brief report from the authors of each package.
 Algorithms (Sid)
 \layout Standard
 
-Four out of the five have been written, the fifth is in progress.
- None have yet been fully tested.
+All five of the proposed algorithms have been implemented and tested by
+ Sid (the coder).
+ More testing (especially of the graph algorithms) will be required by other
+ testers/coders to ensure that the implementations aren't flawed.
+ Sid has included some sample connectivity matrices that can be used by
+ testers; these are stored in the folder TestData under the file ConnectivityMat
+rices.txt.
+ The code produced the correct results with this data.
 \layout Subsection
 
 Animators
@@ -194,18 +200,16 @@ Graph animators (Steven)
 \layout Standard
 
 Almost complete, only highlighting nodes and edges and algorithm step messages
- have to be completed. The algorithm step messages require calling methods on 
- the shell 
-
- The node and edge data is stored in a list of objects and a matrix of objects
- respectively. These have methods similar to the api calls which are called by
- the actual api method implementations. The class uses the same animation system
- as the Vector Animator, with a global timer picking events off an event queue,
- and causing the frame to be redrawn.
- 
- 
-
- Only used elementary tests to confirm various methods are working correctly.
+ have to be completed.
+ The algorithm step messages require calling methods on  the shell  The
+ node and edge data is stored in a list of objects and a matrix of objects
+ respectively.
+ These have methods similar to the api calls which are called by the actual
+ api method implementations.
+ The class uses the same animation system as the Vector Animator, with a
+ global timer picking events off an event queue, and causing the frame to
+ be redrawn.
+   Only used elementary tests to confirm various methods are working correctly.
 \layout Subsubsection
 
 Vector animators (Andrew)
