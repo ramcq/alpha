@@ -5,12 +5,7 @@
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
  
-// TODO: make sure saving / restoring state is fixed (done?)
-// TODO: fix non-redrawing when timer is not running (need equivalent of 
-//		applet paint() method). Maybe have a redraw() method which the shell 
-//		calls whenever the window needs to be redrawn (via a window listener or 
-//		similar?) IN PROGRESS
-// TODO: fix fast forward to next checkpoint
+// TODO: fix fast forward to next checkpoint (currently completely broken)
 // TODO: add column highlighting for vectors (for radix sort)
 package org.ucam.ned.teamalpha.shell;
 
