@@ -95,15 +95,6 @@ public interface VectorAnimator extends Animator {
 		public void flashElement(int offset) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 		
 		/**
-		 * Highlight a given digit of all the values in the vector.
-		 * 
-		 * @param column
-		 *            the digit to highlight, counting left from 0 as the
-		 *            rightmost digit, and -1 to highlight no digit
-		 */
-		public void setHighlightedDigit(int column) throws ItemDeletedException, InvalidLocationException, InterruptedException;
-
-		/**
 		 * Create a new arrow pointing at a value in the vector, or the boundary
 		 * between two values.
 		 * 
