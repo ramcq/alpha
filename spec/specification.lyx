@@ -696,7 +696,7 @@ Public Methods
 \emph on 
 static
 \emph default 
- getName
+ String getName()
 \layout Itemize
 
 
@@ -704,22 +704,22 @@ static
 \emph on 
 static
 \emph default 
- getDescription
+ String getDescription()
 \layout Itemize
 
 
 \family typewriter 
-setAnimator
+void setAnimator(Animator)
 \layout Itemize
 
 
 \family typewriter 
-setData
+void setData(...)
 \layout Itemize
 
 
 \family typewriter 
-run
+void execute()
 \layout Subsubsection*
 
 Testing
@@ -737,30 +737,72 @@ TestAnimator
 \layout Subsection
 
 Animators
+\layout Subsubsection*
+
+Purpose
 \layout Standard
 
-Animator Primitives
+The animator abstract classes define all of the methods which are available
+ for the algorithms to call.
+ All of the necessary animation primitives are included in these abstract
+ classes, which are implemented by classes in the queue and shell packages,
+ for queueing and actually displaying the animation events respectively.
+ The initial implementation will include two 
+\family typewriter 
+Animator
+\family default 
+ classes for graph and vector animation primitives.
+\layout Subsubsection*
+
+Public Methods (
+\family typewriter 
+Animator
+\family default 
+)
 \layout Itemize
 
-Define steps of algorithm (a series of strings to explain what the algorithm
- does)
+
+\family typewriter 
+void setSteps(String[])
+\family default 
+ --- define a series of strings to explain what the algorithm does
 \layout Itemize
 
-Highlight currently active step
+
+\family typewriter 
+void setCurrentStep(int)
+\family default 
+ --- highlight currently active step
 \layout Itemize
 
-Show text to user (to explain current actions)
+
+\family typewriter 
+void showMessage(String)
+\family default 
+ --- show text to user to explain current actions
 \layout Itemize
 
-Checkpoint (save the state of the animator so this stage of the algorithm
- can be returned to later when required)
+
+\family typewriter 
+Checkpoint saveState()
+\family default 
+ --- save the state of the animator so this stage of the algorithm can be
+ returned to later when required
 \layout Itemize
 
-Restore (return the animator to the state it was in when a given checkpoint
- was taken)
-\layout Subsubsection
 
-Graph Animator Primitives
+\family typewriter 
+void restoreState(Checkpoint)
+\family default 
+ --- return the animator to the state it was in when a given checkpoint
+ was taken
+\layout Subsubsection*
+
+Public Methods (
+\family typewriter 
+GraphAnimator
+\family default 
+)
 \layout Itemize
 
 Create graph (specify nodes and paths with costs and labels)
@@ -788,9 +830,13 @@ Highlight path (to indicate current focus of algorithm)
 \layout Itemize
 
 Shade path (to indicate membership of a set of nodes or paths)
-\layout Subsubsection
+\layout Subsubsection*
 
-Vector Animator Primitives
+Public Methods (
+\family typewriter 
+VectorAnimator
+\family default 
+)
 \layout Itemize
 
 Create vector (with initial data and label)
