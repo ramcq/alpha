@@ -36,7 +36,7 @@ Team: Alpha
 
 Members: Steve Cooper(sjc209), Graham Le Page(gpl26), Zhan Li(zrll2), Robert
  Macqueen(ram48), Andrew Medworth(am502), Sidath Senanayake(sas58), Alan
- Treanor(ajit2).
+ Treanor(ajit2), Neofytos Mylona(nm314).
 \layout Section
 
 Personal Work
@@ -53,6 +53,10 @@ I was a part of the Documentation team who was composed of me and the Project
  but not implementation.
  I also helped the manager with the rest of the documents that needed to
  be submitted.
+ I spent some of my time learning Unix and especially the Lyx editor for
+ creating professional style documents.
+ Attached to this document is some part of my work, mainly the Developers
+ guide.
 \layout Section
 
 Individual Members Work
@@ -93,5 +97,41 @@ Robert
 \layout Standard
 
 Robert was the main contributor to the success of this project.
- He was the one that came up with the basic ideas about how the system 
+ He was the one that came up with the basic ideas about how the system would
+ work.
+ He did a wonderful job coding the queues and shell which involved a lot
+ of time and effort.
+\layout Subsection
+
+Sid
+\layout Standard
+
+Sid was among the main programmers of the project.
+ He worked amazingly hard to code the algorithms taking also into acount
+ efficiency.
+ He has also been very helpful to other members of the group always keen
+ to explain so that noone would fall behind.
+\layout Subsection
+
+Alan
+\layout Standard
+
+Alan was the second member of the testing team.
+ His job was to test the animators together with Zhan and they did a good
+ job.
+ Testing is a very important part in any software project of a reasonable
+ size and therefore they tried hard to achieve as exhaustive testing as
+ possible.
+\layout Subsection
+
+Andrew
+\layout Standard
+
+Andrew was an enthusiastic coder.
+ He was responsible to implement what was probably the hardest part of the
+ project, the VectorAnimator.
+ He certainly invested more time into the project that what was required
+ but the end result was certainly worth it.
+ He was always concerned how the other members are doing asking questions
+ and trying to make sure that things were not falling behind.
 \the_end
