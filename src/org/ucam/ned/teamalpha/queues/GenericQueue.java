@@ -20,7 +20,7 @@ import org.ucam.ned.teamalpha.animators.Animator;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-class GenericQueue {
+class GenericQueue implements AnimatorQueue {
 	private class Event {
 		String methodname;
 		Object subject;
@@ -72,7 +72,8 @@ class GenericQueue {
 	}
 	
 	private class State {
-		LinkedList events;
+		private LinkedList events;
+		private Animator.State animstate;
 		
 		State() {
 			this.events = new LinkedList();
@@ -85,6 +86,14 @@ class GenericQueue {
 				Event e = (Event) i.next();
 				e.send();
 			}
+		}
+		
+		void save() {
+			animstate = anim.saveState();
+		}
+		
+		void restore() {
+			anim.restoreState(animstate);
 		}
 	}
 	
@@ -115,5 +124,36 @@ class GenericQueue {
 	
 	void enqueue(Object subject, String methodname, Object[] args) {
 		enqueue(subject, methodname, args, null);
+	}
+	
+	void newState() {
+		states.add(new State());
+	}
+	
+	public void next() throws NoSuchStateException {
+		if (!hasNext())
+			throw new NoSuchStateException("already in final state");
+		
+		State s = (State) states.get(currentstate);
+		s.save();
+		s.sendEvents();
+		currentstate++;
+	}
+	
+	public void prev() throws NoSuchStateException {
+		if (!hasPrev())
+			throw new NoSuchStateException("already in first state");
+		
+		currentstate--;
+		State s = (State) states.get(currentstate);
+		s.restore();
+	}
+	
+	public boolean hasNext() {
+		return (currentstate < states.size());
+	}
+	
+	public boolean hasPrev() {
+		return (currentstate > 0);
 	}
 }

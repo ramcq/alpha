@@ -1,8 +1,11 @@
 package org.ucam.ned.teamalpha.queues;
 
+import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 
 public class GraphQueue extends GraphAnimator implements AnimatorQueue {
+	public class State extends Animator.State { };
+	
 	private GenericQueue q;
 	
 	public GraphQueue(GraphAnimator ga) {
@@ -92,15 +95,43 @@ public class GraphQueue extends GraphAnimator implements AnimatorQueue {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
 	 */
-	public State saveState() {
-		// TODO Auto-generated method stub
-		return null;
+	public Animator.State saveState() {
+		q.newState();
+		return new State();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
 	 */
-	public void restoreState(State state) {
-		// TODO Auto-generated method stub	
+	public void restoreState(Animator.State state) {
+		// this is a no-op on the queue!	
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#hasNext()
+	 */
+	public boolean hasNext() {
+		return q.hasNext();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#hasPrev()
+	 */
+	public boolean hasPrev() {
+		return q.hasPrev();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#next()
+	 */
+	public void next() throws NoSuchStateException {
+		q.next();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#prev()
+	 */
+	public void prev() throws NoSuchStateException {
+		q.prev();
 	}
 }
