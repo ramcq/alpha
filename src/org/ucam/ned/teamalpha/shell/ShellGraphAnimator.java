@@ -1,4 +1,5 @@
 package org.ucam.ned.teamalpha.shell;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -10,11 +11,14 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
+
 /**
  * This class generates on screen Graphics2D from methods are called on it by the queue
  * Animation is controlled by it's own internal queue, from which events are picked off according to a Timer object
@@ -31,6 +35,7 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * @author sjc209
  * 
  */
+
 /*
  * TODO: bug fixes:
  * IMPORTANT TODO BEFORE STEVE HAND TESTS IT: problem with gradient -> infinity with 3 node graph ({trig,cast to int} functions rounding error)
