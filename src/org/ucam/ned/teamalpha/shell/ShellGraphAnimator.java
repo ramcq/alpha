@@ -18,7 +18,7 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
 
 /* work in progress */
 
-public class ShellGraphAnimator {//extends GraphAnimator implements ActionListener {
+public class ShellGraphAnimator extends GraphAnimator implements ActionListener {
 	
 	private double nodeangle;
 	private static final int fps = 30;	// Animation framerate
@@ -98,10 +98,11 @@ public class ShellGraphAnimator {//extends GraphAnimator implements ActionListen
 		color colour;
 		private string label; 
 		public void edge(node n1, node n2, cost) {
-			this.x1 = n1.x;
-			this.x2 = n2.x;
-			this.y1 = n1.y;
-			this.y2 = n2.y;
+			this.x1 = n1.x /*+3*/;
+			this.x2 = n2.x /*-3*/;
+			this.y1 = n1.y /*+3*/;
+			this.y2 = n2.y /*-3*/;
+			/*make sure it doesn't overlap with nodes.. global constant nodewidth?*/
 			this.colour = EDGE_START_COLOUR;
 			this.label = cost;
 		}
@@ -127,7 +128,19 @@ public class ShellGraphAnimator {//extends GraphAnimator implements ActionListen
 		}
 		
 		public void setedgeshade() {
-			this.colour = EDGE_SHADE_COLOUR;
+			this.colour = EDGE_SHADE_COLOUR;	
+			this.drawedge();
+		}
+		
+		public void drawedge() {
+			synchronized (ShellGraphAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.EDGE_REDRAW, this));
+					startAnimation();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
 		}
 	}
 	public class AnimationEvent {
@@ -148,8 +161,8 @@ public class ShellGraphAnimator {//extends GraphAnimator implements ActionListen
 			}
 		}
 		AnimationEvent(int type, edge e) throws InvalidAnimationEventException {
-			if (type == AnimationEvent.NODE_REDRAW
-				|| type == AnimationEvent.NODE_LABEL_REDRAW) {
+			if (type == AnimationEvent.EDGE_REDRAW
+				|| type == AnimationEvent.EDGE_LABEL_REDRAW) {
 				this.type = type;
 				this.e1 = e;
 			}
@@ -219,6 +232,15 @@ public class ShellGraphAnimator {//extends GraphAnimator implements ActionListen
 				case AnimationEvent.NODE_REDRAW:
 					drawnode(currentEvent.n1, big);
 					break;
+				case AnimationEvent.EDGE_REDRAW:
+					drawedge(currentEvent.e1, big);
+					break;
+				case AnimationEvent.NODE_LABEL_REDRAW:
+					drawnodelabel(currentEvent.n1, big);
+					break;
+				case AnimationEvent.EDGE_LABEL_REDRAW:
+					drawedgelabel(currentEvent.e1, big);
+					break;
 					
 			}
 		}
@@ -233,12 +255,29 @@ public class ShellGraphAnimator {//extends GraphAnimator implements ActionListen
 	}
 	
 	public void drawnode(node n, Graphics g) {
+		g.setColor = n.colour;
 		g.fillOval(n.x, n.y, n.nodewidth, n.nodeheight)
+		g.setColor = fgcolour;		
 	}
 	
-	public void drawedge(int to, int from, int cost) {
+	public void drawedge(edge e, Graphics g) {
+		g.setColor = e.colour;
+		g.drawLine(e.x1, e.y1, e.x2, e.y2)
+		g.setColor = fgcolour;		
+	}
+	
+	public void drawedgelabel(edge e, Graphics g) {
 		
 	}
+	
+	public void drawnodelabel(node n, Graphics g) {
+		drawlabel()
+	}
+	
+	public void drawlabel(int x,int y,String label, Graphics g) {
+	
+	}
+	
 	//implementation of abstract methods
 	public node[] nodelist = new node[];
 	public edge[][] edgematrix = new edge[];
@@ -257,10 +296,11 @@ public class ShellGraphAnimator {//extends GraphAnimator implements ActionListen
 			for (int i=0;i<costs.length;i++) 
 			{	//create nodes
 				//calculate x,y position
-				x = 250 + 100 * (int) sin(toRadians(currentang));
-				y = 250 + 100 * (int) cos(toRadians(currentang));
+				x = 250 + 100 * (int) java.lang.math.sin(toRadians(currentang));
+				y = 250 + 100 * (int) java.lang.math.cos(toRadians(currentang));
 				currentang = currentang + nodeangle;
 				node[i] = new node(x,y);
+				node[i].drawnode();
 			}
 			for (int i=0;i<costs.length;i++)
 			{	//create edges
@@ -269,6 +309,8 @@ public class ShellGraphAnimator {//extends GraphAnimator implements ActionListen
 					if (costs[i][j] != 0)
 						if (i != j)
 							e[i][j] = new edge(node[i],node[j],costs[i][j].toString);
+							edge[i][j].drawedge();
+							edge[i][j].drawlabel();
 				}
 			}
 		}
@@ -287,7 +329,7 @@ public class ShellGraphAnimator {//extends GraphAnimator implements ActionListen
 	}
 
 	public void setEdgeLabel(int from, int to, String label){
-		edge[i][j].setlabel(label)
+		edge[i][j].setlabel(label);
 	}
 
 	public void setEdgeHighlight(int from, int to, boolean highlight) {
