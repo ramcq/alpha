@@ -3,7 +3,7 @@ package org.ucam.ned.teamalpha.algorithms;
 /**
  * @author ram48
  * 
- * Abstract class from which all algorithms are descended.
+ * Abstract base class from which all algorithms are descended.
  */
 public abstract class Algorithm {
 	/**
