@@ -270,7 +270,7 @@ public class Kruskal extends GraphAlgorithm {
 		// ANIM: Announce completion
 		if (finished()) {
 			// We've seen to all nodes
-			anim.showMessage("A spanning tree of cost <strong>" + TOTALCOST + "<strong> was found.");
+			anim.showMessage("A spanning tree of cost <strong>" + TOTALCOST + "</strong> was found.");
 			anim.setCurrentStep(4);
 		} else {
 			// Couldn't find a tree
