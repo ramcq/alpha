@@ -9,11 +9,13 @@ package org.ucam.ned.teamalpha.shell;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,6 +24,7 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 /**
@@ -102,9 +105,26 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 		
 		// create tree with single selection and handler
 		tree = new JTree(getNodes());
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int selRow = tree.getRowForLocation(e.getX(), e.getY());
+				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				if(selRow != -1 && e.getClickCount() == 2 && shell.getChoice() != null) {
+					try {
+						shell.setMode(Shell.MODE_INPUT);
+					} catch (Exception ex) {
+						System.err.println(ex);
+					}
+				}
+			}
+		});
 		tree.addTreeSelectionListener(this);
-
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree.setShowsRootHandles(true);
+		tree.setRootVisible(false);
+		for (int i = tree.getRowCount(); i >= 0; i--)
+			tree.expandRow(i);
+		
 		// create scrollable box for tree and add
 		JScrollPane treeView = new JScrollPane(tree);
 		treeView.setPreferredSize(new Dimension(210, 500));
