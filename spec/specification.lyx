@@ -327,11 +327,22 @@ The classes within this package will ultimately implement the algorithms
  and any other information which is displayed.
 \layout Standard
 
-The abstract class Algorithm is the parent class for all of the classes
- within this package, and an abstract class is descended from it for each
- group of algorithms which are being implemented.
- The initial specification is to implement two types of algorithm, GraphAlgorith
-m and SortAlgorithm.
+The abstract class 
+\family typewriter 
+Algorithm
+\family default 
+ is the parent class for all of the classes within this package, and an
+ abstract class is descended from it for each group of algorithms which
+ are being implemented.
+ The initial specification is to implement two types of algorithm, 
+\family typewriter 
+GraphAlgorithm
+\family default 
+ and 
+\family typewriter 
+SortAlgorithm
+\family default 
+.
  These abstract classes will contain methods for querying information about
  the algorithm, such as its name and purpose, explanation of steps, efficiency,
  as well as setting the initial data for the algorithm and instructing it
@@ -341,24 +352,47 @@ m and SortAlgorithm.
 Animators
 \layout Standard
 
-This package contains a set of abstract classes descended from Animator
+This package contains a set of abstract classes descended from 
+\family typewriter 
+Animator
+\family default 
  which have methods and inner classes to specify the animation primitives
  necessary for each group of algorithms.
- There will initially be two classes descended from Animator, GraphAnimator
- and SortAnimator, which will specify the methods necessary for the following
- primitives.
+ There will initially be two classes, 
+\family typewriter 
+GraphAnimator
+\family default 
+ and 
+\family typewriter 
+SortAnimator
+\family default 
+, which will specify the methods necessary for the following primitives.
+\layout Subsubsection
+
+Animator Primitives
+\layout Itemize
+
+Define steps of algorithm (a series of strings to explain what the algorithm
+ does)
+\layout Itemize
+
+Highlight currently active step
+\layout Itemize
+
+Show text to user (to explain current actions)
+\layout Itemize
+
+Checkpoint (save the state of the animator so this stage of the algorithm
+ can be returned to)
 \layout Subsubsection
 
 Graph Animator Primitives
+\layout Itemize
+
+Create graph (specify nodes and paths with costs and labels)
 \layout Paragraph
 
 Node
-\layout Itemize
-
-Create node (with label)
-\layout Itemize
-
-Delete node
 \layout Itemize
 
 Change node label
@@ -373,12 +407,6 @@ Shade node (to indicate membership of a set of nodes or paths)
 Path (joins two nodes)
 \layout Itemize
 
-Create path (with cost, label and origin/destination nodes)
-\layout Itemize
-
-Delete path
-\layout Itemize
-
 Change path label
 \layout Itemize
 
@@ -389,21 +417,24 @@ Shade path (to indicate membership of a set of nodes or paths)
 \layout Subsubsection
 
 Sort Animator Primitives
+\layout Itemize
+
+Create vector (with initial data and label)
 \layout Paragraph
 
 Vector (array of numbers)
-\layout Itemize
-
-Create vector (with data and label)
-\layout Itemize
-
-Delete vector
 \layout Itemize
 
 Change vector label
 \layout Itemize
 
 Swap elements at two pointers
+\layout Itemize
+
+Delete element at pointer
+\layout Itemize
+
+Insert element at marker
 \layout Itemize
 
 Split vector into two at a marker (for Quicksort)
@@ -448,11 +479,48 @@ Highlight pointer (to indicate current focus of algorithm)
 Queues
 \layout Standard
 
-This package contains an interface AnimatorQueue, and two classes which
- impl
+This package contains an interface 
+\family typewriter 
+AnimatorQueue
+\family default 
+, initially implemented by two classes 
+\family typewriter 
+GraphQueue
+\family default 
+ and 
+\family typewriter 
+SortQueue
+\family default 
+, which extend their respective 
+\family typewriter 
+Animator
+\family default 
+ classes.
+ The queues form a layer of abstraction between the algorithms and the actual
+ implementation of the animators, and allow the algorithms to run to completion
+ before any animation is shown to the user.
+ When the algorithm uses an animator primitive, the queue internally records
+ the requested action, and returns control to the algorithm.
+ The queue hence builds up a list of all of the animator primitives which
+ an algorithm used to get between one checkpointed state of the animator
+ and the next.
+ The shell can then provide an actual implementation of the animator primitives
+ to the queue, and use the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface to instruct the queue to execute each batch of queued primitives
+ on the actual animator.
+ The more important functionality of this package is that it also allows
+ the user to roll the animator back to previous states so the user can revisit
+ previous steps of the algorithm, asdfasdfasdfasdfqaFIXME
 \layout Subsection
 
 Shell
+\layout Standard
+
+The shell package implements the interface that is visible to the user.
+ The Shell class 
 \layout Standard
 
 What the major components (classes) are and how they will fit together (to
@@ -642,7 +710,7 @@ Division of project tasks
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0(null)">
+<column alignment="right" valignment="top" leftline="true" width="0">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
