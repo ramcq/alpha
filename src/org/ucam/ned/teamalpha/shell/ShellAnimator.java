@@ -8,6 +8,10 @@ package org.ucam.ned.teamalpha.shell;
 
 import javax.swing.JPanel;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
 /**
  * @author ram48
  *
@@ -16,9 +20,28 @@ import javax.swing.JPanel;
  */
 public abstract class ShellAnimator extends JPanel {
 	private Shell shell;
+	private RefreshTimer rt;
+	
+	private class RefreshTimer implements ActionListener {
+		private Timer timer;
+		private int delay;
+		RefreshTimer(int fps) {
+			delay = (fps > 0) ? (1000 / fps) : 33;
+			timer = new Timer(delay, this);
+			timer.start();
+		}
+		
+		/* (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
+		public void actionPerformed(ActionEvent e) {
+			repaint();			
+		}
+	}
 	
 	public ShellAnimator() {
 		shell = Shell.getInstance();
+		rt = new RefreshTimer(30);
 	}
 	
 	public void setSteps(String[] steps) {
