@@ -64,6 +64,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public static final int EDGE_TYPE_SAMDIR = 0;
 	public static final int EDGE_TYPE_ONEDIR = 1;
 	public static final int EDGE_TYPE_TWODIR = 2;
+	public static final int EDGE_CURVE_ANGLE = 10; //degrees
 	
 	public class Node /*implements Serializable*/{
 		int Nodewidth=NODE_SIZE;
@@ -171,7 +172,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		 */
 		public void addpath (String label) {
 			this.label2 = label;
-			if (this.label1 == this.label2) {
+			if (this.label1.equals(this.label2)) {
 				this.type = EDGE_TYPE_SAMDIR;
 			}
 			else {
@@ -355,7 +356,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				case AnimationEvent.EDGE_SHADE_REDRAW:
 					intermediateOffset++;
 					drawEdgeshade(currentEvent.e1, big, intermediateOffset);
-					if (intermediateOffset > 500) {
+					if (intermediateOffset > 59) {
 						intermediateOffset = 0;	
 						currentEvent = null;
 					}
@@ -394,11 +395,78 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				g.setColor(fgcolour);
 				//TODO put an arrow on the end
 			}
-			else { //TWODIR, draw curves
-				//TODO
+			else { 
+				drawcurve(e.x1,e.y1,e.x2,e.y2,e.set1,1.0,e.label1,g);
+				drawcurve(e.x2,e.y2,e.x1,e.y1,e.set2,1.0,e.label2,g);
 			}
 		}
+		drawNode(nodelist[e.nd1],g);
+		drawNode(nodelist[e.nd2],g);
 	}
+	
+	public void drawcurve (int x1,int y1,int x2,int y2,int set, double limit, String label,Graphics g) {
+		g.setColor(SET_COLOUR[set]);
+		//calculate midpoint of line
+		int sx = (int) (x1 - (x1 - x2)/2);
+		int sy = (int) (y1 - (y1 - y2)/2);
+		boolean labeldrawn = false;
+		//calculate p1/p2 for bezier
+		//p0 is e.x1,y1 p3 is e.x2,y2
+		if (x1 != x2 && y1 != y2){ //this bit doesn't work
+			double grad = (double) ((x1-x2)/(y1-y2));
+			grad = (-1 / grad);
+			if (x1>x2) {
+				sx = (int)(sx - 30 * grad);
+				sy = (int)(sy + 30 * grad);
+			}
+			else {
+				sx = (int)(sx + 30 * grad);
+				sy = (int)(sy - 30 * grad);
+			}
+		}
+		else {//this bit works fine
+			if (x1 == x2) {
+				if (y1>y2) {
+					sx = (int)(sx - 30);
+				}
+				else {
+					sx = (int)(sx + 30);
+				}
+			}
+			if (y1 == y2) {
+				if (x1>x2) {
+					sy = (int)(sy - 30);
+				}
+				else {
+					sy = (int)(sy + 30);
+				}
+			}
+		}
+		//sx,sy is p1,p2
+		int x,y,oldx,oldy;
+		float t = (float)0.032;
+		float i = (float) 0.0;
+		oldx = x1;
+		oldy = y1;
+		do
+		{	x = (int)((((1-i)*(1-i)*(1-i))*x1)+(3*i*((1-i)*(1-i))*sx)+(3*(i*i)*(1-i)*sx)+((i*i*i)*x2));
+			y = (int)((((1-i)*(1-i)*(1-i))*y1)+(3*i*((1-i)*(1-i))*sy)+(3*(i*i)*(1-i)*sy)+((i*i*i)*y2));
+			g.drawLine(oldx,oldy,x,y);
+			oldx = x;
+			oldy = y;
+			i = i + t;
+			if (labeldrawn == false && i > 0.3) {
+				g.setColor(fgcolour);
+				drawlabel(x,y,label,g);
+				labeldrawn = true;
+				g.setColor(SET_COLOUR[set]);
+			}	
+		}
+		while (i <= limit);
+		//TODO put an arrows on the ends
+		g.setColor(fgcolour);
+	}
+	
 	//incrementally shade an edge on screen	
 	public void drawEdgeshade(Edge e, Graphics g, int t) {
 		int sx1,sx2,sy1,sy2;
@@ -410,18 +478,24 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				sx1 = e.x1; sx2 = e.x2; sy1 = e.y1; sy2 = e.y2;
 			}
 			g.setColor(SET_COLOUR[e.set1]);
-			//get line gradient
-			int x = (int) (sx1 - (t * (sx1 - sx2))/500);
-			int y = (int) (sy1 - (t * (sy1 - sy2))/500);
+			int x = (int) (sx1 - (t * (sx1 - sx2))/60.0);
+			int y = (int) (sy1 - (t * (sy1 - sy2))/60.0);
 			g.drawLine(sx1, sy1, x, y);
 			g.setColor(fgcolour);
-			drawNode(nodelist[e.nd1],g);
-			drawNode(nodelist[e.nd2],g);
 			drawEdgelabel(e, g);
 		}
 		else {
-			//TODO shade one curve instead of a straight line
+			double slimit;
+			slimit =(double) (t/60.0);
+			if (e.toshade == 0) {
+				drawcurve(e.x1,e.y1,e.x2,e.y2,e.set1,slimit,e.label1,g);
+			}
+			else {
+				drawcurve(e.x2,e.y2,e.x1,e.y1,e.set2,slimit,e.label2,g);
+			}
 		}
+		drawNode(nodelist[e.nd1],g);
+		drawNode(nodelist[e.nd2],g);
 	}
 	//draw edge label on screen
 	public void drawEdgelabel(Edge e, Graphics g) {
@@ -440,7 +514,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	//actual method for drawing text on screen
 	public void drawlabel(int x,int y,String label, Graphics g) {
-		g.setFont(new Font("MonoSpaced", Font.PLAIN, 10));
+		g.setFont(new Font("MonoSpaced", Font.PLAIN, 14));
 		g.drawString(label, x, y);
 	}
 	
@@ -502,6 +576,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					}
 				}
 			}
+			//need to fill in all of the data before drawing so that edge type done correctly
 			for (int i=0;i<costs.length;i++)
 			{	for (int j=0;j<arrlentst.length;j++)
 				{	//draw the thing we just made
@@ -638,10 +713,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		});
 		//current test data
-		int[][] tstcosts = {{0,2,1,0},{2,0,3,0},{1,3,0,0},{0,0,0,0}};
+		int[][] tstcosts = {{0,4,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
 		app.createGraph(tstcosts);
-		app.setNodeShade(1,1);
 		app.setEdgeShade(0,2,1);
+		app.setEdgeShade(0,1,3);
 		app.setEdgeShade(2,0,2);
 	}
 }
