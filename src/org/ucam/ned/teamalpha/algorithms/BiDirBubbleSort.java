@@ -32,6 +32,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 							"Search upwards for elements out of place",
 							"Swap elements",
 							"Change direction",
+							"Update sort bounds",
 							"Done"});
 		
 		
@@ -44,11 +45,25 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 			// ANIM: Create the vector we work on
 			VectorAnimator.Vector v = anim.createVector(a);
 			v.setLabel("");
+
+			// ANIM: Create the bounding arrows
+			VectorAnimator.Arrow bottom = v.createArrow(limit, true, true);
+			bottom.setLabel("Bott");
+			VectorAnimator.Arrow top = v.createArrow(0, true, true);
+			top.setLabel("Top");
 			
 			// The main sorting phase
 			while (st < limit) {
+				anim.setCurrentStep(4);
+				
 				st++;
+				// ANIM: Mark Lower bound
+				top.move(st, true);
+				
 				limit--;
+				// ANIM: Mark Upper bound
+				bottom.move(limit+1, true);
+				
 				boolean swapped = false;
 				
 				// ANIM: Create the downwards arrow
@@ -57,6 +72,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				for (j = st; j < limit; j++) {
 					
 					// ANIM: Move the arrow to the right place
+					anim.saveState();
 					anim.setCurrentStep(0);
 					arrowA.move(j, false);
 					
@@ -71,7 +87,6 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						// ANIM: Swap the elements
 						anim.setCurrentStep(2);
 						arrowA.flash();
-						v.flashElement(j+1);
 						v.swapElements(j,j+1);
 						
 						swapped = true;
@@ -79,6 +94,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				}
 				if (!swapped) {
 					arrowA.delete();
+					anim.setCurrentStep(5);
 					v.setLabel("Done!");
 					return;
 				}
@@ -89,6 +105,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				
 				// OTHER WAY NOW! //
 				anim.setCurrentStep(3);
+				anim.saveState();
 				
 				// ANIM: Create the downwards arrow
 				VectorAnimator.Arrow arrowB = v.createArrow("Up", limit-1, false);
@@ -111,7 +128,6 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						// ANIM: Swap the elements
 						anim.setCurrentStep(2);
 						arrowB.flash();
-						v.flashElement(j+1);
 						v.swapElements(j,j+1);
 						
 						swapped = true;
@@ -119,6 +135,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				}
 				if (!swapped) {
 					arrowB.delete();
+					anim.setCurrentStep(5);
 					v.setLabel("Done!");
 					return;
 				}
@@ -128,7 +145,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 			}
 			
 			v.setLabel("Done!");
-			anim.setCurrentStep(4);
+			anim.setCurrentStep(5);
 			
 		} catch (Exception ile) {
 			System.out.println("Animator exception raised");
