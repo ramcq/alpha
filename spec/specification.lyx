@@ -946,6 +946,90 @@ make sure the graphical user interface works correctly
 \layout Subsection
 
 Shell
+\layout Paragraph
+
+Purpose
+\layout Standard
+
+The shell is the interface that the user interacts with and hence contains
+ all the user interface code.
+ The shell accepts input from the user and delegates it to the other packages
+ which run the relevant algorithm and render output to the display.
+\layout Paragraph
+
+Inputs
+\layout Standard
+
+The shell will accept two main types of input.
+ These are: the data on which the selected algorithm will operate on and
+ the animation playback options (forward, back, change speed of animations
+ 
+\emph on 
+[optional]
+\emph default 
+).
+\layout Paragraph
+
+Outputs
+\layout Standard
+
+The shell produces two classes of output; one when the user selects an algorithm
+ and enters data and the other when the user steps through the animation
+ on screen.
+ When the user decides on the algorithm and data he wants animated, the
+ shell creates an instance of the 
+\family typewriter 
+Algorithm
+\family default 
+ object and an instance of the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ object.
+ Depending on the choice of algorithm, the relevant child objects of each
+ are chosen.
+ As the user steps through an animation, the shell will call public methods
+ on the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ object, specifying when to step forward, backward etc.
+\layout Paragraph
+
+Public methods
+\layout Itemize
+
+
+\family typewriter 
+\emph on 
+static
+\emph default 
+ main
+\layout Paragraph
+
+Testing
+\layout Standard
+
+Testing is to be broken down into two sections to mirror the two functions
+ of the shell.
+ For the data entry and algorithm section, the functionality of the relevant
+ Swing components will be tested with the use of stub functions to verify
+ that the right method calls are being made.
+ In addition, the shell's ability to cope with invalid data (such as a 
+\family typewriter 
+String
+\family default 
+ entry to a 
+\family typewriter 
+Vector
+\family default 
+) will be tested.
+ For the animation section the use of stub functions will be used to ensure
+ that the right methods in the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ class are called.
 \layout Section
 
 Final Acceptance Criteria
@@ -1005,7 +1089,7 @@ collapsed false
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0(null)">
+<column alignment="right" valignment="top" leftline="true" width="0">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
