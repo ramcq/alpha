@@ -1751,14 +1751,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(int[])
 	 */
-	public VectorAnimator.Vector createVector(int[] values) {
+	public VectorAnimator.Vector createVector(int[] values) throws InputTooLongException {
 		return createVector("Unnamed", values);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(java.lang.String, int[])
 	 */
-	public VectorAnimator.Vector createVector(String label, int[] values) {
+	public VectorAnimator.Vector createVector(String label, int[] values) throws InputTooLongException {
 		Vector res = null;
 		synchronized(this) {
 			try {
@@ -1768,7 +1768,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				if (draw) startAnimation();
 				else ShellVectorAnimator.this.notify();
 			}
-			catch (InputTooLongException e) { System.out.println(e); }
 			catch (InvalidAnimationEventException e) {
 				System.out.println(e);
 			}
