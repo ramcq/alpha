@@ -1,16 +1,42 @@
 package org.ucam.ned.teamalpha.queues;
 
 import org.ucam.ned.teamalpha.animators.Animator;
+import org.ucam.ned.teamalpha.animators.InvalidLocationException;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 public class VectorQueue extends GenericQueue implements VectorAnimator, AnimatorQueue {
 	public class State implements Animator.State { };
 	
 	public class Vector implements VectorAnimator.Vector {
+		int size;
+		
+		Vector(int[] values) {
+			size = values.length;
+		}
+		
+		private void checkValidOffset(int o) throws InvalidLocationException {
+			if (o<0 | o>size)
+				throw new InvalidLocationException("vector has size " + size + ", requested offset was " + o);
+		}
+		
+		private void checkValidArrowPos(int pos, boolean boundary) throws InvalidLocationException {
+			boolean res = true;
+			
+			if (boundary)
+				res = ((pos>=0) && (pos<=size));
+			else
+				res = ((pos>=0) && (pos<size));
+			
+			if (!res)
+				throw new InvalidLocationException("vector has size " + size + ", requested arrow position was (" + pos + ", " + boundary + ")");
+		}
+		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
 		 */
-		public void copyElement(int offsetfrom, int offsetto) {
+		public void copyElement(int offsetfrom, int offsetto) throws InvalidLocationException {
+			checkValidOffset(offsetfrom);
+			checkValidOffset(offsetto);
 			Object[] args = { new Primitive(offsetfrom), new Primitive(offsetto) };
 			enqueue(this, "copyElement", args);
 		}
@@ -18,7 +44,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void copyElement(int offsetfrom, VectorAnimator.Vector target, int offsetto) {
+		public void copyElement(int offsetfrom, VectorAnimator.Vector target, int offsetto) throws InvalidLocationException {
+			checkValidOffset(offsetfrom);
+			((Vector) target).checkValidOffset(offsetto);
 			Object[] args = { new Primitive(offsetfrom), target, new Primitive(offsetto) };
 			enqueue(this, "copyElement", args);
 		}
@@ -26,8 +54,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary, boolean left) {
-			Arrow ret = new Arrow();
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary, boolean left) throws InvalidLocationException {
+			checkValidArrowPos(position, boundary);
+			Arrow ret = new Arrow(this);
 			Object[] args = {label, new Primitive(position), new Primitive(boundary), new Primitive(left) };
 			enqueue(this, "createArrow", args, ret);
 			return ret;
@@ -36,8 +65,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) {
-			Arrow ret = new Arrow();
+		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) throws InvalidLocationException {
+			checkValidArrowPos(offset, boundary);
+			Arrow ret = new Arrow(this);
 			Object[] args = { new Primitive(offset), new Primitive(boundary) };
 			enqueue(this, "createArrow", args, ret);
 			return ret;
@@ -46,8 +76,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(int position, boolean boundary, boolean left) {
-			Arrow ret = new Arrow();
+		public VectorAnimator.Arrow createArrow(int position, boolean boundary, boolean left) throws InvalidLocationException {
+			checkValidArrowPos(position, boundary);
+			Arrow ret = new Arrow(this);
 			Object[] args = { new Primitive(position), new Primitive(boundary), new Primitive(left) };
 			enqueue(this, "createArrow", args, ret);
 			return ret;
@@ -56,8 +87,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary) {
-			Arrow ret = new Arrow();
+		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary) throws InvalidLocationException {
+			checkValidArrowPos(offset, boundary);
+			Arrow ret = new Arrow(this);
 			Object[] args = { label, new Primitive(offset), new Primitive(boundary) };
 			enqueue(this, "createArrow", args, ret);
 			return ret;
@@ -71,7 +103,8 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 			enqueue(this, "delete", args);
 		}
 
-		public void flashElement(int offset) {
+		public void flashElement(int offset) throws InvalidLocationException {
+			checkValidOffset(offset);
 			Object[] args = { new Primitive(offset) };
 			enqueue(this, "flashElement", args);
 		}
@@ -79,7 +112,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#moveElement(int, int)
 		 */
-		public void moveElement(int offsetfrom, int offsetto) {
+		public void moveElement(int offsetfrom, int offsetto) throws InvalidLocationException {
+			checkValidOffset(offsetfrom);
+			checkValidOffset(offsetto);
 			Object[] args = { new Primitive(offsetfrom), new Primitive(offsetto) };
 			enqueue(this, "moveElement", args);
 		}
@@ -87,17 +122,10 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setElement(int, int)
 		 */
-		public void setElement(int offset, int value) {
+		public void setElement(int offset, int value) throws InvalidLocationException {
+			checkValidOffset(offset);
 			Object[] args = { new Primitive(offset), new Primitive(value) };
 			enqueue(this, "setElement", args);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setHighlightedDigit(int)
-		 */
-		public void setHighlightedDigit(int column) {
-			Object[] args = { new Primitive(column) };
-			enqueue(this, "setHighlightedDigit", args);
 		}
 
 		/* (non-Javadoc)
@@ -111,7 +139,9 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, int)
 		 */
-		public void swapElements(int offset1, int offset2) {
+		public void swapElements(int offset1, int offset2) throws InvalidLocationException {
+			checkValidOffset(offset1);
+			checkValidOffset(offset2);
 			Object[] args = { new Primitive(offset1), new Primitive(offset2) };
 			enqueue(this, "swapElements", args);
 		}
@@ -119,13 +149,21 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void swapElements(int offset1, VectorAnimator.Vector target, int offset2) {
+		public void swapElements(int offset1, VectorAnimator.Vector target, int offset2) throws InvalidLocationException {
+			checkValidOffset(offset1);
+			((Vector) target).checkValidOffset(offset2);
 			Object[] args = { new Primitive(offset1), target, new Primitive(offset2) };
 			enqueue(this, "swapElements", args);
 		}
 	}
 	
 	public class Arrow implements VectorAnimator.Arrow {
+		Vector v;
+		
+		Arrow(Vector v) {
+			this.v = v;
+		}
+		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()
 		 */
@@ -145,7 +183,8 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setOffset(int)
 		 */
-		public void move(int offset, boolean boundary) {
+		public void move(int offset, boolean boundary) throws InvalidLocationException {
+			v.checkValidArrowPos(offset, boundary);
 			Object[] args = { new Primitive(offset), new Primitive(boundary) };
 			enqueue(this, "move", args);
 		}
@@ -167,7 +206,7 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(int[])
 	 */
 	public VectorAnimator.Vector createVector(int[] values) {
-		VectorAnimator.Vector ret = new VectorQueue.Vector();
+		VectorAnimator.Vector ret = new VectorQueue.Vector(values);
 		int[] newvalues = new int[values.length];
 		System.arraycopy(values, 0, newvalues, 0, values.length);
 		Object[] args = { newvalues };
@@ -179,7 +218,7 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(java.lang.String, int[])
 	 */
 	public VectorAnimator.Vector createVector(String label, int[] values) {
-		VectorAnimator.Vector ret = new VectorQueue.Vector();
+		VectorAnimator.Vector ret = new VectorQueue.Vector(values);
 		int[] newvalues = new int[values.length];
 		System.arraycopy(values, 0, newvalues, 0, values.length);
 		Object[] args = { label, newvalues };
@@ -224,13 +263,5 @@ public class VectorQueue extends GenericQueue implements VectorAnimator, Animato
 	 */
 	public void restoreState(Animator.State state) {
 		// this is a no-op	
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#setFpsFactor(double)
-	 */
-	public void setFpsFactor(double f) {
-		Object[] args = { new Primitive(f) };
-		enqueue(this, "setFpsFactor", args);
 	}
 }
