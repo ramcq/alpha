@@ -1565,7 +1565,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		int topOfElement = v.top + (20 * element) + 1;
 		int bottomOfElement = topOfElement + 19;
-		int leftOfAffectedArea = left ? v.left - 80 : v.left+1; // the left of the area we will have to clear each time
+		int leftOfAffectedArea = left ? v.left - 70 : v.left+1; // the left of the area we will have to clear each time
 		int widthOfAffectedArea = 119;
 		int heightOfAffectedArea = 19;
 		
@@ -1973,7 +1973,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		if (redraw) {
 			if (a.left) repaint(left-25, ypos-5, 50, 10);
-			else repaint(left, ypos-6, 50, 12);
+			else repaint(left, ypos-6, 50, 14);
 		}
 	}
 	
@@ -1988,7 +1988,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				
 		if (!a.deleted) drawArrow(a, g, false);
 		
-		if (redraw) repaint(left, ypos-5, 40, 12);
+		if (redraw) repaint(left, ypos-6, 40, 14);
 	}
 	
 	// Redraw all arrows known to the animator
