@@ -391,7 +391,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 */
 		public void setLabel(String label) {
 			// Trim if over 4 chars
-			if (label.length() > 4) label = label.substring(0,3); 
+			if (label.length() > 4) label = label.substring(0,4); 
 			this.label = label;
 		}
 			
