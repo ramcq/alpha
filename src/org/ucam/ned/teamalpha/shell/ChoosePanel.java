@@ -128,7 +128,7 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 		// add text area with description
 		text = new JTextPane();
 		text.setEditable(false);
-		text.setPreferredSize(new java.awt.Dimension(400, 100));
+		text.setPreferredSize(new Dimension(585, 500));
 		right.add(text);
 		
 		// set the default text
