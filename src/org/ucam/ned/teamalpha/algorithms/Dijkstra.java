@@ -234,7 +234,7 @@ public class Dijkstra extends GraphAlgorithm {
 	 */
 	private void processNeighbours(Node n) {
 		// ANIM: Highlight the node we are working with
-		anim.setNodeHighlight(n.index, true);
+		// TODO: anim.setNodeHighlight(n.index, true);
 		anim.setCurrentStep(1);
 		
 		for (Iterator i = map.getDestinations(n).iterator(); i.hasNext();) {
@@ -245,9 +245,9 @@ public class Dijkstra extends GraphAlgorithm {
 			
 			// ANIM: Highlight the node we are looking at
 			anim.flashNode(m.index);
-			anim.setNodeHighlight(m.index, true);
+			// TODO: anim.setNodeHighlight(m.index, true);
 			// ANIM: Highlight the edge we are looking at
-			anim.setEdgeHighlight(n.index, m.index, true);
+			// TODO: anim.setEdgeHighlight(n.index, m.index, true);
 			
 			if (getShortestDist(m) > getShortestDist(n)+ map.getDist(n, m)) {
 				// assign new shortest distance and mark unFinished
@@ -272,17 +272,17 @@ public class Dijkstra extends GraphAlgorithm {
 				// assign predecessor in shortest path
 				setPredecessor(m, n);
 				// ANIM: Unhighlight node
-				anim.setEdgeHighlight(n.index, m.index, false);
+				// TODO: anim.setEdgeHighlight(n.index, m.index, false);
 				// ANIM: and then add an edge here
 				anim.setEdgeShade(n.index, m.index, INCLUDEDEDGE);
 			}
 			
 			// ANIM: Unhighlight the node/edge we were looking at
-			anim.setNodeHighlight(m.index, false);
+			// TODO: anim.setNodeHighlight(m.index, false);
 		}  
 		
 		// ANIM: Unhighlight the node we were working with
-		anim.setNodeHighlight(n.index, false);
+		// TODO: anim.setNodeHighlight(n.index, false);
 	}
 	
 	/**
