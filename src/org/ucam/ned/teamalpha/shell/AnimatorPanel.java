@@ -84,6 +84,7 @@ public class AnimatorPanel extends ShellPanel {
 		message = new JTextPane();
 		message.setEditable(false);
 		message.setPreferredSize(new Dimension(790, 50));
+		message.setBorder(BorderFactory.createLoweredBevelBorder());
 		add(message);
 		
 		// create the queue and a thread for the algorithm and GO GO GO!
