@@ -68,6 +68,14 @@ sas58
 ajit2
 \family default 
 )
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
 \layout Section
 
 Introduction
@@ -86,7 +94,7 @@ smh22@cam.ac.uk
 \layout Section
 
 General project overview
-\layout Subsubsection*
+\layout Subsection
 
 Successes
 \layout Itemize
@@ -104,7 +112,7 @@ We broke the project up into manageable sections which were successfully
 
 We managed to get all the documentation finished and handed in on time for
  project meetings, never missing a deadline.
-\layout Subsubsection*
+\layout Subsection
 
 Failures
 \layout Itemize
@@ -131,7 +139,7 @@ At the first project meeting we had a plan of who was going to be doing
  task allocation saying for example, who would be coding each module.
  Although this was sorted quickly after the meeting, we should have made
  a plan for this in the specification stage.
-\layout Subsubsection*
+\layout Subsection
 
 Lessons learned
 \layout Itemize
