@@ -48,7 +48,7 @@ public class NonSquareMatrixException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static void isSquare(Object[][] matrix) throws NonSquareMatrixException {
+	public static void isSquare(int[][] matrix) throws NonSquareMatrixException {
 		int width = matrix.length;
 		for (int i=0; i<matrix.length; i++) {
 			if (matrix[i].length != width) throw new NonSquareMatrixException("Matrix not square: expected row "+i+" to be of length "+width);
