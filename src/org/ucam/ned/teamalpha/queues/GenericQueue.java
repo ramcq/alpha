@@ -19,14 +19,12 @@ import org.ucam.ned.teamalpha.animators.Animator;
  */
 class GenericQueue {
 	private class Event {
-		Class type;
 		String methodname;
 		Object subject;
 		Object[] args;
 		Object ret;
 		
-		Event(Class type, Object subject, String methodname, Object[] args, Object ret) {
-			this.type = type;
+		Event(Object subject, String methodname, Object[] args, Object ret) {
 			this.subject = subject;
 			this.methodname = methodname;
 			this.args = args;
@@ -36,6 +34,8 @@ class GenericQueue {
 		void send() {		
 			try {
 				Object realsubject = subjects.get(subject);
+				Class type = realsubject.getClass(); 
+
 				Object[] realargs = new Object[args.length];
 				Class[] argtypes = new Class[args.length];
 				
@@ -57,7 +57,7 @@ class GenericQueue {
 				if (ret != null)
 					subjects.put(ret, realret);
 			} catch (Exception e) {
-				System.err.println("internal queue error: failure invoking method");
+				System.err.println("internal queue error: failure delivering event");
 				System.err.println(e);
 			}
 		}
@@ -90,21 +90,13 @@ class GenericQueue {
 		this.currentstate = 0;
 	}
 	
-	void enqueue(Class type, Object subject, String methodname, Object[] args, Object ret) {
-		Event e = new Event(type, subject, methodname, args, ret);
+	void enqueue(Object subject, String methodname, Object[] args, Object ret) {
+		Event e = new Event(subject, methodname, args, ret);
 		State s = (State) states.lastElement();
 		s.events.add(e);
 	}
 	
-	void enqueue(Class type, Object subject, String methodname, Object[] args) {
-		enqueue(type, subject, methodname, args, null);
-	}
-	
-	void enqueue(String methodname, Object[] args, Object ret) {
-		enqueue(anim.getClass(), queue, methodname, args, ret);
-	}
-	
-	void enqueue(String methodname, Object[] args) {
-		enqueue(anim.getClass(), queue, methodname, args, null);
+	void enqueue(Object subject, String methodname, Object[] args) {
+		enqueue(subject, methodname, args, null);
 	}
 }
