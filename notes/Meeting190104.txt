@@ -1,0 +1,52 @@
+ALPHA TEAM meeting 19/01/04
+
+Specificationy type stuff
+
+Basic plan:
+
+ - Algorithm runs to completion calling Animator interface
+
+ - QueueingAnimator implemented by Shell, which records each step in ToDoStack
+
+ - Steps are small sections of the algorithm, seperated by checkpoints, which will be animated one at a time
+
+ - There should be an explanation (tooltip?) of what is going on at each step as it is being animated
+
+ - Shell applies steps to LiveAnimator by popping ToDoStack and moves completed steps to CompletedStack
+
+ - LiveAnimator does the actual animating on the display
+
+ - When backtracking, a step is popped off CompletedStack and put back on ToDoStack, with the display returning to the previous state (but not animating)
+
+
+
+What the user experiences:
+
+ - Loads up program, sees algorithm selection menu (with 5 algorithms)
+
+ - Selects algorithm and generates/inputs data (different fields depending on algorithm)
+
+ - Starts algorithm, sees initial state with input data
+
+ - (at this point the algorithm has been completed internally and animation steps are queued up)
+
+ - Presses next to step through algorithm
+
+ - Presses back to go back a step
+
+ - When the algorithm finishes, return to algorithm selection menu
+
+ - Repeat until bored
+
+
+
+What interacts with what:
+
+ - Shell provides input data and begin command to Algorithm
+
+ - Shell provides QueueingAnimator with next/back commands
+
+ - Algorithm provides QueueingAnimator with steps to animate and queue
+
+ - QueueingAnimator provides LiveAnimator with steps to animate on the display
+
