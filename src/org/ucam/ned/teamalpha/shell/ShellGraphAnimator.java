@@ -61,6 +61,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.black, Color.darkGray, Color.lightGray};
 		//colours for representing the different node/edge sets
 	public static final int NODE_SIZE = 6; //node width/height
+	public static final int EDGE_TYPE_SAMDIR = 0;
+	public static final int EDGE_TYPE_ONEDIR = 1;
+	public static final int EDGE_TYPE_TWODIR = 2;
 	
 	public class Node /*implements Serializable*/{
 		int Nodewidth=NODE_SIZE;
@@ -137,11 +140,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public class Edge /*implements Serializable*/ {
 		int x1,x2; 
 		int y1,y2; //coordinates for two end points of lines
-		int set; //set the edge belongs to, determines colour
+		int set1,set2; //set the edges belong to, determines colour
 		int nd1, nd2;
-		private String label;
-		int path;
-		String altlabel;//two different paths
+		private String label1;
+		private String label2;//two different paths
+		int type; //SAMDIR, ONEDIR, TWODIR
+		int toshade;
 		/*
 		 * called by creategraph api to initialise node data 
 		 */
@@ -152,8 +156,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.y2 = nodelist[n2].y;
 			this.nd1 = n1;
 			this.nd2 = n2;
-			this.set = 0;
-			this.label = cost;
+			this.set1 = 0;
+			this.set2 = 0;
+			this.label1 = cost;
+			this.type = EDGE_TYPE_ONEDIR;
+			this.toshade = 0;
 		}
 		
 		public void delete() {
@@ -162,12 +169,22 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		/*
 		 * called by edgesetlabel api to set label and update display
 		 */
+		public void addpath (String label) {
+			this.label2 = label;
+			if (this.label1 == this.label2) {
+				this.type = EDGE_TYPE_SAMDIR;
+			}
+			else {
+				this.type = EDGE_TYPE_TWODIR;
+			}
+		}
+		
 		public void setlabel(String label) {
-			this.label = label;
+			this.label1 = label;
 			this.drawlabel();
 		}
 		public void setaltlabel(String label) {
-			this.altlabel = label;
+			this.label2 = label;
 			this.drawlabel();
 		}
 		
@@ -191,13 +208,18 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		 * called by the setEdgeShade api 
 		 */
 		public void setEdgeshade(int set) {
-			this.set = set;
-			this.path = 0;
+			this.set1 = set;
+			this.toshade = 0;
 			this.drawEdgeShade();
 		}
 		public void setEdgeshade2(int set) {
-			this.set = set;
-			this.path = 1;
+			if (this.type == EDGE_TYPE_SAMDIR) {
+				this.set1 = set;
+			}
+			else {
+				this.set2 = set;
+			}
+			this.toshade = 1;
 			this.drawEdgeShade();
 		}
 		//put a drawing event on the animation queue
@@ -360,34 +382,57 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	//draw edge on screen	
 	public void drawEdge(Edge e, Graphics g) {
-		g.setColor(SET_COLOUR[e.set]);
-		g.drawLine(e.x1, e.y1, e.x2, e.y2);
-		g.setColor(fgcolour);		
+		if (e.type == EDGE_TYPE_SAMDIR) {
+			g.setColor(SET_COLOUR[e.set1]);
+			g.drawLine(e.x1, e.y1, e.x2, e.y2);
+			g.setColor(fgcolour);
+		}
+		else {
+			if (e.type == EDGE_TYPE_ONEDIR) {
+				g.setColor(SET_COLOUR[e.set1]);
+				g.drawLine(e.x1, e.y1, e.x2, e.y2);
+				g.setColor(fgcolour);
+				//TODO put an arrow on the end
+			}
+			else { //TWODIR, draw curves
+				//TODO
+			}
+		}
 	}
 	//incrementally shade an edge on screen	
 	public void drawEdgeshade(Edge e, Graphics g, int t) {
 		int sx1,sx2,sy1,sy2;
-		if (e.path == 1) {
-			sx1 = e.x2; sx2 = e.x1; sy1 = e.y2; sy2 = e.y1;
+		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
+			if (e.toshade == 1) {
+				sx1 = e.x2; sx2 = e.x1; sy1 = e.y2; sy2 = e.y1;
+			}
+			else {
+				sx1 = e.x1; sx2 = e.x2; sy1 = e.y1; sy2 = e.y2;
+			}
+			g.setColor(SET_COLOUR[e.set1]);
+			//get line gradient
+			int x = (int) (sx1 - (t * (sx1 - sx2))/500);
+			int y = (int) (sy1 - (t * (sy1 - sy2))/500);
+			g.drawLine(sx1, sy1, x, y);
+			g.setColor(fgcolour);
+			drawNode(nodelist[e.nd1],g);
+			drawNode(nodelist[e.nd2],g);
+			drawEdgelabel(e, g);
 		}
 		else {
-			sx1 = e.x1; sx2 = e.x2; sy1 = e.y1; sy2 = e.y2;
+			//TODO shade one curve instead of a straight line
 		}
-		g.setColor(SET_COLOUR[e.set]);
-		//get line gradient
-		int x = (int) (sx1 - (t * (sx1 - sx2))/500);
-		int y = (int) (sy1 - (t * (sy1 - sy2))/500);
-		g.drawLine(sx1, sy1, x, y);
-		g.setColor(fgcolour);
-		drawNode(nodelist[e.nd1],g);
-		drawNode(nodelist[e.nd2],g);
-		drawEdgelabel(e, g);
 	}
 	//draw edge label on screen
 	public void drawEdgelabel(Edge e, Graphics g) {
-		int x = (int) (e.x1 - (e.x1 - e.x2)/3);
-		int y = (int) (e.y1 - (e.y1 - e.y2)/3);
-		drawlabel(x, y, e.label, g);
+		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
+			int x = (int) (e.x1 - (e.x1 - e.x2)/3);
+			int y = (int) (e.y1 - (e.y1 - e.y2)/3);
+			drawlabel(x, y, e.label1, g);
+		}
+		else{
+			//TODO draw labels next to the curves
+		}
 	}
 	//draw node label on screen
 	public void drawNodelabel(Node n, Graphics g) {
@@ -438,32 +483,34 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				{
 					if (costs[i][j] != 0) {
 						if (i != j) {
-							//TODO make edges have two paths
 							Integer tmpint = new Integer(costs[i][j]);
+							edgematrix[i][j] = new Edge();
 							if (i>j) {
 								if (edgematrix[j][i] != null) {
 									edgematrix[i][j] = edgematrix[j][i]; 	
-									if (costs[i][j] == costs[j][i]) {
-										edgematrix[i][j].setaltlabel(" ");
-									}
-									else {
-										edgematrix[i][j].setaltlabel(tmpint.toString()); 
-									}
+									edgematrix[i][j].addpath(tmpint.toString());
+								}
+								else {
+									edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
 								}
 							}
 							else {
-								
 								//fill in edge data
-								edgematrix[i][j] = new Edge();
 								edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
-								edgematrix[i][j].drawEdge();
-								//draw the thing we just made
-								edgematrix[i][j].drawlabel();
 							}
 						}
 					}
 				}
 			}
+			for (int i=0;i<costs.length;i++)
+			{	for (int j=0;j<arrlentst.length;j++)
+				{	//draw the thing we just made
+					if (edgematrix[i][j] != null) {
+						edgematrix[i][j].drawEdge();
+						edgematrix[i][j].drawlabel();
+					}
+				}
+			}		
 		}
 	}
 	
@@ -480,8 +527,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setEdgeLabel(int from, int to, String label){
-		if (from>to) {
-			if (edgematrix[from][to].altlabel != null) {
+		if (edgematrix[from][to].type == EDGE_TYPE_TWODIR) {
+			if (from>to) {
 				edgematrix[from][to].setaltlabel(label);
 			}
 			else {
@@ -498,13 +545,17 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setEdgeShade(int from, int to, int set) {
-		if (from>to) {
-			edgematrix[from][to].setEdgeshade2(set);
-		}
-		else {
+		if (edgematrix[from][to].type == EDGE_TYPE_ONEDIR) {
 			edgematrix[from][to].setEdgeshade(set);
 		}
-		
+		else {
+			if (from>to) {
+				edgematrix[from][to].setEdgeshade2(set);
+			}
+			else {
+				edgematrix[from][to].setEdgeshade(set);
+			}
+		}
 	}
 	/* class for storing the animator state, used to save state
 	 * so that it can be resumed again later.
@@ -563,8 +614,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			nodelist[i].drawNode();
 			nodelist[i].drawlabel();
 			for (int j=0;j<numnodes;j++) {
+				if (edgematrix[i][j] != null){
 				edgematrix[i][j].drawEdge();
 				edgematrix[i][j].drawlabel();
+				}
 			}
 		}
 		outg.drawImage(bi,0,0,outc);
