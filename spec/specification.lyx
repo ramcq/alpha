@@ -69,7 +69,7 @@ ajit2
 \family default 
 )
 \layout Standard
-
+\pagebreak_bottom 
 
 \begin_inset LatexCommand \tableofcontents{}
 
@@ -416,6 +416,9 @@ collapsed false
 UML Class diagram for package 
 \family typewriter 
 Animator
+\layout Standard
+
+Should GraphAnimator and SortingAnimator be labelled abstract in some way?
 \end_inset 
 
 
@@ -870,6 +873,8 @@ Manager
 
 \layout Standard
 
+
+\family sans 
 Graham Le Page
 \end_inset 
 </cell>
@@ -891,6 +896,8 @@ Librarian
 
 \layout Standard
 
+
+\family sans 
 Robert McQueen
 \end_inset 
 </cell>
@@ -912,6 +919,8 @@ Secretary
 
 \layout Standard
 
+
+\family sans 
 Andrew Medworth
 \end_inset 
 </cell>
@@ -933,15 +942,23 @@ User documentation
 
 \layout Standard
 
+
+\family sans 
 Neofytos Mylona
 \layout Standard
 
+
+\family sans 
 Graham Le Page
 \layout Standard
 
+
+\family sans 
 Alan Treanor
 \layout Standard
 
+
+\family sans 
 Andrew Medworth 
 \emph on 
 (backup)
@@ -965,18 +982,28 @@ Design & Coding
 
 \layout Standard
 
+
+\family sans 
 Robert McQueen
 \layout Standard
 
+
+\family sans 
 Steven Cooper
 \layout Standard
 
+
+\family sans 
 Andrew Medworth
 \layout Standard
 
+
+\family sans 
 Sidath Senanayake
 \layout Standard
 
+
+\family sans 
 Zhan Li 
 \emph on 
 (backup)
@@ -1000,18 +1027,25 @@ Troubleshooting & Testing
 
 \layout Standard
 
+
+\family sans 
 Zhan Li
 \layout Standard
 
+
+\family sans 
 Alan Treanor
 \layout Standard
 
+
+\family sans 
 Sidath Senanayake 
 \emph on 
 (backup)
 \layout Standard
 
 
+\family sans 
 \emph on 
 As many others as are required
 \end_inset 
