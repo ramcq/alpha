@@ -33,10 +33,6 @@ public class ButtonPanel extends JPanel {
 		return button;
 	}
 	
-	private void addGap() {
-		add(Box.createRigidArea(new Dimension(5,0)));
-	}
-	
 	public void setText(int i, String text) {
 		buttons[i].setText(text);
 		buttons[i].setActionCommand(text);
@@ -44,6 +40,14 @@ public class ButtonPanel extends JPanel {
 	
 	public void setEnabled(int i, boolean b) {
 		buttons[i].setEnabled(b);
+	}
+	
+	public void setToolTipText(int i, String text) {
+		buttons[i].setToolTipText(text);
+	}
+	
+	public void setMnemonic(int i, int mnemonic) {
+		buttons[i].setMnemonic(mnemonic);
 	}
 	
 	/**
@@ -56,14 +60,13 @@ public class ButtonPanel extends JPanel {
 		buttons = new JButton[names.length];
 		
 		addButton("Exit");
-		addGap();
-		addButton("Restart");		
-		
+		add(Box.createRigidArea(new Dimension(5,0)));
+		addButton("Restart");
 		add(Box.createHorizontalGlue());
 		
 		for (int i = 0; i < names.length; i++) {
 			if (i > 0)
-				addGap();
+				add(Box.createRigidArea(new Dimension(5,0)));
 			
 			buttons[i] = addButton(names[i]);
 		}
