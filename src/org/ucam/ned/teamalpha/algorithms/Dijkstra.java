@@ -309,4 +309,12 @@ public class Dijkstra extends GraphAlgorithm {
 			processNeighbours(u);
 		}
 	}
+	
+	public static String getName() {
+		return "Dijkstra's Algorithm";
+	}
+	
+	public static String getDescription() {
+		return "TODO [Dijkstra.getDescription] Documenters, figure out a description";
+	}
 }

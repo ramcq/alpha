@@ -222,4 +222,11 @@ public class Kruskal extends GraphAlgorithm {
 		k.execute();
 	}*/
 
+	public static String getName() {
+		return "Kruskal's Algorithm";
+	}
+	
+	public static String getDescription() {
+		return "TODO [Kruskal.getDescription] Documenters, figure out a description";
+	}
 }

@@ -71,7 +71,7 @@ public class InsertionSort extends VectorAlgorithm {
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getName()
 	 */
 	public static String getName() {
-		return "Insertion sort";
+		return "Insertion Sort";
 	}
 
 	/* (non-Javadoc)

@@ -106,14 +106,14 @@ public class RadixSort extends VectorAlgorithm {
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getName()
 	 */
 	public static String getName() {
-		return "Sort: Radix Sort";
+		return "Radix Sort";
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getDescription()
 	 */
 	public static String getDescription() {
-		return "TODO: [QuickSort.getDescription()] : Documenters, decide on what string to have here";
+		return "TODO: [RadixSort.getDescription()] : Documenters, decide on what string to have here";
 	}
 
 	/* (non-Javadoc)
