@@ -1,0 +1,246 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass slides
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle headings
+
+\layout Slide
+
+Project Brief
+\layout Itemize
+
+Provide a general mechanism for writing an animation script to correspond
+ to an algorithm
+\layout Itemize
+
+Allow the user to enter initial data
+\layout Itemize
+
+Allow the user to step through at his/her own pace
+\layout Itemize
+
+Five different algorithms for two different problems
+\layout Slide
+
+Interpretation of brief, design decisions
+\layout Itemize
+
+Aim at simple level of understanding:
+\begin_deeper 
+\layout Itemize
+
+No ability to run multiple algorithms side-by-side
+\layout Itemize
+
+Data structures shown at 
+\begin_inset Quotes eld
+\end_inset 
+
+low level
+\begin_inset Quotes erd
+\end_inset 
+
+
+\layout Itemize
+
+No speed or efficiency comparison except what is implicit
+\layout Itemize
+
+Give text explanation of each step as it happens
+\end_deeper 
+\layout Itemize
+
+Whole system (incl.
+ animation scripts) written in Java
+\layout Itemize
+
+Animate two types of algorithm:
+\begin_deeper 
+\layout Itemize
+
+Vectors (sorts, searches, \SpecialChar \ldots{}
+)
+\layout Itemize
+
+Graphs (shortest path algorithms, strongly-connected component finding)
+\end_deeper 
+\layout Itemize
+
+Animate the following as examples:
+\begin_deeper 
+\layout Itemize
+
+Insertion sort
+\layout Itemize
+
+Bi-directional bubble sort
+\layout Itemize
+
+Quicksort
+\layout Itemize
+
+Dijkstra's algorithm
+\layout Itemize
+
+Kruskal's algorithm
+\end_deeper 
+\layout Slide
+
+Optional facilities
+\layout Itemize
+
+Ability to control animation speed
+\layout Itemize
+
+Ability to place nodes on a graph manually
+\layout Itemize
+
+Support for bipartite graphs
+\layout Slide
+
+Overall system architecture
+\layout Standard
+
+Architecture diagram, class inheritance diagram, brief explanation of each
+ component (incl threading, exceptions):
+\layout Itemize
+
+Shell
+\layout Itemize
+
+Algorithm
+\layout Itemize
+
+Animator
+\layout Itemize
+
+Queue
+\layout Slide
+
+Animators
+\layout Itemize
+
+Extend 
+\family typewriter 
+JFrame
+\layout Itemize
+
+Use of 
+\family typewriter 
+Timer
+\family default 
+, 
+\family typewriter 
+repaint()
+\layout Itemize
+
+Double buffering
+\layout Itemize
+
+Internal 
+\family typewriter 
+AnimationEvent
+\family default 
+s, queue
+\layout Itemize
+
+State saving, restoring
+\layout Slide
+
+Queues
+\layout Itemize
+
+Store animation primitives called by the algorithm, decide when to call
+ these on the animator
+\layout Itemize
+
+Take user input from shell
+\layout Itemize
+
+(implementation stuff: talk to Rob)
+\layout Slide
+
+Shell
+\layout Itemize
+
+
+\family typewriter 
+JFrame
+\family default 
+ used
+\layout Itemize
+
+Wizard style, three stages: algorithm choice, data entry, animation
+\layout Itemize
+
+During animation, can click buttons to go forward/back
+\layout Itemize
+
+More implementation detail
+\layout Slide
+
+Evaluation: what didn't go well
+\layout Itemize
+
+Repaint issues in Swing
+\layout Itemize
+
+Bidirectional graph problems?
+\layout Slide
+
+Evaluation: what did go well
+\layout Itemize
+
+It works!
+\layout Itemize
+
+Can go forwards and backwards
+\layout Itemize
+
+Can alter speed
+\layout Itemize
+
+Can write new algorithms
+\layout Slide
+
+Conclusion, lessons
+\layout Itemize
+
+Spend time on your specification
+\layout Itemize
+
+Commit early and often to CVS
+\layout Itemize
+
+GUI stuff takes longer than you think (especially in Java 
+\family typewriter 
+:)
+\family default 
+)
+\layout Itemize
+
+Make (and follow) a time plan
+\layout Itemize
+
+Allow time for problem-solving
+\the_end
