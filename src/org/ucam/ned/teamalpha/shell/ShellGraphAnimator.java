@@ -2,7 +2,7 @@ package org.ucam.ned.teamalpha.shell;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -25,6 +25,18 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * edited for graph animation by
  * @author sjc209
  * 
+ * This class generates on screen Graphics2D from methods are called on it by the queue
+ * Animation is controlled by it's own internal queue, from which events are picked off according to a Timer object
+ * The frame is redrawn after each event is resolved
+ *
+ * Its constructor takes a Container, which in most cases will be a JPanel. It creates a new JPanel with an overridden
+ * paintComponent() method which ensures that the canvas redraws properly after being obscured.
+ * The system maintains a BufferedImage for this redrawing, and also for the purpose of 
+ * double buffering to prevent flicker during animation.
+ * 
+ * Edge and Node inner classes are used to store the data for the objects displayed on screen
+ * Methods called by the Queue call methods in the inner classes, which add items to the internal queue.
+ *
  */
 
 /*
@@ -65,9 +77,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	private int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
 	private JPanel outc; // Component we will be drawing into
-	private Graphics outg; // Graphics object we are passed from the shell
+	private Graphics2D outg; // Graphics2D object we are passed from the shell
 	private BufferedImage bi; // buffered image for double buffering
-	private Graphics big; // corresponding graphics to bi
+	private Graphics2D big; // corresponding Graphics2D to bi
 	private Color fgcolour = Color.black;
 	private Color bgcolour = Color.white;
 	private int intermediateOffset = 0; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
@@ -374,14 +386,15 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	
 	public ShellGraphAnimator(Container c) {
 		outc = new JPanel() {
-			public void paintComponent(Graphics g) {
+			public void paintComponent(Graphics2D g) {
 				g.drawImage(bi,0,0,outc);
 			}
 		};
 		outc.setSize(c.getSize().width, c.getSize().height);
 		c.add(outc);
 		outc.setVisible(true);
-		outg = outc.getGraphics();
+		outg = (Graphics2D) outc.getGraphics();
+		outg.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
 		int delay = (fps > 0) ? (1000 / fps) : 100;	// Frame time in ms
 		// Instantiate timer (gives us ActionEvents at regular intervals)
 		timer = new javax.swing.Timer(delay, this);
@@ -400,9 +413,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 						&& bi.getHeight(outc) == outc.getSize().height))) {
 			bi = (BufferedImage) outc.createImage(outc.getSize().width, outc.getSize().height);
 		}
-		// Create Graphics object from buffered image (we will work on this all the time and flush it out on every frame)
-		big = bi.getGraphics();
-		// Clear working area	
+		// Create Graphics2D object from buffered image (we will work on this all the time and flush it out on every frame)
+		big = (Graphics2D) bi.getGraphics();
+		big.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+		// Clear working area
 		big.setColor(bgcolour);
 		big.fillRect(0,0,500,500);
 		big.setColor(fgcolour);
@@ -510,13 +524,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		if (timer.isRunning()) timer.stop();
 	}
 	//draw node on screen
-	public void drawNode(Node n, Graphics g) {
+	public void drawNode(Node n, Graphics2D g) {
 		g.setColor(SET_COLOUR[n.set]);
 		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
 		g.setColor(fgcolour);		
 		drawNodelabel(n, g);
 	}
-	public void drawFlashNode(Node n, boolean fset, Graphics g) {
+	public void drawFlashNode(Node n, boolean fset, Graphics2D g) {
 		if (fset == true) {
 			g.setColor(Color.black);
 		}
@@ -528,7 +542,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNodelabel(n, g);
 	}
 	//draw edge on screen	
-	public void drawEdge(Edge e, Graphics g) {
+	public void drawEdge(Edge e, Graphics2D g) {
 		if (e.type == EDGE_TYPE_SAMDIR) {
 			g.setColor(SET_COLOUR[e.set1]);
 			edrawLine(e.x1, e.y1, e.x2, e.y2, g);
@@ -550,7 +564,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNode(nodelist[e.nd2],g);
 	}
 	
-	public void drawcurve (int x1,int y1,int x2,int y2,int set, double limit, String label,Graphics g) {
+	public void drawcurve (int x1,int y1,int x2,int y2,int set, double limit, String label,Graphics2D g) {
 		g.setColor(SET_COLOUR[set]);
 		//calculate midpoint of line
 		int sx = (int) (x1 - (x1 - x2)/2);
@@ -628,7 +642,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	/* 
 	 * Method for drawing arrows on straight lines
 	 */
-	public void drawarrow (int x1, int y1, int x2, int y2, int set, Graphics g) {
+	public void drawarrow (int x1, int y1, int x2, int y2, int set, Graphics2D g) {
 		g.setColor(SET_COLOUR[set]);
 		int x = (int) (x1 - ((x1 - x2))/2);
 		int y = (int) (y1 - ((y1 - y2))/2);
@@ -692,7 +706,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	/* 
 	 * Method for drawing arrows on curves
 	 */
-	public void drawarrow (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int set, Graphics g) {
+	public void drawarrow (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int set, Graphics2D g) {
 		g.setColor(SET_COLOUR[set]);
 		int x = (int) x1;
 		int y = (int) y1;
@@ -779,7 +793,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 		
 	//incrementally shade an edge on screen	
-	public void drawEdgeShade(Edge e, Graphics g, int t) {
+	public void drawEdgeShade(Edge e, Graphics2D g, int t) {
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
 			int sx1,sy1,sx2,sy2;
 			if (e.toshade == 1) {
@@ -811,7 +825,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNode(nodelist[e.nd1],g);
 		drawNode(nodelist[e.nd2],g);
 	}
-	public void drawFlashEdge(Edge e, boolean fset, Graphics g) {
+	public void drawFlashEdge(Edge e, boolean fset, Graphics2D g) {
 		int sx1,sx2,sy1,sy2;
 		if (fset == true) {
 			g.setColor(Color.black);
@@ -850,7 +864,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	
 	//draw edge label on screen
-	public void drawEdgelabel(Edge e, Graphics g) {
+	public void drawEdgelabel(Edge e, Graphics2D g) {
 		//pos. TODO need to blank current label?
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
 			int x = (int) (e.x1 - (numnodes * (e.x1 - e.x2)/13));
@@ -863,21 +877,21 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 	}
 	//clear old label before drawing new one
-	public void clrNodelabel(Node n, Graphics g) {
+	public void clrNodelabel(Node n, Graphics2D g) {
 		g.setColor(bgcolour);
 		g.fillRect(n.x- n.Nodewidth,n.y- n.Nodeheight-NODE_FONT_SIZE,NODE_FONT_SIZE*n.oldlen,NODE_FONT_SIZE);
 	}	
 	//draw node label on screen
-	public void drawNodelabel(Node n, Graphics g) {
+	public void drawNodelabel(Node n, Graphics2D g) {
 		drawlabel(n.x - n.Nodewidth,n.y - n.Nodeheight,n.label,g,NODE_FONT_SIZE);
 	}
 	//actual method for drawing text on screen
-	public void drawlabel(int x,int y,String label, Graphics g, int Fsize) {
+	public void drawlabel(int x,int y,String label, Graphics2D g, int Fsize) {
 		g.setColor(fgcolour);
 		g.setFont(new Font("MonoSpaced", Font.BOLD, Fsize));
 		g.drawString(label, x, y);
 	}
-	public void edrawLine(int x1,int y1,int x2,int y2, Graphics g) {
+	public void edrawLine(int x1,int y1,int x2,int y2, Graphics2D g) {
 		if (EDGE_LINE_DRAW == true) {
 			g.drawLine(x1, y1, x2, y2);
 		}
@@ -902,7 +916,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		}
 	}
-	public void drawGraph(Graphics g) {
+	public void drawGraph(Graphics2D g) {
 		// currently unused method
 	}
 	//implementation of abstract methods
