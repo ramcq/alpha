@@ -1973,7 +1973,10 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			g.drawString(a.label, right+8, ypos+5);
 		}
 		
-		if (redraw) repaint(left, ypos-4, 25, 8);
+		if (redraw) {
+			if (a.left) repaint(left-25, ypos-5, 50, 10);
+			else repaint(left, ypos-6, 50, 12);
+		}
 	}
 	
 	// Clear the area where an arrow was and redraw it
