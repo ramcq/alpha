@@ -1,7 +1,7 @@
 #LyX 1.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 221
 \textclass article
-\language english
+\language british
 \inputencoding auto
 \fontscheme default
 \graphics default
@@ -38,11 +38,11 @@ Introduction
 This is my individual report for the "Animating Algorithms" (Topic 8.5) Computer
  Science Tripos Part IB / Part II (General) group project.
  I am a member of group "Alpha".
- This project is being overseen by Steven Hand (smh22@cam.ac.uk).
+ This project is being over seen by Steven Hand (smh22@cam.ac.uk).
 \layout Section
 
 My contribution
-\layout Subsection*
+\layout Subsection
 
 Manager
 \layout Standard
@@ -59,6 +59,9 @@ I was the manager of the Animating Algorithms project.
 
 An example of this is this plan of action from the Progress Report which
  shows who had to do what job and when they had to have it done by:
+\layout Subsubsection
+
+Example from the Progress Report:
 \layout Subsubsection*
 
 Plan of action
@@ -124,14 +127,14 @@ Monday 1st Mar - Deadline for code completion
 \layout Itemize
 
 Wednesday 3rd Mar - Group presentation
-\layout Subsection*
+\layout Subsection
 
 Documenter
 \layout Standard
 
 I also wrote some of the documentation, including large parts of the Specificati
 on, Progress Report, User Guide and the Final Report.
- This involved using LaTex for the first time, and then showing other people
+ This involved using LaTeX for the first time, and then showing other people
  how to use it.
  The actual documents involved making sure that the project could be used
  by anyone who had read the documentation, so for example in the User Guide
@@ -139,7 +142,34 @@ on, Progress Report, User Guide and the Final Report.
  was pressed, for example.
  It also involved working closely with the coders in particular in order
  to implement the user interface and document it properly, and working with
- Neofytos to proof read each others documentation.
+ Neofytos to produce the documentation and proof read each others work.
+\layout Standard
+
+An example of this is the first couple of sections from the User Guide:
+\layout Subsubsection
+
+Example from the User Guide:
+\layout Subsubsection*
+
+Introduction
+\layout Standard
+
+Animating Algorithms is a program designed to aid your understanding of
+ a variety of sorting and graph based algorithms.
+ It shows and explains the basic working of the algorithms by animating
+ key steps and giving an explanation of what is happening at each point.
+ It also allows you to step forward and backwards through the algorithms,
+ allowing you to repeat steps if you want to see an animation again.
+ The purpose of this User Guide is to show you how to use this program.
+\layout Subsubsection*
+
+Starting up
+\layout Standard
+
+To start the program on a Linux machine you need to go to the terminal and
+ type java -jar alpha.jar.
+ If you are running a Windows machine then go at the command prompt and
+ type javaw alpha.jar.
 \layout Section
 
 Contribution of others
@@ -150,6 +180,8 @@ Steven
 
 Steven coded the graph animator module, one of the most challenging parts
  of the project.
+ He generally worked solidly, but sometimes he did not communicate with
+ the other coders as well as could be hoped.
 \layout Subsection*
 
 Richard
@@ -168,7 +200,7 @@ Rob
 Rob was heavily involved with the design of the system, coming up with many
  good ideas for how to structure the system.
  He coded the queueing mechanism and the shell and also set up and maintained
- the CVS repositary in his role as librarian.
+ the CVS repository in his role as librarian.
  
 \layout Subsection*
 
@@ -206,20 +238,6 @@ Alan
 
 Alan tested the vector animator as well as performing various other module
  and integration tests.
- He worked especially well with Andrew when debugging the vector animator.
+ He worked well with Andrew when debugging the vector animator.
  
-\layout Section
-
-Notes
-\layout Standard
-
-Each group member must also submit a brief personal report for the final
- review meeting giving details of their individual contribution to the project.
- This should include a representative part of their contribution which might
- be program code or documentation, project management logs or minutes of
- meetings as appropriate.
- It should also give a summary assessment of the contributions made by the
- other members of the group.
- The group and the personal reports will be retained by the overseer and
- forwarded directly to the examiners.
 \the_end

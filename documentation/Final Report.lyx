@@ -1,7 +1,7 @@
 #LyX 1.3 created this file. For more info see http://www.lyx.org/
 \lyxformat 221
 \textclass article
-\language english
+\language british
 \inputencoding auto
 \fontscheme default
 \graphics default
@@ -79,7 +79,7 @@ User Guide
 Developers Guide
 \layout Itemize
 
-Finished project logs (Description of modules/testing javadoc etc)
+Finished project logs (Description of modules/testing Java-Doc etc)
 \layout Standard
 
 ]
@@ -93,7 +93,7 @@ Introduction
 This is the final report document for the "Animating Algorithms" (Topic
  8.5) Computer Science Tripos Part IB / Part II (General) group project.The
  authors are the members of group "Alpha", listed individually above.
- This project is being overseen by Steven Hand (
+ This project is being over seen by Steven Hand (
 \family typewriter 
 \series bold 
 smh22@cam.ac.uk
@@ -132,7 +132,7 @@ In depth communication between team members was sometimes lacking, as for
 Time planning was a problem, in that some members of the team spent a lot
  longer working on the project at specific times than other members.
  This was generally down to the fact that before modules had been written
- by the coders, the testers couldstuff not test them very much.
+ by the coders, the testers could not test them very much.
  An improvement to this would be to have the testers do some of the coding
  when they had no testing to do, which would spread the workload out more
  easily.
@@ -161,7 +161,7 @@ As the project progressed communication became more important, especially
  This definitely improved towards the end of the project.
 \layout Itemize
 
-As an extention of the merits of communication, we learned that working
+As an extension of the merits of communication, we learned that working
  as a team was very important to the success of the project.
  Everyone had to have some idea of what was going on, so that when people
  were unavailable for some reason the whole project did not have to be held
@@ -200,7 +200,7 @@ Rob
 Rob was heavily involved with the design of the system, coming up with many
  good ideas for how to structure the system.
  He coded the queueing mechanism and the shell and also set up and maintained
- the CVS repositary in his role as librarian.
+ the CVS repository in his role as librarian.
  
 \layout Subsubsection*
 
@@ -272,7 +272,7 @@ The project manager must submit a final report at the final group meeting,
  any lessons learned, and include a summary of the work undertaken by different
  team members in completing the system.
  It is perfectly reasonable for an individual member not to have written
- any code but to have worked specically as a librarian or on documentation
+ any code but to have worked specially as a librarian or on documentation
  or testing as long as this was agreed with the other group members and
  is reported in the delivery document.
 \newline 
