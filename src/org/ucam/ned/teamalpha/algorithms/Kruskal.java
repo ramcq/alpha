@@ -5,8 +5,6 @@ package org.ucam.ned.teamalpha.algorithms;
 
 import java.util.Vector;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
-import org.ucam.ned.teamalpha.shell.ShellGraphAnimator;
-;
 
 /**
  * @author Sid
