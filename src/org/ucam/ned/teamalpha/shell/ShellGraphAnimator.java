@@ -58,21 +58,20 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	private LinkedList eventQueue; // will hold queue the events we are to perform
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
 	public static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.black, Color.darkGray, Color.lightGray};
+		//colours for representing the different node/edge sets
+	public static final int NODE_SIZE = 6; //node width/height
 	
 	public class Node /*implements Serializable*/{
-		int Nodewidth=6;
-		int Nodeheight=6;
-		int x;
-		int y;
-		int set;
+		int Nodewidth=NODE_SIZE;
+		int Nodeheight=NODE_SIZE; //nodes always circular 
+		int x; 
+		int y; //position of top left corner of square containing node
+		int set; //set node belongs to
 		private String label; 
-		/*public Node Node(int x, int y) {
-			this.x = x;
-			this.y = y;
-			this.set = 0;
-			this.label = "";
-			return this;
-		}*/
+		
+		/*
+		 * called by creategraph api to initialise node data 
+		 */
 		public void nodesetdata(int x, int y) {
 			this.x = x;
 			this.y = y;
@@ -84,11 +83,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			
 		}
 		
+		/*
+		 * called by nodesetlabel api to set label and update display
+		 */
 		public void setlabel(String label) {
 			this.label = label;
 			this.drawlabel();
 		}
-		
+		//put a drawing event on the animation queue
 		public void drawlabel() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -104,11 +106,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		public void highlightNode() {
 			
 		}
-		
+		/*
+		 * called by the setNodeShade api 
+		 */
 		public void setNodeshade(int set) {
 			this.set = set;
+			this.drawNode();
 		}
-		
+		//put a drawing event on the animation queue
 		public void drawNode() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -123,27 +128,19 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	
 	public class Edge /*implements Serializable*/ {
-		int x1,x2;
-		int y1,y2;
-		int set;
+		int x1,x2; 
+		int y1,y2; //coordinates for two end points of lines
+		int set; //set the edge belongs to, determines colour
 		private String label; 
-		/*public Edge Edge(Node n1, Node n2, String cost) {
-			this.x1 = n1.x;//adjustments needed to make sure it doesn't overlap with node
-			this.x2 = n2.x;
-			this.y1 = n1.y;
-			this.y2 = n2.y;
-			//make sure it doesn't overlap with nodes.. global constant nodewidth?
-			this.set = 0;
-			this.label = cost;
-			return this;
-		}*/
 		
+		/*
+		 * called by creategraph api to initialise node data 
+		 */
 		public void edgesetdata(Node n1, Node n2, String cost) {
 			this.x1 = n1.x /*+3*/;
 			this.x2 = n2.x /*-3*/;
 			this.y1 = n1.y /*+3*/;
-			this.y2 = n2.y /*-3*/;
-			/*make sure it doesn't overlap with nodes.. global constant nodewidth?*/
+			this.y2 = n2.y /*-3*/; /*TODO : make sure it doesn't overlap with nodes.. probably move to the actual drawing function*/
 			this.set = 0;
 			this.label = cost;
 		}
@@ -152,11 +149,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			
 		}
 		
+		/*
+		 * called by edgesetlabel api to set label and update display
+		 */
 		public void setlabel(String label) {
 			this.label = label;
 			this.drawlabel();
 		}
-		
+		//put a drawing event on the animation queue
 		public void drawlabel() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -168,11 +168,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}
 		}
-		
+		/*
+		 * called by the setEdgeShade api 
+		 */
 		public void setEdgeshade(int set) {
 			this.set = set;
+			this.drawEdge();
 		}
-		
+		//put a drawing event on the animation queue
 		public void drawEdge() {
 			synchronized (ShellGraphAnimator.this) {
 				try {
@@ -190,7 +193,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 	}
 	public class AnimationEvent {
-		public static final int GRAPH_REDRAW = 0; //not sure whether needed
+		public static final int GRAPH_REDRAW = 0; //not sure whether needed - currently drawing each node/edge as separate events
 		public static final int NODE_REDRAW = 1;
 		public static final int EDGE_REDRAW = 2;
 		public static final int NODE_LABEL_REDRAW = 3;
@@ -219,7 +222,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	ShellGraphAnimator(Component c) {
 		outc = c;
 		outg = c.getGraphics();
-		
 		int delay = (fps > 0) ? (1000 / fps) : 100;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
 		// Instantiate timer (gives us ActionEvents at regular intervals)
@@ -232,17 +234,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		timer.setCoalesce(true);
 		// Instantiate our event queue
 		eventQueue = new LinkedList();
-		
 		// Make sure buffered image is the same size as the application window
 		if (bi == null ||
 				(! (bi.getWidth(outc) == outc.getSize().width
 						&& bi.getHeight(outc) == outc.getSize().height))) {
 			bi = outc.createImage(outc.getSize().width, outc.getSize().height);
 		}
-		
 		// Create Graphics object from buffered image (we will work on this all the time and flush it out on every frame)
 		big = bi.getGraphics();
-		
 		// Clear working area	
 		big.setColor(bgcolour);
 		big.fillRect(0,0,500,500);
@@ -267,6 +266,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				stopAnimation();
 			}
 		}
+		//match current event's type to determine what should be drawn
 		if (currentEvent != null) {
 			switch(currentEvent.type) {
 				case AnimationEvent.NODE_REDRAW:
@@ -298,35 +298,35 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void stopAnimation() {
 		if (timer.isRunning()) timer.stop();
 	}
-	
+	//draw node on screen
 	public void drawNode(Node n, Graphics g) {
 		g.setColor(SET_COLOUR[n.set]);
 		System.out.println("drawn node at " + n.x + ", " + n.y);
 		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
 		g.setColor(fgcolour);		
 	}
-	
+	//draw edge on screen	
 	public void drawEdge(Edge e, Graphics g) {
 		g.setColor(SET_COLOUR[e.set]);
 		System.out.println("drawn edge at " + e.x1 + ", " + e.y1 + " to " + e.x2 + ", " + e.y2);
 		g.drawLine(e.x1, e.y1, e.x2, e.y2);
 		g.setColor(fgcolour);		
 	}
-	
+	//draw edge label on screen
 	public void drawEdgelabel(Edge e, Graphics g) {
-		
+		// TODO
 	}
-	
+	//draw node label on screen
 	public void drawNodelabel(Node n, Graphics g) {
 		drawlabel(n.x + n.Nodewidth + 1,n.y,n.label,g);
 	}
-	
+	//actual method for drawing text on screen
 	public void drawlabel(int x,int y,String label, Graphics g) {
-	
+		// TODO
 	}
 	
 	public void drawGraph(Graphics g) {
-		
+		// currently unused method
 	}
 	
 	//implementation of abstract methods
@@ -353,8 +353,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				x = 250 + 100 * (int) java.lang.Math.sin(java.lang.Math.toRadians(currentang));
 				y = 250 + 100 * (int) java.lang.Math.cos(java.lang.Math.toRadians(currentang));
 				currentang = currentang + Nodeangle;
+				//fill in node data
 				nodelist[i] = new Node();
 				nodelist[i].nodesetdata(x,y);
+				//draw the thing we just made
 				nodelist[i].drawNode();
 			}
 			for (int i=0;i<costs.length;i++)
@@ -364,9 +366,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					if (costs[i][j] != 0) {
 						if (i != j) {
 							Integer tmpint = new Integer(costs[i][j]);
+							//fill in edge data
 							edgematrix[i][j] = new Edge();
 							edgematrix[i][j].edgesetdata(nodelist[i],nodelist[j],tmpint.toString());
 							edgematrix[i][j].drawEdge();
+							//draw the thing we just made
 							edgematrix[i][j].drawlabel();
 						}
 					}
@@ -380,7 +384,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setNodeHighlight(int Node, boolean highlight){
-		
+		// TODO	
 	}
 
 	public void setNodeShade(int id, int set){
@@ -392,13 +396,17 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setEdgeHighlight(int from, int to, boolean highlight) {
-		
+		// TODO	
 	}
 
 	public void setEdgeShade(int from, int to, int set) {
 		edgematrix[from][to].setEdgeshade(set);
 	}
 	
+	/* class for storing the animator state, used to save state
+	 * so that it can be resumed again later.
+	 * Used by saveState and restoreState api
+	 */
 	public class State extends Animator.State { 
 		private Edge[][] edges;
 		private Node[] nodes;
@@ -418,50 +426,36 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			return this.numnodes;
 		}
 	}
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#setSteps(java.lang.String[])
-	 */
+	
 	public void setSteps(String[] steps) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#setCurrentStep(int)
-	 */
 	public void setCurrentStep(int step) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#showMessage(java.lang.String)
-	 */
 	public void showMessage(String msg) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
-	 */
 	public synchronized Animator.State saveState() {
 		stopAnimation();
 		return new State(nodelist,edgematrix,numnodes);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
-	 */
 	public synchronized void restoreState(Animator.State s) {
 		State ts = (State) s;
+		//reset animation to displaying nothing
 		stopAnimation();
 		eventQueue.clear();
 		big.setColor(bgcolour);
 		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+		//load saved data
 		edgematrix = ts.getEdges();
 		nodelist = ts.getNodes();
 		numnodes = ts.getNumNodes();
+		//redraw from reloaded data
 		for (int i=0;i<numnodes;i++) {
 			nodelist[i].drawNode();
 			nodelist[i].drawlabel();
@@ -472,7 +466,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 		outg.drawImage(bi,0,0,outc);
 	}
-	
+
+	//main function purely for module testing
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellGraphAnimator test");
 		frame.setSize(500,500);
