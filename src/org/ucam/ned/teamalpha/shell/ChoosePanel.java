@@ -139,7 +139,9 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Next") && shell.getChoice() != null)
+		String command = e.getActionCommand();
+		
+		if (command.equals("Next") && shell.getChoice() != null)
 			try {
 				shell.setMode(Shell.MODE_INPUT);
 			} catch (Exception ex) {
