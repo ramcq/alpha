@@ -307,9 +307,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	
 	}
 	
+	public void drawGraph(Graphics g) {
+		
+	}
+	
 	//implementation of abstract methods
 	public Node[] nodelist = new Node[10];
 	public Edge[][] edgematrix = new Edge[10][10];
+	public int numnodes;
 	
 	public void createGraph(int[][] costs) {
 		int[] arrlentst = (int[]) costs[0].clone();
@@ -321,6 +326,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		if (arrlentst.length == costs.length) // matrix should be square.. 
 		//change later to check all arrays in costs[]
 		{	this.Nodeangle = 360 / costs.length;
+			numnodes = costs.length;
 			double currentang = 0;
 			for (int i=0;i<costs.length;i++) 
 			{	//create nodes
@@ -378,15 +384,20 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public class State extends Animator.State { 
 		private Edge[][] edges;
 		private Node[] nodes;
-		State(Node[] nodes,Edge[][] edges) {
+		private int numnodes;
+		State(Node[] nodes,Edge[][] edges, int numnodes) {
 			this.edges = edges;
 			this.nodes = nodes;
+			this.numnodes = numnodes;
 		}
 		public Node[] getNodes() {
 			return this.nodes;
 		}
 		public Edge[][] getEdges() {
 			return this.edges;
+		}
+		public int getNumNodes() {
+			return this.numnodes;
 		}
 	}
 	/* (non-Javadoc)
@@ -418,7 +429,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	 */
 	public synchronized Animator.State saveState() {
 		stopAnimation();
-		return new State(nodelist,edgematrix);
+		return new State(nodelist,edgematrix,numnodes);
 	}
 
 	/* (non-Javadoc)
@@ -432,7 +443,15 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
 		edgematrix = ts.getEdges();
 		nodelist = ts.getNodes();
-		
+		numnodes = ts.getNumNodes();
+		for (int i=0;i<numnodes;i++) {
+			nodelist[i].drawNode();
+			nodelist[i].drawlabel();
+			for (int j=0;j<numnodes;j++) {
+				edgematrix[i][j].drawEdge();
+				edgematrix[i][j].drawlabel();
+			}
+		}
 		outg.drawImage(bi,0,0,outc);
 	}
 	
