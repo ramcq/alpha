@@ -33,6 +33,8 @@ public abstract class AlgorithmCatalog {
 		 * @return
 		 */
 		public abstract String getDescription();
+		
+		public abstract String getType();
 	
 		/**
 		 * @param panel

@@ -75,6 +75,17 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 			return name;
 		}
 
+		public String getType() {
+			switch (type) {
+			case GRAPH:
+				return "Graph";
+			case VECTOR:
+				return "Vector";
+			default:
+				return null;
+			}
+		}
+		
 		public AnimatorQueue getQueue(Animator anim) {
 			switch (type) {
 			case GRAPH:
@@ -95,14 +106,24 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 		for (int i=0; i<algorithms.length; i++) {
 			try {
 				Class algo = Class.forName("org.ucam.ned.teamalpha.algorithms." + algorithms[i]);
-			
+				Class supr = algo.getSuperclass();
+				Class graph = Class.forName("org.ucam.ned.teamalpha.algorithms.GraphAlgorithm");
+				Class vector = Class.forName("org.ucam.ned.teamalpha.algorithms.VectorAlgorithm");
+
+				int type = 0;
+				if (supr == graph) {
+					type = GRAPH;
+				} else if (supr == vector) {
+					type = VECTOR;
+				}
+				
 				Method getName = algo.getMethod("getName", emptyclass);
 				Method getDescription = algo.getMethod("getDescription", emptyclass);
 			
 				String name = (String) getName.invoke(null, emptyobject);
 				String desc = (String) getDescription.invoke(null, emptyobject);
 			
-				available[i] = new AvailableAlgorithm(0, algo, name, desc);
+				available[i] = new AvailableAlgorithm(type, algo, name, desc);
 			} catch (Exception e) {
 				System.err.println("failed to get algorithm " + algorithms[i] + ": " + e);
 			}
@@ -116,7 +137,7 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 		AlgorithmCatalog.AvailableAlgorithm[] as = a.getAvailableAlgorithms();
 		for (int i = 0; i < as.length; i++) {
 			if (as[i] != null)
-				System.out.println(as[i].getName() + ": " + as[i].getDescription());
+				System.out.println(as[i].getType() + ": " + as[i].getName() + ": " + as[i].getDescription());
 		}
 	}
 }
