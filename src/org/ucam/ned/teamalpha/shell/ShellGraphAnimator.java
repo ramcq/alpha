@@ -18,15 +18,15 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
 
 /*
  * Progress log:
- *	current time use: ~10 hours (?)
+ *	current time use: ~13 hours (?)
  *  current problems: none
  *  past problems: all nodes being appearing drawn on same point 
  * 						- fixed, was just drawing the same node repeatedly due to flaw in actionperformed method
  * currently implemented api:
  * 		createGraph
- * 		setNodeLabel (but no redraw yet)
+ * 		setNodeLabel
  * 		setNodeShade
- * 		setEdgeLabel (but no redraw yet)
+ * 		setEdgeLabel
  * 		setEdgeShade
  * 		saveState
  * 		restoreState
@@ -141,6 +141,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int nd1, nd2;
 		private String label;
 		int path;
+		String altlabel;//two different paths
 		/*
 		 * called by creategraph api to initialise node data 
 		 */
@@ -165,6 +166,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			this.label = label;
 			this.drawlabel();
 		}
+		public void setaltlabel(String label) {
+			this.altlabel = label;
+			this.drawlabel();
+		}
+		
 		//put a drawing event on the animation queue
 		public void drawlabel() {
 			synchronized (ShellGraphAnimator.this) {
@@ -350,6 +356,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		g.setColor(SET_COLOUR[n.set]);
 		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
 		g.setColor(fgcolour);		
+		drawNodelabel(n, g);
 	}
 	//draw edge on screen	
 	public void drawEdge(Edge e, Graphics g) {
@@ -374,6 +381,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		g.setColor(fgcolour);
 		drawNode(nodelist[e.nd1],g);
 		drawNode(nodelist[e.nd2],g);
+		drawEdgelabel(e, g);
 	}
 	//draw edge label on screen
 	public void drawEdgelabel(Edge e, Graphics g) {
@@ -383,7 +391,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	//draw node label on screen
 	public void drawNodelabel(Node n, Graphics g) {
-		drawlabel(n.x + n.Nodewidth + 1,n.y,n.label,g);
+		drawlabel(n.x - n.Nodewidth,n.y - n.Nodeheight,n.label,g);
 	}
 	//actual method for drawing text on screen
 	public void drawlabel(int x,int y,String label, Graphics g) {
@@ -431,13 +439,20 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					if (costs[i][j] != 0) {
 						if (i != j) {
 							//TODO make edges have two paths
+							Integer tmpint = new Integer(costs[i][j]);
 							if (i>j) {
 								if (edgematrix[j][i] != null) {
-									edgematrix[i][j] = edgematrix[j][i]; 
+									edgematrix[i][j] = edgematrix[j][i]; 	
+									if (costs[i][j] == costs[j][i]) {
+										edgematrix[i][j].setaltlabel(" ");
+									}
+									else {
+										edgematrix[i][j].setaltlabel(tmpint.toString()); 
+									}
 								}
 							}
 							else {
-								Integer tmpint = new Integer(costs[i][j]);
+								
 								//fill in edge data
 								edgematrix[i][j] = new Edge();
 								edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
@@ -465,7 +480,17 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setEdgeLabel(int from, int to, String label){
-		edgematrix[from][to].setlabel(label);
+		if (from>to) {
+			if (edgematrix[from][to].altlabel != null) {
+				edgematrix[from][to].setaltlabel(label);
+			}
+			else {
+				edgematrix[from][to].setlabel(label);
+			}
+		}
+		else {
+			edgematrix[from][to].setlabel(label);
+		}
 	}
 
 	public void setEdgeHighlight(int from, int to, boolean highlight) {
