@@ -304,6 +304,36 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * An inner class which stores the internal state of the Vector for the purposes of importing and exporting state to and from ShellVectorAnimator
 		 */
 		public class VectorState {
+			private boolean visible;
+			private int bottom;
+			private int left;
+			private int right;
+			private int size;
+			private Color colour;
+			private String label;
+			private String[] contents;
+			
+			VectorState() {
+				this.visible = Vector.this.visible;
+				this.bottom = Vector.this.bottom;
+				this.left = Vector.this.left;
+				this.right = Vector.this.right;
+				this.size = Vector.this.size;
+				this.colour = Vector.this.colour;
+				this.label = Vector.this.label;
+				this.contents = Vector.this.contents;
+			}
+			
+			public void restore() {
+				Vector.this.visible = this.visible;
+				Vector.this.bottom = this.bottom;
+				Vector.this.left = this.left;
+				Vector.this.right = this.right;
+				Vector.this.size = this.size;
+				Vector.this.colour = this.colour;
+				Vector.this.label = this.label;
+				Vector.this.contents = this.contents;
+			}
 		}
 	}
 	
@@ -417,6 +447,35 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * A class to hold the arrow's internal state, similar to Vector.VectorState. This is for the purpose of saving and restoring the animator state.
 		 */
 		public class ArrowState {
+			private String label;
+			private int position;
+			private boolean boundary;
+			private Color colour, altColour;
+			private boolean left;
+			private boolean visible;
+			private boolean deleted;
+			
+			ArrowState() {
+				this.label = Arrow.this.label;
+				this.position = Arrow.this.position;
+				this.boundary = Arrow.this.boundary;
+				this.colour = Arrow.this.colour;
+				this.altColour = Arrow.this.altColour;
+				this.left = Arrow.this.left;
+				this.visible = Arrow.this.visible;
+				this.deleted = Arrow.this.deleted;
+			}
+			
+			public void restore() {
+				Arrow.this.label = this.label;
+				Arrow.this.position = this.position;
+				Arrow.this.boundary = this.boundary;
+				Arrow.this.colour = this.colour;
+				Arrow.this.altColour = this.altColour;
+				Arrow.this.left = this.left;
+				Arrow.this.visible = this.visible;
+				Arrow.this.deleted = this.deleted;
+			}
 		}
 	}
 	
@@ -613,8 +672,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private int intermediateOffset = 0; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
 	private LinkedList eventQueue; // will hold queue the events we are to perform
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
-	private Vector[] vectors = new Vector[10]; // an array of all Vectors currently known to the animator
-	private Arrow[] arrows = new Arrow[10]; // an array of all Arrows currently known to the animator
+	private LinkedList vectors = new LinkedList(); // a list of all Vectors currently known to the animator
+	private LinkedList arrows = new LinkedList(); // an array of all Arrows currently known to the animator
 	
 	// Constructor
 	ShellVectorAnimator(Component c) {
@@ -1091,7 +1150,18 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 
 	// This method and the next need to be completely rethought!!
 	public synchronized Animator.State saveState() {
-		return null;
+		stopAnimation();
+		Vector.VectorState[vectors.length] vs;
+		Arrow.ArrowState[arrows.length] as;
+		for (int i=0; i<vectors.length; i++) {
+			if (vectors[i] != null) vs[i] = vectors[i].VectorState();
+			else vs[i] = null;
+		}
+		for (int i=0; i<arrows.length; i++) {
+			if (arrows[i] != null) as[i] = arrows[i].ArrowState();
+			else as[i] = null;
+		}
+		return new State(vs, as);
 	}
 	
 	public synchronized void restoreState(Animator.State s) {
