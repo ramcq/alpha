@@ -343,10 +343,9 @@ GraphAlgorithm
 SortAlgorithm
 \family default 
 .
- These abstract classes will contain methods for querying information about
- the algorithm, such as its name and purpose, explanation of steps, efficiency,
- as well as setting the initial data for the algorithm and instructing it
- to execute.
+ These abstract classes will specify methods for querying information about
+ the algorithm, such as its name, purpose and efficiency, as well as setting
+ the initial data for the algorithm and instructing it to execute.
 \layout Subsection
 
 Animators
@@ -513,22 +512,51 @@ AnimatorQueue
  on the actual animator.
  The more important functionality of this package is that it also allows
  the user to roll the animator back to previous states so the user can revisit
- previous steps of the algorithm, asdfasdfasdfasdfqaFIXME
+ previous steps of the algorithm, and the queue retains the steps that need
+ to be done to return the animator to subsequent states.
+ In this way, next and previous methods in the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface are available to the shell.
 \layout Subsection
 
 Shell
 \layout Standard
 
 The shell package implements the interface that is visible to the user.
- The Shell class 
-\layout Standard
-
-What the major components (classes) are and how they will fit together (to
- include UML Use Case diagram, UML Class diagram, and all the usual gimmicks).
-\layout Standard
-
-show diagram, explain diagram in detail, explain why diagram is the way
- it is
+ The actual implementations of the 
+\family typewriter 
+GraphAnimator
+\family default 
+ and 
+\family typewriter 
+SortAnimator
+\family default 
+ abstract classes are here, as well as a 
+\family typewriter 
+Shell
+\family default 
+ class which contains the entry point for the whole system and the controller
+ of main program flow.
+ The shell can investigate the algorithm package to see which classes are
+ available, and present a list of algorithms for the user to choose from.
+ When an algorithm is selected, the shell will allow the user to input the
+ initial data for the algorithm, or generate some at random.
+ The shell then creates instances of the appropriate animator, wrapped in
+ the appropriate queue class, which is provided to the algorithm, which
+ is then run to completion.
+ The shell then displays the animator on screen, will use the 
+\family typewriter 
+AnimatorQueue
+\family default 
+ interface to step through the algorithm's stages, animating the requested
+ changes, showing the explanation texts provided by the algorithm, and showing
+ which step is active.
+ The shell will either advance the animation at a preset speed, or the user
+ can step forwards and backwards through the stages manually.
+ After an animation has run to completion, the user can return to the initial
+ screen and choose a new algorithm or exit.
 \layout Section
 
 Overall inputs, functions, and outputs
