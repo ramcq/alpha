@@ -160,7 +160,7 @@ public class QuickSort extends VectorAlgorithm {
 			// ANIM: Copy the values of curr across
 			anim.setCurrentStep(5);
 			anim.saveState();
-			anim.wait();
+			//anim.waitFor(100);
 			
 /*			anim.setFpsFactor(10000.0f);
 			for (int k=0; k<=high-low; k++) {
