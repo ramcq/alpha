@@ -40,10 +40,6 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  */
 
 /*
- * TODO: bug fixes: IMPORTANT TODO BEFORE STEVE HAND TESTS IT: problem with
- * gradient -> infinity with 3 node graph ({trig,cast to int} functions
- * rounding error)
- * 
  * Progress log: current time use: ~34 hours (?) currently implemented api:
  * createGraph setNodeLabel setNodeShade setEdgeLabel setEdgeShade saveState
  * restoreState label drawing flashing
@@ -795,8 +791,26 @@ public class ShellGraphAnimator
 		boolean arrowdrawn = false;
 		//calculate p1/p2 for bezier
 		//p0 is e.x1,y1 p3 is e.x2,y2
-		if (x1 != x2 && y1 != y2) { //this bit doesn't work
-			double grad = (double) ((x1 - x2) / (y1 - y2));
+		if (((x1-x2 < 2) && (x1-x2 > -2)) || ((y1-y2 < 2) && (y1-y2 > -2))){ //this bit doesn't work
+			if ((x1-x2 < 2) && (x1-x2 > -2)) {
+				if (y1>y2) {
+					sx = (int)(sx - 30);
+				}
+				else {
+					sx = (int)(sx + 30);
+				}
+			}
+			else if ((y1-y2 < 2) && (y1-y2 > -2)) {
+				if (x1>x2) {
+					sy = (int)(sy - 30);
+				}
+				else {
+					sy = (int)(sy + 30);
+				}
+			}
+		}
+		else {
+			double grad = (((double)(x1-x2))/((double)(y1-y2)));
 			grad = (-1 / grad);
 			if (x1 > x2 && y1 > y2) {
 				sx = (int) (sx - 30 * grad);
@@ -813,21 +827,6 @@ public class ShellGraphAnimator
 			if (x2 > x1 && y1 > y2) {
 				sx = (int) (sx - 30 * grad);
 				sy = (int) (sy - 30 * grad);
-			}
-		} else {
-			if (x1 == x2) {
-				if (y1 > y2) {
-					sx = (int) (sx - 30);
-				} else {
-					sx = (int) (sx + 30);
-				}
-			}
-			if (y1 == y2) {
-				if (x1 > x2) {
-					sy = (int) (sy - 30);
-				} else {
-					sy = (int) (sy + 30);
-				}
 			}
 		}
 		//sx,sy is p1,p2
@@ -890,13 +889,13 @@ public class ShellGraphAnimator
 		int set,
 		Graphics2D g) {
 		g.setColor(SET_COLOUR[set]);
-		int x = (int) (x1 - ((x1 - x2)) / 2);
-		int y = (int) (y1 - ((y1 - y2)) / 2);
+		int x = (int) (x1 - ((double)(21*(x1 - x2))) / 40.0);
+		int y = (int) (y1 - ((double)(21*(y1 - y2))) / 40.0);
 		int sx1 = 0, sy1 = 0, sx2 = 0, sy2 = 0, sx3 = 0, sy3 = 0;
 		int arsize = 4;
 		int arlen = 7;
-		if ((x1 == x2) || (y1 == y2)) { //vertical or horizontal line
-			if (x1 == x2) {
+		if (((x1-x2 < 2) && (x1-x2 > -2)) || ((y1-y2 < 2) && (y1-y2 > -2))) { //vertical or horizontal line
+			if ((x1-x2 < 2) && (x1-x2 > -2)) {
 				sx1 = x - arsize;
 				sy1 = y;
 				sx2 = x + arsize;
@@ -908,7 +907,7 @@ public class ShellGraphAnimator
 					sy3 = y + arlen;
 				}
 			}
-			if (y1 == y2) {
+			if ((y1-y2 < 2) && (y1-y2 > -2)) {
 				sx1 = x;
 				sy1 = y - arsize;
 				sx2 = x;
@@ -920,18 +919,17 @@ public class ShellGraphAnimator
 					sx3 = x + arlen;
 				}
 			}
-		} else { //angled line
-			double grad = (((double) (x2 - x1)) / ((double) (y2 - y1)));
+		} 
+		else {
+			double grad = (((double) (y2 - y1)) / ((double) (x2 - x1)));
 			//line gradient
-			double c = ((double) y - (grad * (double) x));
 			sx1 = (int) (x + arlen);
-			sy1 = (int) ((double) sx1 * grad + c);
-			grad = ((-1.0) / (grad));
-			c = (y - (grad * x));
+			sy1 = (int) ((arlen * grad) + y);
+			double grad1 = (((double) (x1 - x2)) / ((double) (y2 - y1)));
 			sx2 = (int) (x + arsize);
-			sy2 = (int) ((double) sx2 * grad + c);
+			sy2 = (int) (y + (arsize * grad1));
 			sx3 = (int) (x - arsize);
-			sy3 = (int) ((double) sx3 * grad + c);
+			sy3 = (int) (y - (arsize * grad1));
 		}
 		int[] xpoints = { sx1, sx2, sx3 };
 		int[] ypoints = { sy1, sy2, sy3 };
@@ -983,60 +981,42 @@ public class ShellGraphAnimator
 		int y = (int) y1;
 		int sx1 = 0, sy1 = 0, sx2 = 0, sy2 = 0, sx3 = 0, sy3 = 0;
 		int arsize = 5;
-		if (x3 != x4 && y3 != y4) {
-			double grad = (((double) (x3 - x4)) / ((double) (y3 - y4)));
-			if ((x3 > x4 && y3 > y4) || (x4 > x3 && y4 > y3)) {
-				if (x3 > x4 && y3 > y4) {
-					sx3 = (int) (x2 - arsize * grad);
-					sy3 = (int) (y2 - arsize * grad);
-				} else {
-					sx3 = (int) (x2 + arsize * grad);
-					sy3 = (int) (y2 + arsize * grad);
-				}
-				grad = (-1 / grad);
-				sx1 = (int) (x - arsize * grad);
-				sy1 = (int) (y + arsize * grad);
-				sx2 = (int) (x + arsize * grad);
-				sy2 = (int) (y - arsize * grad);
-			} else {
-				if (x4 > x3 && y3 > y4) {
-					sx3 = (int) (x2 - arsize * grad);
-					sy3 = (int) (y2 + arsize * grad);
-				} else {
-					sx3 = (int) (x2 + arsize * grad);
-					sy3 = (int) (y2 - arsize * grad);
-				}
-				grad = (-1 / grad);
-				sx1 = (int) (x - arsize * grad);
-				sy1 = (int) (y - arsize * grad);
-				sx2 = (int) (x + arsize * grad);
-				sy2 = (int) (y + arsize * grad);
-			}
-		} else {
-			if (x3 == x4) {
+		if (((x3-x4 < 2) && (x3-x4 > -2)) || ((y3-y4 < 2) && (y3-y4 > -2))) { //vertical or horizontal line
+			if ((x3-x4 < 2) && (x3-x4 > -2)) {
 				sx1 = x - arsize;
 				sy1 = y;
 				sx2 = x + arsize;
 				sy2 = y;
-				sx3 = x2;
+				sx3 = x;
 				if (y3 > y4) {
-					sy3 = y2 + 5;
+					sy3 = y - arsize;
 				} else {
-					sy3 = y2 - 5;
+					sy3 = y + arsize;
 				}
 			}
-			if (y3 == y4) {
+			if ((y3-y4 < 2) && (y3-y4 > -2)) {
 				sx1 = x;
 				sy1 = y - arsize;
 				sx2 = x;
 				sy2 = y + arsize;
-				sy3 = y2;
+				sy3 = y;
 				if (x3 > x4) {
-					sx3 = x2 + 5;
+					sx3 = x - arsize;
 				} else {
-					sx3 = x2 - 5;
+					sx3 = x + arsize;
 				}
 			}
+		} 
+		else {
+			double grad = (((double) (y2 - y1)) / ((double) (x2 - x1)));
+			//line gradient
+			sx1 = (int) (x2 + arsize);
+			sy1 = (int) ((arsize * grad) + y2);
+			double grad1 = (((double) (x1 - x2)) / ((double) (y2 - y1)));
+			sx2 = (int) (x + arsize);
+			sy2 = (int) (y + (arsize * grad1));
+			sx3 = (int) (x - arsize);
+			sy3 = (int) (y - (arsize * grad1));
 		}
 		int[] xpoints = { sx1, sx2, sx3 };
 		int[] ypoints = { sy1, sy2, sy3 };
@@ -1569,19 +1549,23 @@ public class ShellGraphAnimator
 			}
 		});
 		frame.setVisible(true);
-
 		//current test data
-		/*
-		 * int[][] tstcosts = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {33, 0, 0, 0, 0, 0, 0, 0, 0,
-		 * 0}, {10, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {56, 13, 23, 0, 0, 0, 0, 0, 0,
-		 * 0}, {0, 21, 0, 51, 0, 0, 0, 0, 0, 0}, {0, 0, 24, 0, 0, 0, 0, 0, 0,
-		 * 0}, {0, 0, 65, 20, 17, 40, 0, 0, 0, 0}, {0, 0, 0, 0, 35, 0, 99, 0, 0,
-		 * 0}, {0, 0, 0, 0, 0, 72, 45, 0, 0, 0},
-		 */
-		int[][] tstcosts = { { 0, 4, 3 }, {
-				4, 0, 0 }, {
-				1, 0, 0 }
-		};
+		
+		int[][] tstcosts = {{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+							{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0}, 
+							{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0}, 
+							{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+							{ 1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+							{ 1, 0, 1, 0, 1, 0,45, 0, 0, 0},
+							{ 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}};
+		 
+//		int[][] tstcosts = { { 0, 4, 3 }, {
+//				4, 0, 0 }, {
+//				1, 0, 0 }
+//		};
 		try {
 			app.createGraph(tstcosts);
 		} catch (NonSquareMatrixException e) {
