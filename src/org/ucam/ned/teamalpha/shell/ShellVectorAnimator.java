@@ -109,7 +109,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			}
 			right = left + width; // the x position of the right of the new vector
 			bottom = top + (size * 20); // the y position of the bottom of the new vector
-			label = "NoName";
+			label = "";
 			
 			contents = new String[size];
 			// Pad contents with spaces to ensure right alignment
@@ -1924,7 +1924,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(int[])
 	 */
 	public VectorAnimator.Vector createVector(int[] values) throws InputTooLongException, TooManyVectorsException {
-		return createVector("Unnamed", values);
+		return createVector(values);
 	}
 
 	/* (non-Javadoc)
