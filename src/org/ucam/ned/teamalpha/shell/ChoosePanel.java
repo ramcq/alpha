@@ -111,7 +111,6 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 		add(treeView);
 		
 		// add five pixel gap
-		//add(Box.createRigidArea(new Dimension(5,0)));
 		add(Box.createHorizontalStrut(5));
 		
 		// create vertical panel
@@ -125,7 +124,6 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 		right.add(title);
 		
 		// add five pixel gap
-		//right.add(Box.createRigidArea(new Dimension(0, 5)));
 		right.add(Box.createVerticalStrut(5));
 		
 		// add text area with description

@@ -187,7 +187,6 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		contentPane.add(main);
 		
 		// add five pixel gap
-		//contentPane.add(Box.createRigidArea(new Dimension(5,0)));
 		contentPane.add(Box.createVerticalStrut(5));
 		
 		// add separator
@@ -198,7 +197,6 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		contentPane.add(separator);
 		
 		// add five pixel gap
-		//contentPane.add(Box.createRigidArea(new Dimension(5,0)));
 		contentPane.add(Box.createVerticalStrut(5));
 		
 		// add button panel

@@ -68,27 +68,24 @@ public class AnimatorPanel extends ShellPanel {
 		// add a the animator to the top box
 		animator = choice.getAnimator();
 		animator.setPreferredSize(new Dimension(500,480));
-		animator.setBorder(BorderFactory.createLineBorder(java.awt.Color.black, 2));
-		System.out.println("Animator minimumSize is "+animator.getMinimumSize());
-		System.out.println("Animator maximumSize is "+animator.getMaximumSize());
+		animator.setBorder(BorderFactory.createEtchedBorder());
 		top.add(animator);
 		
 		// and a 5 pixel gap
-		//top.add(Box.createRigidArea(new Dimension(5,0)));
+		top.add(Box.createHorizontalStrut(5));
 		
 		// and a list of the steps in the algorithm
-		//steps = new JList();
-		//top.add(steps);
+		steps = new JList();
+		top.add(steps);
 		
 		// add five pixel gap
-		//add(Box.createRigidArea(new Dimension(5,0)));
 		add(Box.createVerticalStrut(5));
 		
 		// create bottom message area
 		message = new JTextPane();
 		message.setEditable(false);
 		message.setPreferredSize(new Dimension(790, 50));
-		message.setBorder(BorderFactory.createLoweredBevelBorder());
+		message.setBorder(BorderFactory.createEtchedBorder());
 		add(message);
 		
 		// create the queue and a thread for the algorithm and GO GO GO!
@@ -114,6 +111,7 @@ public class AnimatorPanel extends ShellPanel {
 						} catch (Exception ex) {
 							System.err.println(ex);
 						}
+						buttons.setEnabled(1, true);
 				} else {
 					play = false;
 					buttons.setText(1, "Play");

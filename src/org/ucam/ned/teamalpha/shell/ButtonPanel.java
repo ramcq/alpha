@@ -6,8 +6,6 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
-import java.awt.Dimension;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -60,13 +58,13 @@ public class ButtonPanel extends JPanel {
 		buttons = new JButton[names.length];
 		
 		addButton("Exit");
-		add(Box.createRigidArea(new Dimension(5,0)));
+		add(Box.createHorizontalStrut(5));
 		addButton("Restart");
 		add(Box.createHorizontalGlue());
 		
 		for (int i = 0; i < names.length; i++) {
 			if (i > 0)
-				add(Box.createRigidArea(new Dimension(5,0)));
+				add(Box.createHorizontalStrut(5));
 			
 			buttons[i] = addButton(names[i]);
 		}

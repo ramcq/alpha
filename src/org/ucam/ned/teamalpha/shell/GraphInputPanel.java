@@ -3,7 +3,6 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -154,7 +153,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.add(label);
 		
 		// add a 5px gap
-		row.add(Box.createRigidArea(new Dimension(5,0)));
+		row.add(Box.createHorizontalStrut(5));
 		
 		// create drop down list of numbers of elements
 		Integer[] vals = { new Integer(3), new Integer(4), new Integer(5), new Integer(8) };
@@ -172,7 +171,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.add(Box.createHorizontalGlue());
 		
 		// add 5 pixel gap
-		add(Box.createRigidArea(new Dimension(0,5)));
+		add(Box.createVerticalStrut(5));
 		
 		// new row
 		row = new JPanel();
