@@ -152,7 +152,7 @@ class GenericQueue implements AnimatorQueue {
 			
 			targetstate = currentstate + 1;
 			hasNext = (targetstate < states.size());
-			hasPrev = (targetstate > 0);
+			hasPrev = (targetstate > 1);
 			
 			s = (State) states.get(currentstate);
 			s.save();
@@ -165,7 +165,7 @@ class GenericQueue implements AnimatorQueue {
 			
 			targetstate = currentstate - 1;
 			hasNext = (targetstate < states.size());
-			hasPrev = (targetstate > 0);
+			hasPrev = (targetstate > 1);
 			
 			s = (State) states.get(targetstate);
 			s.restore();
