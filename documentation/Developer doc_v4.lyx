@@ -40,16 +40,16 @@ Any software project is considered successful and flexible if it can be
 on but that would require more effort since it would involve changing all
  the API to adapt to the new animation primitives.
  In addition, the need to extend the API would make the project less flexible.
- Below we concentrate on the procedure that needs to be used to add new
- algorithms (e.g.
+ Below we concentrate on the procedure that needs to be followed to add
+ new algorithms (e.g.
  Shell Sort, Bubble Sort, Prim's algorithm etc) and ways to implement them.
- In order to make the procedure clearer to the user we will demonstrate
+ In order to make the prochedure clearer to the user we will demonstrate
  it by means of two examples, the first one extending the project to include
- the bubble sort algorithm.
+ the Bubble sort algorithm.
  (that is a VectorAlgorithm).
  The second example would involve a graph algorithm such as Prim's (for
  finding the minimum spanning tree of a graph).
- After that it should be clear how the procedure could be applied to other
+ After that it should be clear how the prochedure could be applied to other
  vector and graph algorithms besides Bubble sort and Prim's algorithm.
 \layout Section
 
@@ -66,19 +66,35 @@ We will demonstrate step by step what needs to be done by the user to implement
 \series medium 
 \size normal 
 The idea here is to add the Bubble Sort class into the Algorithms package.
- This is because the Algorithms package contains all that code that implements
- the algorithms already in the project.
- So the user only needs to define a classBubble Sort inside the package
- that would actually perform all those operations as described by the algorithm.A
- data structure that could be used would be the array to hold the elements
- to be sorted and possibly extra arrays that would accumulate intermediate
- results before the sorting is completed.
+ This is because the Algorithms package contains all that code
+\series default 
+\size default 
+ (a different class for each algorithm) 
+\series medium 
+\size normal 
+that implements the algorithms already in the project.
+ So the user only needs to define 
+\series default 
+\size default 
+the
+\series medium 
+\size normal 
+ class
+\series default 
+\size default 
+ 
+\series medium 
+\size normal 
+BubbleSort inside the package that would actually perform all those operations
+ as described by the algorithm.A data structure that could be used would
+ be the array to hold the elements to be sorted and possibly extra arrays
+ that would accumulate intermediate results before the sorting is completed.
 \layout Enumerate
 
 
 \series medium 
 \size normal 
-The Bubble Sort class must descend from the abstract class VectorAlgorithm
+The BubbleSort class must descend from the abstract class VectorAlgorithm
  inside the Algorithms package (similarly to the already implemented vector
  algorithms).
  The VectorAlgorithm descends from the abstract class Algorithm that contain
@@ -102,6 +118,9 @@ example,
 \end_inset 
 
 .
+ In the figure we can also see comments corresponding to code (implemented
+ by the user) that is responsible for starting up and executing the animation
+ (this would involve calling of methods documented in the animation API).
  We must note that the implementation of the methods above is essential
  for otherwise the compiler would complain.
  By the definition of Java semantics, if a class extends an abstract class
@@ -116,13 +135,20 @@ collapsed true
 
 \family typewriter 
 package algorithms;
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+import animators.Animator;
 \layout Standard
 
 
 \family typewriter 
 import animators.VectorAnimator;
 \newline 
-
+ 
 \layout Standard
 
 
@@ -146,17 +172,32 @@ VectorAnimator anim;
 
 
 \family typewriter 
-public void sort(){
+public void sort(){ 
 \layout Standard
 
 
 \family typewriter 
-// here goes the implementation of the algorithm with
+//VectorAnimator methods to setup the animation 
 \layout Standard
 
 
 \family typewriter 
-// all the arrays and manipulation of data
+//for example, arrows and arrays
+\layout Standard
+
+
+\family typewriter 
+// here goes the implementation of the algorithm 
+\layout Standard
+
+
+\family typewriter 
+//with calling of animation methods
+\layout Standard
+
+
+\family typewriter 
+// to handle the movement of elements in and out of arrays 
 \layout Standard
 
 
@@ -173,17 +214,12 @@ public void sort(){
 
 
 \family typewriter 
-public BubbleSort(VectorAnimator va, int[] values) { //constructor
+public BubbleSort(int[] values) { //constructor
 \layout Standard
 
 
 \family typewriter 
-super(va, values);
-\layout Standard
-
-
-\family typewriter 
-this.anim = va;
+super(values);
 \layout Standard
 
 
@@ -193,17 +229,7 @@ this.a = values;
 
 
 \family typewriter 
-}
-\layout Standard
-
-
-\family typewriter 
-// va = The vector animator that will handle the generated animation primitives
-\layout Standard
-
-
-\family typewriter 
-// values = An array of the elements that are to be sorted.
+}// values = An array of the elements that are to be sorted.
 \newline 
 
 \layout Standard
@@ -244,7 +270,12 @@ return "A string that is a text description of the algorithm";
 
 
 \family typewriter 
-public void execute() {
+public void execute(Animator anim){
+\layout Standard
+
+
+\family typewriter 
+this.anim = (VectorAnimator) anim;
 \layout Standard
 
 
@@ -262,7 +293,12 @@ anim.setSteps(steps);
 \family typewriter 
 sort();
 \newline 
-} // the main method that will cause execution of the algorithm
+} // the main method that will cause execution of the
+\layout Standard
+
+
+\family typewriter 
+//algorithm animation
 \layout Caption
 
 
@@ -297,14 +333,37 @@ The next step is to break the algorithm into steps (inside the sort() method)
 
 \series medium 
 \size normal 
-The import statement as shown in the sample code is very important and essential.
+The import statement
+\series default 
+\size default 
+s
+\series medium 
+\size normal 
+ as shown in the sample code 
+\series default 
+\size default 
+are
+\series medium 
+\size normal 
+ very important and essential.
  First of all we have the animators package and inside that we have the
  Animator abstract class that contains all those data structures that the
  actual animator implementations require to restore their state.
  The VectorAnimator extends animator that again is an abstract class that
  defines all the methods available for a vector on the animation canvas.
- So it is important and vital that this is included inside the BubbleSort
- class.
+ So it is important and vital that th
+\series default 
+\size default 
+ese
+\series medium 
+\size normal 
+ 
+\series default 
+\size default 
+are
+\series medium 
+\size normal 
+ included inside the BubbleSort class.
 \layout Enumerate
 
 
@@ -326,8 +385,14 @@ GraphAlgorithm Extension
 
 \series medium 
 \size normal 
-In this section we will try to give a detailed step by step procedure on
- how the project can be extended with more Graph algorithms.
+In this section we will try to give a detailed
+\series default 
+\size default 
+,
+\series medium 
+\size normal 
+ step by step procedure on how the project can be extended with more Graph
+ algorithms.
  The description will involve the implementation of Prim's algorithm as
  a running example.
  We will again assume that
@@ -422,7 +487,7 @@ example
  needed for otherwise the compiler would give an error.
 \begin_inset Float figure
 wide false
-collapsed true
+collapsed false
 
 \layout Standard
 
@@ -441,6 +506,8 @@ import animators.GraphAnimatorAnimator;
 
 \family typewriter 
 public class Prim extends GraphAlgorithm {
+\newline 
+
 \layout Standard
 
 
@@ -650,8 +717,13 @@ both forwards and backwards during the animation.
  This again requires calling methods on the GraphAnimator at each step so
  that the animation will be synchronized with each logical step of the algorithm.
  These methods animate the particular step.
- The functionality of these methods is explained in the Java Documentation
- for the project.
+ The functionality of these methods is 
+\series default 
+\size default 
+also 
+\series medium 
+\size normal 
+explained in the Java Documentation for the project.
  The use of 
 \family typewriter 
 \series default 
