@@ -6,6 +6,7 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.Timer;
 
@@ -30,6 +32,36 @@ import org.ucam.ned.teamalpha.queues.AnimatorQueue;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class AnimatorPanel extends ShellPanel {
+	private class StepRenderer extends JTextPane implements ListCellRenderer {
+		public StepRenderer() {
+			setPreferredSize(new Dimension(200, 50));
+		}
+		
+		public Component getListCellRendererComponent(
+			JList list,
+			Object value,
+			int index,
+			boolean isSelected,
+			boolean cellHasFocus) {
+			
+			setText((index + 1) + ". " + value.toString());
+			
+			if (isSelected) {
+				setForeground(list.getSelectionForeground());
+				setBackground(list.getSelectionBackground());
+			}	
+			else if ((index % 2) == 0) {
+				setForeground(list.getForeground());
+				setBackground(list.getBackground());
+			} else {
+				setForeground(list.getSelectionForeground().darker());
+				setBackground(list.getSelectionBackground().brighter());
+			}
+						
+			return this;
+		}
+	}
+	
 	private Shell shell;
 	private ButtonPanel buttons;
 	private AlgorithmCatalog.AvailableAlgorithm choice;
@@ -78,6 +110,7 @@ public class AnimatorPanel extends ShellPanel {
 		// and a list of the steps in the algorithm
 		stepList = new JList();
 		stepList.setBorder(BorderFactory.createEtchedBorder());
+		stepList.setCellRenderer(new StepRenderer());
 		stepList.setMaximumSize(new Dimension(200, Short.MAX_VALUE));
 		stepList.setPreferredSize(new Dimension(200, 0));
 		stepList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -88,10 +121,12 @@ public class AnimatorPanel extends ShellPanel {
 		
 		// create bottom message area
 		message = new JTextPane();
+		message.setBackground(java.awt.Color.WHITE);
+		message.setBorder(BorderFactory.createEtchedBorder());
+		message.setContentType("text/html");
 		message.setEditable(false);
 		message.setMaximumSize(new Dimension(Short.MAX_VALUE, 50));
 		message.setPreferredSize(new Dimension(0, 50));
-		message.setBorder(BorderFactory.createEtchedBorder());
 		add(message);
 		
 		// create the queue and a thread for the algorithm and GO GO GO!
@@ -99,7 +134,6 @@ public class AnimatorPanel extends ShellPanel {
 		Thread algoThread = new Thread(new Runnable() {
 			public void run() {
 				algorithm.execute((Animator) queue);
-				System.out.println("done!");
 			}
 		});
 		algoThread.start();
