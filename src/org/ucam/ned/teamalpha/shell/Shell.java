@@ -223,8 +223,8 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 
 		// try native, windows then gtk in increasing order of preference		
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {};
-		try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); } catch (Exception e) {};
 		try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel"); } catch (Exception e) {};
+		try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); } catch (Exception e) {};
 		
 		me = Shell.getInstance();
 		SwingUtilities.invokeLater(me);
