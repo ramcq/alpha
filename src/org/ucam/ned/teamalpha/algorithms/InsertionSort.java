@@ -63,6 +63,7 @@ public class InsertionSort extends VectorAlgorithm {
 			
 			for(i=1;i<n;i++) {
 				//ANIM: The arrow points at the element to be inserted
+				anim.saveState();
 				anim.setCurrentStep(0);
 				aUnsorted.move(i, false);
 								
@@ -72,6 +73,7 @@ public class InsertionSort extends VectorAlgorithm {
 				// Work backwards through the sorted list till the correct position is found
 				j = i;
 				// ANIM: Have the arrow pointing at the potential insertion point
+				anim.saveState();
 				anim.setCurrentStep(1);
 				aSorted.move(j, false);
 				
@@ -86,6 +88,7 @@ public class InsertionSort extends VectorAlgorithm {
 					
 					// ANIM: Shift elements to make space
 					SWAPS++;
+					anim.saveState();
 					anim.setCurrentStep(2);
 					sorted.moveElement(j-1, j);
 				
@@ -96,6 +99,7 @@ public class InsertionSort extends VectorAlgorithm {
 					
 				}
 				// Correct insertion point found, insert here
+				anim.saveState();
 				anim.setCurrentStep(3);
 				a[j] = v;
 				aSorted.flash();
@@ -104,6 +108,7 @@ public class InsertionSort extends VectorAlgorithm {
 			// ANIM Annonunce completion
 			sorted.setLabel("DONE!");
 			anim.setCurrentStep(4);
+			anim.saveState();
 			
 		} catch (Exception ide) {
 			System.out.println("Oh no.");
