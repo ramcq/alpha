@@ -1231,10 +1231,12 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	
 	public void paintComponent(Graphics g) {
 		Rectangle clipArea = g.getClipBounds();
-		//BufferedImage clip = bi.getSubimage(clipArea);
 		g.setColor(bgcolour);
+		Rectangle biarea = new Rectangle(0,0,bi.getWidth(), bi.getHeight());
+		Rectangle redraw = biarea.intersection(clipArea);
 		g.fillRect(clipArea.x, clipArea.y, clipArea.width, clipArea.height);
-		g.drawImage(bi,0,0,this);
+		g.drawImage(bi.getSubimage(redraw.x, redraw.y, redraw.width, redraw.height), redraw.x, redraw.y, this);
+		//g.drawImage(bi,0,0,this);
 	}
 	
 	/**
@@ -1266,6 +1268,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		big.setColor(bgcolour);
 		big.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		big.setColor(fgcolour);
+		
+		repaint();
 	}
 	
 	/* (non-Javadoc)
@@ -1277,7 +1281,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		//long now = System.currentTimeMillis();
 		//if (draw && (now - lastdraw > 100)) {
 		//	lastdraw = now;
-			repaint();
+			//repaint();
 		//}
 
 		// If we need a new event, get it
@@ -1458,15 +1462,23 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	
 	// Redraw the vector v on the Graphics object g (clear the area and draw again)
 	private void redrawVector(Vector v, Graphics g) {
+		// Area to work on
+		int x = v.left-60;
+		int y = v.top-10;
+		int width = Vector.width+120;
+		int height = (v.size*20)+50;
+		
 		// Clear vector area
 		g.setColor(bgcolour);
-		g.fillRect(v.left-60, v.top-10, Vector.width+120, (v.size*20)+50);
+		g.fillRect(x, y, width, height);
 		
 		if (v.visible) {
 			drawVector(v, g);
 			redrawAllArrows(g, true, null);
 			redrawAllArrows(g, false, null);
 		}
+		
+		repaint(x, y, width, height);
 	}
 	
 	// Redraw all vectors known to the animator
@@ -1483,6 +1495,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(v.colour);
 		g.drawLine(v.left, v.top, v.left, v.bottom);
 		g.drawLine(v.right, v.top, v.right, v.bottom);
+		repaint(v.left-1, v.top, 3, (v.size*20));
 	}
 	
 	// Draw the frame of the vector
@@ -1501,6 +1514,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		// Draw label
 		g.setFont(new Font("MonoSpaced", Font.PLAIN, 12));
 		g.drawString(v.label, v.left+5, v.bottom+25);
+		
+		repaint(v.top, v.left, Vector.width, (v.size*20)+50);
 	}
 	
 	// Draw the vector elements in place
@@ -1510,6 +1525,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setFont(new Font("MonoSpaced", Font.PLAIN, 10));
 		for (int i=0; i<v.size; i++) {
 			g.drawString(v.contents[i], v.left+5, v.top+15+(i*20));
+			repaint(v.left, v.top+(i*20), Vector.width, 20);
 		}
 	}
 	
@@ -1573,6 +1589,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		else {
 			g.drawString(v.contents[element], v.left+5+intermediateOffset[which], 14+topOfElement);
 		}
+		
+		repaint(leftOfAffectedArea, topOfElement, widthOfAffectedArea, heightOfAffectedArea);
 	}
 	
 	/**
@@ -1637,6 +1655,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(fgcolour);
 		if (startY < endY) g.drawString(v.contents[from], areaLeft, startY + intermediateOffset[which]);
 		else g.drawString(v.contents[from], areaLeft, startY - intermediateOffset[which]);
+		
+		repaint(areaLeft, v.top, 50, 20*(Math.max(from,to)+1));
 	}
 
 	private void moveElementVerticallyInPlace(Graphics g, Vector v, int from, int to, boolean copy) {
@@ -1668,6 +1688,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(fgcolour);
 		if (startY < endY) g.drawString(v.contents[from], v.left+5, startY + intermediateOffset[0]);
 		else g.drawString(v.contents[from], v.left+5, startY - intermediateOffset[0]);
+		
+		repaint(v.left, v.top+(Math.min(from,to)*20), Vector.width, 40);
 	}
 	
 	/**
@@ -1727,6 +1749,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(fgcolour);
 		if (left) g.drawString(v.contents[to], v.left-70+intermediateOffset[which], textYPos);
 		else g.drawString(v.contents[to], v.left+70-intermediateOffset[which], textYPos);
+		
+		repaint(areaLeft, areaTop, areaWidth, areaHeight);
 	}
 	
 	/**
@@ -1802,6 +1826,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				g.drawString(destVector.contents[destOffset], sourceVector.right+20+intermediateOffset[0], textYPos);
 			}
 		}
+		
+		repaint(areaLeft, areaTop, areaWidth, areaHeight);
 	}
 	
 	/**
@@ -1853,6 +1879,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		// redraw arrow
 		if (movingUp) drawArrow(a, g, a.colour, -intermediateOffset[0]);
 		else drawArrow(a, g, a.colour, intermediateOffset[0]);
+		
+		repaint(areaLeft, a.vector.top, 60, 20*a.vector.size);
 	}
 	
 	/* (non-Javadoc)
@@ -1944,6 +1972,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		else {
 			g.drawString(a.label, right+8, ypos+5);
 		}
+		
+		repaint(left, ypos-4, 25, 8);
 	}
 	
 	// Clear the area where an arrow was and redraw it
@@ -1956,6 +1986,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.fillRect(left, ypos-5, 40, 12);
 				
 		if (!a.deleted) drawArrow(a, g);
+		
+		repaint(left, ypos-5, 40, 12);
 	}
 	
 	// Redraw all arrows known to the animator
@@ -2050,7 +2082,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		colsOccupied = st.colsOccupied;
 		
 		// draw buffered image out
-		this.repaint();
+		repaint();
 	}
 	
 	// Test harness, just for fun :-)
@@ -2082,4 +2114,15 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			System.err.println(e);
 		}
 	}
+	
+/*	public void repaint() {
+		System.out.println("Repainting whole canvas");
+		super.repaint();
+	}
+	
+	public void repaint(int x, int y, int w, int h) {
+		System.out.println("Repainting ("+x+","+y+"), w="+w+", h="+h);
+		super.repaint(x,y,w,h);
+	}
+*/
 }
