@@ -2,6 +2,7 @@ package org.ucam.ned.teamalpha.shell;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -476,7 +477,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		}
 	}
 	
-	public void paintComponent(Graphics2D g) {
+	public void paintComponent(Graphics g) {
 		g.drawImage(bi,0,0,this);
 	}
 	
@@ -520,6 +521,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
 		repaint();
+
 		// Now comes the meat of the method: what should we do each frame?
 		// If we need a new event, get it
 		if (currentEvent == null) {
@@ -533,6 +535,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 				notify();
 			}
 		}
+
 		//match current event's type to determine what should be drawn
 		if (currentEvent != null) {
 			switch(currentEvent.type) {
