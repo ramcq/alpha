@@ -32,12 +32,12 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  * problem with gradient -> infinity with 3 node graph ({trig,cast to int} functions rounding error)
  * check the polygon drawing with curve edges?
  * SID: Functionality to delete edges altogether?
- * SID: Node labels different colour/weight than edge labels (IMPORTANT)
  * 
  * Done:
  * SID: Make the nodes larger 
  * SID: Node labels overwrite on update
  * SID: Thicker lines so it is easier to see changes
+ * SID: Node labels different colour/weight than edge labels (IMPORTANT)
  *
  */
 /*
@@ -61,7 +61,7 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 
 public class ShellGraphAnimator extends GraphAnimator implements ActionListener {
 	
-	private double Nodeangle;
+	private double Nodeangle; //calc. according to number of nodes
 	private int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
 	private JPanel outc; // Component we will be drawing into
@@ -78,11 +78,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public static final int NODE_SIZE = 12; //node width/height
 	public static final int NODE_FONT_SIZE = 18; //node font height
 	public static final int EDGE_FONT_SIZE = 16; //edge font height
-	public static final int EDGE_TYPE_SAMDIR = 0;
+	public static final int EDGE_TYPE_SAMDIR = 0; //edge types
 	public static final int EDGE_TYPE_ONEDIR = 1;
 	public static final int EDGE_TYPE_TWODIR = 2;
-	public static final int EDGE_CURVE_ANGLE = 10; //degrees
-	public static final boolean EDGE_LINE_DRAW = false;
+	public static final int EDGE_CURVE_ANGLE = 10; //curvature degree
+	public static final boolean EDGE_LINE_DRAW = false; //set to true to make it draw thin lines
+	public static final int FLASH_TIME = 50; //number of loops when flashing node/edge
 
 	public class Node /*implements Serializable*/{
 		int Nodewidth=NODE_SIZE;
@@ -471,7 +472,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					else {
 						drawNode(currentEvent.n1, big);
 					}
-					if (tmpint > 100) {
+					if (tmpint > FLASH_TIME) {
 						intermediateOffset = 0;	
 						drawNode(currentEvent.n1, big);
 						currentEvent = null;
@@ -489,7 +490,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					else {
 						drawEdge(currentEvent.e1, big);
 					}
-					if (tmpint2 > 100) {
+					if (tmpint2 > FLASH_TIME) {
 						intermediateOffset = 0;	
 						drawEdge(currentEvent.e1, big);
 						currentEvent = null;
@@ -634,7 +635,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int sx1 = 0,sy1 = 0,sx2 = 0,sy2 = 0,sx3 = 0,sy3 = 0;
 		int arsize = 4;
 		int arlen = 7;
-		if (x1 != x2 && y1 != y2){
+		if (((x1-x2 > 1)||(x1-x2 < -1)) && ((y1-y2 > 1)||(y1-y2 < -1))){
 			double grad = (double) ((x1-x2)/(y1-y2));
 			if ((x1>x2 && y1>y2) || (x2>x1 && y2>y1)) {
 				sx3 = (int)(x + arlen * grad);
@@ -889,7 +890,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					g.fillPolygon(xpts,ypts,4);
 				}
 				else {
-					System.out.println(grad);
 					int[] xpts = {x1-1,x1+1,x2+1,x2-1};
 					int[] ypts = {y1-1,y1+1,y2+1,y2-1};
 					g.fillPolygon(xpts,ypts,4);
@@ -984,7 +984,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void flashNode(int Node) {
 		nodelist[Node].flash();
 	}
-	
+
 	public void flashEdge(int from, int to) {
 		if (edgematrix[from][to].type == EDGE_TYPE_TWODIR) {
 			if (from>to) {
@@ -1057,8 +1057,6 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			return this.numnodes;
 		}
 	}
-	
-	
 
 	public void setSteps(String[] steps) {
 		// TODO Auto-generated method stub	
