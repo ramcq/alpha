@@ -570,13 +570,44 @@ The system must provide a responsive, user-friendly and crash-prone interface;
 Division of tasks
 \layout Standard
 
+The division of tasks is described in Table 
+\begin_inset LatexCommand \ref{table:division-of-tasks}
+
+\end_inset 
+
+.
+ Group members with 
+\emph on 
+(backup)
+\emph default 
+ written next to their names will be called upon to perform that task in
+ the event that the others cannot complete it on their own, or extra effort
+ is needed.
+\layout Standard
+
+
+\begin_inset Float table
+placement bp
+wide false
+collapsed false
+
+\layout Caption
+
+
+\begin_inset LatexCommand \label{table:division-of-tasks}
+
+\end_inset 
+
+Division of project tasks
+\layout Standard
+\align center 
 
 \begin_inset  Tabular
-<lyxtabular version="3" rows="7" columns="2">
+<lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" width="0(null)">
-<column alignment="block" valignment="top" width="3in">
-<row>
+<column alignment="right" valignment="top" leftline="true" width="0(null)">
+<column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
+<row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -597,7 +628,7 @@ Graham Le Page
 \end_inset 
 </cell>
 </row>
-<row>
+<row bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -618,7 +649,7 @@ Robert McQueen
 \end_inset 
 </cell>
 </row>
-<row>
+<row bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -639,7 +670,7 @@ Andrew Medworth
 \end_inset 
 </cell>
 </row>
-<row>
+<row bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -656,11 +687,22 @@ User documentation
 
 \layout Standard
 
-Neofytos Mylona Graham Le Page, Alan Treanor (backup: Andrew Medworth)
+Neofytos Mylona
+\layout Standard
+
+Graham Le Page
+\layout Standard
+
+Alan Treanor
+\layout Standard
+
+Andrew Medworth 
+\emph on 
+(backup)
 \end_inset 
 </cell>
 </row>
-<row>
+<row bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -669,7 +711,7 @@ Neofytos Mylona Graham Le Page, Alan Treanor (backup: Andrew Medworth)
 
 \family sans 
 \series bold 
-Design
+Design & Coding
 \end_inset 
 </cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
@@ -677,11 +719,25 @@ Design
 
 \layout Standard
 
-All
+Robert McQueen
+\layout Standard
+
+Steven Cooper
+\layout Standard
+
+Andrew Medworth
+\layout Standard
+
+Sidath Senanayake
+\layout Standard
+
+Zhan Li 
+\emph on 
+(backup)
 \end_inset 
 </cell>
 </row>
-<row>
+<row bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -690,7 +746,7 @@ All
 
 \family sans 
 \series bold 
-Coding
+Troubleshooting & Testing
 \end_inset 
 </cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
@@ -698,34 +754,27 @@ Coding
 
 \layout Standard
 
-Robert McQueen, Steven Cooper, Andrew Medworth, Sidath Senanayake (backup:
- Zhan Li)
-\end_inset 
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
+Zhan Li
+\layout Standard
 
+Alan Treanor
+\layout Standard
+
+Sidath Senanayake 
+\emph on 
+(backup)
 \layout Standard
 
 
-\family sans 
-\series bold 
-Troubleshooting & testing
-\end_inset 
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\layout Standard
-
-Zhan Li, Alan Treanor (backup: Sidath Senanayake, plus as many others as
- are required)
+\emph on 
+As many others as are required
 \end_inset 
 </cell>
 </row>
 </lyxtabular>
+
+\end_inset 
+
 
 \end_inset 
 
