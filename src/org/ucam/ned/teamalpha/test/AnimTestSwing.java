@@ -1,7 +1,9 @@
+package org.ucam.ned.teamalpha.test;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
+//import java.awt.image.*;
 
 /*
  * Created on Feb 4, 2004
@@ -21,7 +23,7 @@ public class AnimTestSwing extends JFrame implements ActionListener {
 	final static Color fgcolour = Color.black;
 	final static Color bgcolour = Color.white;
 	
-	final static int fps = 100; // Framerate
+	final static int fps = 30; // Framerate
 	
 	private Timer timer; // our animation timer
 	private int linepos = 0;
