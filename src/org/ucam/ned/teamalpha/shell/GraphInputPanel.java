@@ -139,7 +139,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.setLayout(new BoxLayout(row, BoxLayout.Y_AXIS));
 		row.add(Box.createHorizontalGlue());
 		
-		cells = new JPanel(new GridLayout(0, nodesDefault, nodesDefault, nodesDefault));
+		cells = new JPanel();
 		values = new int[64];
 		makeCells(nodesDefault);
 		
@@ -179,8 +179,8 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 			int t;
 			
 			for (int i = 0; i < 64; i++) {
-				t = r.nextInt(250);	
-				values[i] = (t<99)?t:0;
+				t = r.nextInt(125);	
+				values[i] = (t<49)?t:0;
 			}
 			
 			updateValues();
