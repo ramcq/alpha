@@ -10,6 +10,7 @@
 package org.ucam.ned.teamalpha.shell;
 
 import java.util.*;
+import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -25,7 +26,7 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
 public class ShellVectorAnimator extends VectorAnimator implements ActionListener {
 	
 	// Vector inner class
-	public class Vector extends VectorAnimator.Vector {
+	public class Vector extends VectorAnimator.Vector implements Serializable {
 		static final int maxSize = 20;
 		static final int maxElementLength = 6; // Maximum number of digits in any element
 		static final int maxArrowWidth = 20; // Maximum size an arrow can be
@@ -205,7 +206,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	}
 	
 	// Arrow inner class
-	public class Arrow extends VectorAnimator.Arrow {
+	public class Arrow extends VectorAnimator.Arrow implements Serializable {
 		private String label;
 		private int position; // offset in the array at which we are pointing
 		private boolean boundary; // are we pointing between two locations?
@@ -279,6 +280,21 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	// State inner class
 	public class State extends Animator.State {
+		private byte[] vectors;
+		private byte[] arrows;
+				
+		State(byte[] vectors, byte[] arrows) {
+			this.vectors = vectors;
+			this.arrows = arrows;
+		}
+		
+		public byte[] getVectors() {
+			return vectors;
+		}
+		
+		public byte[] getArrows() {
+			return arrows;
+		}
 	}
 	
 	// AnimationEvent inner class
@@ -862,35 +878,53 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	public void showMessage(String msg) {
 	}
 
-	// Do we really need this? (see second restoreState method below)
-	public Animator.State saveState() {
-		return null;
+	public Animator.State saveState() throws IOException {
+		// Open output streams for serialization
+		ByteArrayOutputStream vbaos = new ByteArrayOutputStream();
+		ObjectOutputStream voos = new ObjectOutputStream(vbaos);
+		ByteArrayOutputStream abaos = new ByteArrayOutputStream();
+		ObjectOutputStream aoos = new ObjectOutputStream(abaos);
+		
+		// Serialize the vectors
+		for (int i=0; i<vectors.length; i++)  {
+			if (vectors[i] != null) voos.writeObject(vectors[i]); 
+		}
+
+		// Serialize the arrows
+		for (int i=0; i<arrows.length; i++) {
+			if (arrows[i] != null) aoos.writeObject(arrows[i]);
+		}
+				
+		// Get a byte array
+		byte[] vects = vbaos.toByteArray();
+		byte[] arrs = abaos.toByteArray();
+		voos.close();
+		aoos.close();
+		
+		// Make the state object and return it
+		State res = new State(vects, arrs);
+		return res;
 	}
 	
-	/*public Object[] saveMyState() {
-		if (currentEvent == null && eventQueue.isEmpty()) {
-			stopAnimation();
-			Object[] res = 
+	public void restoreState(Animator.State s) throws IOException {
+		State state = (State) s;
+		byte[] vectors = state.getVectors();
+		ByteArrayInputStream vbais = new ByteArrayInputStream(vectors);
+		// Open input stream for deserialization
+		ObjectInputStream vois = new ObjectInputStream(vbais);
+		while (true) {
+			try {
+				Vector v = (Vector) vois.readObject();
+				// Do the appropriate thing with the vector
+			}
+			catch (Exception e) {
+				// Handle end of stream
+				break;
+			}
 		}
-	}*/
-
-	public void restoreState(Animator.State state) {
+		// Do the same for arrows
 	}
 	
-	public void restoreState(Object[] state) throws NotAStateException {
-		stopAnimation();
-		eventQueue.clear();
-		for (int i=0; i<state.length; i++) {
-			if (state[i] instanceof Vector) {
-				drawVector((Vector)state[i], big);
-			}
-			else if (state[i] instanceof Arrow) {
-			}
-			else throw new NotAStateException("Element " + i + " is neither a Vector nor an Arrow");
-		}
-		startAnimation();
-	}
-
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellVectorAnimator test");
 		frame.setSize(500,500);
