@@ -64,7 +64,7 @@ public class InsertionSort extends VectorAlgorithm {
 			// Vector is split into sorted elements and those yet to be sorted about i
 			// ANIM: Pick the first element in a and move to the sorted section
 			
-			anim.showMessage("Copy <strong><FONT COLOR=#E71917>" + a[0] + "</strong></FONT> to start off.");
+			anim.showMessage("Copy <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + a[0] + "</strong></FONT><FONT FACE=\"SansSerif\"> to start off.");
 			unsorted.copyElement(0, sorted, 0);
 			//aUnsorted.flash();
 			
@@ -73,7 +73,7 @@ public class InsertionSort extends VectorAlgorithm {
 				anim.saveState();
 				anim.setCurrentStep(0);
 				
-				anim.showMessage("In this pass, inserting <strong><FONT COLOR=#E71917>" + a[i] + "</strong></FONT>.");
+				anim.showMessage("In this pass, inserting <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + a[i] + "</strong></FONT><FONT FACE=\"SansSerif\">.");
 				
 				aUnsorted.move(i, false);
 								
@@ -101,7 +101,7 @@ public class InsertionSort extends VectorAlgorithm {
 					anim.saveState();
 					anim.setCurrentStep(2);
 					
-					anim.showMessage("Since <strong><FONT COLOR=#E71917>" + a[j] + "</strong></FONT> &gt; <strong><FONT COLOR=#E71917>" + v + "</strong></FONT>, shift down to make space.");
+					anim.showMessage("Since <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + a[j] + "</strong></FONT><FONT FACE=\"SansSerif\"> &gt; <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + v + "</strong></FONT><FONT FACE=\"SansSerif\">, shift down to make space.");
 					
 					sorted.moveElement(j-1, j);
 				
@@ -115,7 +115,7 @@ public class InsertionSort extends VectorAlgorithm {
 				anim.saveState();
 				anim.setCurrentStep(3);
 				
-				anim.showMessage("We have found the insertion point, insert <strong><FONT COLOR=#E71917>" + v + "</strong></FONT> here.");
+				anim.showMessage("We have found the insertion point, insert <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + v + "</strong></FONT><FONT FACE=\"SansSerif\"> here.");
 				
 				a[j] = v;
 				//aSorted.flash();
@@ -124,7 +124,7 @@ public class InsertionSort extends VectorAlgorithm {
 			// ANIM Annonunce completion
 			sorted.setLabel("DONE!");
 			
-			anim.showMessage("Done! With <strong><FONT COLOR=#E71917>" + COMPARES + "</strong></FONT> compares and <strong><FONT COLOR=#E71917>" + SWAPS + "</strong></FONT> swaps.");
+			anim.showMessage("Done! With <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + COMPARES + "</strong></FONT><FONT FACE=\"SansSerif\"> compares and <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + SWAPS + "</strong></FONT><FONT FACE=\"SansSerif\"> swaps.");
 			
 			anim.setCurrentStep(4);
 			anim.saveState();

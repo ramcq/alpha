@@ -229,7 +229,7 @@ public class Kruskal extends GraphAlgorithm {
 				anim.saveState();
 				anim.setCurrentStep(2);
 				
-				anim.showMessage("Cheapest edge of cost <strong><FONT COLOR=#E71917>" + costMatrix[n1][n2] + "<strong></FONT> doesn't cause a cycle; add.");
+				anim.showMessage("Cheapest edge of cost <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + costMatrix[n1][n2] + "</strong></FONT><FONT FACE=\"SansSerif\"> doesn't cause a cycle; add.");
 				
 				// ****THIS REMOVES SUPPORT FOR BIDIRECTIONAL EDGES******
 				result[n2][n1] = 1;
@@ -248,7 +248,7 @@ public class Kruskal extends GraphAlgorithm {
 				//ANIM: Show that edge causes a cycle if not already in tree
 				anim.setCurrentStep(1);
 				
-				anim.showMessage("Cheapest edge of cost <strong><FONT COLOR=#E71917>" + costMatrix[n1][n2] + "<strong></FONT> causes a cycle; do not add.");
+				anim.showMessage("Cheapest edge of cost <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + costMatrix[n1][n2] + "</strong></FONT><FONT FACE=\"SansSerif\"> causes a cycle; do not add.");
 				
 				anim.saveState();
 				
@@ -270,7 +270,7 @@ public class Kruskal extends GraphAlgorithm {
 		// ANIM: Announce completion
 		if (finished()) {
 			// We've seen to all nodes
-			anim.showMessage("A spanning tree of cost <strong><FONT COLOR=#E71917>" + TOTALCOST + "<strong></FONT> was found.");
+			anim.showMessage("A spanning tree of cost <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + TOTALCOST + "</strong></FONT><FONT FACE=\"SansSerif\"> was found.");
 			anim.setCurrentStep(4);
 		} else {
 			// Couldn't find a tree

@@ -95,7 +95,7 @@ public class QuickSort extends VectorAlgorithm {
 					
 					COMPARES++;
 					
-					anim.showMessage("If <strong><FONT COLOR=#E71917>" + a[i] + "</strong></FONT> &lt; <strong><FONT COLOR=#E71917>" + pivot + "</strong></FONT> swap.");
+					anim.showMessage("If <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + a[i] + "</strong></FONT><FONT FACE=\"SansSerif\"> &lt; <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + pivot + "</strong></FONT><FONT FACE=\"SansSerif\"> swap.");
 					
 					// ANIM: Move the low-end pointer down
 					anim.setCurrentStep(1);
@@ -107,7 +107,7 @@ public class QuickSort extends VectorAlgorithm {
 					
 					COMPARES++;
 					
-					anim.showMessage("If <strong><FONT COLOR=#E71917>" + a[i] + "</strong></FONT> &gt; <strong><FONT COLOR=#E71917>" + pivot + "</strong></FONT> swap.");
+					anim.showMessage("If <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + a[i] + "</strong></FONT><FONT FACE=\"SansSerif\"> &gt; <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + pivot + "</strong></FONT><FONT FACE=\"SansSerif\"> swap.");
 					
 					// ANIM: Move the high-end pointer up
 					anim.setCurrentStep(2);
@@ -125,7 +125,7 @@ public class QuickSort extends VectorAlgorithm {
 						// ANIM: Swap the elements
 						anim.setCurrentStep(3);
 						
-						anim.showMessage("Swap <strong><FONT COLOR=#E71917>" + a[i] + "</strong></FONT> and <strong><FONT COLOR=#E71917>" + a[j] + "</strong></FONT>.");
+						anim.showMessage("Swap <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + a[i] + "</strong></FONT><FONT FACE=\"SansSerif\"> and <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + a[j] + "</strong></FONT><FONT FACE=\"SansSerif\">.");
 						
 						anim.saveState();
 						curr.swapElements(i-low, j-low);
@@ -160,7 +160,7 @@ public class QuickSort extends VectorAlgorithm {
 			// ANIM: Anounce partition found
 			anim.setCurrentStep(4);
 			
-			anim.showMessage("The new partition has been found at <strong><FONT COLOR=#E71917>" + (i-low) + "</strong></FONT>. Move elements back.");
+			anim.showMessage("The new partition has been found at <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + (i-low) + "</strong></FONT><FONT FACE=\"SansSerif\">. Move elements back.");
 			
 			anim.saveState();
 			
@@ -233,7 +233,7 @@ public class QuickSort extends VectorAlgorithm {
 		int B = a[bb];
 		int C = a[cc];
 		
-		anim.showMessage("Select median of <strong><FONT COLOR=#E71917>" + A + "</strong></FONT>, <strong><FONT COLOR=#E71917>" + B + "</strong></FONT> and <strong><FONT COLOR=#E71917>" + C + "</strong></FONT> for pivot.");
+		anim.showMessage("Select median of <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + A + "</strong></FONT><FONT FACE=\"SansSerif\">, <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + B + "</strong></FONT><FONT FACE=\"SansSerif\"> and <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + C + "</strong></FONT><FONT FACE=\"SansSerif\"> for pivot.");
 		
 		if ((B>A && A>C) || (C>A && A>B)) return aa;
 		if ((C>B && B>A) || (A>B && B>C)) return bb;
@@ -305,7 +305,7 @@ public class QuickSort extends VectorAlgorithm {
 			
 			anim.setCurrentStep(6);
 			
-			anim.showMessage("Done! With <strong><FONT COLOR=#E71917>" + COMPARES + "</strong></FONT> compares and <strong><FONT COLOR=#E71917>" + SWAPS + "</strong></FONT> swaps.");
+			anim.showMessage("Done! With <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + COMPARES + "</strong></FONT><FONT FACE=\"SansSerif\"> compares and <strong><FONT COLOR=#E71917><FONT SIZE=+1>" + SWAPS + "</strong></FONT><FONT FACE=\"SansSerif\"> swaps.");
 			
 		} catch (Exception e) {
 			System.err.println("quicksort died: " + e);
