@@ -1581,7 +1581,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		
 		// Clear side channel
 		g.setColor(bgcolour);
-		g.fillRect(areaLeft, v.top, 50, 20*v.size);
+		g.fillRect(areaLeft, v.top, 50, 20*(Math.max(from,to)+1));
 		
 		redrawAllArrows(g, left, null);
 		
