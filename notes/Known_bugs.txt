@@ -1,10 +1,8 @@
 Known bugs:
 
-Does not handle invalid data input properly
- - Most particularly for vector input which is too large
-
 Graph stuff
  - Quite a lot broken eg bidirectional stuff
+ - At least it looks pretty
 
 Go faster button
  - Or some speed thingy
@@ -13,6 +11,9 @@ User Guide ?
  - Add screenshots ?
 
 Fixed bugs:
+
+Does not handle invalid data input properly
+ - Most particularly for vector input which is too large
 
 Next/prev/stop buttons dont work yet
  - Need work on checkpoints etc
