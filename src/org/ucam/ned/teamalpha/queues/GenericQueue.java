@@ -141,8 +141,6 @@ class GenericQueue implements AnimatorQueue {
 		State s;
 		int targetstate;
 		
-		System.out.println("QUEUE: handling command " + cmd);
-		
 		isBusy = true;
 		
 		switch (cmd) {
@@ -220,8 +218,6 @@ class GenericQueue implements AnimatorQueue {
 			public void run() {
 				int command = 0;
 				
-				System.out.println("QUEUE: entering commandRunner thread");
-				
 				try {
 					while (!Thread.interrupted()) {
 						if (command > 0)
@@ -240,8 +236,6 @@ class GenericQueue implements AnimatorQueue {
 				} catch (InterruptedException e) {
 					// interrupted, off we go
 				}
-				
-				System.out.println("QUEUE: leaving commandRunner thread");
 			}
 		});
 		commandRunner.start();
