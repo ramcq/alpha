@@ -708,8 +708,7 @@ This section has a similar structure to the one on overall system architecture.
  function, its inputs and outputs, its main public methods, and we will
  suggest a possible test strategy.
  The lists of public methods are not exhaustive and may be subject to change:
- these sections are designed to remove the need for separately-submitted
- abstract classes.
+ these sections are designed by way of an alternative to abstract classes.
 \layout Subsection
 
 Algorithms
