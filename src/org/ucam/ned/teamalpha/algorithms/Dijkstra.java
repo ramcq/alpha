@@ -33,6 +33,7 @@ public class Dijkstra extends GraphAlgorithm {
 	// Nodes
 	static final int UNTOUCHEDSETID = 0;
 	static final int WORKINGSETID = 1;
+	static final int BEINGPROCESSED = 2;
 	static final int FINISHEDSETID = 3;
 	//Edges
 	static final int EDGEDEFAULT = 0;
@@ -239,18 +240,23 @@ public class Dijkstra extends GraphAlgorithm {
 	 */
 	private void processNeighbours(Node n) {
 		// ANIM: Highlight the node we are working with
-		// TODO: anim.setNodeHighlight(n.index, true);
-		anim.setCurrentStep(1);
-		
 		try {
+			anim.setNodeShade(n.index, BEINGPROCESSED);
+			anim.setCurrentStep(1);
+			
+			anim.showMessage("Analyse the immediate neighbours of the current finished node with cost <strong>" + getShortestDist(n) + "</strong>.");
 		
 			for (Iterator i = map.getDestinations(n).iterator(); i.hasNext();) {
+				
+				anim.showMessage("Analyse the next immediate neighbour of the current finished node with cost <strong>" + getShortestDist(n) + "</strong>.");
+				
 				Node m = map.nodeAt(((Integer)i.next()).intValue());
 				
 				// skip node already settled
 				if (isDone(m)) continue;
 				
 				// ANIM: Highlight the node we are looking at
+				anim.showMessage("Found neighbour " + ((getShortestDist(m)==INF) ? "not yet seen." : "with current cost of <strong>" + getShortestDist(m) + "</strong>."));
 				anim.flashNode(m.index);
 				// TODO: anim.setNodeHighlight(m.index, true);
 				// ANIM: Highlight the edge we are looking at
@@ -263,6 +269,9 @@ public class Dijkstra extends GraphAlgorithm {
 						anim.setEdgeShade(getPredecessor(m).index, m.index, EXCLUDEDEDGE);
 						// ANIM: removing a longer route
 						anim.setCurrentStep(3);
+						
+						anim.showMessage("A shorter route than <strong>" + getShortestDist(m) + "</strong> has been found. Remove the old route.");
+						
 						anim.saveState();
 					} catch (NullPointerException e) {
 						// There is no predecessor yet.
@@ -275,6 +284,9 @@ public class Dijkstra extends GraphAlgorithm {
 					addToUnFinished(m);
 					// ANIM: Change the node shade
 					anim.setCurrentStep(2);
+					
+					anim.showMessage("Update the neighbour's cost to <strong>" + getShortestDist(m) + "</strong>.");
+					
 					anim.setNodeShade(m.index, WORKINGSETID);
 					
 					// assign predecessor in shortest path
@@ -288,6 +300,8 @@ public class Dijkstra extends GraphAlgorithm {
 				// ANIM: Unhighlight the node/edge we were looking at
 				// TODO: anim.setNodeHighlight(m.index, false);
 			}
+			
+			anim.setNodeShade(n.index, FINISHEDSETID);
 		
 		} catch (InvalidLocationException ile) {
 			System.out.println(ile);
@@ -343,6 +357,9 @@ public class Dijkstra extends GraphAlgorithm {
 		{
 			// get the node with the shortest distance
 			anim.setCurrentStep(0);
+			
+			anim.showMessage("Select the cheapest edge visible.");
+			
 			Node u = extractMin();
 			
 			// destination reached, stop (shortest dist pair)
@@ -351,6 +368,9 @@ public class Dijkstra extends GraphAlgorithm {
 			finished.add(u);
 			// ANIM: Set node shade to finished
 			anim.setCurrentStep(4);
+			
+			anim.showMessage("Add the current node to the finished list.");
+			
 			anim.saveState();
 			try {
 				anim.setNodeShade(u.index, FINISHEDSETID);
@@ -365,6 +385,8 @@ public class Dijkstra extends GraphAlgorithm {
 		
 		// ANIM: Annouce completion
 		anim.setCurrentStep(5);
+		
+		anim.showMessage("Done! The shortest distances to all reachable nodes have been found.");
 	}
 	
 	public static String getName() {
