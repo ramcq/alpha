@@ -16,7 +16,6 @@
 package org.ucam.ned.teamalpha.shell;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -31,8 +30,10 @@ import java.util.NoSuchElementException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.ucam.ned.teamalpha.animators.*;
 import org.ucam.ned.teamalpha.animators.Animator;
+import org.ucam.ned.teamalpha.animators.InputTooLongException;
+import org.ucam.ned.teamalpha.animators.InvalidAnimationEventException;
+import org.ucam.ned.teamalpha.animators.ItemDeletedException;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
@@ -780,7 +781,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private javax.swing.Timer timer;	// timer for animation events
 	private int highestColUsed = -1; // stores the highest column which has a vector in it
 	
-	private Component outc; // Component we will be drawing into
+	private JPanel outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
 	private BufferedImage bi; // buffered image for double buffering
 	private Graphics big; // corresponding graphics to bi
@@ -798,9 +799,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private boolean draw = true; // Do we actually want to draw our buffered image out to the screen on each frame, or are we fast-forwarding?
 	
 	// Constructor
-	public ShellVectorAnimator(Component c) {
-		outc = c;
-		outg = c.getGraphics();
+	public ShellVectorAnimator(JFrame c) {
+		outc = new JPanel(true) {
+			public void paint(Graphics g) {
+				outg.drawImage(bi,0,0,outc);
+			}
+		}; // lightweight container
+		outc.setSize(c.getSize().width, c.getSize().height);
+		c.getContentPane().add(outc);
+		outc.setVisible(true);
+		outg = outc.getGraphics();
 		
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
@@ -1541,12 +1549,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		frame.setSize(500,500);
 		frame.setVisible(true);
 		
-		JPanel panel = new JPanel(true); // lightweight container
-		panel.setSize(500,500);
-		frame.getContentPane().add(panel);
-		panel.setVisible(true);
-		
-		ShellVectorAnimator app = new ShellVectorAnimator(panel);
+		ShellVectorAnimator app = new ShellVectorAnimator(frame);
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
