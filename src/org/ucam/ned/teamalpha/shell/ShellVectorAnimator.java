@@ -156,10 +156,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -179,10 +179,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -206,10 +206,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -231,10 +231,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -259,10 +259,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -282,10 +282,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -309,10 +309,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -333,10 +333,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				return res;
 			}
@@ -363,10 +363,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -397,10 +397,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -565,10 +565,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -589,10 +589,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -611,10 +611,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -632,10 +632,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -659,10 +659,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -1160,6 +1160,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	// can be in are actually occupied? (Allows for ten positions, which should be plenty :)
 	private boolean[] colsOccupied = {false, false, false, false, false, false, false, false, false, false};
 	
+	private Shell shell; // reference to the shell singleton
 	private JPanel outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
 	private BufferedImage bi; // buffered image for double buffering
@@ -1182,6 +1183,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	 * 	A container for us to use as a canvas. Generally this will be a JFrame, but it can be any Container.
 	 */
 	public ShellVectorAnimator(Container c) {
+		shell = Shell.getInstance();
 		outc = new JPanel() {
 			public void paintComponent(Graphics g) {
 				g.drawImage(bi,0,0,outc);
@@ -1338,7 +1340,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 								eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, arr));
 							}
 							catch (InvalidAnimationEventException e) {
-								System.out.println(e);
+								System.err.println(e);
 							}
 						};
 					}
@@ -1392,7 +1394,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				while (eventQueue.isEmpty()) wait();
 			}
 			catch (InterruptedException e) {
-				System.out.println(e);
+				System.err.println(e);
 			}
 			actionPerformed(null);
 		}
@@ -1788,7 +1790,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				else ShellVectorAnimator.this.notify();
 			}
 			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
+				System.err.println(e);
 			}
 			return res;
 		}
@@ -1882,15 +1884,37 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
-	// TODO: what are these for? Can I delete them?
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setSteps(java.lang.String[])
+	 */
 	public void setSteps(String[] steps) {
+		try {
+			shell.setSteps(steps);
+		} catch (Exception e) {
+			System.err.println(e);
+		}
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setCurrentStep(int)
+	 */
 	public void setCurrentStep(int step) {
+		try {
+			shell.setCurrentStep(step);
+		} catch (Exception e) {
+			System.err.println(e);
+		}		
 	}
-
-	// TODO: what to do about this?
+	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#showMessage(java.lang.String)
+	 */
 	public void showMessage(String msg) {
+		try {
+			shell.showMessage(msg);
+		} catch (Exception e) {
+			System.err.println(e);
+		}		
 	}
 
 	/* (non-Javadoc)
@@ -2012,7 +2036,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		VectorAnimator.Vector v3 = app.createVector("New!!", t2);
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			System.err.println(e);
 		}
 	}
 }

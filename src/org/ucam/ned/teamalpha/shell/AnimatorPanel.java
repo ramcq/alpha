@@ -32,4 +32,15 @@ public class AnimatorPanel extends ShellPanel {
 
 	}
 
+	public void showMessage(String message) {
+		
+	}
+	
+	public void setSteps(String[] steps) {
+		
+	}
+	
+	public void setCurrentStep(int step) {
+		
+	}
 }

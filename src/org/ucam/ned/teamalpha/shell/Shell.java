@@ -30,6 +30,10 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 	private AlgorithmCatalog.AvailableAlgorithm choice;
 	private Algorithm algorithm;
 	
+	private Shell() {
+		catalog = new StaticAlgorithmCatalog();
+	}
+	
 	public ButtonPanel getButtonPanel() {
 		return buttons;
 	}
@@ -88,7 +92,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 				main.add(panel);
 				break;
 			case MODE_INPUT:
-				panel = choice.getAlgorithm();
+				panel = choice.getInputPanel();
 				main.add(panel);
 				break;
 			case MODE_ANIMATE:
@@ -105,7 +109,49 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		main.repaint();
 		pack();
 	}
+
+	public void setSteps(String[] s) throws InvalidModeException {
+		if (!(mode == MODE_ANIMATE && panel instanceof AnimatorPanel))
+			throw new InvalidModeException("Can only set steps in animate mode!");
+		 
+		final String[] steps = s;
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				AnimatorPanel a = (AnimatorPanel) panel;
+				a.setSteps(steps);
+			}
+		});
+	}
 	
+	public void setCurrentStep(int s) throws InvalidModeException {
+		if (!(mode == MODE_ANIMATE && panel instanceof AnimatorPanel))
+			throw new InvalidModeException("Can only set current step in animate mode!");
+		
+		final int step = s;
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				AnimatorPanel a = (AnimatorPanel) panel;
+				a.setCurrentStep(step);
+			}
+		});
+	}
+	
+	public void showMessage(String m) throws InvalidModeException {
+		if (!(mode == MODE_ANIMATE && panel instanceof AnimatorPanel))
+			throw new InvalidModeException("Can only show a message in animate mode!");
+		
+		final String message = m;
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				AnimatorPanel a = (AnimatorPanel) panel;
+				a.showMessage(message);
+			}
+		});
+	}
+
 	// handles all the button presses from the button panel
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Exit"))
@@ -166,11 +212,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		}
 		setVisible(true);
 	}
-	
-	private Shell() {
-		catalog = new StaticAlgorithmCatalog();
-	}
-	
+
 	public static Shell getInstance() {
 		if (!(myself instanceof Shell))
 			myself = new Shell();

@@ -65,6 +65,7 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 
 public class ShellGraphAnimator extends GraphAnimator implements ActionListener, ShellAnimator {
 	
+	private Shell shell; // reference to the shell singleton
 	private double Nodeangle; //calc. according to number of nodes
 	private int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
@@ -150,10 +151,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -179,10 +180,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}	
@@ -197,10 +198,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}			
 		}
@@ -305,10 +306,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -352,10 +353,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -370,10 +371,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}
@@ -402,10 +403,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				catch (InterruptedException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 			}
 		}	
@@ -494,6 +495,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 	 * 			A container for us to use as a canvas.
 	 */
 	public ShellGraphAnimator(Container c) {
+		shell = Shell.getInstance();
 		outc = new JPanel() {
 			public void paintComponent(Graphics2D g) {
 				g.drawImage(bi,0,0,outc);
@@ -1338,24 +1340,40 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 			return this.numnodes;
 		}
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#setSteps(java.lang.String[])
 	 */
 	public void setSteps(String[] steps) {
-		// TODO Auto-generated method stub	
+		try {
+			shell.setSteps(steps);
+		} catch (Exception e) {
+			System.err.println(e);
+		}
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#setCurrentStep(int)
 	 */
 	public void setCurrentStep(int step) {
-		// TODO Auto-generated method stub		
+		try {
+			shell.setCurrentStep(step);
+		} catch (Exception e) {
+			System.err.println(e);
+		}		
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#showMessage(java.lang.String)
 	 */
 	public void showMessage(String msg) {
-		// TODO Auto-generated method stub		
+		try {
+			shell.showMessage(msg);
+		} catch (Exception e) {
+			System.err.println(e);
+		}		
 	}
+	
 	/**
 	 * Method to conrol the speed of the animation display
 	 * @param fps
@@ -1366,6 +1384,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
 		timer.setDelay(delay);
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
 	 */
@@ -1439,7 +1458,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 					 {0,	0,	0,	0,	0,	0,	42,	0,	83,	0}};
 		try { app.createGraph(tstcosts); }
 		catch (NonSquareMatrixException e) {
-			System.out.println(e);
+			System.err.println(e);
 		}
 		app.flashEdge(3,6);
 	}
