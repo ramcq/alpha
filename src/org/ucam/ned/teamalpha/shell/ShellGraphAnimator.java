@@ -297,7 +297,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				x = 250 + 100 * (int) java.lang.Math.sin(java.lang.Math.toRadians(currentang));
 				y = 250 + 100 * (int) java.lang.Math.cos(java.lang.Math.toRadians(currentang));
 				currentang = currentang + Nodeangle;
-				Nodelist[i] = new Node(x,y);
+				Nodelist[i] = Node(x,y); /*TODO fix this*/
 				Nodelist[i].drawNode();
 			}
 			for (int i=0;i<costs.length;i++)
@@ -307,7 +307,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					if (costs[i][j] != 0) {
 						if (i != j) {
 							Integer tmpint = new Integer(costs[i][j]);
-							Edgematrix[i][j] = new Edge(Nodelist[i],Nodelist[j],tmpint.toString());
+							Edgematrix[i][j] = Edge(Nodelist[i],Nodelist[j],tmpint.toString()); /*TODO fix this*/
 							Edgematrix[i][j].drawEdge();
 							Edgematrix[i][j].drawlabel();
 						}
