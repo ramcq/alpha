@@ -199,9 +199,9 @@ Rob
 
 Rob was heavily involved with the design of the system, coming up with many
  good ideas for how to structure the system.
- He coded the queueing mechanism and the shell and also set up and maintained
+ He coded the queueing mechanism and the shell and set up and maintained
  the CVS repository in his role as librarian.
- 
+ He was always available if the other coders needed advice as well.
 \layout Subsection*
 
 Andrew
@@ -220,17 +220,15 @@ Neofytos
 
 Neofytos was an enthusiastic documenter, and so was involved in writing
  up many of the documents such as the Developers Guide.
- He also wrote the algorithm explanations that appear during animation to
- help explain what the algorithm is doing.
+ He also contributed a lot of ideas for the design of the system.
 \layout Subsection*
 
 Sid
 \layout Itemize
 
 Sid coded the algorithms and also helped out a great deal with the shell.
- He worked well with the other coders making sure that integration went
- relatively smoothly.
- 
+ He worked well with the other coders, making sure that all the modules
+ were compatable and offering help when other coders had problems.
 \layout Subsection*
 
 Alan
