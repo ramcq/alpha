@@ -1304,6 +1304,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					break;
 				case AnimationEvent.ARROW_DELETE:
 					redrawAllArrows(big, currentEvent.a1.left, null);
+					currentEvent = null;
 					break;
 				case AnimationEvent.ELT_CHANGE:
 					currentEvent.v1.contents[currentEvent.e1] = String.valueOf(currentEvent.arg);
@@ -1896,12 +1897,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	// Clear the area where an arrow was and redraw it
 	private void redrawArrow(Arrow a, Graphics g) {
-		int left = (a.left) ? a.vector.left - 30 : a.vector.right+1;
+		int left = (a.left) ? a.vector.left - 40 : a.vector.right+1;
 		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
 
 		// Clear arrow area
-		g.setColor(bgcolour);
-		g.fillRect(left, ypos-5, 29, 10);
+		g.setColor(Color.black);
+		g.fillRect(left, ypos-5, 39, 12);
 				
 		if (!a.deleted) drawArrow(a, g);
 	}
