@@ -1206,14 +1206,14 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		}
 	}
 	
-	private int fps = 100;	// Animation framerate
-	private int granularity = 2; // number of pixels to move each frame
+	private int fps = 40;	// Animation framerate
+	private int granularity = 3; // number of pixels to move each frame
 	private javax.swing.Timer timer;	// timer for animation events
 	//private int highestColUsed = -1; // stores the highest column which has a vector in it
 	// Placement information: which of the possible positions a vector
 	// can be in are actually occupied? (Allows for ten positions, which should be plenty :)
 	private boolean[] colsOccupied = {false, false, false, false, false, false, false, false, false, false};
-	long lastdraw = 0;
+	//long lastdraw = 0;
 	
 	private BufferedImage bi; // buffered image for double buffering
 	private Graphics big; // corresponding graphics to bi
@@ -1222,7 +1222,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	// Colours to be used for arrows and vectors, in order of preference
 	public static final Color[] vectorGroupColours = {Color.red, Color.blue, Color.darkGray, Color.magenta, Color.orange, Color.pink};
 	public static final Color[] arrowGroupColours = {Color.blue, Color.magenta, Color.orange, Color.pink, Color.darkGray, Color.red};
-	private int intermediateOffset = 0; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
+	private int[] intermediateOffset = {0, 0}; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
 	private LinkedList eventQueue; // will hold queue the events we are to perform
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
 	private LinkedList vectors = new LinkedList(); // a list of all Vectors currently known to the animator
@@ -1302,11 +1302,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					currentEvent = null;
 					break;
 				case AnimationEvent.ARROW_FLASH:
-					intermediateOffset++;
-					if (intermediateOffset % 4 < 2) drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
+					intermediateOffset[0]++;
+					if (intermediateOffset[0] % 4 < 2) drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
 					else drawArrow(currentEvent.a1, big, currentEvent.a1.colour);
-					if (intermediateOffset > 58) {
-						intermediateOffset = 0;
+					if (intermediateOffset[0] > 58) {
+						intermediateOffset[0] = 0;
 						currentEvent = null;
 					}
 					break;
@@ -1324,32 +1324,32 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					currentEvent = null;
 					break;
 				case AnimationEvent.ELT_FROM_CHANNEL:
-					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.b1, true);
+					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.b1, 0);
 					break;
 				case AnimationEvent.ELT_TO_CHANNEL:
-					moveElementToChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.b1, currentEvent.b2, true);
+					moveElementToChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.b1, currentEvent.b2, 0);
 					break;
 				case AnimationEvent.ELT_VERT_IN_CHANNEL:
-					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.v2, currentEvent.e2, currentEvent.b1, true);
+					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.v2, currentEvent.e2, currentEvent.b1, 0);
 					break;
 				case AnimationEvent.ELT_VERT_IN_PLACE:
 					moveElementVerticallyInPlace(big, currentEvent.v1, currentEvent.e1, currentEvent.e2, currentEvent.b1);
 					break;
 				case AnimationEvent.ELT_FLASH:
-					intermediateOffset += 1;
+					intermediateOffset[0] += 1;
 					big.setColor(bgcolour);
 					big.fillRect(currentEvent.v1.left+1, currentEvent.v1.top+(currentEvent.e1*20)+1, 48, 18);
-					if (intermediateOffset % 4 < 2) big.setColor(fgcolour);
+					if (intermediateOffset[0] % 4 < 2) big.setColor(fgcolour);
 					else big.setColor(Color.green);
 					big.drawString(currentEvent.v1.contents[currentEvent.e1], currentEvent.v1.left+5, currentEvent.v1.top+(currentEvent.e1*20)+15);
-					if (intermediateOffset >= 60) {
+					if (intermediateOffset[0] >= 60) {
 						currentEvent = null;
-						intermediateOffset = 0;
+						intermediateOffset[0] = 0;
 					}
 					break;
 				case AnimationEvent.TWO_ARROW_FLASH:
-					intermediateOffset++;
-					if (intermediateOffset % 4 < 2) {
+					intermediateOffset[0]++;
+					if (intermediateOffset[0] % 4 < 2) {
 						drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
 						drawArrow(currentEvent.a2, big, currentEvent.a2.altColour);
 					}
@@ -1357,22 +1357,22 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 						drawArrow(currentEvent.a1, big, currentEvent.a1.colour);
 						drawArrow(currentEvent.a2, big, currentEvent.a2.colour);
 					}
-					if (intermediateOffset > 60) {
-						intermediateOffset = 0;
+					if (intermediateOffset[0] > 60) {
+						intermediateOffset[0] = 0;
 						currentEvent = null;
 					}
 					break;
 				case AnimationEvent.TWO_FROM_CHANNEL:
-					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, false, false);
-					moveElementFromChannel(big, currentEvent.v1, currentEvent.e2, true, true);
+					moveElementFromChannel(big, currentEvent.v1, currentEvent.e1, false, 1);
+					moveElementFromChannel(big, currentEvent.v1, currentEvent.e2, true, 0);
 					break;
 				case AnimationEvent.TWO_TO_CHANNEL:
-					moveElementToChannel(big, currentEvent.v1, currentEvent.e1, true, false, false);
-					moveElementToChannel(big, currentEvent.v1, currentEvent.e2, false, false, true);
+					moveElementToChannel(big, currentEvent.v1, currentEvent.e1, true, false, 1);
+					moveElementToChannel(big, currentEvent.v1, currentEvent.e2, false, false, 0);
 					break;
 				case AnimationEvent.TWO_VERT_IN_CHANNEL:
-					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, null, currentEvent.f1, true, false);
-					moveElementInChannel(big, currentEvent.v1, currentEvent.e2, null, currentEvent.f2, false, true);
+					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, null, currentEvent.f1, true, 1);
+					moveElementInChannel(big, currentEvent.v1, currentEvent.e2, null, currentEvent.f2, false, 0);
 					break;
 				case AnimationEvent.VECTOR_CHANGE:
 					redrawVector(currentEvent.v1, big);
@@ -1400,9 +1400,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					moveElementFromNewVectorChannel(big, currentEvent.v1, currentEvent.v2, currentEvent.e2, currentEvent.b1);
 					break;
 				case AnimationEvent.WAIT:
-					if (intermediateOffset++>currentEvent.arg) {
+					if (intermediateOffset[0]++>currentEvent.arg) {
 						currentEvent = null;
-						intermediateOffset = 0;
+						intermediateOffset[0] = 0;
 					}
 					break;
 				default:
@@ -1516,7 +1516,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	/**
 	 * Moves a vector element horizontally to lie beside the vector in one
 	 * of the vertical channels.
-	 * This method is called multiple times, once per frame, and it moves its target one pixel each time.
+	 * This method is called multiple times, once per frame.
 	 * @param g
 	 * 	Graphics object to act upon (generally this will be the buffered image)
 	 * @param v
@@ -1528,22 +1528,26 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * @param copy
 	 * 	If true, the original element will be left intact (used for copying elements).
 	 * 	If false, the original element will be obliterated (used for element swaps).
-	 * @param cancelEvent
-	 * 	If true, this method has the power to nullify the current event in order to go
-	 * 	onto the next one. If false, it does not. This is only set to false when there is
-	 * 	more than one operation going on concurrently, e.g. in a swap, so that one
-	 * 	operation doesn't cancel the entire event and leave the other operation half
-	 * 	finished.
+	 * @param which
+	 * 	This method will update intermediateOffset[0]. If this method is being called
+	 * as part of an event moving a single element, this should just be 0. If there are
+	 * two of these happening at once (i.e. TWO_TO_CHANNEL) then one should be 0, the other 1.
+	 * The event with which set to ZERO will have the power to cancel the event.
+	 * 	
 	 */
-	private void moveElementToChannel(Graphics g, Vector v, int element, boolean left, boolean copy, boolean cancelEvent) {
+	private void moveElementToChannel(Graphics g, Vector v, int element, boolean left, boolean copy, int which) {
 		int dist = left ? 75 : 65; // distance to move
-		if (intermediateOffset > dist) { // are we done?
-			intermediateOffset = 0;
-			if (cancelEvent) currentEvent = null;
+		if (intermediateOffset[which] > dist) { // are we done?
+			if (which == 0) {
+				intermediateOffset[0] = 0;
+				intermediateOffset[1] = 0;
+				currentEvent = null;
+			}
 			return;
 		}
-		intermediateOffset += granularity;
-		if (intermediateOffset > dist) intermediateOffset = dist+1;
+		
+		intermediateOffset[which] += granularity;
+		if (intermediateOffset[which] > dist) intermediateOffset[which] = dist+1;
 		
 		int topOfElement = v.top + (20 * element) + 1;
 		int bottomOfElement = topOfElement + 19;
@@ -1564,16 +1568,16 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		g.setColor(fgcolour);
 		if (left) {
-			g.drawString(String.valueOf(v.contents[element]), v.left+5-intermediateOffset, 14+topOfElement);
+			g.drawString(String.valueOf(v.contents[element]), v.left+5-intermediateOffset[which], 14+topOfElement);
 		}
 		else {
-			g.drawString(v.contents[element], v.left+5+intermediateOffset, 14+topOfElement);
+			g.drawString(v.contents[element], v.left+5+intermediateOffset[which], 14+topOfElement);
 		}
 	}
 	
 	/**
 	 * Moves a vector element vertically beside the vector into its new position.
-	 * This method is called multiple times, once per frame, and it moves its target one pixel each time.
+	 * This method is called multiple times, once per frame.
 	 * @param g
 	 * 	The Graphics object to act on; generally this will be the buffered image
 	 * @param v
@@ -1590,22 +1594,23 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * 	The final position of the element
 	 * @param left
 	 * 	True if the element is in the left channel; false if it is in the right
-	 * @param cancelEvent
-	 * 	True if this method has the power to cancel the current event; only set 
-	 * 	to false if there is more than one event happening concurrently, e.g. in a swap
-	 * 	(so that one operation cannot cancel the entire event leaving the other 
-	 * 	half-finished)
+	 * @param which
+	 * This method will update intermediateOffset[0]. If this method is being called
+	 * as part of an event moving a single element, this should just be 0. If there are
+	 * two of these happening at once (i.e. TWO_TO_CHANNEL) then one should be 0, the other 1.
+	 * The event with which set to ZERO will have the power to cancel the event.
 	 */
-	private void moveElementInChannel(Graphics g, Vector v, int from, Vector dv, int to, boolean left, boolean cancelEvent) {
+	private void moveElementInChannel(Graphics g, Vector v, int from, Vector dv, int to, boolean left, int which) {
 		int startY = v.top + (20*from) + 15;
 		int endY = v.top + (20*to) + 15;
 		int areaLeft = left ? v.left - 70 : v.right + 20;
 		int areaRight = left ? v.left - 20 : v.right + 70;
 		int dist = Math.abs(startY-endY);
 		
-		if (intermediateOffset >= dist) { // are we done?
-			if (cancelEvent) {
-				intermediateOffset = 0; 
+		if (intermediateOffset[which] >= dist) { // are we done?
+			if (which == 0) {
+				intermediateOffset[0] = 0;
+				intermediateOffset[1] = 0;
 				if (currentEvent.type == AnimationEvent.TWO_VERT_IN_CHANNEL) {
 					String t = v.contents[from];
 					v.contents[from] = v.contents[to];
@@ -1625,21 +1630,22 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.fillRect(areaLeft, v.top, 50, 20*(Math.max(from,to)+1));
 		
 		redrawAllArrows(g, left, null);
-		
-		intermediateOffset += granularity;
-		if (intermediateOffset > dist) intermediateOffset = dist;
+
+		intermediateOffset[which] += granularity;
+		if (intermediateOffset[which] > dist) intermediateOffset[which] = dist;
 		
 		g.setColor(fgcolour);
-		if (startY < endY) g.drawString(v.contents[from], areaLeft, startY + intermediateOffset);
-		else g.drawString(v.contents[from], areaLeft, startY - intermediateOffset);
+		if (startY < endY) g.drawString(v.contents[from], areaLeft, startY + intermediateOffset[which]);
+		else g.drawString(v.contents[from], areaLeft, startY - intermediateOffset[which]);
 	}
 
 	private void moveElementVerticallyInPlace(Graphics g, Vector v, int from, int to, boolean copy) {
 		int startY = v.top + (20*from) + 15;
 		int endY = v.top + (20*to) + 15;
+		int dist = Math.abs(startY-endY);
 		
-		if (Math.abs(intermediateOffset) >= Math.abs(startY-endY)) { // are we done?
-			intermediateOffset = 0; 
+		if (intermediateOffset[0] >= dist) { // are we done?
+			intermediateOffset[0] = 0; 
 			v.contents[to] = v.contents[from];
 			currentEvent = null;
 			return;
@@ -1656,17 +1662,18 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			g.fillRect(v.left+1, v.top+(from*20)+1, 48, 18);
 		}
 		
-		intermediateOffset += 1;
+		intermediateOffset[0] += granularity;
+		if (intermediateOffset[0] > dist) intermediateOffset[0] = dist;
 		
 		g.setColor(fgcolour);
-		if (startY < endY) g.drawString(v.contents[from], v.left+5, startY + intermediateOffset);
-		else g.drawString(v.contents[from], v.left+5, startY - intermediateOffset);
+		if (startY < endY) g.drawString(v.contents[from], v.left+5, startY + intermediateOffset[0]);
+		else g.drawString(v.contents[from], v.left+5, startY - intermediateOffset[0]);
 	}
 	
 	/**
 	 * Moves a vector element horizontally from outside the vector (in the vertical channel)
 	 * back into the vector, in its new position.
-	 * This method is called multiple times, once per frame, and it moves its target one pixel each time.
+	 * This method is called multiple times, once per frame.
 	 * @param g
 	 * 	The Graphics object to act upon; generally this will be the buffered image object
 	 * @param v
@@ -1680,8 +1687,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * 	this should only be false when there is more than one operation happening
 	 * 	simultaneously, e.g. in a swap (so that one operation does not cancel 
 	 * 	the entire event leaving the other unfinished)
+	 * @param which
+	 * This method will update intermediateOffset[0]. If this method is being called
+	 * as part of an event moving a single element, this should just be 0. If there are
+	 * two of these happening at once (i.e. TWO_TO_CHANNEL) then one should be 0, the other 1.
+	 * The event with which set to ZERO will have the power to cancel the event.
 	 */
-	private void moveElementFromChannel(Graphics g, Vector v, int to, boolean left, boolean cancelEvent) {
+	private void moveElementFromChannel(Graphics g, Vector v, int to, boolean left, int which) {
 		int textYPos = v.top + (20*to) + 15;
 		int areaTop = v.top + (20*to) + 1;
 		int areaLeft = left ? v.left - 70 : v.left + 1;
@@ -1689,15 +1701,17 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		int areaHeight = 19;
 		int dist = left ? 75 : 65; // distance to move
 
-		if (intermediateOffset >= dist) { // we are done
-			if (cancelEvent) {
-				intermediateOffset = 0;
+		if (intermediateOffset[which] >= dist) { // we are done
+			if (which == 0) {
+				intermediateOffset[0] = 0;
+				intermediateOffset[1] = 0;
 				currentEvent = null;
 			}
 			return;
 		}
-		intermediateOffset += granularity;
-		if (intermediateOffset > dist) intermediateOffset = dist;
+		
+		intermediateOffset[which] += granularity;
+		if (intermediateOffset[which] > dist) intermediateOffset[which] = dist;
 						
 		// Clear affected area
 		g.setColor(bgcolour);
@@ -1711,8 +1725,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		// Redraw text
 		g.setColor(fgcolour);
-		if (left) g.drawString(v.contents[to], v.left-70+intermediateOffset, textYPos);
-		else g.drawString(v.contents[to], v.left+70-intermediateOffset, textYPos);
+		if (left) g.drawString(v.contents[to], v.left-70+intermediateOffset[which], textYPos);
+		else g.drawString(v.contents[to], v.left+70-intermediateOffset[which], textYPos);
 	}
 	
 	/**
@@ -1721,7 +1735,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * vector is done by moving it out into the channel of the old vector,
 	 * moving it vertically into its new y position, and then moving it
 	 * horizontally into the new vector.)
-	 * This method is called multiple times, once per frame, and it moves its target one pixel each time.
+	 * This method is called multiple times, once per frame.
 	 * @param g
 	 * 	The Graphics object to act upon; generally, this will be the buffered image object.
 	 * @param sourceVector
@@ -1750,13 +1764,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		int areaHeight = 19;
 		int dist = left ? Math.abs(destVector.left-sourceVector.left+75) : Math.abs(destVector.left-sourceVector.right-15); 
 				
-		if (intermediateOffset >= dist) { // we are done
-			intermediateOffset = 0;
+		if (intermediateOffset[0] >= dist) { // we are done
+			intermediateOffset[0] = 0;
 			currentEvent = null;
 			return;
 		}
-		intermediateOffset += granularity;
-		if (intermediateOffset > dist) intermediateOffset = dist;
+		intermediateOffset[0] += granularity;
+		if (intermediateOffset[0] > dist) intermediateOffset[0] = dist;
 		
 		// Clear affected area
 		g.setColor(bgcolour);
@@ -1774,25 +1788,25 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(fgcolour);
 		if (left) {
 			if (movingLeft) {
-				g.drawString(destVector.contents[destOffset],sourceVector.left-70-intermediateOffset, textYPos);
+				g.drawString(destVector.contents[destOffset],sourceVector.left-70-intermediateOffset[0], textYPos);
 			}
 			else {
-				g.drawString(destVector.contents[destOffset], sourceVector.left-70+intermediateOffset, textYPos);
+				g.drawString(destVector.contents[destOffset], sourceVector.left-70+intermediateOffset[0], textYPos);
 			}
 		}
 		else {
 			if (movingLeft) {
-				g.drawString(destVector.contents[destOffset], sourceVector.right+20-intermediateOffset, textYPos);
+				g.drawString(destVector.contents[destOffset], sourceVector.right+20-intermediateOffset[0], textYPos);
 			}
 			else {
-				g.drawString(destVector.contents[destOffset], sourceVector.right+20+intermediateOffset, textYPos);
+				g.drawString(destVector.contents[destOffset], sourceVector.right+20+intermediateOffset[0], textYPos);
 			}
 		}
 	}
 	
 	/**
 	 * Move an arrow vertically to a new position.
-	 * This method is called multiple times, once per frame, and it moves its target one pixel each time.
+	 * This method is called multiple times.
 	 * @param g
 	 * 	The Graphics object to act upon; generally this will be the buffered image object
 	 * @param a
@@ -1815,17 +1829,17 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		boolean movingUp = (oldypos > newypos);
 		int dist = Math.abs(oldypos-newypos);
 		
-		if (intermediateOffset >= dist) {
+		if (intermediateOffset[0] >= dist) {
 			if (cancelEvent) {
 				currentEvent = null;
-				intermediateOffset = 0;
+				intermediateOffset[0] = 0;
 			}
 			a.position = to;
 			a.boundary = boundary;
 			return;
 		}
-		intermediateOffset += granularity;
-		if (intermediateOffset > dist) intermediateOffset = dist;
+		intermediateOffset[0] += granularity;
+		if (intermediateOffset[0] > dist) intermediateOffset[0] = dist;
 		
 		// boundary of affected area
 		int areaLeft = a.left ? a.vector.left - 60 : a.vector.right + 1;
@@ -1837,8 +1851,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		redrawAllArrows(g, a.left, a);
 		
 		// redraw arrow
-		if (movingUp) drawArrow(a, g, a.colour, -intermediateOffset);
-		else drawArrow(a, g, a.colour, intermediateOffset);
+		if (movingUp) drawArrow(a, g, a.colour, -intermediateOffset[0]);
+		else drawArrow(a, g, a.colour, intermediateOffset[0]);
 	}
 	
 	/* (non-Javadoc)
@@ -2059,59 +2073,12 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		frame.setVisible(true);
 		
 		try {
-		int[] t1 = {6,35,4,728,23,233,88};
-		Vector v = (Vector) app.createVector("V1", t1);
-		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
-		Arrow a2 = (Arrow) v.createArrow("A2", 2, false);
-		v.moveElement(2,2);
-		v.moveElement(0,5);
-		a.flash();
-		a.move(0, false);
-		//app.fastForward();
-		v.copyElement(4,3);
-		v.swapElements(2,6);
-		v.setElement(0,100);
-		v.setGroup(3);
-		a2.move(6, true);
-		int[] t2 = {34,72,76667,257,878,99112,6,17};
-		VectorAnimator.Vector v2 = app.createVector("V2", t2);
-		//Animator.State s = app.saveState();
-		a2.setGroup(2);
-		v2.swapElements(7,2);
-		v2.copyElement(3, v, 5);
-		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
-		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
-		a3.flash();
-		a3.move(8, true);
-		v2.flashElement(4);
-		v.delete();
-		a3.delete();
-		//app.restoreState(s);
-		v2.swapElements(7,2);
-		a3 = v2.createArrow("A3", 6, true);
-		a4 = v2.createArrow("A4", 2, false);
-		a3.flash();
-		app.waitFor(3000);
-		//app.stopFastForward();
-		//a3.move(8, true);
-		//v2.flashElement(4);
-		//v.delete();
-		//a3.delete();
-		VectorAnimator.Vector v3 = app.createVector("New!!", t2);
+			int[] t1 = {6,35,4,728,23,233,88};
+			Vector v = (Vector) app.createVector("V1", t1);
+			v.copyElement(3,5);
+			v.swapElements(0,1);
 		}
-		catch (InputTooLongException e) {
-			System.err.println(e);
-		}
-		catch (TooManyVectorsException e) {
-			System.err.println(e);
-		}
-		catch (InvalidLocationException e) {
-			System.err.println(e);
-		}
-		catch (ItemDeletedException e) {
-			System.err.println(e);
-		}
-		catch (InterruptedException e) {
+		catch (Exception e) {
 			System.err.println(e);
 		}
 	}
