@@ -57,8 +57,10 @@ public class Kruskal extends GraphAlgorithm {
 	private int[][] costMatrix;
 	private Vector edges;
 	private Vector nodes;
+	// Hack to keep track of untouched nodes
+	int[] touched;
 	
-	// We return the result in a dim x dim matrix
+	// We return the result in a dim x dim matrix [for testing]
 	int[][] result;
 	
 	/**
@@ -101,6 +103,10 @@ public class Kruskal extends GraphAlgorithm {
 	}
 	
 	private void buildN() {
+		// Set up the hack
+		touched = new int[dim];
+		for(int i=0; i<dim; touched[i++]=1);
+		
 		nodes = new Vector(dim);
 		Node n;
 		
@@ -116,6 +122,17 @@ public class Kruskal extends GraphAlgorithm {
 		for(int i=0; i<dim; i++) {
 			for (int j=0; j<dim; j++) result[i][j] = 0;
 		}
+	}
+	
+	/**
+	 * Checks whether all nodes have been visited. If so, the
+	 * algorithm is complete
+	 * @return
+	 */
+	private boolean finished() {
+		int count=0;
+		for(int i=0; i<dim; count+=touched[i++]);
+		return !(count >0);
 	}
 	
 	/**
@@ -157,7 +174,7 @@ public class Kruskal extends GraphAlgorithm {
 		int n2;
 		
 		// Loop through the lists of edges adding them as we go:
-		while(true) {
+		while(!finished()) {
 			// We are done if we are out of edges
 			if (edges.isEmpty()) break;
 			
@@ -169,6 +186,9 @@ public class Kruskal extends GraphAlgorithm {
 			n1 = e.node1; n2 = e.node2;
 			if (acyclic(n1, n2, true)) {
 				result[n1][n2] = 1;
+				
+				// Flag nodes as in the tree
+				touched[n1]=0; touched[n2]=0;
 				
 				//ANIM: Add edge to the graph
 				anim.setEdgeShade(n1,n2,INCLUDED);
