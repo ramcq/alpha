@@ -6,8 +6,6 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
-import org.ucam.ned.teamalpha.algorithms.Algorithm;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -24,6 +22,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.ucam.ned.teamalpha.algorithms.Algorithm;
 
 /**
  * @author ram48
@@ -52,6 +53,7 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 			JFormattedTextField field = new JFormattedTextField(NumberFormat.getIntegerInstance());
 			field.setValue(new Integer(values[i]));
 			field.setColumns(6);
+			field.setHorizontalAlignment(JTextField.CENTER);
 			field.addPropertyChangeListener("value", this);
 			
 			cells.add(field);
