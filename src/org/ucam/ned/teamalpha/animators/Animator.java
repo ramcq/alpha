@@ -62,5 +62,5 @@ public interface Animator {
 	 * @param state
 	 *            a <class>State</class> object from the saveState() method
 	 */
-	public void restoreState(State state);
+	public void restoreState(State state) throws InterruptedException;
 }

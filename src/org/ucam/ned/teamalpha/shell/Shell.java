@@ -150,6 +150,9 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		
+		if (panel instanceof ActionListener)
+			panel.actionPerformed(e);
+		
 		if (command.equals("Exit"))
 			System.exit(0);
 		else if (command.equals("Restart"))
@@ -160,8 +163,6 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 			} catch (Exception ex) {
 				System.err.println(ex);
 			}
-		else if (panel instanceof ActionListener)
-			panel.actionPerformed(e);
 	}
 	
 	public synchronized void run() {

@@ -14,7 +14,7 @@ public interface GraphAnimator extends Animator {
 	 *            a square matrix of edge costs, indexed first by source node,
 	 *            and then by destination node, with 0 for no edge
 	 */
-	public void createGraph(int[][] costs) throws NonSquareMatrixException;
+	public void createGraph(int[][] costs) throws NonSquareMatrixException, InterruptedException;
 
 	/**
 	 * Set a text label for a node.
@@ -24,7 +24,7 @@ public interface GraphAnimator extends Animator {
 	 * @param label
 	 *            the label
 	 */
-	public void setNodeLabel(int node, String label);
+	public void setNodeLabel(int node, String label) throws InvalidLocationException, InterruptedException;
 
 	/**
 	 * Add a node to a shaded set, to indicate that the algorithm has completed
@@ -35,7 +35,7 @@ public interface GraphAnimator extends Animator {
 	 * @param set
 	 *            the number of the set to add it to, 0 to unshade
 	 */
-	public void setNodeShade(int node, int set);
+	public void setNodeShade(int node, int set) throws InvalidLocationException, InterruptedException;
 
 	/**
 	 * Set a text label for an edge.
@@ -47,7 +47,7 @@ public interface GraphAnimator extends Animator {
 	 * @param label
 	 *            the label
 	 */
-	public void setEdgeLabel(int from, int to, String label);
+	public void setEdgeLabel(int from, int to, String label) throws InvalidLocationException, InterruptedException;
 
 	/**
 	 * Add an edge to a shaded set, to indicate that the algorithm has
@@ -60,7 +60,7 @@ public interface GraphAnimator extends Animator {
 	 * @param set
 	 *            the number of the set to add it to, 0 to unshade it
 	 */
-	public void setEdgeShade(int from, int to, int set);
+	public void setEdgeShade(int from, int to, int set) throws InvalidLocationException, InterruptedException;
 	
 	/**
 	 * Flash a node to indicate something exciting going on.
@@ -68,7 +68,7 @@ public interface GraphAnimator extends Animator {
 	 * @param node
 	 * 			id of node to be flashed
 	 */
-	public void flashNode(int node);
+	public void flashNode(int node) throws InvalidLocationException, InterruptedException;
 	
 	/**
 	 * Flash an edge to indicate something exciting going on.
@@ -78,5 +78,5 @@ public interface GraphAnimator extends Animator {
 	 * @param to
 	 * 			the destination node
 	 */
-	public void flashEdge(int from, int to);
+	public void flashEdge(int from, int to) throws InvalidLocationException, InterruptedException;
 }

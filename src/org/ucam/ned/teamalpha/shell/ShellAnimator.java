@@ -8,9 +8,9 @@ package org.ucam.ned.teamalpha.shell;
 
 import javax.swing.JPanel;
 
-import java.awt.event.ActionEvent;
+/*import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Timer;
+import javax.swing.Timer;*/
 
 /**
  * @author ram48
@@ -20,7 +20,7 @@ import javax.swing.Timer;
  */
 public abstract class ShellAnimator extends JPanel {
 	private Shell shell;
-	private RefreshTimer rt;
+/*	private RefreshTimer rt;
 	
 	private class RefreshTimer implements ActionListener {
 		private Timer timer;
@@ -31,13 +31,13 @@ public abstract class ShellAnimator extends JPanel {
 			timer.start();
 		}
 		
-		/* (non-Javadoc)
+		 (non-Javadoc)
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 */
+		 
 		public void actionPerformed(ActionEvent e) {
 			repaint();			
 		}
-	}
+	}*/
 	
 	public ShellAnimator() {
 		shell = Shell.getInstance();
@@ -47,7 +47,7 @@ public abstract class ShellAnimator extends JPanel {
 	public void setSteps(String[] steps) {
 		try {
 			shell.setSteps(steps);
-		} catch (Exception e) {
+		} catch (InvalidModeException e) {
 			System.err.println(e);
 		}
 	}
@@ -55,20 +55,20 @@ public abstract class ShellAnimator extends JPanel {
 	public void setCurrentStep(int step) {
 		try {
 			shell.setCurrentStep(step);
-		} catch (Exception e) {
+		} catch (InvalidModeException e) {
 			System.err.println(e);
-		}		
+		}
 	}
 	
 	public void showMessage(String msg) {
 		try {
 			shell.showMessage(msg);
-		} catch (Exception e) {
+		} catch (InvalidModeException e) {
 			System.err.println(e);
 		}		
 	}
 	
 	public abstract void setFps(int fps);
 	
-	public abstract void fastForward();
+	public abstract void fastForward() throws InterruptedException;
 }

@@ -6,6 +6,7 @@
  */
 package org.ucam.ned.teamalpha.queues;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,7 +35,7 @@ class GenericQueue implements AnimatorQueue {
 			this.ret = ret;
 		}
 		
-		void send() {		
+		void send() throws InterruptedException {		
 			try {
 				Object realsubject = subjects.get(subject);
 				Class type = realsubject.getClass(); 
@@ -64,6 +65,11 @@ class GenericQueue implements AnimatorQueue {
 				
 				if (ret != null)
 					subjects.put(ret, realret);
+			} catch (InvocationTargetException e) {
+				Throwable cause = e.getCause();
+				
+				if (cause instanceof InterruptedException)
+					throw (InterruptedException) cause;
 			} catch (Exception e) {
 				System.err.println("internal queue error: failure delivering event");
 				System.err.println(e);
@@ -79,7 +85,7 @@ class GenericQueue implements AnimatorQueue {
 			this.events = new LinkedList();
 		}
 		
-		void sendEvents() {
+		void sendEvents() throws InterruptedException {
 			Iterator i = events.listIterator();
 			
 			while (i.hasNext()) {
@@ -92,7 +98,7 @@ class GenericQueue implements AnimatorQueue {
 			animstate = anim.saveState();
 		}
 		
-		void restore() {
+		void restore() throws InterruptedException {
 			anim.restoreState(animstate);
 		}
 	}
@@ -107,6 +113,7 @@ class GenericQueue implements AnimatorQueue {
 	
 	// for the thread that delivers them
 	private LinkedList commands;
+	private Thread commandRunner;
 	private boolean hasNext;
 	private boolean hasPrev;
 	private boolean isBusy;
@@ -122,38 +129,19 @@ class GenericQueue implements AnimatorQueue {
 		states.add(new State());
 		
 		this.commands = new LinkedList();
+		this.commandRunner = null;
 		this.hasNext = true;
 		this.hasPrev = false;
 		this.isBusy = false;
 		this.currentstate = 0;
-		
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				while (true) {
-					int command;
-					
-					synchronized (commands) {
-						while (commands.size() == 0)
-							try {
-								commands.wait();
-							} catch (InterruptedException e) {
-								// uhuh
-							};
-						
-						 command = ((Integer) commands.getFirst()).intValue();
-					}
-
-					handleCommand(command);				
-				}
-			}
-		});
-		t.start();
 	}
 	
 	// private method that's called by the queue's runner thread
-	private synchronized void handleCommand(int cmd) {
+	private synchronized void handleCommand(int cmd) throws InterruptedException {
 		State s;
 		int targetstate;
+		
+		System.out.println("QUEUE: handling command " + cmd);
 		
 		isBusy = true;
 		
@@ -225,6 +213,43 @@ class GenericQueue implements AnimatorQueue {
 			commands.addLast(new Integer(COMMAND_PREV));
 			commands.notify();
 		}
+	}
+	
+	public void start() {
+		commandRunner = new Thread(new Runnable() {
+			public void run() {
+				int command = 0;
+				
+				System.out.println("QUEUE: entering commandRunner thread");
+				
+				try {
+					while (!Thread.interrupted()) {
+						if (command > 0)
+							handleCommand(command);	
+						
+						synchronized (commands) {
+							command = 0;
+							
+							while (commands.size() == 0) 
+								commands.wait();
+							
+							command = ((Integer) commands.getFirst()).intValue();
+							commands.removeFirst();
+						}
+					}		
+				} catch (InterruptedException e) {
+					// interrupted, off we go
+				}
+				
+				System.out.println("QUEUE: leaving commandRunner thread");
+			}
+		});
+		commandRunner.start();
+	}
+
+	public void stop() {
+		if (commandRunner != null)
+			commandRunner.interrupt();
 	}
 	
 	public boolean hasNext() {

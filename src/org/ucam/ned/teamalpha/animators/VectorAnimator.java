@@ -17,7 +17,7 @@ public interface VectorAnimator extends Animator {
 		/**
 		 * Remove the vector from the animation canvas.
 		 */
-		public void delete() throws ItemDeletedException;
+		public void delete() throws ItemDeletedException, InterruptedException;
 
 		/**
 		 * Set a string label for the vector.
@@ -25,7 +25,7 @@ public interface VectorAnimator extends Animator {
 		 * @param label
 		 *            the label
 		 */
-		public void setLabel(String label) throws ItemDeletedException;
+		public void setLabel(String label) throws ItemDeletedException, InterruptedException;
 
 		/**
 		 * Copy an element from one offset in the vector to another,
@@ -36,7 +36,7 @@ public interface VectorAnimator extends Animator {
 		 * @param offsetto
 		 *            the destination offset
 		 */
-		public void copyElement(int offsetfrom, int offsetto) throws ItemDeletedException, InvalidLocationException;
+		public void copyElement(int offsetfrom, int offsetto) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 
 		/**
 		 * Copy an element from one offset in the vector to an offset in
@@ -53,7 +53,7 @@ public interface VectorAnimator extends Animator {
 		public void copyElement(
 			int offsetfrom,
 			VectorAnimator.Vector target,
-			int offsetto) throws ItemDeletedException, InvalidLocationException;
+			int offsetto) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 
 		/**
 		 * Move an element from one offset in the vector to another, shifting
@@ -64,7 +64,7 @@ public interface VectorAnimator extends Animator {
 		 * @param offsetto
 		 *            the destination offset
 		 */
-		public void moveElement(int offsetfrom, int offsetto) throws ItemDeletedException, InvalidLocationException;
+		public void moveElement(int offsetfrom, int offsetto) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 
 		/**
 		 * Set the value of an element.
@@ -74,7 +74,7 @@ public interface VectorAnimator extends Animator {
 		 * @param value
 		 *            the value to set it to
 		 */
-		public void setElement(int offset, int value) throws ItemDeletedException, InvalidLocationException, InputTooLongException;
+		public void setElement(int offset, int value) throws ItemDeletedException, InvalidLocationException, InputTooLongException, InterruptedException;
 
 		/**
 		 * Swap the values of two elements within the same vector.
@@ -84,7 +84,7 @@ public interface VectorAnimator extends Animator {
 		 * @param offset2
 		 *            the offset to the second value
 		 */
-		public void swapElements(int offset1, int offset2) throws ItemDeletedException, InvalidLocationException;
+		public void swapElements(int offset1, int offset2) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 
 		/**
 		 * Flash an element to draw attention to it.
@@ -92,7 +92,7 @@ public interface VectorAnimator extends Animator {
 		 * @param offset
 		 *  the element of the vector to flash 
 		 */
-		public void flashElement(int offset) throws ItemDeletedException, InvalidLocationException;
+		public void flashElement(int offset) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 		
 		/**
 		 * Highlight a given digit of all the values in the vector.
@@ -101,7 +101,7 @@ public interface VectorAnimator extends Animator {
 		 *            the digit to highlight, counting left from 0 as the
 		 *            rightmost digit, and -1 to highlight no digit
 		 */
-		public void setHighlightedDigit(int column) throws ItemDeletedException, InvalidLocationException;
+		public void setHighlightedDigit(int column) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 
 		/**
 		 * Create a new arrow pointing at a value in the vector, or the boundary
@@ -126,7 +126,7 @@ public interface VectorAnimator extends Animator {
 			String label,
 			int position,
 			boolean boundary,
-			boolean left) throws ItemDeletedException, InvalidLocationException;
+			boolean left) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 		
 		/**
 		 * Create a new arrow pointing at a value in the vector, or the
@@ -139,7 +139,7 @@ public interface VectorAnimator extends Animator {
 		 *            true to point at the boundary before the offset
 		 * @return a reference to the arrow created
 		 */
-		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) throws ItemDeletedException, InvalidLocationException;
+		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 
 		/**
 		 * Create a new arrow pointing at a value in the vector, or the
@@ -157,7 +157,7 @@ public interface VectorAnimator extends Animator {
 		public VectorAnimator.Arrow createArrow(
 			String label,
 			int offset,
-			boolean boundary) throws ItemDeletedException, InvalidLocationException;
+			boolean boundary) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 		
 		/**
 		 * @param position
@@ -170,7 +170,7 @@ public interface VectorAnimator extends Animator {
 		public VectorAnimator.Arrow createArrow(
 			int position,
 			boolean boundary,
-			boolean left) throws ItemDeletedException, InvalidLocationException;
+			boolean left) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 	}
 
 	/**
@@ -183,7 +183,7 @@ public interface VectorAnimator extends Animator {
 		/**
 		 * Remove the arrow from the animation canvas.
 		 */
-		public void delete() throws ItemDeletedException;
+		public void delete() throws ItemDeletedException, InterruptedException;
 
 		/**
 		 * Set a string label for the arrow.
@@ -191,7 +191,7 @@ public interface VectorAnimator extends Animator {
 		 * @param label
 		 *            the label
 		 */
-		public void setLabel(String label) throws ItemDeletedException;
+		public void setLabel(String label) throws ItemDeletedException, InterruptedException;
 
 		/**
 		 * Move the arrow to another offset in the vector.
@@ -202,12 +202,12 @@ public interface VectorAnimator extends Animator {
 		 * 	@param boundary
 		 *            true to point at the boundary before the offset
 		 */
-		public void move(int offset, boolean boundary) throws ItemDeletedException, InvalidLocationException;
+		public void move(int offset, boolean boundary) throws ItemDeletedException, InvalidLocationException, InterruptedException;
 
 		/**
 		 * Flash the arrow to indicate something exciting going on.
 		 */
-		public void flash() throws ItemDeletedException;
+		public void flash() throws ItemDeletedException, InterruptedException;
 	}
 
 	/**
@@ -217,7 +217,7 @@ public interface VectorAnimator extends Animator {
 	 *            the array of initial values
 	 * @return a reference to the vector created
 	 */
-	public VectorAnimator.Vector createVector(int[] values) throws InputTooLongException, TooManyVectorsException;
+	public VectorAnimator.Vector createVector(int[] values) throws InputTooLongException, TooManyVectorsException, InterruptedException;
 
 	/**
 	 * Create a new vector with a label and place it on the animation canvas.
@@ -228,5 +228,5 @@ public interface VectorAnimator extends Animator {
 	 *            the array of initial values
 	 * @return a reference to the vector created
 	 */
-	public VectorAnimator.Vector createVector(String label, int[] values) throws InputTooLongException, TooManyVectorsException;
+	public VectorAnimator.Vector createVector(String label, int[] values) throws InputTooLongException, TooManyVectorsException, InterruptedException;
 }

@@ -39,6 +39,7 @@ public class AnimatorPanel extends ShellPanel {
 	private JList steps;
 	private String[] stepText;
 	private JTextPane message;
+	private Timer playTimer;
 	private boolean play;
 	
 	/**
@@ -95,11 +96,11 @@ public class AnimatorPanel extends ShellPanel {
 				System.out.println("done!");
 			}
 		});
-		algoThread.start();		
+		algoThread.start();
 		
 		// set up timer for playing
 		play = true;
-		Timer playTimer = new Timer(100, new ActionListener() {
+		playTimer = new Timer(100, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (queue.isBusy()) {
 					buttons.setEnabled(0, false);
@@ -117,7 +118,10 @@ public class AnimatorPanel extends ShellPanel {
 				}
 			}
 		});
+		
+		// start the play timer and the queue thread
 		playTimer.start();
+		queue.start();
 	}
 
 	/* (non-Javadoc)
@@ -149,11 +153,10 @@ public class AnimatorPanel extends ShellPanel {
 			play = true;
 			buttons.setEnabled(1, false);
 			buttons.setText(1, "Stop");
+		} else if (command.equals("Exit") || command.equals("Restart")) {
+			queue.stop();
+			playTimer.stop();
 		}
-				
-		//else if (command.equals(""))
-		// TODO Auto-generated method stub
-
 	}
 
 	public void showMessage(String msg) {

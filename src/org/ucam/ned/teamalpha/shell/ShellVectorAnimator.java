@@ -138,7 +138,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#delete()
 		 */
-		public void delete() throws ItemDeletedException {
+		public void delete() throws ItemDeletedException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Arrow "+label+" already deleted!");
 			// Register new free space where this vector was
 			colsOccupied[col] = false;
@@ -153,16 +153,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setLabel(java.lang.String)
 		 */
-		public void setLabel(String label) throws ItemDeletedException {
+		public void setLabel(String label) throws ItemDeletedException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Arrow "+label+" already deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -176,16 +173,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
 		 */
-		public void copyElement(int from, int to) throws ItemDeletedException, InvalidLocationException {
+		public void copyElement(int from, int to) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has already been deleted!");
 			if ((!isValidOffset(from)) | (!isValidOffset(to))) throw new InvalidLocationException("Invalid offset. Vector length is "+size+", from was "+from+", to was "+to);
 			synchronized (ShellVectorAnimator.this) {
@@ -208,16 +202,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void copyElement(int from, VectorAnimator.Vector v, int to) throws ItemDeletedException, InvalidLocationException {
+		public void copyElement(int from, VectorAnimator.Vector v, int to) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			Vector vec = (Vector) v;
 			if ((!isValidOffset(from)) | (!vec.isValidOffset(to))) throw new InvalidLocationException("Invalid parameter: this vector has size "+size+", from is "+from+", destination has size "+vec.size+", to is "+to);
@@ -233,14 +224,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		// TODO: fix the queue so it finds interfaces
-		public void copyElement(int from, ShellVectorAnimator.Vector v, int to) throws ItemDeletedException, InvalidLocationException {
+		public void copyElement(int from, ShellVectorAnimator.Vector v, int to) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			copyElement(from, (VectorAnimator.Vector) v, to);
 		}
 		
@@ -248,7 +236,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#moveElement(int, int)
 		 */
 		// TODO: do we actually want this?
-		public void moveElement(int from, int to) throws ItemDeletedException, InvalidLocationException {
+		public void moveElement(int from, int to) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			if ((!isValidOffset(from)) | (!isValidOffset(to))) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", from is "+from+", to is "+to);
 			synchronized (ShellVectorAnimator.this) {
@@ -271,16 +259,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setElement(int, int)
 		 */
-		public void setElement(int elt, int value) throws ItemDeletedException, InvalidLocationException, InputTooLongException {
+		public void setElement(int elt, int value) throws ItemDeletedException, InvalidLocationException, InputTooLongException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			if (!isValidOffset(elt)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", elt is "+elt);
 			InputTooLongException.elementCheck(elt);
@@ -295,16 +280,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, int)
 		 */
-		public void swapElements(int elt1, int elt2) throws ItemDeletedException, InvalidLocationException {
+		public void swapElements(int elt1, int elt2) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			if ((!isValidOffset(elt1)) | (!isValidOffset(elt2))) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", elt1 is "+elt1+", elt2 is "+elt2);
 			synchronized (ShellVectorAnimator.this) {
@@ -322,16 +304,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary, boolean left) throws ItemDeletedException, InvalidLocationException {
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary, boolean left) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			if (!isValidArrowPos(position, boundary)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", arrow position was ("+position+", "+boundary+")");
 			synchronized (ShellVectorAnimator.this) {
@@ -346,9 +325,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 				return res;
 			}
 		}
@@ -356,25 +332,25 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(int position, boolean boundary) throws ItemDeletedException, InvalidLocationException {
+		public VectorAnimator.Arrow createArrow(int position, boolean boundary) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			return createArrow("", position, boundary, false);
 		}
 		
-		public VectorAnimator.Arrow createArrow(int position, boolean boundary, boolean left) throws ItemDeletedException, InvalidLocationException {
+		public VectorAnimator.Arrow createArrow(int position, boolean boundary, boolean left) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			return createArrow("", position, boundary, left);
 		}
 
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) throws ItemDeletedException, InvalidLocationException {
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			return createArrow(label, position, boundary, false);
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#highlightElement(int)
 		 */
-		public void flashElement(int elt) throws ItemDeletedException, InvalidLocationException {
+		public void flashElement(int elt) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			if (!isValidOffset(elt)) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", elt is "+elt);
 			synchronized (ShellVectorAnimator.this) {
@@ -383,9 +359,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					if (draw) startAnimation();
 					else ShellVectorAnimator.this.notify();
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
-				}
-				catch (InterruptedException e) {
-					System.err.println(e);
 				}
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
@@ -397,7 +370,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setHighlightedDigit(int)
 		 */
 		// TODO
-		public void setHighlightedDigit(int column) throws InvalidLocationException {
+		public void setHighlightedDigit(int column) throws InvalidLocationException, InterruptedException {
 		}
 		
 		/**
@@ -408,7 +381,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 * 	although only a few different colours can be displayed, so only a 
 		 * 	certain number of groups can be distinguished visually).
 		 */
-		public void setGroup(int group) throws ItemDeletedException {
+		public void setGroup(int group) throws ItemDeletedException, InterruptedException {
 			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			this.group = group % vectorGroupColours.length;
 			this.colour = vectorGroupColours[this.group];
@@ -420,9 +393,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.err.println(e);
-				}
-				catch (InterruptedException e) {
 					System.err.println(e);
 				}
 			}
@@ -600,7 +570,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()
 		 */
-		public void delete() throws ItemDeletedException {
+		public void delete() throws ItemDeletedException, InterruptedException {
 			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has already been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				deleted = true;
@@ -613,16 +583,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setLabel(java.lang.String)
 		 */
-		public void setLabel(String label) throws ItemDeletedException {
+		public void setLabel(String label) throws ItemDeletedException, InterruptedException {
 			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			// Trim if over 4 chars
 			if (label.length() > 4) label = label.substring(0,4); 
@@ -637,16 +604,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 			
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#move(int, boolean)
 		 */
-		public void move(int newpos, boolean boundary) throws ItemDeletedException, InvalidLocationException {
+		public void move(int newpos, boolean boundary) throws ItemDeletedException, InvalidLocationException, InterruptedException {
 			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			if (!vector.isValidArrowPos(newpos, boundary)) throw new InvalidLocationException("Invalid parameter: vector has size "+vector.size+", arrow position given is ("+newpos+", "+boundary+")");
 			synchronized (ShellVectorAnimator.this) {
@@ -659,16 +623,13 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				catch (InvalidAnimationEventException e) {
 					System.err.println(e);
 				}
-				catch (InterruptedException e) {
-					System.err.println(e);
-				}
 			}
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#highlight()
 		 */
-		public void flash() throws ItemDeletedException {
+		public void flash() throws ItemDeletedException, InterruptedException {
 			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -678,9 +639,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.err.println(e);
-				}
-				catch (InterruptedException e) {
 					System.err.println(e);
 				}
 			}
@@ -693,7 +651,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 * 	number of colours can be displayed, so only that number of different groups
 		 * 	can be visually distinguished on screen.
 		 */
-		public void setGroup(int group) throws ItemDeletedException {
+		public void setGroup(int group) throws ItemDeletedException, InterruptedException {
 			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			this.group = group % arrowGroupColours.length;
 			this.colour = arrowGroupColours[this.group];
@@ -705,9 +663,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
-					System.err.println(e);
-				}
-				catch (InterruptedException e) {
 					System.err.println(e);
 				}
 			}
@@ -1505,17 +1460,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	/**
 	 * Stop drawing to the screen and animate very quickly until told otherwise.
 	 */
-	public void fastForward() {
+	public synchronized void fastForward() throws InterruptedException {
 		draw = false;
 		stopAnimation();
 		while (!draw) {
-			try {
-				// TODO: This throws IllegalMonitorStateException! Help!
-				while (eventQueue.isEmpty()) wait();
-			}
-			catch (InterruptedException e) {
-				System.err.println(e);
-			}
+			while (eventQueue.isEmpty()) wait();
 			actionPerformed(null);
 		}
 	}
@@ -2037,7 +1986,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * @param time
 	 * 	Time to pause for in ms
 	 */
-	public void waitFor(int time) {
+	public void waitFor(int time) throws InterruptedException {
 		int fps = (int) (basespeed*speedfactor);
 		int frames = (time / 1000) * fps; // number of frames to wait for
 		System.out.println("Waiting for "+frames);
@@ -2051,9 +2000,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			catch (InvalidAnimationEventException e) {
 				System.out.println(e);
 			}
-			catch (InterruptedException e) {
-				System.out.println(e);
-			}
 		}
 	}
 
@@ -2063,6 +2009,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	public synchronized Animator.State saveState() {
 		Vector.VectorState[] vs = new Vector.VectorState[vectors.size()];
 		Arrow.ArrowState[] as = new Arrow.ArrowState[arrows.size()];
+		boolean copyColsOccupied[] = new boolean[colsOccupied.length];
 		Iterator vi = vectors.listIterator();
 		Iterator ai = arrows.listIterator();
 		int vc = 0;
@@ -2082,7 +2029,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			ac++;
 		}
 
-		return new State(vs, as, colsOccupied);
+		System.arraycopy(colsOccupied, 0, copyColsOccupied, 0, colsOccupied.length);
+
+		return new State(vs, as, copyColsOccupied);
 	}
 	
 	/* (non-Javadoc)
@@ -2189,6 +2138,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			System.out.println(e);
 		}
 		catch (ItemDeletedException e) {
+			System.out.println(e);
+		}
+		catch (InterruptedException e) {
 			System.out.println(e);
 		}
 	}
