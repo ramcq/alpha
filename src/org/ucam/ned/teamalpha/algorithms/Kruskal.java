@@ -184,8 +184,11 @@ public class Kruskal extends GraphAlgorithm {
 			// Check whether addition will cause a cycle and update
 			// update the result matrix if so
 			n1 = e.node1; n2 = e.node2;
-			if (acyclic(n1, n2, true)) {
+			if (acyclic(n1, n2, true) && result[n1][n2] != 1) {
 				result[n1][n2] = 1;
+				
+				// THIS REMOVES SUPPORT FOR BIDIRECTIONAL EDGES
+				result[n2][n1] = 1;
 				
 				// Flag nodes as in the tree
 				touched[n1]=0; touched[n2]=0;

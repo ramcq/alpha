@@ -83,7 +83,7 @@ public class KruskalAnimationTest {
 			System.out.println(e);
 		}*/
 		
-		anim.setFPS(20);
+		anim.setFPS(50);
 		Kruskal k = new Kruskal(c);
 		k.execute(anim);
 	}
