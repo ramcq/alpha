@@ -1,5 +1,5 @@
-#LyX 1.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 218
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
 \textclass article
 \language english
 \inputencoding auto
@@ -11,6 +11,8 @@
 \paperpackage a4
 \use_geometry 0
 \use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
@@ -27,21 +29,45 @@
 Animating Algorithms: Project Specification
 \layout Author
 
-Steven Cooper (sjc209), Graham LePage (gpl26), Zhan Li (zrll2), 
+Steven Cooper (
+\family typewriter 
+sjc209
+\family default 
+), Graham LePage (
+\family typewriter 
+gpl26
+\family default 
+), Zhan Li (
+\family typewriter 
+zrll2
+\family default 
+), 
 \newline 
-Robert McQueen (ram48), Andrew Medworth (am502), 
+Robert McQueen (
+\family typewriter 
+ram48
+\family default 
+), Andrew Medworth (
+\family typewriter 
+am502
+\family default 
+), 
 \newline 
-Neofytos Mylona (nm314), Sidath Senanayake (sas58), 
+Neofytos Mylona (
+\family typewriter 
+nm314
+\family default 
+), Sidath Senanayake (
+\family typewriter 
+sas58
+\family default 
+), 
 \newline 
-Alan Treanor (ajit2)
-\layout Standard
-
-
-\begin_inset LatexCommand \tableofcontents{}
-
-\end_inset 
-
-
+Alan Treanor (
+\family typewriter 
+ajit2
+\family default 
+)
 \layout Section
 
 Introduction
@@ -97,6 +123,12 @@ Clearly, a system to animate any conceivable algorithm working on any imaginable
  the available time.
 \layout Section
 
+Assumptions
+\layout Standard
+
+Any clarifications of / assumptions about the specification should go here
+\layout Section
+
 Facilities to be provided
 \layout Standard
 
@@ -134,20 +166,58 @@ Cross-platform operation using Java
 Easy-to-use graphical user interface
 \layout Section
 
-Major system components
+Environment
 \layout Standard
 
-As discussed today
+The system will be written in Java, using the Eclipse IDE.
+ Version control will be provided by 
+\family typewriter 
+cvs
+\family default 
+.
 \layout Section
 
-Acceptance criteria for finished project
+Overall system architecture
+\layout Standard
+
+To include UML Use Case diagram, UML Class diagram, etc etc
+\layout Section
+
+Inputs, functions, outputs
+\layout Section
+
+Specification of components and test requirements
+\layout Section
+
+Final acceptance criteria
 \layout Standard
 
 To be discussed
 \layout Section
 
-Management strategy and member roles
-\layout Standard
+Division of tasks
+\layout Itemize
 
-To be discussed
+Manager
+\layout Itemize
+
+Librarian
+\layout Itemize
+
+Secretary
+\layout Itemize
+
+Documentation
+\layout Itemize
+
+Design
+\layout Itemize
+
+Coding
+\layout Itemize
+
+Troubleshooting
+\layout Itemize
+
+Arrangements for covering each other
 \the_end
