@@ -12,11 +12,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
-import org.ucam.ned.teamalpha.algorithms.GraphAlgorithm;
 import org.ucam.ned.teamalpha.algorithms.Kruskal;
-import org.ucam.ned.teamalpha.animators.Animator;
-import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 import org.ucam.ned.teamalpha.shell.ShellGraphAnimator;
 
 /**
