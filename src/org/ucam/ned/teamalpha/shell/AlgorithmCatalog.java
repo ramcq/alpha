@@ -6,8 +6,6 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
-import javax.swing.JPanel;
-
 import org.ucam.ned.teamalpha.algorithms.Algorithm;
 import org.ucam.ned.teamalpha.queues.AnimatorQueue;
 
@@ -39,16 +37,16 @@ public abstract class AlgorithmCatalog {
 		public abstract Algorithm getAlgorithm(Object[] args);
 		
 		/**
+		 * @param panel
+		 * @return
+		 */
+		public abstract ShellAnimator getAnimator();
+		
+		/**
 		 * @param anim
 		 * @return
 		 */
 		public abstract AnimatorQueue getQueue(ShellAnimator anim);
-		
-		/**
-		 * @param panel
-		 * @return
-		 */
-		public abstract ShellAnimator getAnimator(JPanel panel);
 	}
 	
 	/**

@@ -8,7 +8,6 @@ package org.ucam.ned.teamalpha.test;
 
 import org.ucam.ned.teamalpha.shell.ShellVectorAnimator;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  * @author Alan Treanor
@@ -25,12 +24,8 @@ public class test {
 		frame.setSize(500,500);
 		frame.setVisible(true);
 		
-		JPanel panel = new JPanel(true); // lightweight container
-		panel.setSize(500,500);
-		frame.getContentPane().add(panel);
-		panel.setVisible(true);
-		
-		ShellVectorAnimator app = new ShellVectorAnimator(frame);
+		ShellVectorAnimator app = new ShellVectorAnimator();
+		frame.getContentPane().add(app);
 			
 		TestVectorAlgorithm testalg = new TestVectorAlgorithm(values);	
 		

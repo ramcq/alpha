@@ -9,8 +9,6 @@ package org.ucam.ned.teamalpha.shell;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import javax.swing.JPanel;
-
 import org.ucam.ned.teamalpha.algorithms.Algorithm;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
@@ -73,12 +71,12 @@ public class StaticAlgorithmCatalog extends AlgorithmCatalog {
 			return ret;
 		}
 
-		public ShellAnimator getAnimator(JPanel panel) {
+		public ShellAnimator getAnimator() {
 			switch (type) {
 			case GRAPH:
-				return new ShellGraphAnimator(panel);
+				return new ShellGraphAnimator();
 			case VECTOR:
-				return new ShellVectorAnimator(panel);
+				return new ShellVectorAnimator();
 			default:
 				return null;
 			}

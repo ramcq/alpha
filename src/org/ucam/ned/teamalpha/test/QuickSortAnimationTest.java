@@ -27,7 +27,8 @@ public class QuickSortAnimationTest {
 		frame.setSize(500,500);
 		frame.setVisible(true);
 		
-		ShellVectorAnimator app = new ShellVectorAnimator(frame.getContentPane());
+		ShellVectorAnimator app = new ShellVectorAnimator();
+		frame.getContentPane().add(app);
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {

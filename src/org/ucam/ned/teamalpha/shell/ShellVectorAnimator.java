@@ -9,7 +9,6 @@
 package org.ucam.ned.teamalpha.shell;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -22,15 +21,14 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import org.ucam.ned.teamalpha.animators.*;
 import org.ucam.ned.teamalpha.animators.Animator;
-import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.animators.InputTooLongException;
-import org.ucam.ned.teamalpha.animators.ItemDeletedException;
 import org.ucam.ned.teamalpha.animators.InvalidLocationException;
+import org.ucam.ned.teamalpha.animators.ItemDeletedException;
+import org.ucam.ned.teamalpha.animators.TooManyVectorsException;
+import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
  * This is the class which is given animation primitives by the queue and actually does the animation on screen.
@@ -1243,9 +1241,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	// can be in are actually occupied? (Allows for ten positions, which should be plenty :)
 	private boolean[] colsOccupied = {false, false, false, false, false, false, false, false, false, false};
 	
-	private Shell shell; // reference to the shell singleton
-	private JPanel outc; // Component we will be drawing into
-	private Graphics outg; // Graphics object we are passed from the shell
 	private BufferedImage bi; // buffered image for double buffering
 	private Graphics big; // corresponding graphics to bi
 	private Color fgcolour = Color.black; // foreground colour
@@ -1260,27 +1255,16 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	private LinkedList arrows = new LinkedList(); // an array of all Arrows currently known to the animator
 	private boolean draw = true; // Do we actually want to draw our buffered image out to the screen on each frame, or are we fast-forwarding?
 	
+	public void paintComponent(Graphics g) {
+		g.drawImage(bi,0,0,this);
+	}
+	
 	/**
 	 * Constructor
-	 * @param c
-	 * 	A container for us to use as a canvas. Generally this will be a JFrame, but it can be any Container.
 	 */
-	public ShellVectorAnimator(Container c) {
-		shell = Shell.getInstance();
-		outc = new JPanel() {
-			public void paintComponent(Graphics g) {
-				try {
-					g.drawImage(bi,0,0,outc);
-				}
-				catch (Exception e) {
-					System.out.println(e);
-				}
-			}
-		}; // a JPanel with a redefined paintComponent method for redrawing the canvas after the window has been obscured
-		outc.setSize(c.getSize().width, c.getSize().height);
-		c.add(outc); // add the JPanel to the Container we were given
-		outc.setVisible(true);
-		outg = outc.getGraphics(); // get a Graphics object for us to animate on
+	public ShellVectorAnimator() {
+		setSize(500, 500);
+		setOpaque(true);
 		
 		int fps = (int) (basefps * fpsfactor);
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
@@ -1297,20 +1281,14 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		// Instantiate our event queue
 		eventQueue = new LinkedList();
-		
-		// Make sure buffered image is the same size as the application window
-		if (bi == null ||
-			(! (bi.getWidth(outc) == outc.getSize().width
-			&& bi.getHeight(outc) == outc.getSize().height))) {
-				 bi = (BufferedImage) outc.createImage(outc.getSize().width, outc.getSize().height);
-		}
 			
-		// Create Graphics object from buffered image (we will work on this all the time and flush it out on every frame)
+		// Create Graphics object and buffered image (we will work on this all the time and flush it out on every frame)
+		bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
 		big = bi.getGraphics();
 		
 		// Clear working area	
 		big.setColor(bgcolour);
-		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+		big.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		big.setColor(fgcolour);
 	}
 	
@@ -1320,7 +1298,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	// This method is executed on each animation frame
 	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
-		if (draw) outg.drawImage(bi,0,0,outc);
+		if (draw) repaint();
 
 		// If we need a new event, get it
 		if (currentEvent == null) {
@@ -1995,39 +1973,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#setSteps(java.lang.String[])
-	 */
-	public void setSteps(String[] steps) {
-		try {
-			shell.setSteps(steps);
-		} catch (Exception e) {
-			System.err.println(e);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#setCurrentStep(int)
-	 */
-	public void setCurrentStep(int step) {
-		try {
-			shell.setCurrentStep(step);
-		} catch (Exception e) {
-			System.err.println(e);
-		}		
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#showMessage(java.lang.String)
-	 */
-	public void showMessage(String msg) {
-		try {
-			shell.showMessage(msg);
-		} catch (Exception e) {
-			System.err.println(e);
-		}		
-	}
-	
 	/**
 	 * Causes the animator to wait (pause) for a certain time
 	 * @param time
@@ -2112,7 +2057,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		
 		// Clear the whole canvas
 		big.setColor(bgcolour);
-		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+		big.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		
 		// restore these states
 		for (int i=0; i<vs.length; i++) {
@@ -2126,16 +2071,16 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		colsOccupied = st.colsOccupied;
 		
 		// draw buffered image out
-		outg.drawImage(bi,0,0,outc);
+		this.repaint();
 	}
 	
 	// Test harness, just for fun :-)
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellVectorAnimator test");
 		frame.setSize(500,500);
-		frame.setVisible(true);
 		
-		ShellVectorAnimator app = new ShellVectorAnimator(frame.getContentPane());
+		ShellVectorAnimator app = new ShellVectorAnimator();
+		frame.getContentPane().add(app);
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
@@ -2145,6 +2090,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				System.exit(0);
 			}
 		});
+		
+		frame.setVisible(true);
 		
 		try {
 		int[] t1 = {6,35,4,728,23,233,88};

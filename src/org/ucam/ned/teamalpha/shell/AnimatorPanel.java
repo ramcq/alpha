@@ -59,9 +59,9 @@ public class AnimatorPanel extends ShellPanel {
 		top.setLayout(new BoxLayout(top, BoxLayout.X_AXIS));
 		add(top);
 		
-		// add a panel for the animator to the top box
-		JPanel animPanel = new JPanel();
-		top.add(animPanel);
+		// add a the animator to the top box
+		animator = choice.getAnimator();
+		top.add(animator);
 		
 		// and a 5 pixel gap
 		top.add(Box.createRigidArea(new Dimension(5,0)));
@@ -79,11 +79,8 @@ public class AnimatorPanel extends ShellPanel {
 		message.setPreferredSize(new Dimension(790, 75));
 		add(message);
 		
-		// create the animator and the queue
-		animator = choice.getAnimator(animPanel);
+		// create the queue and a thread for the algorithm and GO GO GO!
 		queue = choice.getQueue(animator);
-		
-		// create a thread for the algorithm and GO GO GO!
 		Thread algoThread = new Thread(new Runnable() {
 			public void run() {
 				algorithm.execute((Animator) queue);

@@ -10,7 +10,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import org.ucam.ned.teamalpha.algorithms.Kruskal;
 import org.ucam.ned.teamalpha.shell.ShellGraphAnimator;
@@ -28,11 +27,10 @@ public class KruskalAnimationTest {
 		JFrame frame = new JFrame("Kruskal Animation test");
 		frame.setSize(500,500);
 		frame.setVisible(true);
-		JPanel panel = new JPanel(true); // lightweight container
-		panel.setSize(500,500);
-		frame.getContentPane().add(panel);
-		panel.setVisible(true);
-		ShellGraphAnimator anim = new ShellGraphAnimator(panel);
+		
+		ShellGraphAnimator anim = new ShellGraphAnimator();
+		frame.getContentPane().add(anim);
+		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);

@@ -1,7 +1,6 @@
 package org.ucam.ned.teamalpha.shell;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -13,7 +12,6 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
@@ -55,14 +53,10 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  *		flashing
  */
 public class ShellGraphAnimator extends ShellAnimator implements ActionListener, GraphAnimator {
-	
-	private Shell shell; // reference to the shell singleton
 	private int basefps = 100;	// Basic animation framerate
 	private double fpsfactor = 1; // algorithm-defined FPS factor
 	private double Nodeangle; //calc. according to number of nodes
 	private javax.swing.Timer timer;	// timer for animation events
-	private JPanel outc; // Component we will be drawing into
-	private Graphics2D outg; // Graphics2D object we are passed from the shell
 	private BufferedImage bi; // buffered image for double buffering
 	private Graphics2D big; // corresponding Graphics2D to bi
 	private Color fgcolour = Color.black;
@@ -481,23 +475,17 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
 	}
+	
+	public void paintComponent(Graphics2D g) {
+		g.drawImage(bi,0,0,this);
+	}
+	
 	/**
 	 * Constructor
-	 * @param c
-	 * 			A container for us to use as a canvas.
 	 */
-	public ShellGraphAnimator(Container c) {
-		shell = Shell.getInstance();
-		outc = new JPanel() {
-			public void paintComponent(Graphics2D g) {
-				g.drawImage(bi,0,0,outc);
-			}
-		};
-		outc.setSize(c.getSize().width, c.getSize().height);
-		c.add(outc);
-		outc.setVisible(true);
-		outg = (Graphics2D) outc.getGraphics();
-		outg.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+	public ShellGraphAnimator() {
+		setSize(500, 500);
+		setOpaque(true);
 		
 		int fps = (int) (basefps * fpsfactor);
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
@@ -511,18 +499,16 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		timer.setRepeats(true);
 		// Combine into a single ActionEvent in case of backlog
 		timer.setCoalesce(true);
+		
 		// Instantiate our event queue
 		eventQueue = new LinkedList();
 		intermediateOffset = 0;
-		// Make sure buffered image is the same size as the application window
-		if (bi == null ||
-				(! (bi.getWidth(outc) == outc.getSize().width
-						&& bi.getHeight(outc) == outc.getSize().height))) {
-			bi = (BufferedImage) outc.createImage(outc.getSize().width, outc.getSize().height);
-		}
-		// Create Graphics2D object from buffered image (we will work on this all the time and flush it out on every frame)
+		
+		// Create Graphics2D object and buffered image (we will work on this all the time and flush it out on every frame)
+		bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
 		big = (Graphics2D) bi.getGraphics();
 		big.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+		
 		// Clear working area
 		big.setColor(bgcolour);
 		big.fillRect(0,0,500,500);
@@ -533,7 +519,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 	 */
 	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
-		outg.drawImage(bi,0,0,outc);
+		repaint();
 		// Now comes the meat of the method: what should we do each frame?
 		// If we need a new event, get it
 		if (currentEvent == null) {
@@ -1329,39 +1315,6 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#setSteps(java.lang.String[])
-	 */
-	public void setSteps(String[] steps) {
-		try {
-			shell.setSteps(steps);
-		} catch (Exception e) {
-			System.err.println(e);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#setCurrentStep(int)
-	 */
-	public void setCurrentStep(int step) {
-		try {
-			shell.setCurrentStep(step);
-		} catch (Exception e) {
-			System.err.println(e);
-		}		
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.Animator#showMessage(java.lang.String)
-	 */
-	public void showMessage(String msg) {
-		try {
-			shell.showMessage(msg);
-		} catch (Exception e) {
-			System.err.println(e);
-		}		
-	}
-	
 	/**
 	 * Method to conrol the speed of the animation display
 	 * @param fps
@@ -1405,6 +1358,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		stopAnimation();
 		return new State(snodelist,sedgematrix,numnodes);
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
 	 */
@@ -1414,7 +1368,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		stopAnimation();
 		eventQueue.clear();
 		big.setColor(bgcolour);
-		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+		big.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		//load saved data
 		edgematrix = ts.getEdges();
 		nodelist = ts.getNodes();
@@ -1430,14 +1384,17 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 				}
 			}
 		}
-		outg.drawImage(bi,0,0,outc);
+		repaint();
 	}
+	
 	//main function purely for module testing
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellGraphAnimator test");
 		frame.setSize(500,500);
-		frame.setVisible(true);
-		ShellGraphAnimator app = new ShellGraphAnimator(frame.getContentPane());
+		
+		ShellGraphAnimator app = new ShellGraphAnimator();
+		frame.getContentPane().add(app);
+		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
 				System.exit(0);
@@ -1445,7 +1402,9 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
-		});		
+		});
+		frame.setVisible(true);
+		
 		//current test data
 		int[][] tstcosts = {{0,	33,	10,	56,	0,	0,	0,	0,	0,	0},
 					 {33,	0,	0,	13,	21,	0,	0,	0,	0,	0},
