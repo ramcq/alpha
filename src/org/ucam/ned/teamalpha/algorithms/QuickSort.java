@@ -95,7 +95,7 @@ public class QuickSort extends VectorAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getName()
 	 */
-	public String getName() {
+	public static String getName() {
 		// TODO Auto-generated method stub
 		return "QuickSort";
 	}
@@ -103,7 +103,7 @@ public class QuickSort extends VectorAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getDescription()
 	 */
-	public String getDescription() {
+	public static String getDescription() {
 		return "TODO: [QuickSort.getDescription()] : Documenters, decide on what string to have here";
 	}
 

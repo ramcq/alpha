@@ -11,14 +11,14 @@ public abstract class Algorithm {
 	 * 
 	 * @return the name of the algorithm
 	 */
-	public abstract String getName();
+	public static String getName() { return "Unnamed Algorithm"; }
 
 	/**
 	 * Static method to return a longer description of the algorithm.
 	 * 
 	 * @return a description of the algorithm
 	 */
-	public abstract String getDescription();
+	public static String getDescription() { return "Undescribed Algorithm"; }
 
 	/**
 	 * Executes the algorithm in full, calling all necessary animation

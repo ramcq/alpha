@@ -9,16 +9,6 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
  */
 public abstract class VectorAlgorithm extends Algorithm {
 	/**
-	 * A reference to the <class>VectorAnimator</class> which will be used
-	 * for all animation primitives within these algorithms.
-	 */
-	VectorAnimator va;
-	/**
-	 * An array of the initial values to sort.
-	 */
-	int[] values;
-
-	/**
 	 * The constructor for <class>VectorAlgorithm</class> which initialises
 	 * the necessary <class>VectorAnimator</class> and initial data members.
 	 * 
@@ -27,8 +17,5 @@ public abstract class VectorAlgorithm extends Algorithm {
 	 * @param values
 	 *            the initial data
 	 */
-	public VectorAlgorithm(VectorAnimator va, int[] values) {
-		this.va = va;
-		this.values = values;
-	}
+	public VectorAlgorithm(VectorAnimator va, int[] values) { };
 }

@@ -28,7 +28,7 @@ public class RadixSort extends VectorAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getName()
 	 */
-	public String getName() {
+	public static String getName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -36,7 +36,7 @@ public class RadixSort extends VectorAlgorithm {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getDescription()
 	 */
-	public String getDescription() {
+	public static String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
 	}
