@@ -23,7 +23,75 @@
 \papersides 1
 \paperpagestyle default
 
+\layout Title
+
+Personal Report for Neofytos Mylona (nm314)
 \layout Standard
 
-hlgelglkngflnfglknfdl
+Project: Animating Algorithms
+\layout Standard
+
+Team: Alpha
+\layout Standard
+
+Members: Steve Cooper(sjc209), Graham Le Page(gpl26), Zhan Li(zrll2), Robert
+ Macqueen(ram48), Andrew Medworth(am502), Sidath Senanayake(sas58), Alan
+ Treanor(ajit2).
+\layout Section
+
+Personal Work
+\layout Standard
+
+I was a part of the Documentation team who was composed of me and the Project
+ Manager, Graham.
+ My job was to write the Developers Documention which involved detailed
+ explanation to the user of how the project can be extended.
+ I was keeping up with the coders so that I could understand precisely how
+ the system works and therefore give a clear explaantion to the user how
+ to painlessly add new algorithms.
+ I was also involved in the design of the shell (provided ideas and diagrams)
+ but not implementation.
+ I also helped the manager with the rest of the documents that needed to
+ be submitted.
+\layout Section
+
+Individual Members Work
+\layout Subsection
+
+Steve
+\layout Standard
+
+Steve was a very active coder and has coded the Graph Animation API.
+ This involved a lot of effort and time and also ability.
+ He certainly contributed a very fair amount towards compeltion of this
+ project.
+\layout Subsection
+
+Graham
+\layout Standard
+
+Graham was our project manager.
+ This involved a lot of effort to try to organise the team properly and
+ also to organise meetings and always making sure that things were on track.
+ He was also an excellent documentor as he was involved in writing the user
+ manual and many of the other documents that needed to be submitted by the
+ project manager.
+\layout Subsection
+
+Zhan
+\layout Standard
+
+Zhan was part of the testing team.
+ He was responsible for writing all those classes that would behave as the
+ testing prochedures for the actual code that implements the project.
+ Certainly his job was very important and it involved careful work to try
+ to design appropriate classes that would perform testing according to all
+ the rules of software engineering.
+\layout Subsection
+
+Robert
+\layout Standard
+
+Robert was the main contributor to the success of this project.
+ He was the one that came up with the basic ideas about how the system 
 \the_end
