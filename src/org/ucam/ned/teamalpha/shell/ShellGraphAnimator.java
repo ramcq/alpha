@@ -79,14 +79,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
 	private static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.yellow, Color.darkGray, Color.lightGray};
 		//colours for representing the different node/edge sets
-	private static final int NODE_SIZE = 12; //constant for specifying node width/height
-	private static final int NODE_FONT_SIZE = 18; //node font height
-	private static final int EDGE_FONT_SIZE = 16; //edge font height
+	private static final int NODE_SIZE = 6; //constant for specifying node width/height
+	private static final int NODE_FONT_SIZE = 14; //node font height
+	private static final int EDGE_FONT_SIZE = 12; //edge font height
 	private static final int EDGE_TYPE_SAMDIR = 0; //edge types
 	private static final int EDGE_TYPE_ONEDIR = 1;
 	private static final int EDGE_TYPE_TWODIR = 2;
 	private static final int EDGE_CURVE_ANGLE = 10; //curvature degree
-	private static final boolean EDGE_LINE_DRAW = false; //set to true to make it draw thin lines
+	private static final boolean EDGE_LINE_DRAW = true; //set to true to make it draw thin lines
 	private static final int FLASH_TIME = 15; //number of loops when flashing node/edge
 	private static final int GRAPH_DIM = 10; //graph dimension
 	/**
