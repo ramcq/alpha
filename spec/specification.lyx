@@ -136,10 +136,10 @@ Background
 
 The field of algorithms and data structures is one of the hardest parts
  of Computer Science to teach.
- When done on blackboards or overhead projectors, diagrams can get extremely
- messy and hard to follow; even when the steps of an algorithm are clearly
- displayed on paper, it is not always immediately clear what operations
- have been done between each step.
+ When demonstrated on blackboards or overhead projectors, diagrams can get
+ extremely messy and hard to follow; even when the steps of an algorithm
+ are clearly displayed on paper, it is not always immediately clear what
+ operations have been done between each step.
 \layout Standard
 
 Computer animation would be an ideal way to demonstrate algorithms: the
@@ -269,7 +269,7 @@ In order to demonstrate the system, we will implement three sorting algorithms
 insertion sort,
 \layout Itemize
 
-Quicksort,
+quicksort,
 \layout Itemize
 
 radix sort,
