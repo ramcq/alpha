@@ -71,7 +71,7 @@ class GenericQueue implements AnimatorQueue {
 				if (cause instanceof InterruptedException)
 					throw (InterruptedException) cause;
 				else
-					System.err.println("internal queue error: failure animating event: " + e);
+					System.err.println("internal queue error: failure animating event: " + cause);
 			} catch (Exception e) {
 				System.err.println("internal queue error: failure delivering event: " + e);
 			}
