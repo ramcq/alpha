@@ -107,39 +107,40 @@ Vector Animator
 
 
 \family typewriter 
-Markers
+Marker
 \family default 
- and 
+s and 
 \family typewriter 
-Pointers
+Pointer
 \family default 
- merged into 
+s merged into 
 \family typewriter 
-Arrows
+Arrow
 \family default 
- for ease of implementation.
+s for ease of implementation.
 \layout Itemize
 
 Copy element from one pointer to another method changed to take offsets
  rather than pointers.
 \layout Itemize
 
-Specific compare two elements method removed vector primitives; un-necessary
- since you can just flash arrows.
+Removed vector primitive to compare two elements; un-necessary since you
+ can just flash arrows.
 \layout Itemize
 
-Delete element method removed, variable vector lengths aren't necessary
+Delete element method removed; variable vector lengths aren't necessary
  for the sorting algorithms we plan to implement.
 \layout Itemize
 
 Split vector method also removed, for similar reasons.
 \layout Itemize
 
-Boolean highlight of Arrows supplemented with a few seconds of flashing
- (forboth arrows and vector elements).
-\layout Itemize
-
-Flash element method added.
+Boolean highlight of 
+\family typewriter 
+Arrow
+\family default 
+s supplemented with a few seconds of flashing (for both arrows and vector
+ elements).
 \layout Paragraph
 
 Shell Package
@@ -180,6 +181,13 @@ Four out of the five have been written, the fifth is in progress.
 \layout Subsection
 
 Animators
+\layout Standard
+
+For both the graph and vector animator APIs, a set of exceptions for invalid
+ input to the methods must be created, along with static functions which
+ perform these tests.
+ These tests can be used by all implementers of the APIs, as well as packages
+ which need to test input
 \layout Subsubsection
 
 Graph animators (Steven)
@@ -231,7 +239,7 @@ actionPerformed()
 AnimationEvent
 \family default 
  inner class) to see what should be done next.
- It is a slightly complicated design, especially given that 
+ It is a fairly complicated design, especially given that 
 \family typewriter 
 wait
 \family default 
@@ -240,7 +248,8 @@ s and
 notify
 \family default 
 s have been added to prevent animation primitive methods from exiting until
- the relevant animation has been completed (for the sake of Rob's queue).
+ the relevant animation has been completed (as is the intended behaviour
+ for the API).
  However, it works and is still fairly easy to understand, and this, coupled
  with its extensibility, mean that we will not be changing this fundamental
  design.
@@ -280,10 +289,8 @@ Arrow
 false
 \family default 
 , so that all all arrows appear on the right of their vectors): all that
- is required is to allow the user to set this at the time of arrow creation.
- (It will not be possible to alter this property after creation time.) A
- facility to alter the colour of an arrow may also be provided (at the moment
- they are all blue).
+ is required is to allow the user to set this at the time of arrow creation
+ (it will not be possible to alter this property after creation time).
 \layout Standard
 
 A problem has also been discovered with saving and restoring the animator
@@ -310,7 +317,7 @@ highestColUsed
  mechanism breaks.
 \layout Standard
 
-This will be remedied by using a more advanced way of laying out vectors
+This can be remedied by using a more advanced way of laying out vectors
  on screen, which will keep track of which columns are vacant and insert
  newly-created vectors into the left-most free column.
  This will also solve a problem related to the deletion of vectors and arrows:
