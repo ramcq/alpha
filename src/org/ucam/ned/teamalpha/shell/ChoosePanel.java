@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -115,6 +116,7 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 		// create vertical panel
 		JPanel right = new JPanel();
 		right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
+		right.setBorder(BorderFactory.createLoweredBevelBorder());
 		add(right);
 		
 		// add title to vertical panel
