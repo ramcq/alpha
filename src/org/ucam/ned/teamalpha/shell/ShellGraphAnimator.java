@@ -95,8 +95,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.NODE_LABEL_REDRAW, this));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -118,8 +122,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.NODE_REDRAW, this));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -159,8 +167,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.EDGE_LABEL_REDRAW, this));
 					startAnimation();
+					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
 				}
 				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
 					System.out.println(e);
 				}
 			}
@@ -170,7 +182,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		 */
 		public void setEdgeshade(int set) {
 			this.set = set;
-			this.drawEdge();
+			this.drawEdgeShade();
 		}
 		//put a drawing event on the animation queue
 		public void drawEdge() {
@@ -178,14 +190,29 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.EDGE_REDRAW, this));
 					startAnimation();
-				/*	while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
-			*/	}
+					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
+				}
 				catch (InvalidAnimationEventException e) {
 					System.out.println(e);
 				}
-			/*	catch (InterruptedException e) {
+				catch (InterruptedException e) {
 					System.out.println(e);
-				}*/
+				}
+			}
+		}
+		public void drawEdgeShade() {
+			synchronized (ShellGraphAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.EDGE_SHADE_REDRAW, this));
+					startAnimation();
+					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
+					System.out.println(e);
+				}
 			}
 		}
 	}
@@ -196,7 +223,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		public static final int EDGE_REDRAW = 2;
 		public static final int NODE_LABEL_REDRAW = 3;
 		public static final int EDGE_LABEL_REDRAW = 4;
-		
+		public static final int EDGE_SHADE_REDRAW = 5;
+				
 		private int type;
 		private Node n1;
 		private Edge e1;
@@ -209,7 +237,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 		AnimationEvent(int type, Edge e) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.EDGE_REDRAW
-				|| type == AnimationEvent.EDGE_LABEL_REDRAW) {
+				|| type == AnimationEvent.EDGE_LABEL_REDRAW
+				|| type == AnimationEvent.EDGE_SHADE_REDRAW) {
 				this.type = type;
 				this.e1 = e;
 			}
@@ -232,6 +261,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		timer.setCoalesce(true);
 		// Instantiate our event queue
 		eventQueue = new LinkedList();
+		intermediateOffset = 0;
 		// Make sure buffered image is the same size as the application window
 		if (bi == null ||
 				(! (bi.getWidth(outc) == outc.getSize().width
@@ -262,6 +292,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				System.out.println("Nothing to do, stopping Timer");
 				currentEvent = null;
 				stopAnimation();
+				notify();
 			}
 		}
 		//match current event's type to determine what should be drawn
@@ -283,6 +314,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					drawEdgelabel(currentEvent.e1, big);
 					currentEvent = null;
 					break;		
+				case AnimationEvent.EDGE_SHADE_REDRAW:
+					intermediateOffset++;
+					drawEdgeshade(currentEvent.e1, big, intermediateOffset);
+					if (intermediateOffset > 60) {
+						intermediateOffset = 0;	
+						currentEvent = null;
+					}
+					break;
 				default:
 					break;
 			}
@@ -299,15 +338,22 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	//draw node on screen
 	public void drawNode(Node n, Graphics g) {
 		g.setColor(SET_COLOUR[n.set]);
-		System.out.println("drawn node at " + n.x + ", " + n.y);
 		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
 		g.setColor(fgcolour);		
 	}
 	//draw edge on screen	
 	public void drawEdge(Edge e, Graphics g) {
 		g.setColor(SET_COLOUR[e.set]);
-		System.out.println("drawn edge at " + e.x1 + ", " + e.y1 + " to " + e.x2 + ", " + e.y2);
 		g.drawLine(e.x1, e.y1, e.x2, e.y2);
+		g.setColor(fgcolour);		
+	}
+	//incrementally shade an edge on screen	
+	public void drawEdgeshade(Edge e, Graphics g, int t) {
+		g.setColor(SET_COLOUR[e.set]);
+		//get line gradient
+		int x = (int) (e.x1 - (e.x1 - e.x2)/t);
+		int y = (int) (e.y1 - (e.y1 - e.y2)/t);
+		g.drawLine(e.x1, e.y1, x, y);
 		g.setColor(fgcolour);		
 	}
 	//draw edge label on screen
@@ -481,10 +527,10 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		});
 		//current test data
-		int[][] tstcosts = {{1,2,0,0},{0,1,0,0},{0,0,1,0},{1,2,0,0}};
+		int[][] tstcosts = {{0,2,1,0},{0,0,3,0},{0,0,0,0},{0,0,0,0}};
 		app.createGraph(tstcosts);
 		app.setNodeShade(1,1);
-		app.setEdgeShade(0,1,1);
+		app.setEdgeShade(1,3,1);
 	}
 }
    /*
