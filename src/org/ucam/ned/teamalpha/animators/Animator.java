@@ -61,5 +61,5 @@ public abstract class Animator {
 	 * @param state
 	 *            a <class>State</class> object from the saveState() method
 	 */
-	public abstract void restoreState(State state);
+	public abstract void restoreState(State state) throws java.io.IOException;
 }
