@@ -41,7 +41,7 @@ public abstract class ShellAnimator extends JPanel {
 	
 	public ShellAnimator() {
 		shell = Shell.getInstance();
-		rt = new RefreshTimer(30);
+		//rt = new RefreshTimer(10);
 	}
 	
 	public void setSteps(String[] steps) {
