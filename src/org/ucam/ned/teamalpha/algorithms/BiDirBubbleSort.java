@@ -8,7 +8,6 @@ import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
  * @author Sid
- *
  */
 public class BiDirBubbleSort extends VectorAlgorithm {
 	/**
@@ -109,18 +108,19 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute(org.ucam.ned.teamalpha.animators.Animator)
 	 */
 	public void execute(Animator anim) {
 		this.anim = (VectorAnimator)anim;
 		sort();
+	}
+	
+	public static String getName() {
+		return "Bi-directional Bubble Sort";
+	}
+	
+	public static String getDescription() {
+		return "TODO [BiDirBubbleSort.getDescription] Documenters, figure out a description";
 	}
 }
