@@ -3,10 +3,6 @@
  *
  */
  
-// TODO: change API so that algorithm can specify whether an arrow should be on the
-//		left or right of a vector
-// TODO: add exceptions, make sure everything works properly if algorithm does something stupid
-// 	(addresses an offset not in the vector, makes labels too long, creates vectors too long etc)
 // TODO: fix fast forward to next checkpoint (currently completely broken)
 // TODO: add column highlighting for vectors (for radix sort)
 package org.ucam.ned.teamalpha.shell;
@@ -519,7 +515,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private int group = 0;
 		private Color colour = arrowGroupColours[0], altColour = Color.cyan;
 		private boolean left = false; // are we to the left or the right of our vector?
-		private boolean visible = false;
+		//private boolean visible = false;
 		private boolean deleted = false;
 		
 		/**
@@ -589,11 +585,11 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()
 		 */
 		public void delete() throws ItemDeletedException {
-			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has already been deleted!");
+			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has already been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				deleted = true;
 				try {
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, this));
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_DELETE, this));
 					if (draw) startAnimation();
 					else ShellVectorAnimator.this.notify();
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
@@ -611,7 +607,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setLabel(java.lang.String)
 		 */
 		public void setLabel(String label) throws ItemDeletedException {
-			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
+			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			// Trim if over 4 chars
 			if (label.length() > 4) label = label.substring(0,4); 
 			this.label = label;
@@ -635,7 +631,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#move(int, boolean)
 		 */
 		public void move(int newpos, boolean boundary) throws ItemDeletedException, InvalidLocationException {
-			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
+			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			if (!vector.isValidArrowPos(newpos, boundary)) throw new InvalidLocationException("Invalid parameter: vector has size "+vector.size+", arrow position given is ("+newpos+", "+boundary+")");
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -657,7 +653,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#highlight()
 		 */
 		public void flash() throws ItemDeletedException {
-			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
+			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_FLASH, this));
@@ -682,7 +678,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	can be visually distinguished on screen.
 		 */
 		public void setGroup(int group) throws ItemDeletedException {
-			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
+			if (deleted) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			this.group = group % arrowGroupColours.length;
 			this.colour = arrowGroupColours[this.group];
 			synchronized (ShellVectorAnimator.this) {
@@ -735,7 +731,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				this.colour = Arrow.this.colour;
 				this.altColour = Arrow.this.altColour;
 				this.left = Arrow.this.left;
-				this.visible = Arrow.this.visible;
 				this.deleted = Arrow.this.deleted;
 			}
 			
@@ -750,7 +745,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				Arrow.this.colour = this.colour;
 				Arrow.this.altColour = this.altColour;
 				Arrow.this.left = this.left;
-				Arrow.this.visible = this.visible;
 				Arrow.this.deleted = this.deleted;
 				arrows.add(Arrow.this);
 				redrawArrow(Arrow.this, big);
@@ -843,6 +837,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 */
 		public static final int ARROW_MOVE = 5;
 		/**
+		 * Deleting an arrow
+		 */
+		public static final int ARROW_DELETE = 16;
+		/**
 		 * Changing an element in some manner (so it has to be redrawn)
 		 */
 		public static final int ELT_CHANGE = 6;
@@ -883,7 +881,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/**
 		 * Constructor
 		 * @param type
-		 * 	Event type (should be either ARROW_FLASH or ARROW_CHANGE)
+		 * 	Event type (should be either ARROW_FLASH, ARROW_DELETE or ARROW_CHANGE)
 		 * @param a
 		 * 	The arrow to be flashed or redrawn
 		 * @throws InvalidAnimationEventException
@@ -893,7 +891,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 */
 		AnimationEvent(int type, Arrow a) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ARROW_FLASH
-				|| type == AnimationEvent.ARROW_CHANGE) {
+				|| type == AnimationEvent.ARROW_CHANGE
+				|| type == AnimationEvent.ARROW_DELETE) {
 				this.type = type;
 				this.a1 = a;
 				this.a2 = null;
@@ -1288,8 +1287,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		if (currentEvent != null) {
 			switch(currentEvent.type) {
 				case AnimationEvent.ARROW_CHANGE:
-					System.out.println("Redrawing arrow");
-					currentEvent.a1.visible = true;
 					redrawAllArrows(big, currentEvent.a1.left, null);
 					currentEvent = null;
 					break;
@@ -1304,6 +1301,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					break;
 				case AnimationEvent.ARROW_MOVE:
 					moveArrowVert(big, currentEvent.a1, currentEvent.e1, currentEvent.b1, true);
+					break;
+				case AnimationEvent.ARROW_DELETE:
+					redrawAllArrows(big, currentEvent.a1.left, null);
 					break;
 				case AnimationEvent.ELT_CHANGE:
 					currentEvent.v1.contents[currentEvent.e1] = String.valueOf(currentEvent.arg);
@@ -1896,13 +1896,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	// Clear the area where an arrow was and redraw it
 	private void redrawArrow(Arrow a, Graphics g) {
-		if (!a.visible) return;
-		int left = (a.left) ? a.vector.left - 10 : a.vector.right+1;
+		int left = (a.left) ? a.vector.left - 30 : a.vector.right+1;
 		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
 
 		// Clear arrow area
 		g.setColor(bgcolour);
-		g.fillRect(left, ypos-5, 9, 9);
+		g.fillRect(left, ypos-5, 29, 10);
 				
 		if (!a.deleted) drawArrow(a, g);
 	}
