@@ -787,7 +787,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 			i = i + t;
 			if (labeldrawn == false && i > 0.3) {
 				g.setColor(fgcolour);
-				drawlabel(x,y,label,g,EDGE_FONT_SIZE);
+				drawlabel(x,y,label,g,EDGE_FONT_SIZE,fgcolour);
 				labeldrawn = true;
 				g.setColor(SET_COLOUR[set]);
 			}	
@@ -1069,7 +1069,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
 			int x = (int) (e.x1 - (numnodes * (e.x1 - e.x2)/13));
 			int y = (int) (e.y1 - (numnodes * (e.y1 - e.y2)/13));
-			drawlabel(x, y, e.label1, g, EDGE_FONT_SIZE);
+			drawlabel(x, y, e.label1, g, EDGE_FONT_SIZE, fgcolour);
 		}
 		else{
 			drawcurve(e.x1,e.y1,e.x2,e.y2,e.set1,1.0,e.label1,g);
@@ -1094,7 +1094,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 	 * @param g
 	 *			Graphics object to draw on
 	 */private void drawNodelabel(Node n, Graphics2D g) {
-		drawlabel(n.x - n.Nodewidth,n.y - n.Nodeheight,n.label,g,NODE_FONT_SIZE);
+		drawlabel(n.x - n.Nodewidth,n.y - n.Nodeheight,n.label,g,NODE_FONT_SIZE,Color.RED);
 	}
 	/**
 	 * Draws text on screen
@@ -1108,9 +1108,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener,
 	 *			Graphics object to draw on
 	 * @param Fsize
 	 * 			Font size for text
+	 * @param colour
+	 * 			Colour for text
 	 */
-	private void drawlabel(int x,int y,String label, Graphics2D g, int Fsize) {
-		g.setColor(fgcolour);
+	private void drawlabel(int x,int y,String label, Graphics2D g, int Fsize, Color colour) {
+		g.setColor(colour);
 		g.setFont(new Font("MonoSpaced", Font.BOLD, Fsize));
 		g.drawString(label, x, y);
 	}
