@@ -5,7 +5,7 @@ package org.ucam.ned.teamalpha.algorithms;
 
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
-import org.ucam.ned.teamalpha.shell.ItemDeletedException;
+import org.ucam.ned.teamalpha.animators.ItemDeletedException;
 
 /**
  * An applet animating this algorithm may be found at: 
