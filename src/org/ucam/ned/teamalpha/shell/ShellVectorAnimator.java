@@ -14,7 +14,7 @@ package org.ucam.ned.teamalpha.shell;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Rectangle;
+//import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -250,12 +250,17 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			if ((!isValidOffset(from)) | (!isValidOffset(to))) throw new InvalidLocationException("Invalid parameter: vector has size "+size+", from is "+from+", to is "+to);
 			synchronized (ShellVectorAnimator.this) {
 				try {
-					// Move element out to channel
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, false));
-					// Move element vertically within channel
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, null, to, true));
-					// Move element horizontally into new position
-					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
+					if (Math.abs(from-to) == 1) {
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_PLACE, this, from, to));
+					}
+					else {
+						// Move element out to channel
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_TO_CHANNEL, this, from, true, false));
+						// Move element vertically within channel
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_VERT_IN_CHANNEL, this, from, null, to, true));
+						// Move element horizontally into new position
+						eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FROM_CHANNEL, this, to, true));
+					}
 					if (draw) startAnimation();
 					else ShellVectorAnimator.this.notify();
 					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
@@ -825,6 +830,10 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 */
 		public static final int ELT_FROM_CHANNEL = 8;
 		/**
+		 * Move an element vertically inside the vector
+		 */
+		public static final int ELT_VERT_IN_PLACE = 18;
+		/**
 		 * Moving two elements at once out to different side channels
 		 */
 		public static final int TWO_TO_CHANNEL = 2;
@@ -1083,7 +1092,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		/**
 		 * Constructor
 		 * @param type
-		 * 	Event type (expected to be ELT_CHANGE, TWO_FROM_CHANNEL or TWO_TO_CHANNEL)
+		 * 	Event type (expected to be ELT_CHANGE, ELT_VERT_IN_PLACE, TWO_FROM_CHANNEL or TWO_TO_CHANNEL)
 		 * @param v
 		 * 	The Vector to act upon
 		 * @param e
@@ -1097,7 +1106,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		 * 	thrown externally.
 		 */
 		AnimationEvent(int type, Vector v, int e, int arg) throws InvalidAnimationEventException {
-			if (type == AnimationEvent.ELT_CHANGE) {
+			if (type == AnimationEvent.ELT_CHANGE
+				|| type == AnimationEvent.ELT_VERT_IN_PLACE) {
 				this.type = type;
 				this.v1 = v;
 				this.v2 = null;
@@ -1347,6 +1357,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					break;
 				case AnimationEvent.ELT_VERT_IN_CHANNEL:
 					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.v2, currentEvent.e2, currentEvent.b1, true);
+					break;
+				case AnimationEvent.ELT_VERT_IN_PLACE:
+					moveElementVerticallyInPlace(big, currentEvent.v1, currentEvent.e1, currentEvent.e2);
 					break;
 				case AnimationEvent.ELT_FLASH:
 					intermediateOffset += 1;
@@ -1684,6 +1697,30 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		g.setColor(fgcolour);
 		if (startY < endY) g.drawString(v.contents[from], areaLeft, startY + intermediateOffset);
 		else g.drawString(v.contents[from], areaLeft, startY - intermediateOffset);
+	}
+
+	private void moveElementVerticallyInPlace(Graphics g, Vector v, int from, int to) {
+		int startY = v.top + (20*from) + 15;
+		int endY = v.top + (20*to) + 15;
+		
+		if (Math.abs(intermediateOffset) >= Math.abs(startY-endY)) { // are we done?
+			intermediateOffset = 0; 
+			v.contents[to] = v.contents[from];
+			currentEvent = null;
+			return;
+		}
+		
+		redrawVector(v, g);
+
+		// Clear destination
+		g.setColor(bgcolour);
+		g.fillRect(v.left+1, v.top+(to*20)+1, 48, 18);
+		
+		intermediateOffset += 1;
+		
+		g.setColor(fgcolour);
+		if (startY < endY) g.drawString(v.contents[from], v.left+5, startY + intermediateOffset);
+		else g.drawString(v.contents[from], v.left+5, startY - intermediateOffset);
 	}
 	
 	/**
