@@ -120,7 +120,7 @@ public class RadixSort extends VectorAlgorithm {
 	 */
 	public void execute() {
 		// TODO Auto-generated method stub
-
+		sort();
 	}
 	
 	

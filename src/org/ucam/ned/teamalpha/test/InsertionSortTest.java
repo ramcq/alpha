@@ -14,7 +14,7 @@ import org.ucam.ned.teamalpha.animators.*;
 public class InsertionSortTest extends VectorAlgorithm {
 	
 	static VectorAnimator va;
-	static int[] data = {14,23,456,56,123,12,12,0,-1,3};
+	static int[] data = {14,23,456,56,123,12,12,0,3};
 	
 	public static void main(String[] args) {	
 		InsertionSort is = new InsertionSort(va, data);
