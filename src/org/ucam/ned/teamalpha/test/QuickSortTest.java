@@ -18,19 +18,19 @@ public class QuickSortTest extends VectorAlgorithm {
 	static int[] data = InsertionSortTest.data;
 	
 	public static void main(String[] args) {
-		QuickSort qs = new QuickSort(va, data);
-		qs.execute();			// Sort the data
+		QuickSort qs = new QuickSort(data);
+		qs.execute(va);			// Sort the data
 		System.out.println("Quick Sort result: ");
 		for (int i=0; i<data.length; i++) {	// Print out the results
 			System.out.println(data[i]);
 		}		
 	}
 	
-	public QuickSortTest(VectorAnimator va, int[] values) {
-		super(va, values);
+	public QuickSortTest(int[] values) {
+		super(values);
 	}
 	
-	public void execute() {
+	public void execute(Animator anim) {
 	}
 
 }

@@ -65,7 +65,7 @@ public class QuickSort extends VectorAlgorithm {
 			if( low < j ) {
 				
 				// ANIM: Partition the vector
-				v.partition(i);  
+				//v.partition(i);  
 				quick(low, j );  // TODO: Partition vector at j+1
 				if( i < high )	quick( i, high );
 			}

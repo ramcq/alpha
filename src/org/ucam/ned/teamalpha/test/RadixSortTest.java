@@ -16,19 +16,19 @@ public class RadixSortTest extends VectorAlgorithm {
 	static int[] data = InsertionSortTest.data;
 	
 	public static void main(String[] args) {
-		RadixSort rs = new RadixSort(va, data);
-		rs.execute();			// Sort the data
+		RadixSort rs = new RadixSort(data);
+		rs.execute(va);			// Sort the data
 		System.out.println("Radix Sort result: ");
 		for (int i=0; i<data.length; i++) {	// Print out the results
 			System.out.println(data[i]);
 		}		
 	}
 	
-	public RadixSortTest(VectorAnimator va, int[] values) {
-		super(va, values);
+	public RadixSortTest(int[] values) {
+		super(values);
 	}
 	
-	public void execute() {
+	public void execute(Animator anim) {
 	}
 	
 }
