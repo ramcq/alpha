@@ -68,88 +68,6 @@ sas58
 ajit2
 \family default 
 )
-\layout Standard
-
-{
-\layout Standard
-
-4.2 Module implementation and testing
-\newline 
-
-\layout Standard
-
-The next task is to write the code of the classes and to test them in isolation.
- This is likely to require the construction of special test harnesses for
- separate classes.
- The deliverables for this task are a progress report by the team manager,
- which must be delivered in writing, plus code of the implementations and
- a description of the testing procedures and their results, which may be
- online.
-\newline 
-
-\layout Standard
-
-Changes in specification or design (if any)
-\layout Standard
-
-Difficulties (if any)
-\layout Standard
-
-Project log:
-\layout Itemize
-
-Interfaces and modules
-\layout Itemize
-
-Authorship
-\layout Itemize
-
-Status (written, tested, work in hand...)
-\layout Itemize
-
-Copies of test results
-\layout Itemize
-
-Pointers to on-line sources 
-\newline 
-
-\newline 
-
-\newline 
-Animator API - Rob, Steven, Sid, Andrew
-\layout Itemize
-
-Shell appearance - Neofytos, Graham
-\layout Itemize
-
-Algorithm API & friends - Rob
-\layout Itemize
-
-Phase 2
-\layout Itemize
-
-Test Animators } Graph test - Richard
-\layout Itemize
-
-Test Algorithms} Vector test - Alan
-\layout Itemize
-
-Queue - Rob
-\layout Itemize
-
-GraphAnimator - Steven
-\layout Itemize
-
-VectorAnimator - Andrew
-\layout Itemize
-
-Document API - All coders
-\layout Itemize
-
-Document user interface - Neofytos, Graham
-\layout Standard
-
-}
 \layout Section
 
 Introduction
@@ -258,7 +176,7 @@ Algorithms (Sid)
 \layout Standard
 
 Four out of the five have been written, the fifth is in progress.
- None have yet been tested.
+ None have yet been fully tested.
 \layout Subsection
 
 Animators
@@ -515,24 +433,6 @@ Animator
 \family default 
  classes for the shell.
  
-\layout Section
-
-Examples of code
-\layout Standard
-
-Explain what they do - refer to specification
-\layout Subsection
-
-Algorithms
-\layout Subsection
-
-Animators
-\layout Subsection
-
-Queues
-\layout Subsection
-
-Shell
 \layout Section
 
 Test results
