@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
-import org.ucam.ned.teamalpha.animators.Animator.State;
 
 
 /**
@@ -48,13 +47,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int y;
 		int set;
 		private String label; 
-		public Node Node(int x, int y) {
+		/*public Node Node(int x, int y) {
 			this.x = x;
 			this.y = y;
 			this.set = 0;
 			this.label = "";
 			return this;
-		}
+		}*/
 		public void nodesetdata(int x, int y) {
 			this.x = x;
 			this.y = y;
@@ -109,16 +108,16 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int y1,y2;
 		int set;
 		private String label; 
-		public Edge Edge(Node n1, Node n2, String cost) {
-			this.x1 = n1.x /*+3*/;
-			this.x2 = n2.x /*-3*/;
-			this.y1 = n1.y /*+3*/;
-			this.y2 = n2.y /*-3*/;
-			/*make sure it doesn't overlap with nodes.. global constant nodewidth?*/
+		/*public Edge Edge(Node n1, Node n2, String cost) {
+			this.x1 = n1.x;//adjustments needed to make sure it doesn't overlap with node
+			this.x2 = n2.x;
+			this.y1 = n1.y;
+			this.y2 = n2.y;
+			//make sure it doesn't overlap with nodes.. global constant nodewidth?
 			this.set = 0;
 			this.label = cost;
 			return this;
-		}
+		}*/
 		
 		public void edgesetdata(Node n1, Node n2, String cost) {
 			this.x1 = n1.x /*+3*/;
