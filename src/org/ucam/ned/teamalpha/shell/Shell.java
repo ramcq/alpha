@@ -64,7 +64,7 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 	
 	public void setMode(int mode) throws InvalidModeException {
 		// if an invalid mode has been requested, do nothing
-		if (mode > MODE_ANIMATE)
+		if (mode < MODE_CHOOSE || mode > MODE_ANIMATE)
 			throw new InvalidModeException("Unknown mode requested: " + mode);
 		
 		// stay in choice mode if we've been asked to move on without a choice
@@ -220,12 +220,11 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 	
 	public static void main(String[] args) {
 		Shell me;
-		
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-		} catch (Exception e) {
-			System.err.println("failed to set look and feel:" + e);
-		}
+
+		// try native, windows then gtk in increasing order of preference		
+		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {};
+		try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); } catch (Exception e) {};
+		try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel"); } catch (Exception e) {};
 		
 		me = Shell.getInstance();
 		SwingUtilities.invokeLater(me);
