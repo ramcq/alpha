@@ -539,7 +539,6 @@ public class ShellGraphAnimator
 	 * Constructor
 	 */
 	public ShellGraphAnimator() {
-		setSize(500, 500);
 		setOpaque(true);
 
 		int fps = (int) (basefps * fpsfactor);
@@ -563,8 +562,8 @@ public class ShellGraphAnimator
 		// all the time and flush it out on every frame)
 		bi =
 			new BufferedImage(
-				getWidth(),
-				getHeight(),
+				500,
+				500,
 				BufferedImage.TYPE_INT_RGB);
 		big = (Graphics2D) bi.getGraphics();
 		big.setRenderingHint(
@@ -583,7 +582,7 @@ public class ShellGraphAnimator
 	 */
 	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
-		repaint();
+		repaint(0, 0, bi.getWidth(), bi.getHeight());
 
 		// Now comes the meat of the method: what should we do each frame?
 		// If we need a new event, get it

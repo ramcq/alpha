@@ -1243,7 +1243,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * Constructor
 	 */
 	public ShellVectorAnimator() {
-		//setSize(500, 500);
 		setOpaque(true);
 		
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
