@@ -51,7 +51,7 @@ public class InsertionSort extends VectorAlgorithm {
 			sorted.setLabel("B");
 			VectorAnimator.Vector unsorted = anim.createVector(a);
 			unsorted.setLabel("A");
-			VectorAnimator.Arrow aSorted = sorted.createArrow(0, false);
+			VectorAnimator.Arrow aSorted = sorted.createArrow(0, false, true);
 			aSorted.setLabel("Ins");
 			VectorAnimator.Arrow aUnsorted = unsorted.createArrow(0, false);
 			aUnsorted.setLabel("Take");
