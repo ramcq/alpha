@@ -3,6 +3,9 @@
  *
  */
  
+// TODO: call repaint less often
+// TODO: move as much as possible up to ShellAnimator
+// TODO: make buffered image very large, paint top left
 // TODO: fix redrawAllArrows for very close arrows
 // TODO: fix fast forward to next checkpoint (currently completely broken)
 // TODO: add column highlighting for vectors (for radix sort)
@@ -1208,8 +1211,8 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		}
 	}
 	
-	private int basefps = 100;	// Basic animation framerate
-	private double fpsfactor = 1; // algorithm-defined FPS factor
+	private int basespeed = 100;	// Basic animation framerate
+	private double speedfactor = 1; // algorithm-defined speed factor
 	private javax.swing.Timer timer;	// timer for animation events
 	//private int highestColUsed = -1; // stores the highest column which has a vector in it
 	// Placement information: which of the possible positions a vector
@@ -1241,7 +1244,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		setSize(500, 500);
 		setOpaque(true);
 		
-		int fps = (int) (basefps * fpsfactor);
+		int fps = (int) (basespeed * speedfactor);
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
 		
@@ -1273,7 +1276,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	// This method is executed on each animation frame
 	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
-		if (draw) repaint();
+		//if (draw) repaint();
 
 		// If we need a new event, get it
 		if (currentEvent == null) {
@@ -1428,7 +1431,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * 	New frame rate (frames per second)
 	 */
 	public void setFps(int fps) {
-		basefps = fps;
+		basespeed = fps;
 		int newfps = getFps();
 		int delay = (newfps > 0) ? (1000 / newfps) : 10;	// Frame time in ms
 		System.out.println("Delay = " + delay + " ms");
@@ -1441,7 +1444,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * @see org.ucam.ned.teamalpha.animators.Animator#setFpsFactor(double)
 	 */
 	public void setFpsFactor(double f) {
-		fpsfactor = f;
+		speedfactor = f;
 		int fps = getFps();
 		int delay = (fps > 0) ? (1000 / fps) : 100;
 		System.out.println("Delay is "+delay+" ms");
@@ -1454,7 +1457,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * @return the current framerate
 	 */
 	public int getFps() {
-		return (int) (basefps*fpsfactor);
+		return (int) (basespeed*speedfactor);
 	}
 	
 	/**
@@ -1964,7 +1967,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 * 	Time to pause for in ms
 	 */
 	public void waitFor(int time) {
-		int fps = (int) (basefps*fpsfactor);
+		int fps = (int) (basespeed*speedfactor);
 		int frames = (time / 1000) * fps; // number of frames to wait for
 		System.out.println("Waiting for "+frames);
 		synchronized (this) {
