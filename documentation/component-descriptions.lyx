@@ -97,9 +97,80 @@ VectorAnimator
 \layout Subsection
 
 Exceptions
+\layout Subsubsection
+
+
+\family typewriter 
+InputTooLongException
+\layout Standard
+
+This exception is thrown if an attempt is made to create a vector with more
+ than 20 elements.
+\layout Subsubsection
+
+
+\family typewriter 
+InvalidLocationException
+\layout Standard
+
+This exception is thrown if an attempt is made to reference a vector element
+ which does not exist, for example an element with a negative offset, or
+ with an offset greater than the size of the vector.
+ This applies to element moving, swapping and copying, arrow movement and
+ creation, and so forth.
+\layout Subsubsection
+
+
+\family typewriter 
+ItemDeletedException
+\layout Standard
+
+This exception is thrown if an attempt is made to make any modification
+ (move an associated arrow, alter an element, change a label, etc) of a
+ vector or arrow which has previously had the 
+\family typewriter 
+delete()
+\family default 
+ method called on it.
+ This prevents the 
+\begin_inset Quotes eld
+\end_inset 
+
+resurrection
+\begin_inset Quotes erd
+\end_inset 
+
+ of deleted vectors and arrows if animation primitives are called on them.
+\layout Subsubsection
+
+
+\family typewriter 
+NonSquareMatrixException
+\layout Standard
+
+This exception is thrown if an attempt is made to create a graph with a
+ non-square cost matrix.
+ The exception class itself has a static method for checking the 
+\begin_inset Quotes eld
+\end_inset 
+
+squareness
+\begin_inset Quotes erd
+\end_inset 
+
+ of an 
+\family typewriter 
+int[][]
+\family default 
+, and this is called whereever an attempt to create a graph is made.
 \layout Section
 
 Queues
+\begin_inset LatexCommand \label{sec:Queues}
+
+\end_inset 
+
+
 \layout Subsection
 
 Interface 
@@ -141,6 +212,444 @@ AnimatorShell
 
 \family typewriter 
 ShellVectorAnimator
+\layout Standard
+
+This class was written by Andrew Medworth.
+ It is the class which does the actual graphical work for vector algorithms,
+ such as the sort algorithms we implemented.
+ Its constructor takes a 
+\family typewriter 
+Container
+\family default 
+, which will normally be a 
+\family typewriter 
+JFrame
+\family default 
+, and instantiates its own 
+\family typewriter 
+JPanel
+\family default 
+ to go inside this.
+ It overrides the 
+\family typewriter 
+paintComponent(Graphics)
+\family default 
+ method of the 
+\family typewriter 
+JPanel
+\family default 
+ with a method which redraws the current animation canvas, thus causing
+ the canvas to be redrawn if it is ever obscured.
+\layout Standard
+
+Animation is done using a 
+\family typewriter 
+Timer
+\family default 
+ (from 
+\family typewriter 
+javax.swing
+\family default 
+), which sends periodic 
+\family typewriter 
+ActionEvent
+\family default 
+s to the 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+.
+ The class responds to these by implementing 
+\family typewriter 
+ActionListener
+\family default 
+ and having a method, 
+\family typewriter 
+actionPerformed
+\family default 
+, which is executed on each 
+\family typewriter 
+ActionEvent
+\family default 
+.
+ This method contains the instructions required for drawing the next animation
+ frame.
+\layout Standard
+
+The animator knows what event it is in the process of animating by means
+ of an internal queue (not to be confused with the queue classes --- see
+ section\SpecialChar ~
+
+\begin_inset LatexCommand \ref{sec:Queues}
+
+\end_inset 
+
+) which stores instances of the inner class 
+\family typewriter 
+AnimationEvent
+\family default 
+.
+ Each 
+\family typewriter 
+AnimationEvent
+\family default 
+ represents a very fundamental animation operation, even more fundamental
+ than the animation primitives dealt with by the algorithm: examples of
+ types of 
+\family typewriter 
+ActionEvent
+\family default 
+ would be moving a vector element horizontally out to lie beside the vector,
+ or moving an arrow from one position to another.
+\layout Standard
+
+When the 
+\family typewriter 
+actionPerformed
+\family default 
+ method is called, the current event is examined to see what type it is,
+ and an appropriate set of instructions is called, to move the animation
+ on by one frame.
+ This is generally done, somewhat clumsily, by a global integer variable
+ 
+\family typewriter 
+intermediateOffset
+\family default 
+, which is incremented on each frame and tells the current operation, for
+ example, by how much a vector element should be displaced from its position
+ at the start of the current event.
+\layout Standard
+
+After an event is completed, 
+\family typewriter 
+intermediateOffset
+\family default 
+ is zeroed, and the current event is set to 
+\family typewriter 
+null
+\family default 
+, causing the next event to be taken off the event queue.
+ If the queue is empty, the 
+\family typewriter 
+Timer
+\family default 
+ is stopped and the animator 
+\family typewriter 
+wait
+\family default 
+s until the queue is filled again, by animation primitives called by the
+ queue class (see section\SpecialChar ~
+
+\begin_inset LatexCommand \ref{sec:Queues}
+
+\end_inset 
+
+).
+\layout Standard
+
+The 
+\family typewriter 
+awt
+\family default 
+ library does not directly support double buffering, and there is no equivalent
+ of the 
+\family typewriter 
+Graphics
+\family default 
+ class in Swing, which does support double buffering throughout.
+ In order to facilitate flicker-free animation, therefore, the animator
+ maintains a 
+\family typewriter 
+BufferedImage
+\family default 
+ object which holds the current state of the canvas.
+ When graphical operations are actually being done, they are performed on
+ this 
+\family typewriter 
+BufferedImage
+\family default 
+ rather than directly on the screen.
+ At the start of the 
+\family typewriter 
+actionPerformed
+\family default 
+ method, this 
+\family typewriter 
+BufferedImage
+\family default 
+ is written out to the screen.
+ This 
+\family typewriter 
+BufferedImage
+\family default 
+ is also useful for redrawing the animation canvas if it is obscured and
+ then revealed again while the 
+\family typewriter 
+Timer
+\family default 
+ is not running: in fact, this is precisely what the overridden 
+\family typewriter 
+paintComponent
+\family default 
+ method on the 
+\family typewriter 
+JPanel
+\family default 
+ instantiated in the constructor does.
+\layout Standard
+
+Vectors and arrows are represented by instances of the inner classes 
+\family typewriter 
+Vector
+\family default 
+ and 
+\family typewriter 
+Arrow
+\family default 
+ respectively.
+ These objects contain information about the placing, colour, label and
+ other properties of each vector or arrow, along with methods for the animation
+ primitives as specified by the parent classes 
+\family typewriter 
+VectorAnimator.Vector
+\family default 
+ and 
+\family typewriter 
+VectorAnimator.Arrow
+\family default 
+.
+ Here, these methods are synchronized on the parent 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+ (to prevent concurrency issues with the event queue, which is not designed
+ to be resilient under concurrent access).
+ Each one adds the appropriate 
+\family typewriter 
+AnimationEvent
+\family default 
+s to the animator's event queue, and then 
+\family typewriter 
+wait
+\family default 
+s until the event queue becomes empty again (which it will after the primitive
+ has been animated in full).
+ This is done in order that the animation primitive method should not exit
+ until the animation of that primitive is complete --- this makes the design
+ of the queue classes easier, and it also results in not having to worry
+ about the effect of calling animation primitives while the 
+\family typewriter 
+Timer
+\family default 
+ is running and animation is actually in progress.
+\layout Standard
+
+The 
+\family typewriter 
+Vector
+\family default 
+ and 
+\family typewriter 
+Arrow
+\family default 
+ inner classes each contain a 
+\family typewriter 
+getState()
+\family default 
+ method which returns a 
+\family typewriter 
+VectorState
+\family default 
+ or 
+\family typewriter 
+ArrowState
+\family default 
+ object containing all the information needed to restore that particular
+ vector or arrow.
+ These objects are used to make up a 
+\family typewriter 
+State
+\family default 
+ object for the animator as a whole.
+ These objects facilitate the saving and restoring of the animator state,
+ in order that the user can jump forwards and backwards in the algorithm.
+ When the 
+\family typewriter 
+saveState()
+\family default 
+ method is called on the animator, it calls 
+\family typewriter 
+getState()
+\family default 
+ on each 
+\family typewriter 
+Vector
+\family default 
+ and 
+\family typewriter 
+Arrow
+\family default 
+ it knows about (pointers to each 
+\family typewriter 
+Vector
+\family default 
+ and 
+\family typewriter 
+Arrow
+\family default 
+ are stored in two 
+\family typewriter 
+LinkedList
+\family default 
+s when the vectors and arrows are created), puts these states in two arrays,
+ and puts these two arrays in a 
+\family typewriter 
+State
+\family default 
+ object, which is then returned.
+ When 
+\family typewriter 
+restoreState
+\family default 
+ is called for a particular state, the 
+\family typewriter 
+VectorState
+\family default 
+ and 
+\family typewriter 
+ArrowState
+\family default 
+ objects are extracted and the 
+\family typewriter 
+restore()
+\family default 
+ method is called on each.
+ The beauty is that, because these are inner classes, each is already associated
+ with the correct 
+\family typewriter 
+Arrow
+\family default 
+ or 
+\family typewriter 
+Vector
+\family default 
+ object, and so it simply updates the object's fields according to the values
+ stored in the state object.
+\layout Standard
+
+The 
+\family typewriter 
+State
+\family default 
+ object holds one value as well as the arrays of 
+\family typewriter 
+ArrowState
+\family default 
+s and 
+\family typewriter 
+VectorState
+\family default 
+s, namely the value of the variable 
+\family typewriter 
+highestColUsed
+\family default 
+.
+ This variable stores the position of the right-most 
+\family typewriter 
+Vector
+\family default 
+ known to the animator, and is used for placing new 
+\family typewriter 
+Vector
+\family default 
+s.
+ It is stored in the 
+\family typewriter 
+State
+\family default 
+ object so that, if a vector is created in a particular stage of an algorithm
+ and the animator is then taken back to a state before that vector was created,
+ the vector will appear in the same position as before if it is created
+ again.
+ If this variable is allowed to persist through calls to 
+\family typewriter 
+restoreState
+\family default 
+, this vector will appear further over on subsequent animations of that
+ step of the algorithm.
+\layout Standard
+
+The design of this class has a number of drawbacks, which should be drawn
+ to the reader's attention.
+ Firstly, it would be very time-consuming to modify this class to lay things
+ out differently, for example by having wider vectors, or larger fonts.
+ This is because the layout information is spread out in lots of methods,
+ with each layout property being redundantly hard-coded again and again
+ into animation methods.
+ Given the chance to start again, this information should be stored centrally
+ (non-redundantly) in static variables, so that it can be modified more
+ easily.
+\layout Standard
+
+Secondly, highlighting the 
+\begin_inset Formula $n$
+\end_inset 
+
+th digit of each element of a vector (to assist with the visualisation of
+ Radix sorting) has not been implemented at the time of writing.
+\layout Standard
+
+Thirdly, the 
+\family typewriter 
+fastForward
+\family default 
+ mechanism, designed to make the animator stop visually displaying its animation
+ and just execute the animation events at maximum speed (so that the user
+ can jump forwards in time as well as backwards), does not work at all.
+ It is supposed to work by stopping the 
+\family typewriter 
+Timer
+\family default 
+, repeatedly calling the 
+\family typewriter 
+actionPerformed
+\family default 
+ method until the event queue is exhausted, and then 
+\family typewriter 
+wait
+\family default 
+ing until something new arrives; however, this 
+\family typewriter 
+wait
+\family default 
+ operation causes 
+\family typewriter 
+IllegalMonitorStateException
+\family default 
+ to be thrown.
+ This issue has yet to be thoroughly investigated, but it is suspected to
+ be due to the fact that the methods which add events to the queue contain
+ 
+\family typewriter 
+synchronized
+\family default 
+ blocks, and so they cannot be run at the same time as another method 
+\family typewriter 
+wait
+\family default 
+s for an event.
+\layout Standard
+
+Fourthly, the placement of vectors is rather inflexible.
+ New vectors are placed to the right of the rightmost vector currently known
+ to the animator, but this includes deleted vectors, so if an algorithm
+ using many vectors, many of which are deleted and new ones subsequently
+ created, the positioning of the vectors will be strange, with large gaps
+ resulting where the deleted vectors were.
+ This is not true of the kinds of algorithm we are animating, so this is
+ not considered to be a problem as far as this project is concerned, but
+ for full flexibility in animating arbitrary vector algorithms, this positioning
+ scheme should be extended to something more intelligent.
 \layout Subsection
 
 
@@ -163,4 +672,39 @@ StaticAlgorithmCatalog
 \layout Subsection
 
 Exceptions
+\layout Subsubsection
+
+
+\family typewriter 
+InvalidAnimationEventException
+\layout Standard
+
+This exception is internal to 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+ and should never be thrown externally.
+ It is thrown by the constructors to the 
+\family typewriter 
+AnimationEvent
+\family default 
+ inner class of 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+, if the constructor is called with an inappropriate event type.
+ This exception is caught within 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+ and, if it arises, an error message is printed on 
+\family typewriter 
+System.out
+\family default 
+ for debugging purposes.
+ This can only arise due to a programming error in 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+.
 \the_end
