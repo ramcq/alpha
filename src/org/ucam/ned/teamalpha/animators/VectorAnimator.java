@@ -87,21 +87,6 @@ public abstract class VectorAnimator extends Animator {
 		public abstract void swapElements(int offset1, int offset2) throws ItemDeletedException;
 
 		/**
-		 * Swap the value of two elements, one in another vector.
-		 * 
-		 * @param offset1
-		 *            the offset to the first value
-		 * @param target
-		 *            the other vector
-		 * @param offset2
-		 *            the offset to the second value in the other vector
-		 */
-		public abstract void swapElements(
-			int offset1,
-			VectorAnimator.Vector target,
-			int offset2) throws ItemDeletedException;
-
-		/**
 		 * Flash an element to draw attention to it.
 		 * 
 		 * @param offset
