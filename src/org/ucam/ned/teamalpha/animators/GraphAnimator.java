@@ -83,4 +83,22 @@ public abstract class GraphAnimator extends Animator {
 	 *            the number of the set to add it to, 0 to unshade it
 	 */
 	public abstract void setEdgeShade(int from, int to, int set);
+	
+	/**
+	 * causes node to alternate between shade, white, and black for set time period.
+	 * 
+	 * @param Node
+	 * 			id of node to be flashed
+	 */
+	public abstract void flashNode(int Node);
+	/**
+	 * causes edge to alternate between shade, white, and black for set time period.
+	 * 
+	 * @param from
+	 * 			the origin node
+	 * @param to
+	 * 			the destination node
+	 */
+	public abstract void flashEdge(int from, int to);
+
 }
