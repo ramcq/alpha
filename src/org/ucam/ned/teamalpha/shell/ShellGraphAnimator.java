@@ -152,6 +152,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				}
 			}			
 		}
+		public void nodecopy(Node n) {
+			this.x = n.x; 
+			this.y = n.y; 
+			this.set = n.set;
+			this.label = n.label; 		
+		}
 	}
 	
 	public class Edge /*implements Serializable*/ {
@@ -269,6 +275,44 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					System.out.println(e);
 				}
 			}
+		}
+		public void altflash() {
+			this.toshade = 0;
+			this.drawEdgeFlash();
+		}
+		public void flash() {
+			this.toshade = 1;
+			this.drawEdgeFlash();
+		}
+		public void drawEdgeFlash() {
+			synchronized (ShellGraphAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.EDGE_FLASH, this));
+					startAnimation();
+					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
+					System.out.println(e);
+				}
+			}
+		}
+
+		public void edgecopy(Edge e) {
+			this.x1 = e.x1;
+			this.y1 = e.y1;
+			this.x2 = e.x2;
+			this.y2 = e.y2;
+			this.set1 = e.set1;
+			this.set2 = e.set2;
+			this.nd1 = e.nd1;
+			this.nd2 = e.nd2;
+			this.label1 = e.label1;
+			this.label2 = e.label2;
+			this.type = e.type;
+			this.toshade = e.toshade;
 		}
 	}
 
@@ -390,7 +434,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					break;
 				case AnimationEvent.NODE_FLASH:
 					intermediateOffset++;
-					int tmpint = (int) (intermediateOffset / 10);
+					int tmpint = (int) (intermediateOffset / 5);
 					if ((tmpint % 4)== 0) {
 						drawFlashNode(currentEvent.n1, true, big);
 					}
@@ -400,14 +444,15 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					else {
 						drawNode(currentEvent.n1, big);
 					}
-					if (tmpint > 31) {
+					if (tmpint > 100) {
 						intermediateOffset = 0;	
+						drawNode(currentEvent.n1, big);
 						currentEvent = null;
 					}
 					break;
 				case AnimationEvent.EDGE_FLASH:
 					intermediateOffset++;
-					int tmpint2 = (int) (intermediateOffset / 10);
+					int tmpint2 = (int) (intermediateOffset / 5);
 					if ((tmpint2 % 4)== 0) {
 						drawFlashEdge(currentEvent.e1, true, big);
 					}
@@ -417,8 +462,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					else {
 						drawEdge(currentEvent.e1, big);
 					}
-					if (tmpint2 > 31) {
+					if (tmpint2 > 100) {
 						intermediateOffset = 0;	
+						drawEdge(currentEvent.e1, big);
 						currentEvent = null;
 					}
 					break;
@@ -464,7 +510,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			if (e.type == EDGE_TYPE_ONEDIR) {
 				g.setColor(SET_COLOUR[e.set1]);
 				g.drawLine(e.x1, e.y1, e.x2, e.y2);
-				drawarrow(e.x1,e.y1,e.x2,e.y2,e.set1,55,g);
+				drawarrow(e.x1,e.y1,e.x2,e.y2,e.set1,g);
 				g.setColor(fgcolour);				
 			}
 			else { 
@@ -525,6 +571,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		{	x = (int)((((1-i)*(1-i)*(1-i))*x1)+(3*i*((1-i)*(1-i))*sx)+(3*(i*i)*(1-i)*sx)+((i*i*i)*x2));
 			y = (int)((((1-i)*(1-i)*(1-i))*y1)+(3*i*((1-i)*(1-i))*sy)+(3*(i*i)*(1-i)*sy)+((i*i*i)*y2));
 			g.drawLine(oldx,oldy,x,y);
+			if (arrowdrawn == false && i > 0.5) {
+				drawarrow(oldx,oldy,x,y,x1,y1,x2,y2,set,g);
+				arrowdrawn = true;
+				g.setColor(SET_COLOUR[set]);
+			}
 			oldx = x;
 			oldy = y;
 			i = i + t;
@@ -536,31 +587,28 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}	
 		}
 		while (i <= limit);
-/*		if (limit == 1) {
-			drawarrow(oldx,oldy,x,y,set,1,g);
-		}*/
-		//TODO arrow drawing on curves
 		g.setColor(fgcolour);
 	}
-	
-	public void drawarrow (int x1, int y1, int x2, int y2, int set, int div, Graphics g) {
+	/* 
+	 * Method for drawing arrows on straight lines
+	 */
+	public void drawarrow (int x1, int y1, int x2, int y2, int set, Graphics g) {
 		g.setColor(SET_COLOUR[set]);
-		int x = (int) (x1 - (div * (x1 - x2))/60.0);
-		int y = (int) (y1 - (div * (y1 - y2))/60.0);
+		int x = (int) (x1 - ((x1 - x2))/2);
+		int y = (int) (y1 - ((y1 - y2))/2);
 		int sx1 = 0,sy1 = 0,sx2 = 0,sy2 = 0,sx3 = 0,sy3 = 0;
-		int arsize = 5;
+		int arsize = 4;
+		int arlen = 7;
 		if (x1 != x2 && y1 != y2){
 			double grad = (double) ((x1-x2)/(y1-y2));
 			if (x1>x2) {
-				sx3 = (int)(x2 - arsize * grad);
-				sy3 = (int)(y2 + arsize * grad);
+				sx3 = (int)(x + arlen * grad);
+				sy3 = (int)(y - arlen * grad);
 			}
 			else {
-				sx3 = (int)(x2 + arsize * grad);
-				sy3 = (int)(y2 - arsize * grad);
+				sx3 = (int)(x - arlen * grad);
+				sy3 = (int)(y + arlen * grad);
 			}
-			sx3 = (int)(x2 - arsize * grad);
-			sy3 = (int)(y2 + arsize * grad);
 			grad = (-1 / grad);
 			sx1 = (int)(x - arsize * grad);
 			sy1 = (int)(y - arsize * grad);
@@ -573,12 +621,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				sy1 = y;
 				sx2 = x + arsize;
 				sy2 = y;
-				sx3 = x2;
+				sx3 = x;
 				if (y1>y2) {
-					sy3 = y2 + 5;
+					sy3 = y - arlen;
 				}
 				else {
-					sy3 = y2 - 5;
+					sy3 = y + arlen;
 				}
 			}
 			if (y1 == y2) {
@@ -586,8 +634,66 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				sy1 = y - arsize;
 				sx2 = x;
 				sy2 = y + arsize;
-				sy3 = y2;
+				sy3 = y;
 				if (x1>x2) {
+					sx3 = x - arlen;
+				}
+				else {
+					sx3 = x + arlen;
+				}
+			}
+		}
+		int[] xpoints = {sx1,sx2,sx3};
+		int[] ypoints = {sy1,sy2,sy3};
+		g.fillPolygon(xpoints, ypoints,3);
+		g.setColor(fgcolour);
+	}
+	/* 
+	 * Method for drawing arrows on curves
+	 */
+	public void drawarrow (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int set, Graphics g) {
+		g.setColor(SET_COLOUR[set]);
+		int x = (int) x1;
+		int y = (int) y1;
+		int sx1 = 0,sy1 = 0,sx2 = 0,sy2 = 0,sx3 = 0,sy3 = 0;
+		int arsize = 5;
+		if (x3 != x4 && y3 != y4){
+			double grad = (double) ((x3-x4)/(y3-y4));
+			if (x3>x4) {
+				sx3 = (int)(x2 - arsize * grad);
+				sy3 = (int)(y2 + arsize * grad);
+			}
+			else {
+				sx3 = (int)(x2 + arsize * grad);
+				sy3 = (int)(y2 - arsize * grad);
+			}
+			grad = (-1 / grad);
+			sx1 = (int)(x - arsize * grad);
+			sy1 = (int)(y - arsize * grad);
+			sx2 = (int)(x + arsize * grad);
+			sy2 = (int)(y + arsize * grad);
+		}
+		else {
+			if (x3 == x4) {
+				sx1 = x - arsize;
+				sy1 = y;
+				sx2 = x + arsize;
+				sy2 = y;
+				sx3 = x2;
+				if (y3>y4) {
+					sy3 = y2 + 5;
+				}
+				else {
+					sy3 = y2 - 5;
+				}
+			}
+			if (y3 == y4) {
+				sx1 = x;
+				sy1 = y - arsize;
+				sx2 = x;
+				sy2 = y + arsize;
+				sy3 = y2;
+				if (x3>x4) {
 					sx3 = x2 + 5;
 				}
 				else {
@@ -603,8 +709,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		
 	//incrementally shade an edge on screen	
 	public void drawEdgeShade(Edge e, Graphics g, int t) {
-		int sx1,sx2,sy1,sy2;
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
+			int sx1,sy1,sx2,sy2;
 			if (e.toshade == 1) {
 				sx1 = e.x2; sx2 = e.x1; sy1 = e.y2; sy2 = e.y1;
 			}
@@ -615,6 +721,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			int x = (int) (sx1 - (t * (sx1 - sx2))/60.0);
 			int y = (int) (sy1 - (t * (sy1 - sy2))/60.0);
 			g.drawLine(sx1, sy1, x, y);
+			if (e.type == EDGE_TYPE_ONEDIR) {
+				drawarrow(e.x1,e.y1,e.x2,e.y2,e.set1,g);
+			}
 			g.setColor(fgcolour);
 			drawEdgelabel(e, g);
 		}
@@ -649,6 +758,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			int x = (int) (sx1 - (sx1 - sx2));
 			int y = (int) (sy1 - (sy1 - sy2));
 			g.drawLine(sx1, sy1, x, y);
+			if (e.type == EDGE_TYPE_ONEDIR) {
+				drawarrow(e.x1,e.y1,e.x2,e.y2,e.set1,g);
+			}
 			g.setColor(fgcolour);
 			drawEdgelabel(e, g);
 		}
@@ -772,6 +884,19 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		nodelist[Node].flash();
 	}
 	
+	public void flashEdge(int from, int to) {
+		if (edgematrix[from][to].type == EDGE_TYPE_TWODIR) {
+			if (from>to) {
+				edgematrix[from][to].flash();
+			}
+			else {
+				edgematrix[from][to].altflash();
+			}
+		}
+		else {
+			edgematrix[from][to].flash();
+		}	}
+	
 	public void setNodeShade(int id, int set){
 		nodelist[id].setNodeshade(set);
 	}
@@ -855,8 +980,20 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	
 	public synchronized Animator.State saveState() {
+		Node[] snodelist = new Node[10];
+		Edge[][] sedgematrix = new Edge[10][10];
+		for (int i=0;i<numnodes;i++) {
+			snodelist[i] = new Node();
+			snodelist[i].nodecopy(nodelist[i]);
+			for (int j=0;j<numnodes;j++) {
+				if (edgematrix[i][j] != null) {
+					sedgematrix[i][j] = new Edge();
+					sedgematrix[i][j].edgecopy(edgematrix[i][j]);
+				}
+			}
+		}
 		stopAnimation();
-		return new State(nodelist,edgematrix,numnodes);
+		return new State(snodelist,sedgematrix,numnodes);
 	}
 
 	public synchronized void restoreState(Animator.State s) {
@@ -866,6 +1003,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		eventQueue.clear();
 		big.setColor(bgcolour);
 		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+/*		//clear data
+		for (int i=0;i<numnodes;i++) {
+			nodelist[i] = new Node();
+			for (int j=0;j<numnodes;j++) {
+				edgematrix[i][j] = new Edge();
+			}
+		}*/
 		//load saved data
 		edgematrix = ts.getEdges();
 		nodelist = ts.getNodes();
@@ -901,8 +1045,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		//current test data
 		int[][] tstcosts = {{0,0,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
 		app.createGraph(tstcosts);
+		Animator.State s = app.saveState();
 		app.setEdgeShade(0,2,1);
 		app.setEdgeShade(2,0,2);
+		app.setEdgeShade(1,2,3);
+		app.setEdgeShade(2,1,1);
+		app.restoreState(s);
+		app.setEdgeShade(1,2,6);
 	}
 }
    /*
@@ -912,7 +1061,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	*	app.createGraph(tstcosts);
 	*	app.setNodeShade(1,1);
 	*	app.setEdgeShade(0,1,1);
-	*	Result: Worked fine (pic wanted?)
+	*	Result: Worked fine
 	*
 	*2) int[][] tstcosts = {{0,2,1,0},{2,0,3,0},{1,3,0,0},{0,0,0,0}};
 	*	app.createGraph(tstcosts);
@@ -927,5 +1076,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	*	app.setEdgeShade(0,1,3);
 	*	app.setEdgeShade(2,0,2);
 	*	Result: Now draws and shades curved edges	
-	* 
+	*4)int[][] tstcosts = {{0,0,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
+	*	app.createGraph(tstcosts);
+	*	app.setEdgeShade(0,2,1);
+	*	app.setEdgeShade(2,0,2);
+	*	Result: now draws arrows
 	*/
