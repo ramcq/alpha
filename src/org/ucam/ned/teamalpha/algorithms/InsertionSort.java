@@ -77,7 +77,6 @@ public class InsertionSort extends VectorAlgorithm {
 				
 				// Find insertion point
 				while ( a[j-1] > v ) {
-					
 					COMPARES++;
 					
 					a[j] = a[j-1];
@@ -94,6 +93,7 @@ public class InsertionSort extends VectorAlgorithm {
 					
 					COMPARES++;
 					if ( j <= 0 ) break;
+					
 				}
 				// Correct insertion point found, insert here
 				anim.setCurrentStep(3);

@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Random;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -142,6 +143,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.add(Box.createHorizontalGlue());
 		
 		cells = new JPanel();
+		cells.setBorder(BorderFactory.createTitledBorder("Enter cost matrix for algorithm"));
 		values = new int[64];
 		makeCells(nodesDefault);
 		

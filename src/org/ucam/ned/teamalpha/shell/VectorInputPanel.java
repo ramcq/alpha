@@ -16,6 +16,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Random;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -119,7 +120,7 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		// create drop down list of numbers of elements
 		Integer[] vals = { new Integer(5), new Integer(10), new Integer(15), new Integer(20) };
 		elements = new JComboBox(vals);
-		elements.setSelectedIndex(0);
+		elements.setSelectedIndex(1);
 		elements.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Integer i = (Integer) elements.getSelectedItem();
@@ -140,8 +141,9 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		row.add(Box.createHorizontalGlue());
 		
 		cells = new JPanel(new GridLayout(0, 5, 5, 5));
+		cells.setBorder(BorderFactory.createTitledBorder("Enter integers for algorithm"));
 		values = new int[20];
-		makeCells(5);
+		makeCells(10);
 		
 		row.add(cells);
 		row.add(Box.createHorizontalGlue());
