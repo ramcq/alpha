@@ -28,8 +28,15 @@ import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
  */
 
 /*
+ * TODO: bug fixes:
+ * problem with gradient -> infinity with 3 node graph ({trig,cast to int} functions rounding error)
+ * potential edge overlap problem (scale label distance along edge according to number of nodes?)
+ */
+
+
+/*
  * Progress log:
- *	current time use: ~13 hours (?)
+ *	current time use: ~27 hours (?)
  *  current problems: none
  *  past problems: all nodes being appearing drawn on same point 
  * 						- fixed, was just drawing the same node repeatedly due to flaw in actionperformed method
@@ -854,7 +861,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public int numnodes;
 	
 	public void createGraph(int[][] costs) throws NonSquareMatrixException {
-		NonSquareMatrixException.isSquare(costs);
+		//NonSquareMatrixException.isSquare(costs);
 		int[] arrlentst = (int[]) costs[0].clone();
 		//perhaps hardcode positions given number of nodes?
 		//centre is 250,250. 
@@ -869,9 +876,9 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			for (int i=0;i<costs.length;i++) 
 			{	//create nodes
 				//calculate x,y position
-				System.out.println(costs.length + " " + arrlentst.length);
-				x = 250 + 200 * (int) java.lang.Math.sin(java.lang.Math.toRadians(currentang));
-				y = 250 + 200 * (int) java.lang.Math.cos(java.lang.Math.toRadians(currentang));
+				x = (int) (250 + 200 * java.lang.Math.sin(java.lang.Math.toRadians(currentang)));
+				y = (int) (250 + 200 * java.lang.Math.cos(java.lang.Math.toRadians(currentang)));
+				System.out.println(x + " " + y + " " + java.lang.Math.sin(java.lang.Math.toRadians(currentang)) + " " + java.lang.Math.cos(java.lang.Math.toRadians(currentang)));
 				currentang = currentang + Nodeangle;
 				//fill in node data
 				nodelist[i] = new Node();
@@ -1088,18 +1095,20 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		});
 		//current test data
-		int[][] tstcosts = {{0,0,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
+		int[][] tstcosts = {{0,	33,	10,	56,	0,	0,	0,	0,	0,	0},
+					 {33,	0,	0,	13,	21,	0,	0,	0,	0,	0},
+					 {10,	0,	0,	23,	0,	24,	65,	0,	0,	0},
+					 {56,	13,	23,	0,	51,	0,	20,	0,	0,	0},
+					 {0,	21,	0,	51,	0,	0,	17,	35,	0,	0},
+					 {0,	0,	24,	0,	0,	0,	40,	0,	72,	0},
+					 {0,	0,	65,	20,	17,	40,	0,	99,	45,	42},
+					 {0,	0,	0,	0,	35,	0,	99,	0,	0,	0},
+					 {0,	0,	0,	0,	0,	72,	45,	0,	0,	83},
+					 {0,	0,	0,	0,	0,	0,	42,	0,	83,	0}};
 		try { app.createGraph(tstcosts); }
 		catch (NonSquareMatrixException e) {
 			System.out.println(e);
 		}
-		Animator.State s = app.saveState();
-		app.setEdgeShade(0,2,1);
-		app.setEdgeShade(2,0,2);
-		app.setEdgeShade(1,2,3);
-		app.setEdgeShade(2,1,1);
-		app.restoreState(s);
-		app.setEdgeShade(1,2,6);
 	}
 }
    /*
