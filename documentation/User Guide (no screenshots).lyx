@@ -1,0 +1,137 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language british
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms: User Guide
+\layout Standard
+\pagebreak_bottom 
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
+\layout Section
+
+Introduction
+\layout Standard
+
+Animating Algorithms is a program designed to aid your understanding of
+ a variety of sorting and graph based algorithms.
+ It shows and explains the basic working of the algorithms by animating
+ key steps and giving an explanation of what is happening at each point.
+ It also allows you to step forward and backwards through the algorithms,
+ allowing you to repeat steps if you want to see an animation again.
+ The purpose of this User Guide is to show you how to use this program.
+\layout Section
+
+Starting up
+\layout Standard
+
+To start the program on a Linux machine you need to go to the terminal and
+ type java -jar alpha.jar.
+ If you are running a Windows machine then go at the command prompt and
+ type javaw alpha.jar.
+\layout Section
+
+Animating an algorithm
+\layout Itemize
+
+When the program starts, the Main Menu will be displayed on screen.
+\layout Itemize
+
+You can now see two drop-down boxes to the left which list the algorithms
+ which are available for animation.
+ Choose either the Vector or Graph option and accordingly you will see the
+ available algorithms for animation.
+ To the right a brief description of the algorithm will be presented.
+ Select the desired algorithm using the mouse.
+\layout Itemize
+
+Then, click the 'Next' button at the bottom of the screen.
+ This will then display the Input Data Menu.
+ This screen allows you to input some initial data for the algorithm that
+ you have chosen.
+ The type of data you can input depends on the algorithm you are using,
+ because sorting based algorithms use different data to graph based algorithms.
+ 
+\layout Itemize
+
+To input data in either of these, click on an empty text box with the mouse
+ and write data in with the keyboard.
+ There is also an option to generate random data, and to do this simply
+ click on the 'Random' button.
+ This will automatically fill all of the boxes for you.
+\layout Itemize
+
+The next step is to select how you would like the animation to proceed.
+ In order to make the animation continue to the end without stopping (i.e
+ run by the machine), click on the 'Automatic Slide Show' button.
+ If however you would like the animation to proceed at your own pace, press
+ the 'Manual' button.
+ This will then enable the algorithm to go one step at a time and only move
+ on to the next step when you tell it to do so by pressing the 'Next' button.
+\layout Itemize
+
+Regardless of the animation method you choose to view, the animation screen
+ will still appear the same.
+ 
+\layout Itemize
+
+If you are using the 'Manual' method, you can use the 'Next' and 'Previous'
+ buttons which allow you to step forwards and backwards through the algorithm,
+ allowing you to view certain steps again in order to aid your understanding
+ of the algorithm.
+\layout Itemize
+
+To exit and return to the Main Menu before the animation has finished, click
+ the 'Exit' button.
+\layout Section
+
+Exiting
+\layout Standard
+
+To terminate the program completely, press the 'Quit' button on the main
+ menu.
+\layout Section
+
+Useful information
+\layout Standard
+
+For more useful information on algorithms, these sources may be useful:
+\layout Itemize
+
+'Introduction To Algorithms' by Cormen, Leiberson, Rivest & Stein - A comprehens
+ive look at many algorithms
+\layout Itemize
+
+www.google.co.uk - Internet search engine
+\layout Standard
+
+To learn how to add new algorithms to the current system, read the Animating
+ Algorithms: Developers Guide.
+\the_end
