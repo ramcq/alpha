@@ -76,8 +76,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.yellow, Color.darkGray, Color.lightGray};
 		//colours for representing the different node/edge sets
 	public static final int NODE_SIZE = 12; //node width/height
-	public static final int NODE_FONT_SIZE = 16; //node font height
-	public static final int EDGE_FONT_SIZE = 14; //edge font height
+	public static final int NODE_FONT_SIZE = 18; //node font height
+	public static final int EDGE_FONT_SIZE = 16; //edge font height
 	public static final int EDGE_TYPE_SAMDIR = 0;
 	public static final int EDGE_TYPE_ONEDIR = 1;
 	public static final int EDGE_TYPE_TWODIR = 2;
@@ -873,7 +873,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	//actual method for drawing text on screen
 	public void drawlabel(int x,int y,String label, Graphics g, int Fsize) {
 		g.setColor(fgcolour);
-		g.setFont(new Font("MonoSpaced", Font.PLAIN, Fsize));
+		g.setFont(new Font("MonoSpaced", Font.BOLD, Fsize));
 		g.drawString(label, x, y);
 	}
 	public void edrawLine(int x1,int y1,int x2,int y2, Graphics g) {
@@ -883,12 +883,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		else {
 			if (y1-y2 != 0) {
 				double grad = (double)(x1-x2)/(y1-y2);
-				if ((grad > 0.6) && (grad < 1.4)) {
+				if ((grad > 0.6) && (grad < 10)) {
 					int[] xpts = {x1-1,x1+1,x2+1,x2-1};
 					int[] ypts = {y1+1,y1-1,y2-1,y2+1};	
 					g.fillPolygon(xpts,ypts,4);
 				}
-				else {			
+				else {
+					System.out.println(grad);
 					int[] xpts = {x1-1,x1+1,x2+1,x2-1};
 					int[] ypts = {y1-1,y1+1,y2+1,y2-1};
 					g.fillPolygon(xpts,ypts,4);
@@ -995,7 +996,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 		else {
 			edgematrix[from][to].flash();
-		}	}
+		}
+	}
 	
 	public void setNodeShade(int id, int set){
 		nodelist[id].setNodeshade(set);
@@ -1150,7 +1152,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		catch (NonSquareMatrixException e) {
 			System.out.println(e);
 		}
-		app.setEdgeShade(2,6,1);	
+		app.flashEdge(3,6);
 	}
 }
    /*
