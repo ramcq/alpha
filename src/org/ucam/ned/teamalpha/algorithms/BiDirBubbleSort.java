@@ -82,7 +82,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					anim.setCurrentStep(0);
 					arrowA.move(j, false);
 					
-					anim.showMessage("Search down and check if <strong>" + a[j] + "</strong> &gt; <strong>" + a[j+1] + "</strong>.");
+					anim.showMessage("Search down and check if <strong><FONT COLOR=#E71917>" + a[j] + "</FONT></strong> &gt; <strong><FONT COLOR=#E71917>" + a[j+1] + "</FONT></strong>.");
 					
 					if (a[j] > a[j + 1]) {
 						COMPARES++;
@@ -95,7 +95,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						// ANIM: Swap the elements
 						anim.setCurrentStep(2);
 						
-						anim.showMessage("Swap elements <strong>" + a[j] + "</strong> and <strong>" + a[j+1] + "</strong>.");
+						anim.showMessage("Swap elements <strong><FONT COLOR=#E71917>" + a[j] + "</FONT></strong> and <strong><FONT COLOR=#E71917>" + a[j+1] + "</FONT></strong>.");
 						
 						//arrowA.flash();
 						v.swapElements(j,j+1);
@@ -106,7 +106,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				if (!swapped) {
 					arrowA.delete();
 					
-					anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
+					anim.showMessage("Done! With <strong><FONT COLOR=#E71917>" + COMPARES + "</FONT></strong> compares and <strong><FONT COLOR=#E71917>" + SWAPS + "</FONT></strong> swaps.");
 					
 					anim.setCurrentStep(5);
 					v.setLabel("Done!");
@@ -137,7 +137,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					anim.setCurrentStep(1);
 					arrowB.move(j, false);
 					
-					anim.showMessage("Search down and check if <strong>" + a[j+1] + "</strong> &gt; <strong>" + a[j] + "</strong>.");
+					anim.showMessage("Search down and check if <strong><FONT COLOR=#E71917>" + a[j+1] + "</FONT></strong> &gt; <strong><FONT COLOR=#E71917>" + a[j] + "</FONT></strong>.");
 					
 					if (a[j] > a[j + 1]) {
 						
@@ -151,7 +151,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 						// ANIM: Swap the elements
 						anim.setCurrentStep(2);
 						
-						anim.showMessage("Swap elements <strong>" + a[j+1] + "</strong> and <strong>" + a[j] + "</strong>.");
+						anim.showMessage("Swap elements <strong><FONT COLOR=#E71917>" + a[j+1] + "</FONT></strong> and <strong><FONT COLOR=#E71917>" + a[j] + "</FONT></strong>.");
 						
 						//arrowB.flash();
 						v.swapElements(j,j+1);
@@ -164,7 +164,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 				if (!swapped) {
 					arrowB.delete();
 					
-					anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
+					anim.showMessage("Done! With <strong><FONT COLOR=#E71917>" + COMPARES + "</FONT></strong> compares and <strong><FONT COLOR=#E71917>" + SWAPS + "</FONT></strong> swaps.");
 					
 					anim.setCurrentStep(5);
 					v.setLabel("Done!");
@@ -177,7 +177,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 			
 			v.setLabel("Done!");
 			
-			anim.showMessage("Done! With <strong>" + COMPARES + "</strong> compares and <strong>" + SWAPS + "</strong> swaps.");
+			anim.showMessage("Done! With <strong><FONT COLOR=#E71917>" + COMPARES + "</FONT></strong> compares and <strong><FONT COLOR=#E71917>" + SWAPS + "</FONT></strong> swaps.");
 			
 			anim.setCurrentStep(5);
 			

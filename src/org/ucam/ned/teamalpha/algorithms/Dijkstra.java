@@ -244,11 +244,11 @@ public class Dijkstra extends GraphAlgorithm {
 			anim.setNodeShade(n.index, BEINGPROCESSED);
 			anim.setCurrentStep(1);
 			
-			anim.showMessage("Analyse the immediate neighbours of the current finished node with cost <strong>" + getShortestDist(n) + "</strong>.");
+			anim.showMessage("Analyse the immediate neighbours of the current finished node with cost <strong><FONT COLOR=#E71917>" + getShortestDist(n) + "</FONT></strong>.");
 		
 			for (Iterator i = map.getDestinations(n).iterator(); i.hasNext();) {
 				
-				anim.showMessage("Analyse the next immediate neighbour of the current finished node with cost <strong>" + getShortestDist(n) + "</strong>.");
+				anim.showMessage("Analyse the next immediate neighbour of the current finished node with cost <strong><FONT COLOR=#E71917>" + getShortestDist(n) + "</FONT></strong>.");
 				
 				Node m = map.nodeAt(((Integer)i.next()).intValue());
 				
@@ -256,7 +256,7 @@ public class Dijkstra extends GraphAlgorithm {
 				if (isDone(m)) continue;
 				
 				// ANIM: Highlight the node we are looking at
-				anim.showMessage("Found neighbour " + ((getShortestDist(m)==INF) ? "not yet seen." : "with current cost of <strong>" + getShortestDist(m) + "</strong>."));
+				anim.showMessage("Found neighbour " + ((getShortestDist(m)==INF) ? "not yet seen." : "with current cost of <strong><FONT COLOR=#E71917>" + getShortestDist(m) + "</FONT></strong>."));
 				anim.flashNode(m.index);
 				// TODO: anim.setNodeHighlight(m.index, true);
 				// ANIM: Highlight the edge we are looking at
@@ -270,7 +270,7 @@ public class Dijkstra extends GraphAlgorithm {
 						// ANIM: removing a longer route
 						anim.setCurrentStep(3);
 						
-						anim.showMessage("A shorter route than <strong>" + getShortestDist(m) + "</strong> has been found. Remove the old route.");
+						anim.showMessage("A shorter route than <strong><FONT COLOR=#E71917>" + getShortestDist(m) + "</FONT></strong> has been found. Remove the old route.");
 						
 						anim.saveState();
 					} catch (NullPointerException e) {
@@ -285,7 +285,7 @@ public class Dijkstra extends GraphAlgorithm {
 					// ANIM: Change the node shade
 					anim.setCurrentStep(2);
 					
-					anim.showMessage("Update the neighbour's cost to <strong>" + getShortestDist(m) + "</strong>.");
+					anim.showMessage("Update the neighbour's cost to <strong><FONT COLOR=#E71917>" + getShortestDist(m) + "</FONT></strong>.");
 					
 					anim.setNodeShade(m.index, WORKINGSETID);
 					
