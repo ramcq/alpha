@@ -222,14 +222,21 @@ Graph animator (Steven)
 Almost complete, only highlighting nodes and edges and algorithm step messages
  have to be completed.
  The algorithm step messages require calling methods on  the shell.
- The node and edge data is stored in a list of objects and a matrix of objects
+ 
+\layout Standard
+
+The node and edge data is stored in a list of objects and a matrix of objects
  respectively.
  These have methods similar to the API calls which are called by the actual
  API method implementations.
  The class uses the same animation system as the Vector Animator, with a
  global timer picking events off an event queue, and causing the frame to
  be redrawn.
-   Only used elementary tests to confirm various methods are working correctly.
+  
+\layout Standard
+
+So far, there have only been elementary tests to confirm various methods
+ are working correctly.
 \layout Subsubsection
 
 Vector animator (Andrew)
