@@ -385,7 +385,7 @@ SortAlgorithm
  the initial data for the algorithm and instructing it to execute.
 \layout Subsection
 
-Animators
+Animatorsusing mouse) 
 \layout Standard
 
 
@@ -654,13 +654,14 @@ Algorithm selection (from the ones implemented)
 \layout Itemize
 
 Initial data (keyboard input for vector elements, graph edge costs) including
- ability to generate random data and special cases with mouse clicks
+ ability to generate random data and special cases (such as already sorted
+ data) 
 \layout Itemize
 
-Navigation through algorithm with mouse clicks
+Navigation through algorithm using buttons
 \layout Itemize
 
-Animation speed (using mouse) 
+Animation speed 
 \emph on 
 [optional]
 \layout Itemize
