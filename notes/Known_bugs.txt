@@ -1,0 +1,31 @@
+Known bugs:
+
+Next/prev/stop buttons dont work yet
+ - Need work on checkpoints etc
+
+Restart button doesn't work
+ - Algorithms carry on in background and can cause errors
+ - Need to stop thread when restart is pressed
+
+Does not handle invalid data input properly
+ - Most particularly for vector input which is too large
+
+Graph stuff
+ - Quite a lot broken eg bidirectional stuff
+
+Visualisation problems
+ - Small cosmetic changes eg. Bi-Directional Bubble Sort field on Main Menu 
+
+Double click
+ - Eg double click on next from main menu basically skips insert data 
+ - User Guide warning?
+
+Go faster button
+ - Or some speed thingy
+
+Resizing issues
+ - Gets clipped so cant see whats happening
+ - Make it fixed size?
+
+User Guide ?
+ - Add screenshots ?
