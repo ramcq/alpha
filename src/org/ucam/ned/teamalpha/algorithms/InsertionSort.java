@@ -63,6 +63,8 @@ public class InsertionSort extends VectorAlgorithm {
 			
 			// Vector is split into sorted elements and those yet to be sorted about i
 			// ANIM: Pick the first element in a and move to the sorted section
+			
+			anim.showMessage("Copy <strong>" + a[0] + "</strong> to start off.");
 			unsorted.copyElement(0, sorted, 0);
 			//aUnsorted.flash();
 			
