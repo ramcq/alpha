@@ -29,15 +29,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		static final int width = 50; // width of vector in pixels
 		
 		private final int top = 50; // y coordinate of top of vector
-		private int bottom;
-		private int left;
-		private int right;
+		private int bottom; // y coordinate of bottom of vector
+		private int left; // x coordinate of left of vector
+		private int right; // x coordinate of right of vector
 		private int size; // number of elements in vector
 		private Color colour = Color.red; // colour of skeleton and label
 		private String label; // visible label of vector
 		private String[] contents; // the actual elements of the vector (held as space-padded Strings rather than ints)
 		
-		// Can we eliminate the gross redundancy in these two constructors?
 		Vector(int[] values) {
 			size = values.length;
 			if (size > maxSize); // complain
@@ -59,24 +58,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 		
 		Vector(String label, int[] values) {
-			size = values.length;
-			if (size > maxSize); // complain
-			
-			// This vector will be in a new column, so increase the value of the highest column in use
-			highestColUsed++;
-			left = 80 + (highestColUsed * 190); // the x position of the left of the new vector
-			right = left + width; // the x position of the right of the new vector
-			bottom = top + (size * 20); // the y position of the bottom of the new vector
+			this(values);
 			this.label = label;
-
-			contents = new String[20];
-			
-			// Pad contents with spaces to ensure right alignment
-			for (int i=0; i<size; i++) {
-				contents[i] = String.valueOf(values[i]);
-				int len = contents[i].length();
-				for (int j=0; j<(maxElementLength-len); j++) { contents[i] = " ".concat(contents[i]); } 
-			}
 		}
 		
 		public void delete() {
@@ -144,11 +127,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public VectorAnimator.Vector splitVector(int offset) {
 			return null;
 		}
-		public VectorAnimator.Arrow createArrow(int loc, boolean boundary) {
-			return null;
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) {
+			Arrow res = new Arrow(this, label, position, boundary);
+			drawArrow(res, big);
+			return res;
 		}
-		public VectorAnimator.Arrow createArrow(String label, int loc, boolean boundary) {
-			return null;
+	
+		public VectorAnimator.Arrow createArrow(int position, boolean boundary) {
+			Arrow res = new Arrow(this, position, boundary);
+			drawArrow(res, big);
+			return res;
 		}
 		public void setHighlightedDigit(int column) {
 		}
@@ -156,15 +144,50 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	// Arrow inner class
 	public class Arrow extends VectorAnimator.Arrow {
+		private String label;
+		private int position; // offset in the array at which we are pointing
+		private boolean boundary; // are we pointing between two locations?
+		private Vector vector; // vector with which we are associated
+		private Color colour = Color.blue, altColour = Color.cyan;
+		private boolean left = false; // are we to the left or the right of our vector?
+		
+		Arrow(Vector v, String label, int position, boolean boundary) {
+			this(v, position, boundary);
+			setLabel(label);
+		}
+		
+		Arrow(Vector v, int position, boolean boundary) {
+			numberOfArrows++;
+			this.vector = v;
+			this.position = position;
+			this.boundary = boundary;
+		}
+		
 		public void delete() {
 		}
+		
 		public void setLabel(String label) {
+			// Trim if over 4 chars
+			if (label.length() > 4) label = label.substring(0,3); 
+			this.label = label;
 		}
+		
 		public void setOffset(int offset) {
+			this.position = offset;
 		}
+		
 		public void setBoundary(boolean boundary) {
+			this.boundary = boundary;
 		}
+		
+		// Need to discuss API issues here: have a flash() method and a changecolour() method instead?
 		public void setHighlight(boolean highlight) {
+			try {
+				eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_FLASH, this));
+			}
+			catch (InvalidAnimationEventException e) {
+				System.out.println(e);
+			}
 		}
 	}
 	
@@ -184,15 +207,35 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public static final int ARROW_MOVE = 5; // moving an arrow
 		public static final int ELT_CHANGE = 6; // changing an element in some manner (so it has to be redrawn)
 		public static final int ARROW_CHANGE = 7; // changing an arrow in some manner (so it has to be redrawn)
+		public static final int TWO_ARROW_FLASH = 11; // flash two arrows at once
 
 		private int type;
 		// Arguments
 		private Vector v1, v2;
+		private Arrow a1, a2;
 		private int e1, e2, f1, f2;
 		private int arg;
 		private boolean b1;
 		private boolean b2;
 
+		AnimationEvent(int type, Arrow a) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.ARROW_FLASH) {
+				this.type = type;
+				this.a1 = a;
+				this.a2 = null;
+			}
+			else throw new InvalidAnimationEventException("Invalid event");
+		}
+		
+		AnimationEvent(int type, Arrow a1, Arrow a2) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.TWO_ARROW_FLASH) {
+				this.type = type;
+				this.a1 = a1;
+				this.a2 = a2; 
+			}
+			else throw new InvalidAnimationEventException("Invalid event");
+		}
+		
 		AnimationEvent(int type, Vector v1, int e1, boolean b1) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ELT_FROM_CHANNEL) {
 				this.type = type;
@@ -250,12 +293,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		
 		AnimationEvent(int type, Vector v1, int e1, int e2, boolean b1) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.ELT_VERT_IN_CHANNEL) {
-						   this.type = type;
-						   this.v1 = v1;
-						   this.v2 = null;
-						   this.e1 = e1;
-						   this.e2 = e2;
-						   this.b1 = b1;
+				this.type = type;
+				this.v1 = v1;
+				this.v2 = null;
+				this.e1 = e1;
+				this.e2 = e2;
+				this.b1 = b1;
 			}
 			else throw new InvalidAnimationEventException("Invalid event");
 		}
@@ -268,6 +311,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private static final int fps = 30;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
 	private int highestColUsed = -1; // stores the highest column which has a vector in it
+	private int numberOfArrows = -1; // stores the number of Arrows known to the animator (minus one)
 	
 	private Component outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
@@ -279,10 +323,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private int intermediateOffset = 0; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
 	private LinkedList eventQueue; // will hold queue the events we are to perform
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
-	
-	
-	// Temporary test vectors
-	public Vector v, v2;
+	private Vector[] vectors = new Vector[10]; // an array of all Vectors currently known to the animator
+	private Arrow[] arrows = new Arrow[50]; // an array of all Arrows currently known to the animator
 	
 	// Constructor
 	ShellVectorAnimator(Component c) {
@@ -354,6 +396,13 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				case AnimationEvent.ARROW_CHANGE:
 					break;
 				case AnimationEvent.ARROW_FLASH:
+					intermediateOffset++;
+					if (intermediateOffset % 2 == 0) drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
+					else drawArrow(currentEvent.a1, big, currentEvent.a1.colour);
+					if (intermediateOffset > 60) {
+						intermediateOffset = 0;
+						currentEvent = null;
+					}
 					break;
 				case AnimationEvent.ARROW_MOVE:
 					break;
@@ -399,6 +448,11 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		if (timer.isRunning()) timer.stop();
 	}
 
+	private void drawVector(Vector v, Graphics g) {
+		drawVectorSkeleton(v, g);
+		drawVectorContents(v, g);
+	}
+	
 	private void drawVectorVertical(Vector v, Graphics g) {
 		g.setColor(v.colour);
 		g.drawLine(v.left, v.top, v.left, v.bottom);
@@ -533,16 +587,47 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	
 	public VectorAnimator.Vector createVector(int[] values) {
 		Vector res = new Vector(values);
-		drawVectorSkeleton(res, big);
-		drawVectorContents(res, big);
+		vectors[highestColUsed] = res;
+		drawVector(res, big);
 		return res;
 	}
 
 	public VectorAnimator.Vector createVector(String label, int[] values) {
 		Vector res = new Vector(label, values);
-		drawVectorSkeleton(res, big);
-		drawVectorContents(res, big);
+		vectors[highestColUsed] = res;
+		drawVector(res, big);
 		return res;
+	}
+	
+	private void drawArrow(Arrow a, Graphics g) {
+		drawArrow(a, g, a.colour);
+	}
+	
+	private void drawArrow(Arrow a, Graphics g, Color c) {
+		int left = (a.left) ? a.vector.left - 5 : a.vector.right+1;
+		int right = left + 8;
+		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
+		
+		g.setColor(c);
+		// Draw arrow body
+		g.drawLine(left, ypos, right, ypos);
+		// Draw arrowhead
+		if (a.left) {
+			g.drawLine(right-4, ypos+4, right, ypos);
+			g.drawLine(right-4, ypos-4, right, ypos);
+		}
+		else {
+			g.drawLine(left+4, ypos+4, left, ypos);
+			g.drawLine(left+4, ypos-4, left, ypos);
+		}
+		// Draw label
+		g.setFont(new Font("Monospaced", Font.PLAIN, 10));
+		if (a.left) {
+			g.drawString(a.label, left-8, ypos+5);
+		}
+		else {
+			g.drawString(a.label, right+8, ypos+5);
+		}
 	}
 	
 	public void setSteps(String[] steps) {
@@ -554,11 +639,33 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	public void showMessage(String msg) {
 	}
 
+	// Do we really need this? (see second restoreState method below)
 	public Animator.State saveState() {
 		return null;
 	}
+	
+	/*public Object[] saveMyState() {
+		if (currentEvent == null && eventQueue.isEmpty()) {
+			stopAnimation();
+			Object[] res = 
+		}
+	}*/
 
 	public void restoreState(Animator.State state) {
+	}
+	
+	public void restoreState(Object[] state) throws NotAStateException {
+		stopAnimation();
+		eventQueue.clear();
+		for (int i=0; i<state.length; i++) {
+			if (state[i] instanceof Vector) {
+				drawVector((Vector)state[i], big);
+			}
+			else if (state[i] instanceof Arrow) {
+			}
+			else throw new NotAStateException("Element " + i + " is neither a Vector nor an Arrow");
+		}
+		startAnimation();
 	}
 
 	public static void main(String[] args) {
@@ -585,6 +692,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		v.copyElement(4,3);
 		v.swapElements(2,6);
 		v.setElement(0,100);
+		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
+		VectorAnimator.Arrow a2 = v.createArrow("A2", 2, false);
+		a.setHighlight(true);
 		app.startAnimation();
 
 	}
