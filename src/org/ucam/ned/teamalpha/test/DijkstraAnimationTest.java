@@ -76,7 +76,6 @@ public class DijkstraAnimationTest{
 			System.out.println(e);
 		}*/
 		
-		anim.setFps(100);
 		Dijkstra d = new Dijkstra(c);
 		d.execute(anim);
 	}
