@@ -70,16 +70,31 @@ Alpha
 Background
 \layout Standard
 
-Algorithms are one of the hardest parts of Computer Science to teach.
+The field of algorithms and data structures is one of the hardest parts
+ of Computer Science to teach.
  When done on blackboards or overhead projectors, diagrams can get extremely
- messy and hard to follow.
+ messy and hard to follow; even when the steps of an algorithm are clearly
+ displayed on paper, it is not always immediately clear what operations
+ have been done between each step.
  Computer animation would be an ideal way to demonstrate algorithms: the
  actions taken by the computer at each stage can be clearly demonstrated
  at whatever level of abstraction is most helpful.
  Users could move through an algorithm's execution at their own speed, going
  especially slowly over difficult steps.
+ Critical information can be shown in a clear, intuitive way using colour
+ coding, and this can be reinforced with clean, smooth graphical animations
+ which show exactly what is going on internally as the algorithm is executed.
  The cost of the algorithm in time and space on different sizes of input
  could also be clearly displayed.
+\layout Standard
+
+Clearly, a system to animate any conceivable algorithm working on any imaginable
+ data structure is well beyond the scope of a six-week project, but we believe
+ it should be possible to provide an extensible system with animation primitives
+ enabling the illustration of algorithms which operate on vectors and lists
+ (for example sorting, searching and heap algorithms) or graphs (for example
+ shortest-path and strongly-connected component finding algorithms) within
+ the available time.
 \layout Section
 
 Facilities to be provided
@@ -91,6 +106,9 @@ The following list needs to be completed and tidied up:
 Support for algorithms on vectors, lists and graphs
 \layout Itemize
 
+Neat, professional-looking graphical animation
+\layout Itemize
+
 Ability to step through algorithms, both forwards and backwards, at user's
  speed
 \layout Itemize
@@ -98,17 +116,38 @@ Ability to step through algorithms, both forwards and backwards, at user's
 Ability to specify initial data / input
 \layout Itemize
 
-Ability to add new algorithms with relative ease
+Ability to add new algorithms with relative ease using existing animation
+ primitives
+\layout Itemize
+
+Well-documented API for creation of new animation primitives and data structures
+, potentially allowing the implementation of different types of algorithm
+ from the ones done here
 \layout Itemize
 
 Graphical display of the time and space costs of the algorithm
+\layout Itemize
+
+Cross-platform operation using Java
+\layout Itemize
+
+Easy-to-use graphical user interface
 \layout Section
 
 Major system components
+\layout Standard
+
+As discussed today
 \layout Section
 
 Acceptance criteria for finished project
+\layout Standard
+
+To be discussed
 \layout Section
 
 Management strategy and member roles
+\layout Standard
+
+To be discussed
 \the_end
