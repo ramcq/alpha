@@ -16,8 +16,10 @@
 package org.ucam.ned.teamalpha.shell;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -799,14 +801,17 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private boolean draw = true; // Do we actually want to draw our buffered image out to the screen on each frame, or are we fast-forwarding?
 	
 	// Constructor
-	public ShellVectorAnimator(JFrame c) {
-		outc = new JPanel(true) {
+	public ShellVectorAnimator(Container c) {
+		outc = new JPanel() {
 			public void paint(Graphics g) {
-				outg.drawImage(bi,0,0,outc);
+				Rectangle r = g.getClipBounds();
+				BufferedImage i = bi.getSubimage(r.x, r.y, r.width, r.height);
+				outg.drawImage(i, r.x, r.y, outc);
+//				super.paint(g);
 			}
 		}; // lightweight container
 		outc.setSize(c.getSize().width, c.getSize().height);
-		c.getContentPane().add(outc);
+		c.add(outc);
 		outc.setVisible(true);
 		outg = outc.getGraphics();
 		
@@ -1549,7 +1554,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		frame.setSize(500,500);
 		frame.setVisible(true);
 		
-		ShellVectorAnimator app = new ShellVectorAnimator(frame);
+		ShellVectorAnimator app = new ShellVectorAnimator(frame.getContentPane());
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
