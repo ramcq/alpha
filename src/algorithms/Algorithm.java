@@ -1,3 +1,3 @@
 public abstract class Algorithm {
-	void run();
+	void run() {}
 }
