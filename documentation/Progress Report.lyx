@@ -224,101 +224,90 @@ Code status
 Algorithms
 \layout Standard
 
-Rob?
+Sid
+\layout Standard
+
+Four out of the five have been written, the fifth is in progress.
+ None have yet been tested.
 \layout Subsection
 
 Animators
 \layout Standard
 
-Steven, Andrew
+Graph animators - Steven 
+\layout Standard
+
+Almost complete, only highlighting nodes and edges and algorithm step messages
+ have to be completed.
+ The messages will be completed when the shell has been finished.
+ Untested.
+\newline 
+
+\newline 
+Vector animators- Andrew
+\layout Standard
+
+Almost complete.
+ Untested.
 \layout Subsection
 
 Queues
 \layout Standard
 
 Rob
+\layout Standard
+
+Functionally complete.
+ Untested.
 \layout Subsection
 
 Shell
 \layout Standard
 
-Any program delivered to a client (namely the user) must be accompanied
- with a friendly, easy to use user interface.
- When we say user interface we usually refer to a program that controls
- a display for the user (usually on a computer monitor) and that allows
- the user to interact with the system.
- A system can be said to be truly user-friendly if the first time user can
- make use of it without continual reference to a manual.
- So it is vital that the design of the user interface should be carefully
- planned taking all parameters into consideration.
-\layout Subsubsection
+The user interface which will be implemented by the shell has been designed,
+ and a proof of concept created.
+ This has yet to be written though.
+\newline 
 
-Componants:
-\layout Standard
-
-First we will split our UI into different components so that we can manage
- and implement them more easily.
+\newline 
+There will be three main screens in the system:
 \layout Itemize
 
-The menu bar which will include the following options:
+the algorithm selection screen (Diagram 1)
 \begin_deeper 
 \layout Itemize
 
-Algorithm.
- The user by clicking on this option will be given the chance to choose
- which algorithm he wishes to see animated.
- The selection of algorithms will include the algorithms specified in the
- specification document.
-\layout Itemize
-
-Help.
- The user can get help on the spot without reference to the user manual.
-\layout Itemize
-
-Links.
- Possible links to webpages that contain animation material for algorithms.
-\layout Itemize
-
-what more can we add??
+This will have a list of available algorithms, with a description of each
+ algorithm showing when the algorithm is selected.
+ There will be a 'Next' button which when clicked will advance to the data
+ input screen.
 \end_deeper 
 \layout Itemize
 
-The main screen where the algorithm gets animated.
-\layout Subsubsection
+the data input screen (Diagram 2)
+\begin_deeper 
+\layout Itemize
 
-Ideas:
-\layout Standard
+This will have some text boxes for user input, the number of boxes will
+ depend on the algorithm used.
+ It will have a 'Random' button to generate random input, a 'Back' button
+ to return to the algorithm select menu, and two buttons to start the algorithm.
+ The 'Run Automatically' button will start the algorithm and run it through
+ to completion, the 'Run Manually' button will animate the algorithm one
+ step at a time, with the user choosing when to move on.
+\end_deeper 
+\layout Itemize
 
-It would be nice when the shell begins to have a nice graphical display
- on the screen as shown on diagram 1.
- Maybe we can achieve this by the use of a simple applet within the shell
- application that just prints on the screen.
- When the user chooses an algorithm (by the use of the mouse, don't think
- it is essential to have keyboard shortcuts) then the screen appearance
- changes and it looks like diagram 2.
- If the user chooses to run a sorting algorithm then he will be prompted
- to specify the input data by placing integers inside each box.
- Otherwise a button will give the option of filling up the boxes with random
- data.
- Similarly, if the user chooses to run a graph algorithm then he will be
- prompted with number of nodes but specifying somehow that the number can
- not exceed the number stated in the specification document.
- After doing this, there will be two buttons, the first one corresponding
- to run automatically (i.e the machine will run the animating algorithm at
- reasonable speed to completion) and the second one corresponding to run
- manually (namely the user can step through the algorithm at his own speed).
- Either of the two run buttons chosen, the animation will begin appearing
- on the main screen.
- However the input data should remain on the screen so that the user can
- reference to if he wishes.
- This will aid comprehension since he can see the initial configuration
- of data and compare with the subsequent phases.
- See diagram 3.
- If the user wishes to step through the algorithm then the presence of a
- button labelled next will be present at the bottom of the animation.
- The presence of the stop button will enable the user to stop the current
- algorithm running and the screen goes back to a state as that proposed
- when the shell loads.
+the animation screen (Diagram 3)
+\begin_deeper 
+\layout Itemize
+
+This will show the animation of the algorithm, along with a description
+ of what is happening at each step.
+ There will be 'Next' and 'Previous' buttons to step through the algorithm,
+ as well as a 'Restart' button to return to the first step, and an 'Exit'
+ button to return to the algorithm select screen.
+\end_deeper 
 \layout Section
 
 Examples of code
