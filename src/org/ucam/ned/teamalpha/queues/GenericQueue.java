@@ -114,7 +114,7 @@ class GenericQueue implements AnimatorQueue {
 		this.currentstate = 0;
 	}
 	
-	void enqueue(Object subject, String methodname, Object[] args, Object ret) {
+	synchronized void enqueue(Object subject, String methodname, Object[] args, Object ret) {
 		Event e = new Event(subject, methodname, args, ret);
 		State s = (State) states.lastElement();
 		s.events.add(e);
@@ -124,7 +124,7 @@ class GenericQueue implements AnimatorQueue {
 		enqueue(subject, methodname, args, null);
 	}
 	
-	void newState() {
+	synchronized void newState() {
 		states.add(new State());
 	}
 	
