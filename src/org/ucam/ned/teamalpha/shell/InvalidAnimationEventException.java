@@ -1,8 +1,8 @@
 /*
- * Created on Feb 7, 2004
+ * Created on Feb 19, 2004
  *
  * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package org.ucam.ned.teamalpha.shell;
 
@@ -10,7 +10,7 @@ package org.ucam.ned.teamalpha.shell;
  * @author igor
  *
  * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class InvalidAnimationEventException extends Exception {
 
