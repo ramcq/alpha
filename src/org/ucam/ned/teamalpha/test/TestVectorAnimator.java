@@ -6,8 +6,8 @@
  */
 package org.ucam.ned.teamalpha.test;
 
-import org.ucam.ned.teamalpha.animators.VectorAnimator;
 import org.ucam.ned.teamalpha.animators.Animator;
+import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
  * @author zrll2
@@ -109,7 +109,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		System.out.println("Restoring state" + state + "...");
 	}
 	
-	public class Vector extends VectorAnimator.Vector {
+	public class VectorAnimator.Vector extends VectorAnimator.Vector {
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
@@ -208,7 +208,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		}
 	}
 	
-	public class Arrow extends VectorAnimator.Arrow {
+	public class Arrow extends org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow {
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()
