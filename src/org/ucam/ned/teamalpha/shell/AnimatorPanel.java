@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.Timer;
 
 import org.ucam.ned.teamalpha.algorithms.Algorithm;
@@ -36,8 +37,7 @@ public class AnimatorPanel extends ShellPanel {
 	private AnimatorQueue queue;
 	private ShellAnimator animator;
 	
-	private JList steps;
-	private String[] stepText;
+	private JList stepList;
 	private JTextPane message;
 	private Timer playTimer;
 	private boolean play;
@@ -73,11 +73,15 @@ public class AnimatorPanel extends ShellPanel {
 		top.add(animator);
 		
 		// and a 5 pixel gap
-		//top.add(Box.createHorizontalStrut(5));
+		top.add(Box.createHorizontalStrut(5));
 		
 		// and a list of the steps in the algorithm
-		//steps = new JList();
-		//top.add(steps);
+		stepList = new JList();
+		stepList.setBorder(BorderFactory.createEtchedBorder());
+		stepList.setMaximumSize(new Dimension(200, Short.MAX_VALUE));
+		stepList.setPreferredSize(new Dimension(200, 0));
+		stepList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		top.add(stepList);
 		
 		// add five pixel gap
 		add(Box.createVerticalStrut(5));
@@ -85,8 +89,8 @@ public class AnimatorPanel extends ShellPanel {
 		// create bottom message area
 		message = new JTextPane();
 		message.setEditable(false);
-		message.setPreferredSize(new Dimension(0, 50));
 		message.setMaximumSize(new Dimension(Short.MAX_VALUE, 50));
+		message.setPreferredSize(new Dimension(0, 50));
 		message.setBorder(BorderFactory.createEtchedBorder());
 		add(message);
 		
@@ -169,10 +173,10 @@ public class AnimatorPanel extends ShellPanel {
 	}
 	
 	public void setSteps(String[] steps) {
-		stepText = steps;
+		stepList.setListData(steps);
 	}
 	
 	public void setCurrentStep(int step) {
-		//showMessage(stepText[step]);
+		stepList.setSelectedIndex(step);
 	}
 }
