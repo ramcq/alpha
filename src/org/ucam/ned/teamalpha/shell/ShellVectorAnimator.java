@@ -1165,6 +1165,27 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	}
 	
 	public synchronized void restoreState(Animator.State s) {
+		State st = (State) s;
+		stopAnimation();
+		eventQueue.clear();
+		Vector.VectorState[] vs = st.getVectors();
+		Arrow.ArrowState[] as = st.getArrows();
+		vectors.clear();
+		arrows.clear();
+		for (int i=0; i<vs.length; i++) {
+			vectors.addLast(vs[i]);
+		}
+		for (int i=0; i<as.length; i++) {
+			arrows.addLast(as[i]);
+		}
+		
+		// Clear the whole canvas
+		big.setColor(bgcolour);
+		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
+		
+		redrawAllVectors(big);
+		redrawAllArrows(big, true, null);
+		redrawAllArrows(big, false, null);
 	}
 	
 	public static void main(String[] args) {
