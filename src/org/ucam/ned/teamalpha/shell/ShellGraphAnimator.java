@@ -808,8 +808,8 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		int arsize = 4;
 		int arlen = 7;
 		if (((x1-x2 > 1)||(x1-x2 < -1)) && ((y1-y2 > 1)||(y1-y2 < -1))){
-			double grad = (double) ((x1-x2)/(y1-y2));
-			if ((x1>x2 && y1>y2) || (x2>x1 && y2>y1)) {
+			double grad = ((double)(x2-x1))/((double)(y2-y1));
+			if (((grad < 1) && (grad > 0)) || (grad < -1)) { //(x1>x2 && y1>y2) || (x2>x1 && y2>y1)
 				sx3 = (int)(x + arlen * grad);
 				sy3 = (int)(y + arlen * grad);
 				grad = (-1 / grad);
@@ -819,17 +819,20 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 				sy2 = (int)(y - arsize * grad);			
 			}
 			else {
-				sx3 = (int)(x - arlen * grad);
+				sx3 = (int)(x + arlen * grad);
 				sy3 = (int)(y + arlen * grad);
+	//			System.out.println(grad + " " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + sx3 + " " + sy3);
+	//			Double tgrad = new Double(grad);
+	//			drawlabel(x,y," " +tgrad.toString(), g, 12, fgcolour);
 				grad = (-1 / grad);
 				sx1 = (int)(x - arsize * grad);
 				sy1 = (int)(y - arsize * grad);
 				sx2 = (int)(x + arsize * grad);
-				sy2 = (int)(y + arsize * grad);			
+				sy2 = (int)(y + arsize * grad);		
 			}
 		}
 		else {
-			if (x1 == x2) {
+			if ((x1 == x2) || (x1 == x2+1) || (x1+1 == x2)) {
 				sx1 = x - arsize;
 				sy1 = y;
 				sx2 = x + arsize;
@@ -842,7 +845,7 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 					sy3 = y + arlen;
 				}
 			}
-			if (y1 == y2) {
+			if ((y1 == y2) || (y1 == y2+1) || (y1+1 == y2)) {
 				sx1 = x;
 				sy1 = y - arsize;
 				sx2 = x;
@@ -1424,21 +1427,20 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		frame.setVisible(true);
 		
 		//current test data
-		int[][] tstcosts = {{0,	33,	10,	56,	0,	0,	0,	0,	0,	0},
-					 {33,	0,	0,	13,	21,	0,	0,	0,	0,	0},
-					 {10,	0,	0,	23,	0,	24,	65,	0,	0,	0},
-					 {56,	13,	23,	0,	51,	0,	20,	0,	0,	0},
-					 {0,	21,	0,	51,	0,	0,	17,	35,	0,	0},
-					 {0,	0,	24,	0,	0,	0,	40,	0,	72,	0},
-					 {0,	0,	65,	20,	17,	40,	0,	99,	45,	42},
-					 {0,	0,	0,	0,	35,	0,	99,	0,	0,	0},
-					 {0,	0,	0,	0,	0,	72,	45,	0,	0,	83},
-					 {0,	0,	0,	0,	0,	0,	42,	0,	83,	0}};
+		int[][] tstcosts = {{0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+				{33,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+				{10,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+				{56,	13,	23,	0,	0,	0,	0,	0,	0,	0},
+				{0,	21,	0,	51,	0,	0,	0,	0,	0,	0},
+				{0,	0,	24,	0,	0,	0,	0,	0,	0,	0},
+				{0,	0,	65,	20,	17,	40,	0,	0,	0,	0},
+				{0,	0,	0,	0,	35,	0,	99,	0,	0,	0},
+				{0,	0,	0,	0,	0,	72,	45,	0,	0,	0},
+				{0,	0,	0,	0,	0,	0,	42,	0,	83,	0}};
 		try { app.createGraph(tstcosts); }
 		catch (NonSquareMatrixException e) {
 			System.err.println(e);
 		}
-		app.flashEdge(3,6);
 	}
 }
    /*
@@ -1480,4 +1482,15 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 	*	app.restoreState(s);
 	*	app.setEdgeShade(1,2,6);
 	*	Result: savestate bug fixed
+	*
+	*int[][] tstcosts = {{0,	33,	10,	56,	0,	0,	0,	0,	0,	0},
+					 {33,	0,	0,	13,	21,	0,	0,	0,	0,	0},
+					 {10,	0,	0,	23,	0,	24,	65,	0,	0,	0},
+					 {56,	13,	23,	0,	51,	0,	20,	0,	0,	0},
+					 {0,	21,	0,	51,	0,	0,	17,	35,	0,	0},
+					 {0,	0,	24,	0,	0,	0,	40,	0,	72,	0},
+					 {0,	0,	65,	20,	17,	40,	0,	99,	45,	42},
+					 {0,	0,	0,	0,	35,	0,	99,	0,	0,	0},
+					 {0,	0,	0,	0,	0,	72,	45,	0,	0,	83},
+					 {0,	0,	0,	0,	0,	0,	42,	0,	83,	0}};
 	*/
