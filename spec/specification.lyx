@@ -164,6 +164,9 @@ Clearly, a system to animate any conceivable algorithm working on any imaginable
 \layout Section
 
 Assumptions
+\layout Standard
+
+[?write this up as proper writing not bullet points?]
 \layout Itemize
 
 The 
@@ -220,7 +223,14 @@ The auxiliary displays showing the time and space costs of the algorithm,
 Facilities to be provided
 \layout Standard
 
-The following facilities will definitely be provided:
+There will be some facilities that the system will need to provide.
+ Other facilities are optional, as they are not essential to the system
+ but will either extend its functionality or add additional features.
+ These facilities may or may not be implemented, subject to time constraints.
+\newline 
+
+\newline 
+The following facilities will definitely be implemented:
 \layout Itemize
 
 Support for algorithms on vectors, lists and graphs
@@ -258,8 +268,7 @@ We will be demonstrating the system by implementing the following algorithms:
  (for finding the minimum spanning tree of a set of nodes in a graph).
 \layout Standard
 
-The following facilities will be optionally implemented subject to time
- constraints:
+The following facilities will optionally be implemented:
 \layout Itemize
 
 Ability to vary animation speed (between two reasonable values)
@@ -279,7 +288,7 @@ A graph editor which allows the user to place the nodes on the animation
 Support for bipartite graphs
 \layout Itemize
 
-More algorithms, e.g.
+Implementations of more algorithms, e.g.
  Prim's algorithm, shell sort, strongly connected component finding algorithm
 \layout Section
 
@@ -770,10 +779,28 @@ The algorithms themselves
 Final Acceptance Criteria
 \layout Itemize
 
-The system must provide a responsive, user-friendly and crash-prone interface;
+The system must allow a user to pick an algorithm from a selection of at
+ least five, where there must be at least two different types of algorithm;
 \layout Itemize
 
-(We need more here.)
+The system must allow a user to input data to be used with the selected
+ algorithm;
+\layout Itemize
+
+The system must compute each step of the algorithm correctly using the data
+ it receives;
+\layout Itemize
+
+The system must animate each step of the algorithm on the screen, at a speed
+ chosen by the user;
+\layout Itemize
+
+The user documentation must explain how to use the system as it is implemented
+ now;
+\layout Itemize
+
+The user documentation must explain how to extend the system with new algorithms
+ and animations.
 \layout Section
 
 Division of tasks
