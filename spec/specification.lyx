@@ -134,8 +134,7 @@ animation script
 \begin_inset Quotes erd
 \end_inset 
 
- will be written in Java; we have decided not to opt for writing our own
- special language.
+ will be written in Java; we will not implement our own special language
 \layout Itemize
 
 The user can specify initial data in the following way:
@@ -170,7 +169,7 @@ The auxiliary displays showing the time and space costs of the algorithm
  etc will not be available.
 \layout Section
 
-Facilities to Be Provided
+Facilities to be provided
 \layout Standard
 
 The following facilities will definitely be provided:
@@ -179,7 +178,7 @@ The following facilities will definitely be provided:
 Support for algorithms on vectors, lists and graphs
 \layout Itemize
 
-Neat, professional-looking graphical animation
+Neat, non-flickering graphical animation
 \layout Itemize
 
 Ability to step through algorithms, both forwards and backwards, at user's
@@ -187,11 +186,11 @@ Ability to step through algorithms, both forwards and backwards, at user's
 \layout Itemize
 
 Ability to specify initial data / input (plus ability to generate random
- initial data)
+ initial data and special cases such as all entries in a vector being the
+ same)
 \layout Itemize
 
-Ability to add new algorithms with relative ease using existing animation
- primitives
+Ability to add new algorithms using existing animation primitives
 \layout Itemize
 
 Well-documented API for creation of new animation primitives and data structures
@@ -202,7 +201,7 @@ Well-documented API for creation of new animation primitives and data structures
 Cross-platform operation using Java
 \layout Itemize
 
-Easy-to-use graphical user interface
+Graphical user interface
 \layout Itemize
 
 We will be demonstrating the system by implementing the following algorithms:
@@ -218,7 +217,7 @@ The following facilities will be optionally implemented subject to time
 Ability to vary animation speed (between two reasonable values)
 \layout Itemize
 
-Text explanation of each step as it happens (pseudocode)
+Text explanation of each step as it happens (pseudocode as in a debugger)
 \layout Itemize
 
 Display of the time and space costs of the algorithm
@@ -231,7 +230,8 @@ A graph editor which allows the user to place the nodes on the animation
 Support for bipartite graphs
 \layout Itemize
 
-Some more algorithms?
+More algorithms, e.g.
+ Prim's algorithm, shell sort, strongly connected component finding algorithm
 \layout Section
 
 Environment
@@ -257,58 +257,68 @@ show diagram, explain diagram in detail, explain why diagram is the way
  it is
 \layout Section
 
-Inputs, functions, outputs (fold this section into the next?)
-\layout Standard
-
-<<SNIP?>>
+Overall inputs, functions, and outputs
 \layout Standard
 
 User inputs:
 \layout Itemize
 
-Input initial algorithm data (keyboard input for vector elements)
+Algorithm selection (from the ones implemented)
 \layout Itemize
 
-animation speed (?)
+Initial data (keyboard input for vector elements, graph edge costs) including
+ ability to generate random data and special cases with mouse clicks
 \layout Itemize
 
-generate random data
+Navigation through algorithm with mouse clicks
 \layout Itemize
 
-choose algorithm
+Animation speed (using mouse) 
+\emph on 
+[optional]
 \layout Itemize
 
-step forwards/backwards in algorithm
+Graph node locations and other layout information (using mouse, in graph
+ editor) 
+\emph on 
+[optional]
 \layout Standard
 
 Functions:
 \layout Itemize
 
-run algorithm using inputted << SHOULD IT BE SPELT LIKE input?>> data
+Simulate algorithm using given initial data, storing the state at each stage
+ to facilitate forward and backward movement, plus information displays
+ such as time and space cost
 \layout Itemize
 
-create animations for each step in the algorithm
-\layout Itemize
-
-akjb
+Animate each step in the algorithm when the user moves forward
 \layout Standard
 
 Outputs:
 \layout Itemize
 
-animation displayed on screen
+Animation displayed on screen
 \layout Itemize
 
-display adjusted when back/next buttons are used
-\layout Standard
+Time and space cost display 
+\emph on 
+[optional]
+\layout Itemize
 
-<</SNIP?>>
+Pseudocode 
+\emph on 
+[optional]
 \layout Section
 
 Specification of components and test requirements
 \layout Standard
 
 For each major class in the system:
+\layout Itemize
+
+Its purpose, including what functionality is it supposed to provide to the
+ user or to other classes
 \layout Itemize
 
 Its inputs
@@ -319,10 +329,6 @@ Its outputs
 
 Its major public methods (replicating some of the stuff in the abstract
  class listings)
-\layout Itemize
-
-What it is supposed to do, i.e.
- what functionality is it supposed to provide to the user, or to other classes
 \layout Itemize
 
 How it should be tested
@@ -386,7 +392,8 @@ The algorithms themselves
 Final acceptance criteria
 \layout Standard
 
-To be discussed
+The system must work.
+ (We need more here.)
 \layout Section
 
 Division of tasks
@@ -413,5 +420,5 @@ Coding: Robert McQueen, Steven Cooper, Andrew Medworth, Sidath Senanayake
 \layout Itemize
 
 Troubleshooting / testing: Zhan Li, Alan Treanor (backup: Sidath Senanayake,
- but also everyone else!)
+ plus as many others as are required!)
 \the_end
