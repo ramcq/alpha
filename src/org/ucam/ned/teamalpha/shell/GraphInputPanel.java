@@ -3,6 +3,7 @@
  */
 package org.ucam.ned.teamalpha.shell;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -143,6 +144,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		// create top jpanel with box layout (horizontal)
 		JPanel row = new JPanel();
 		row.setLayout(new BoxLayout(row, BoxLayout.X_AXIS));
+		row.setMaximumSize(new Dimension(Short.MAX_VALUE, 0));
 		add(row);
 		
 		// add glue
@@ -176,6 +178,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		// new row
 		row = new JPanel();
 		row.setLayout(new BoxLayout(row, BoxLayout.Y_AXIS));
+		row.setMaximumSize(new Dimension(Short.MAX_VALUE, 0));
 		row.add(Box.createHorizontalGlue());
 		
 		cells = new JPanel();
