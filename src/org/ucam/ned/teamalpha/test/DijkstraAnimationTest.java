@@ -26,7 +26,7 @@ import org.ucam.ned.teamalpha.shell.ShellGraphAnimator;
  */
 public class DijkstraAnimationTest extends GraphAlgorithm {
 	
-	private static Animator anim;
+	//private static Animator anim;
 	
 	/**
 	 * @param costs
@@ -50,7 +50,7 @@ public class DijkstraAnimationTest extends GraphAlgorithm {
 		panel.setSize(500,500);
 		frame.getContentPane().add(panel);
 		panel.setVisible(true);
-		ShellGraphAnimator app = new ShellGraphAnimator(panel);
+		ShellGraphAnimator anim = new ShellGraphAnimator(panel);
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
@@ -81,11 +81,12 @@ public class DijkstraAnimationTest extends GraphAlgorithm {
 				 {16,  0,  0,  5,  0,  7},
 				 { 8, 10, 11, 17,  7,  0}};
 		
-		try { app.createGraph(c); }
+/*		try { app.createGraph(c); }
 		catch (NonSquareMatrixException e) {
 			System.out.println(e);
-		}
+		}*/
 		
+		anim.setFPS(20);
 		Dijkstra d = new Dijkstra(c);
 		d.execute(anim);
 	}

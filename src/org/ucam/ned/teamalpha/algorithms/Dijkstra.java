@@ -288,15 +288,16 @@ public class Dijkstra extends GraphAlgorithm {
 	 */
 	public void execute(Animator a) {
 		this.anim = (GraphAnimator) a;
+	
 		
-		buildData(STARTINDEX, costMatrix);
-		
-		// ANIM: Create animator information
 		try {
 			anim.createGraph(costMatrix);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+		
+		// ANIM: Create animator information
+		buildData(STARTINDEX, costMatrix);
 		
 		while (!unFinished.isEmpty())
 		{
