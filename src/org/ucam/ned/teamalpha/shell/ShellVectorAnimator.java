@@ -1901,7 +1901,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		int ypos = (a.boundary) ? a.vector.top + (a.position*20) : a.vector.top + (a.position*20) + 10;
 
 		// Clear arrow area
-		g.setColor(Color.black);
+		g.setColor(bgcolour);
 		g.fillRect(left, ypos-5, 39, 12);
 				
 		if (!a.deleted) drawArrow(a, g);
