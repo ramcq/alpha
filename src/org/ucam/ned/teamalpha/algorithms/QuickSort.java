@@ -109,10 +109,18 @@ public class QuickSort extends VectorAlgorithm {
 						// Check for a moved pivot element and sort out
 						if (i == pivotLoc) {
 							pivotLoc = j;
-							aPivot.move(pivotLoc, false);
+							
+							aPivot.delete();
+							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
+							
+							//aPivot.move(pivotLoc, false);
 						} else if (j == pivotLoc) {
 							pivotLoc = i;
-							aPivot.move(pivotLoc, false);
+							
+							aPivot.delete();
+							aPivot = curr.createArrow("Piv", pivotLoc-low, false, true);
+							
+							//aPivot.move(pivotLoc, false);
 						}
 					}
 					
