@@ -797,15 +797,20 @@ void execute()
 Testing
 \layout Standard
 
-Each algorithm can be tested indepdently of the main system by implementing
- a simple program which provides a 
+Each algorithm can be tested indepdently of the main system by making a
+ test program that provides a 
 \family typewriter 
 TestAnimator
 \family default 
- class, which rather than queueing or animating, merely displays the sequence
- of method calls which were made by the algorithm.
+ class, which rather than queueing or animating, implements stub functions
+ to merely display the sequence of method calls which were made by the algorithm.
  The program can then run the algorithm on a variety of possible inputs
- to ensure the correct results are generated.
+ to ensure that the correct results are generated, even in extreme cases
+ such as a vector full of 
+\family typewriter 
+0
+\family default 
+s.
 \layout Subsection
 
 Animators
@@ -982,31 +987,21 @@ Highlight pointer (to indicate current focus of algorithm)
 \layout Subsection
 
 Queues
-\layout Standard
+\layout Subsubsection*
 
-Test requirements: (move these to appropriate classes)
-\layout Itemize
+Purpose
+\layout Subsubsection*
 
-make sure algorithms work correctly and produce the right result in all
- circumstances, even when dealing with extreme data eg.
- all 0's
-\layout Itemize
+Inputs
+\layout Subsubsection*
 
-make sure valid inputs are dealt with sensibly
-\layout Itemize
+Outputs
+\layout Subsubsection*
 
-make sure invalid (i.e.
- non-integers in vectors) inputs are dealt with sensibly
-\layout Itemize
+Public Methods
+\layout Subsubsection*
 
-make sure the display shows the correct information at each step
-\layout Itemize
-
-make sure the next/back buttons work, eg.
- what happens if they are pressed during animations
-\layout Itemize
-
-make sure the graphical user interface works correctly
+Testing
 \layout Subsection
 
 Shell
@@ -1026,6 +1021,9 @@ The shell is a collection of classes that contain all of the code to implement
 Animator
 \family default 
  subclasses.
+ These animators will implement an internal interface which allows the shell
+ to control playback speed, pausing, etc, independently of which type of
+ animation is being implemented.
 \layout Subsubsection*
 
 Inputs
@@ -1050,7 +1048,7 @@ As a graphical component, the shell produces all of its output on screen,
  and the other is the actual display of the animation on screen.
 \layout Subsubsection*
 
-Public methods
+Public Methods
 \layout Itemize
 
 
@@ -1075,7 +1073,9 @@ Testing is to be broken down into two sections to mirror the two functions
  entering a string into a vector of numbers) will be tested.
  To test the animation section, further test algorithms will be created
  which call methods to test all of the animation primitives and combinations
- thereof.
+ thereof, to ensure the display is correctly updated and that user interaction
+ or interruption during animations (such as clicking previous, next or pause)
+ is handled appropriately.
 \layout Section
 
 Final acceptance criteria
@@ -1107,8 +1107,8 @@ the user documentation must explain how to use the system as it is currently
  implemented;
 \layout Itemize
 
-the user documentation must explain how to extend the system with new algorithms
- and animations (using the APIs provided).
+the developer documentation must explain how to use the APIs provided to
+ extend the system with new algorithms and animations.
 \layout Section
 
 Division of tasks
@@ -1141,7 +1141,7 @@ collapsed false
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0(null)">
+<column alignment="right" valignment="top" leftline="true" width="0">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
