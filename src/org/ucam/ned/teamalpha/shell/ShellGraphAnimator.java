@@ -1170,66 +1170,63 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#createGraph(int[][])
 	 */
 	public void createGraph(int[][] costs) throws NonSquareMatrixException {
-		//NonSquareMatrixException.isSquare(costs);
+		NonSquareMatrixException.isSquare(costs); // ensure matrix is square
 		int[] arrlentst = (int[]) costs[0].clone();
 		//perhaps hardcode positions given number of nodes?
 		//centre is 250,250. 
 		/*TODO: get this from frame size*/
 		int x = 250;
 		int y = 250;
-		if (arrlentst.length == costs.length) // matrix should be square.. 
-		//change later to check all arrays in costs[]
-		{	this.Nodeangle = 360 / costs.length;
-			numnodes = costs.length;
-			double currentang = 0;
-			for (int i=0;i<costs.length;i++) 
-			{	//create nodes
-				//calculate x,y position
-				x = (int) (250 + 200 * java.lang.Math.sin(java.lang.Math.toRadians(currentang)));
-				y = (int) (250 + 200 * java.lang.Math.cos(java.lang.Math.toRadians(currentang)));
-				currentang = currentang + Nodeangle;
-				//fill in node data
-				nodelist[i] = new Node();
-				nodelist[i].nodesetdata(x,y,i);
-				//draw the thing we just made
-				nodelist[i].drawNode();
-			}
-			for (int i=0;i<costs.length;i++)
-			{	//create edges
-				for (int j=0;j<arrlentst.length;j++)
-				{
-					if (costs[i][j] != 0) {
-						if (i != j) {
-							Integer tmpint = new Integer(costs[i][j]);
-							edgematrix[i][j] = new Edge();
-							if (i>j) {
-								if (edgematrix[j][i] != null) {
-									edgematrix[i][j] = edgematrix[j][i]; 	
-									edgematrix[i][j].addpath(tmpint.toString());
-								}
-								else {
-									edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
-								}
+		this.Nodeangle = 360 / costs.length;
+		numnodes = costs.length;
+		double currentang = 0;
+		for (int i=0;i<costs.length;i++) 
+		{	//create nodes
+			//calculate x,y position
+			x = (int) (250 + 200 * java.lang.Math.sin(java.lang.Math.toRadians(currentang)));
+			y = (int) (250 + 200 * java.lang.Math.cos(java.lang.Math.toRadians(currentang)));
+			currentang = currentang + Nodeangle;
+			//fill in node data
+			nodelist[i] = new Node();
+			nodelist[i].nodesetdata(x,y,i);
+			//draw the thing we just made
+			nodelist[i].drawNode();
+		}
+		for (int i=0;i<costs.length;i++)
+		{	//create edges
+			for (int j=0;j<arrlentst.length;j++)
+			{
+				if (costs[i][j] != 0) {
+					if (i != j) {
+						Integer tmpint = new Integer(costs[i][j]);
+						edgematrix[i][j] = new Edge();
+						if (i>j) {
+							if (edgematrix[j][i] != null) {
+								edgematrix[i][j] = edgematrix[j][i]; 	
+								edgematrix[i][j].addpath(tmpint.toString());
 							}
 							else {
-								//fill in edge data
 								edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
 							}
+						}
+						else {
+							//fill in edge data
+							edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
 						}
 					}
 				}
 			}
-			//need to fill in all of the data before drawing so that edge type done correctly
-			for (int i=0;i<costs.length;i++)
-			{	for (int j=0;j<arrlentst.length;j++)
-				{	//draw the thing we just made
-					if (edgematrix[i][j] != null) {
-						edgematrix[i][j].drawEdge();
-						edgematrix[i][j].drawlabel();
-					}
-				}
-			}		
 		}
+		//need to fill in all of the data before drawing so that edge type done correctly
+		for (int i=0;i<costs.length;i++)
+		{	for (int j=0;j<arrlentst.length;j++)
+			{	//draw the thing we just made
+				if (edgematrix[i][j] != null) {
+					edgematrix[i][j].drawEdge();
+					edgematrix[i][j].drawlabel();
+				}
+			}
+		}		
 	}
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setNodeLabel(int, java.lang.String)
