@@ -52,7 +52,7 @@ public abstract class VectorAnimator extends Animator {
 		 */
 		public abstract void copyElement(
 			int offsetfrom,
-			Vector target,
+			VectorAnimator.Vector target,
 			int offsetto);
 
 		/**
@@ -98,7 +98,7 @@ public abstract class VectorAnimator extends Animator {
 		 */
 		public abstract void swapElements(
 			int offset1,
-			Vector target,
+			VectorAnimator.Vector target,
 			int offset2);
 
 		/**
@@ -130,7 +130,7 @@ public abstract class VectorAnimator extends Animator {
 		 *            true to point at the boundary before the offset
 		 * @return a reference to the arrow created
 		 */
-		public abstract Arrow createArrow(int offset, boolean boundary);
+		public abstract VectorAnimator.Arrow createArrow(int offset, boolean boundary);
 
 		/**
 		 * Create a new arrow pointing at a value in the vector, or the
@@ -145,7 +145,7 @@ public abstract class VectorAnimator extends Animator {
 		 *            the string label for the arrow
 		 * @return a reference to the arrow created
 		 */
-		public abstract Arrow createArrow(
+		public abstract VectorAnimator.Arrow createArrow(
 			String label,
 			int offset,
 			boolean boundary);
@@ -205,7 +205,7 @@ public abstract class VectorAnimator extends Animator {
 	 *            the array of initial values
 	 * @return a reference to the vector created
 	 */
-	public abstract Vector createVector(int[] values);
+	public abstract VectorAnimator.Vector createVector(int[] values);
 
 	/**
 	 * Create a new vector with a label and place it on the animation canvas.
@@ -216,5 +216,5 @@ public abstract class VectorAnimator extends Animator {
 	 *            the array of initial values
 	 * @return a reference to the vector created
 	 */
-	public abstract Vector createVector(String label, int[] values);
+	public abstract VectorAnimator.Vector createVector(String label, int[] values);
 }
