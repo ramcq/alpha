@@ -33,45 +33,97 @@ public class QuickSort extends VectorAlgorithm {
 		int j = high;
 		int pivot;
 		
-		// ANIM: Create animator vector
+		// ANIM: Create animator vector if on initial run
 		VectorAnimator.Vector v = anim.createVector(a);
+		// A vector to hold the currently changing section
+		VectorAnimator.Vector curr;
 		
-		if ( high > low) {
+		// ANIM: Create the arrows on main vector
+		VectorAnimator.Arrow aDividerLow = v.createArrow("Low", low, true);
+		VectorAnimator.Arrow aDividerHigh = v.createArrow("High", high+1, true);
+
+		// ANIM: Create arrows on working vector
+		VectorAnimator.Arrow aHigh;
+		VectorAnimator.Arrow aLow;
+		VectorAnimator.Arrow aPivot;
+		VectorAnimator.Arrow aSplitLocation;
+		
+		// ANIM: Create and draw the new Vector
+		curr = anim.createVector("Curr", getArraySection(low,high));
+		
+		if (high > low) {
 
 			// Select the pivot by the median of first, middle and last element
-			pivot = a[ ( low + high ) / 2 ];
+			pivot = a[(low + high)/2];
+			
+			// ANIM: Point arrow at area we are working on
+			aPivot = curr.createArrow("Pivot", (low+high)/2-low, false);
+			aPivot.flash();
+			aPivot.delete();
 
+			// ANIM: Create the swapper pointers
+			aLow = curr.createArrow("A", 0, false);
+			aHigh = curr.createArrow("B", high-low, false);
+			
 			// Partition the vector
-			while( i <= j )
+			while(i <= j )
 			{
 				// Search for elements to swap
-				while( ( i < high ) && ( a[i] < pivot ) )	++i; // TODO: Move the arrow right
-				while( ( j > low ) && ( a[j] > pivot ) ) --j; // TODO: Move the arrow left
+				while( (i < high ) && ( a[i] < pivot ) ) {
+					// ANIM: Move the low-end pointer down
+					aLow.move(i-low +1, false);
+					
+					++i;
+				}
+				while( (j > low ) && ( a[j] > pivot ) ) {
+					// ANIM: Move the high-end pointer up
+					aHigh.move(j-low -1, false);
+					
+					--j;
+				}
 
 				// if the indexes have not crossed, swap
-				if( i <= j ) 
+				if(i <= j ) 
 				{
 					swap(i, j); // TODO: Swap elements
 					// ANIM
-					v.swapElements(i, j);
+					curr.swapElements(i-low, j-low);
 					
-					++i; // TODO: Move the arrow right
+					// Move pointers in place for next run
+					// ANIM: Move the low-end pointer down
+					aLow.move(i-low +1, false);
+					++i;
+					
+					// ANIM: Move the high-end pointer up
+					if ((j-low -1)>=0) aHigh.move(j-low -1, false);
 					--j; // TODO: Move the arrow left
 				}
 			}
-
+			
+			// ANIM: Highlight the split location
+			aSplitLocation = curr.createArrow("Split", i-low, true);
+			aSplitLocation.flash();
+			
+			// ANIM: Copy the values of curr across
+			for (int k=0; k<=high-low; k++) {
+				curr.copyElement(k, v, low+k);
+			}
+			
+			// ANIM: Remove both
+			curr.delete();
+			v.delete();
+			
 			// Recursively quicksort if pointers are not at edges
 			// Need additional logic to prevent partitioning the vector too many times
-			if( low < j ) {
-				
-				// ANIM: Partition the vector
-				//v.partition(i);  
-				quick(low, j );  // TODO: Partition vector at j+1
-				if( i < high )	quick( i, high );
+			if(low < j ) {
+				// Call recursively
+				quick(low, j);
+				if(i < high) quick(i, high);
 			}
 			else {
-				if( i < high )	quick( i, high ); // TODO: Partition vector at i-1
+				if(i < high )	quick(i, high); // TODO: Partition vector at i-1
 			}
+			
 			
 		}
 	}
@@ -91,6 +143,26 @@ public class QuickSort extends VectorAlgorithm {
 		a[j] = tmp;
 	}
 
+	/**
+	 * Returns a contiguous subset of an array between two markers.
+	 * @param l
+	 * 	The low end.
+	 * @param h
+	 * 	The high end
+	 * @return
+	 * 	An array with elements between these locations
+	 */
+	private int[] getArraySection(int l, int h) {
+		
+		int outSize = h - l + 1;
+		int[] out = new int[outSize];
+		
+		for(int i=0; i<outSize; i++) {
+			out[i] = a[l+i];
+		}
+		
+		return out;
+	}
 	
 	/**
 	 * @param va
@@ -121,6 +193,7 @@ public class QuickSort extends VectorAlgorithm {
 	 */
 	public void execute(Animator anim) {
 		this.anim = (VectorAnimator) anim;
+		
 		try {
 			quick(0, a.length - 1);
 		} catch (Exception e) {
