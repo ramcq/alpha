@@ -47,7 +47,7 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
 public class ShellGraphAnimator extends GraphAnimator implements ActionListener {
 	
 	private double Nodeangle;
-	private static final int fps = 30;	// Animation framerate
+	private static final int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
 	private Component outc; // Component we will be drawing into
 	private Graphics outg; // Graphics object we are passed from the shell
@@ -138,15 +138,18 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int x1,x2; 
 		int y1,y2; //coordinates for two end points of lines
 		int set; //set the edge belongs to, determines colour
+		int nd1, nd2;
 		private String label; 		
 		/*
 		 * called by creategraph api to initialise node data 
 		 */
-		public void edgesetdata(Node n1, Node n2, String cost) {
-			this.x1 = n1.x /*+3*/;
-			this.x2 = n2.x /*-3*/;
-			this.y1 = n1.y /*+3*/;
-			this.y2 = n2.y /*-3*/; /*TODO : make sure it doesn't overlap with nodes.. probably move to the actual drawing function*/
+		public void edgesetdata(int n1, int n2, String cost) {
+			this.x1 = nodelist[n1].x;
+			this.x2 = nodelist[n2].x;
+			this.y1 = nodelist[n1].y;
+			this.y2 = nodelist[n2].y;
+			this.nd1 = n1;
+			this.nd2 = n2;
 			this.set = 0;
 			this.label = cost;
 		}
@@ -276,7 +279,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		big.setColor(fgcolour);
 	}
 	
-	public void actionPerformed(ActionEvent a) {
+	public synchronized void actionPerformed(ActionEvent a) {
 		// Draw our buffered image out to the actual window
 		outg.drawImage(bi,0,0,outc);
 		// Now comes the meat of the method: what should we do each frame?
@@ -317,7 +320,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				case AnimationEvent.EDGE_SHADE_REDRAW:
 					intermediateOffset++;
 					drawEdgeshade(currentEvent.e1, big, intermediateOffset);
-					if (intermediateOffset > 60) {
+					if (intermediateOffset > 200) {
 						intermediateOffset = 0;	
 						currentEvent = null;
 					}
@@ -351,10 +354,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void drawEdgeshade(Edge e, Graphics g, int t) {
 		g.setColor(SET_COLOUR[e.set]);
 		//get line gradient
-		int x = (int) (e.x1 - (e.x1 - e.x2)/t);
-		int y = (int) (e.y1 - (e.y1 - e.y2)/t);
+		int x = (int) (e.x1 - (t * (e.x1 - e.x2))/200);
+		int y = (int) (e.y1 - (t * (e.y1 - e.y2))/200);
 		g.drawLine(e.x1, e.y1, x, y);
-		g.setColor(fgcolour);		
+		g.setColor(fgcolour);
+		drawNode(nodelist[e.nd1],g);
+		drawNode(nodelist[e.nd2],g);
 	}
 	//draw edge label on screen
 	public void drawEdgelabel(Edge e, Graphics g) {
@@ -414,7 +419,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 							Integer tmpint = new Integer(costs[i][j]);
 							//fill in edge data
 							edgematrix[i][j] = new Edge();
-							edgematrix[i][j].edgesetdata(nodelist[i],nodelist[j],tmpint.toString());
+							edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
 							edgematrix[i][j].drawEdge();
 							//draw the thing we just made
 							edgematrix[i][j].drawlabel();
@@ -530,7 +535,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int[][] tstcosts = {{0,2,1,0},{0,0,3,0},{0,0,0,0},{0,0,0,0}};
 		app.createGraph(tstcosts);
 		app.setNodeShade(1,1);
-		app.setEdgeShade(1,3,1);
+		app.setEdgeShade(0,2,1);
 	}
 }
    /*
