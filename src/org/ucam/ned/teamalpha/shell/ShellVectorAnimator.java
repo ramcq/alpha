@@ -721,13 +721,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		
 		// boundary of affected area
 		int areaLeft = a.left ? a.vector.left - 61 : a.vector.right + 1;
-		//int areaRight = a.left ? a.vector.left - 1 : a.vector.right + 20;
-		int areaTop = movingUp ? oldypos - intermediateOffset - 15 : oldypos + intermediateOffset - 15;
-		//int areaBottom = areaTop + 10;
 		
 		// clear affected area
 		g.setColor(bgcolour);
-		g.fillRect(areaLeft, areaTop, 60, 30);
+		g.fillRect(areaLeft, a.vector.top-10, 60, (a.vector.size*20)+20);
 		
 		redrawAllArrows(g, a.left, a);
 		
@@ -753,6 +750,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 			return res;
 		}
+	}
+	
+	public VectorAnimator.Vector createVector(String label, int size) {
+		int[] c = new int[size];
+		for (int i=0; i<size; i++) c[i] = 0;
+		return createVector(label, c);
+	}
+	
+	public VectorAnimator.Vector createVector(int size) {
+		return createVector("Unnamed", size);
 	}
 	
 	private void drawArrow(Arrow a, Graphics g) {
@@ -868,7 +875,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		
 		int[] t1 = {6,35,4,728,23,233,88};
 		app.startAnimation();
-		VectorAnimator.Vector v = app.createVector("Vector 1", t1);
+		VectorAnimator.Vector v = app.createVector("V1", t1);
 		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
 		VectorAnimator.Arrow a2 = v.createArrow("A2", 2, false);
 		v.moveElement(2,2);
@@ -879,5 +886,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		v.swapElements(2,6);
 		v.setElement(0,100);
 		a2.move(6, true);
+		int[] t2 = {34,72,76667,257,878,99112,6,17};
+		VectorAnimator.Vector v2 = app.createVector("V2", t2);
+		v2.swapElements(7,2);
+		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
+		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
+		a3.setHighlight(true);
+		a3.move(8, true);
 	}
 }
