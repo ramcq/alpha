@@ -51,7 +51,7 @@ public abstract class Animator {
 	 * @return a <class>State</class> object which can later be used with
 	 *         restoreState to restore the state of the animator
 	 */
-	public abstract Animator.State saveState();
+	public abstract Animator.State saveState() throws java.io.IOException;
 
 	/**
 	 * Restores the state of the animator to that which it was in when the
