@@ -115,9 +115,4 @@ class GenericQueue {
 	void enqueue(Object subject, String methodname, Object[] args) {
 		enqueue(subject, methodname, args, null);
 	}
-	
-	void flush() {
-		State s = (State) states.lastElement();
-		s.sendEvents();
-	}
 }

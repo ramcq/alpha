@@ -103,8 +103,4 @@ public class GraphQueue extends GraphAnimator implements AnimatorQueue {
 	public void restoreState(State state) {
 		// TODO Auto-generated method stub	
 	}
-	
-	public void flush() {
-		q.flush();
-	}
 }
