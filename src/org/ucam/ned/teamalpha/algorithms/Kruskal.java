@@ -191,6 +191,7 @@ public class Kruskal extends GraphAlgorithm {
 				touched[n1]=0; touched[n2]=0;
 				
 				//ANIM: Add edge to the graph
+				anim.flashEdge(n1,n2);
 				anim.setEdgeShade(n1,n2,INCLUDED);
 			} else if (!(result[n1][n2] == 1 || result[n2][n1] == 1 )) {
 				//ANIM: Show that edge causes a cycle if not already in tree
