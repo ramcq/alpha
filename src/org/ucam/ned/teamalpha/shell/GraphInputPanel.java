@@ -29,7 +29,7 @@ import org.ucam.ned.teamalpha.algorithms.Algorithm;
  */
 public class GraphInputPanel extends ShellPanel implements PropertyChangeListener {
 
-	int nodesDefault = 5;
+	int nodesDefault = 6;
 	
 	private Shell shell;
 	private ButtonPanel buttons;
@@ -51,12 +51,15 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		cells.removeAll();
 		cells.setLayout(new GridLayout(num, num, 5, 5));
 		
+		NumberFormat format = NumberFormat.getIntegerInstance();
+		format.setMaximumIntegerDigits(2);
+		
 		for (int k = 0; k < num*num; k++) {
 			// Calcuate the dimensions on the matrix
 			int i = k / num;
 			int j = k % num;
 			
-			JFormattedTextField field = new JFormattedTextField(NumberFormat.getIntegerInstance());
+			JFormattedTextField field = new JFormattedTextField(format);
 			field.setValue(new Integer(values[k]));
 			field.setColumns(4);
 			field.setHorizontalAlignment(JTextField.CENTER);
@@ -79,8 +82,8 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		int t;
 		
 		for (int i = 0; i < 64; i++) {
-			t = r.nextInt(100);	
-			values[i] = (t<49)?t:0;
+			t = r.nextInt(40);	
+			values[i] = (t<25)?t:0;
 		}
 		
 		updateValues();
@@ -106,18 +109,19 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 				// Calcuate the dimensions on the matrix
 				//int i = k / nodes;
 				//int j = k % nodes;
-				
+							
 				if (!bidirectional) {
 					if (l<k) {
 						// Add and mirror if unidirectional
-						ret[k][l] = ret[l][k] = values[k*nodes+l];
+						ret[k][l] = ret[l][k] = values[k*nodes+l] % 100;
 					} else {
 						// Do nothing
 					}
 				} else { // Bidirectional case
-					if (l != k) ret[k][l] = values[k*nodes+l];
-				}
-				
+					if (l != k) {
+						ret[k][l] = values[k*nodes+l] % 100;
+					}
+				}		
 			}
 		}
 		
@@ -158,7 +162,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		row.add(Box.createHorizontalStrut(5));
 		
 		// create drop down list of numbers of elements
-		Integer[] vals = { new Integer(3), new Integer(4), new Integer(5), new Integer(8) };
+		Integer[] vals = { new Integer(4), new Integer(5), new Integer(6), new Integer(7), new Integer(8) };
 		elements = new JComboBox(vals);
 		elements.setSelectedIndex(2);
 		elements.addActionListener(new ActionListener() {

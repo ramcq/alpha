@@ -50,8 +50,11 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 
 		cells.removeAll();
 		
+		NumberFormat format = NumberFormat.getIntegerInstance();
+		format.setMaximumIntegerDigits(5);
+		
 		for (int i = 0; i < num; i++) {
-			JFormattedTextField field = new JFormattedTextField(NumberFormat.getIntegerInstance());
+			JFormattedTextField field = new JFormattedTextField(format);
 			field.setValue(new Integer(values[i]));
 			field.setColumns(4);
 			field.setHorizontalAlignment(JTextField.CENTER);
@@ -89,7 +92,7 @@ public class VectorInputPanel extends ShellPanel implements PropertyChangeListen
 		int[] ret = new int[num.intValue()];
 		
 		for (int i = 0; i < num.intValue(); i++) {
-			ret[i] = values[i];
+			ret[i] = values[i] % 100000;
 		}
 		
 		return ret;
