@@ -157,10 +157,12 @@ public class QuickSort extends VectorAlgorithm {
 			// ANIM: Copy the values of curr across
 			anim.setCurrentStep(5);
 			
-/*			for (int k=0; k<=high-low; k++) {
+			anim.setFpsFactor(10000.0f);
+			for (int k=0; k<=high-low; k++) {
 				curr.copyElement(k, v, low+k);
 			}
-*/			
+			anim.setFpsFactor(1.0f);
+			
 			// ANIM: Remove all
 			curr.delete();
 			v.delete();
