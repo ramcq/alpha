@@ -107,7 +107,7 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 
 		// create scrollable box for tree and add
 		JScrollPane treeView = new JScrollPane(tree);
-		treeView.setPreferredSize(new Dimension(200, 500));
+		treeView.setPreferredSize(new Dimension(210, 500));
 		add(treeView);
 		
 		// add five pixel gap
