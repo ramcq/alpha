@@ -68,6 +68,14 @@ sas58
 ajit2
 \family default 
 )
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
 \layout Section
 
 Introduction
@@ -173,11 +181,10 @@ This section contains a brief report from the authors of each package.
 Algorithms (Sid)
 \layout Standard
 
-All five of the proposed algorithms have been implemented and tested by
- Sid (the coder).
+All five of the proposed algorithms have been implemented and tested.
  More testing (especially of the graph algorithms) will be required by other
  testers/coders to ensure that the implementations aren't flawed.
- He has also prepared some sample connectivity matrices that can be used
+ There are also prepared some sample connectivity matrices that can be used
  by testers; these are stored in the folder TestData under the file Connectivity
 Matrices.txt.
  The code produced the correct results with this data.
@@ -214,11 +221,11 @@ Graph animator (Steven)
 
 Almost complete, only highlighting nodes and edges and algorithm step messages
  have to be completed.
- The algorithm step messages require calling methods on  the shell  The
- node and edge data is stored in a list of objects and a matrix of objects
+ The algorithm step messages require calling methods on  the shell.
+ The node and edge data is stored in a list of objects and a matrix of objects
  respectively.
- These have methods similar to the api calls which are called by the actual
- api method implementations.
+ These have methods similar to the API calls which are called by the actual
+ API method implementations.
  The class uses the same animation system as the Vector Animator, with a
  global timer picking events off an event queue, and causing the frame to
  be redrawn.
@@ -521,19 +528,38 @@ Animator
  or even downloading algorithms from a web server.
 \layout Section
 
-Testing
+Testing (Alan and Richard)
 \layout Standard
 
-Work has started on test animators and algorithms to exercise and implement
+The testing of the project is governed by a single bottom-up strategy.
+ All combinations of modules will be tested, starting with the individual
+ modules and working up to the entire program.
+ The strategy can be divided into two stages though: modular and integration
+ testing, the former being the testing of modules individually and the latter
+ the testing of modules that have been linked.
+ Work has started on test animators and algorithms to exercise and implement
  all of the animation primitives in both the graph and vector animator APIs.
- These will be completed shortly, and a variety of test programs can be
- made which will run the test algorithms against the real animators, with
- and without queues, to test that the animators function and correctly interact
- with the queue, and the test algorithms against the test animators via
- the queue, to independently verify the queue's correct functionality.
+ A variety of test programs can be made which will run the test algorithms
+ against the real animators, with and without queues, to test that the animators
+ function and correctly interact with the queue, and the test algorithms
+ against the test animators via the queue, to independently verify the queue's
+ correct functionality.
  Only recently has enough of the coding been completed to allow modules
  to be tested at an external interface level, so much of the testing has
  not been started.
+ The modular testing thus far has taken a largely informal approach, with
+ coders testing snippets of code as they develop a module.
+ Test harnesses have been developed for each of the modules (some are yet
+ to be completed) and these are to be used to test each of the modules in
+ isolation.
+ When all modules have passed their individual tests they will be tested
+ together.
+ Testing will not advance to the next stage, e.g.
+ from testing pairs of modules to testing them in threes, until every test
+ is passed.
+ At each stage, bugs that are identified by the testers will be referred
+ back to coders in a detailed code report, unless they are of such a simple
+ nature, that it is more efficient for the tester himself to fix them himself.
 \layout Standard
 
 For each erroneous input data case which has been conceived, a test case
@@ -548,14 +574,13 @@ For each erroneous input data case which has been conceived, a test case
  to ensure correct action in all cases.
 \layout Section
 
-Documentation
+Documentation (Graham and Neofytos)
 \layout Standard
 
-The user guide has been written by Graham, but will be updated in more detail
+The basic user guide has been written, but will be updated in more detail
  as the project takes shape.
- The developers guide for adding new algorithms to the system is being written
- by Neofytos, again this will be updated in more detail as the project progresse
-s.
+ The developers guide for adding new algorithms to the system is also being
+ written, again this will be updated in more detail as the project progresses.
  Current copies of both have been submitted.
  All code, especially APIs which are implemented by multiple classes, is
  being documented by the coders as it has been written.
