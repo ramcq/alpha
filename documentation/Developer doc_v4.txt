@@ -1,0 +1,170 @@
+							Developer Documentation
+         							And
+							Extending the Project
+						     -----------------------------
+
+Project: Animating Algorithms
+Team: Alpha
+
+	Any software project is considered successful if it can be extended, meaning that extra functionality and features                                                    
+can easily be added if one wishes to do so. In this project, an obvious extension would be to add new algorithms for animation. 
+Also the animation API could be extended for displaying more detailed information but that would require more effort since it 
+would involve changing all the API to adapt to the new animation primitives. In addition, the need to extend the API would make 
+the project less flexible. Below we concentrate on the procedure that needs to be used to add new algorithms (e.g. Shell Sort, 
+Bubble Sort, Prim’s algorithm etc) and ways to implement them. In order to make the procedure clearer to the user we will 
+demonstrate it by means of two examples, the first one extending the project to include the bubble sort algorithm. (that is a
+VectorAlgorithm). The second example would involve a graph algorithm such as Prim's (for finding the minimum spanning tree). 
+After that it should be clear how the procedure could be applied to other vector and graph algorithms besides Bubble sort 
+and Prim's algorithm.
+
+	VectorAlgorithm Extension:
+	
+	We will demonstrate step by step what needs to be done by the user to implement his own algorithm so that it is easier 
+to follow. We will assume that the user is familiar with the algorithm Bubble Sort and he is at the point of being ready to 
+implement it.
+	
+		1) The idea here is to add the Bubble Sort class into the Algorithms package. This is because the Algorithms 
+package contains all that code that implements the algorithms already in the project. So the user only needs to define a class
+ Bubble Sort inside the package that would actually perform all those operations as described by the algorithm.
+A data structure that could be used would be the array to hold the elements to be sorted and possibly extra arrays that would 
+accumulate intermediate results before the sorting is completed.
+
+		2) The Bubble Sort class must descend from the abstract class VectorAlgorithm inside the Algorithms package 
+(similarly to the already implemented vector algorithms).  The VectorAlgorithm descends from the abstract class Algorithm 
+that contain methods for returning the name of the Algorithm, to return a description of the algorithm and also to execute 
+the algorithm. This is done so that the algorithm’s constructor will have a vector animator that will handle the generated 
+animation primitives. For example,
+
+package algorithms;
+import animators.VectorAnimator;
+
+public class BubbleSort extends VectorAlgorithm {
+
+int [] a;
+VectorAnimator anim;
+
+public void sort(){
+// here goes the implementation of the algorithm with
+// all the arrays and manipulation of data
+// according to the steps of the algorithm
+}
+
+public BubbleSort(VectorAnimator va, int[] values) {             //constructor
+		super(va, values);
+		this.anim = va;
+		this.a = values;
+	}
+// va =  The vector animator that will handle the generated animation primitives
+
+// values =  An array of the elements that are to be sorted.
+
+public static String getName() {
+		return "Bubble sort";
+	} //identity of the algorithm
+
+public static String getDescription() {
+		return "A string that is a text description of the algorithm";
+	}    
+
+public void execute() {
+		String[] steps = { “BubbleSort operation”, “Swapping”, “BubbleSort operarion”, …etc };
+		anim.setSteps(steps);
+		sort();
+	}  // the main method that will cause execution of the algorithm
+
+We must note that the implementation of the methods above is essential for otherwise the compiler would complain. By the definition 
+of Java semantics, if a class extends an abstract class then it must provide implementation for all those methods that are defined 
+as abstract inside the abstract class.
+
+	3) The next step is to break the algorithm into steps (inside the sort() method) so that the user can have the ability to 
+step both forwards and backwards during the animation. This will involve calling methods on the VectorAnimator at each step so that 
+the animation will be persistent with each logical step of the algorithm. These methods will be responsible for animating that 
+particular step. The functionality of these methods is explained in the Java Documentation for the project (which is provided by 
+the coders). In order to show to the user the current step that is in progress, we need to call the setStep() method to highlight a 
+string from the steps registered originally, and after each logical phase of the algorithm, we need to call the saveState() method 
+to give the user a point where he can move forward from and back to, or pause the animation at.
+
+
+	4) The import statement as shown in the sample code is very important and essential. First of all we have the animators 
+package and inside that we have the Animator abstract class that contains all those data structures that the actual animator 
+implementations require to restore their state. The VectorAnimator extends animator that again is an abstract class that defines 
+all the methods available for a vector on the animation canvas. So it is important and vital that this is included inside the 
+BubbleSort class.
+
+	5) The final step would involve adding the algorithm inside the catalog where all the existing algorithms are listed.
+
+GraphAlgorithm Extension:
+
+	In this section we will try to give a detailed step by step procedure on how the project can be extended with more Graph 
+algorithms. The description will involve the implementation of Prim's algorithm as a running example. We will again assume that
+the user is familiar with Prim's and he is ready to implement the algorithm.
+
+	1) The first step involves adding the class into the Algorithms package. The reason is that the Algorithm package holds 
+all the classes that implement the project’s algorithms. So the only thing needed at this stage is for the user to define the 
+Prim’s algorithm class with all those operations that the algorithm performs in order to find the minimum spanning tree. Arrays 
+could be used in the implementation of Prim’s as well as the Java Vector package for implementing the graph edges and nodes.
+
+	2)The Prim’s implementation must descend from the abstract class GraphAlgorithm inside the Algorithms package (similarly 
+to the already implemented Kruskal and Dijkstra algorithms).  The GraphAlgorithm extends the abstract class Algorithm whose 
+methods have already been discussed. This is again done so that the algorithm’s constructor will have a vector animator that will
+ handle all the animation primitives. Let’s see the 
+following example,
+
+package algorithms;
+import animators.GraphAnimatorAnimator;
+
+public class Prim extends GraphAlgorithm {
+
+GraphrAnimator anim;
+
+private int [][] costs;
+private Vector edges;
+private Vector nodes;
+private int dim;                   //number of nodes
+int[][] result;
+
+public void prim(){
+// here goes the implementation of the algorithm with
+// all the arrays and manipulation of data
+// according to the steps of the algorithm
+// and possibly addition of new methods to help with the operations
+}
+
+public Kruskal(GraphAnimator ga, int[][] costs) {
+		super(ga, costs);
+		this.costs = costs;
+		this.dim = costs.length;
+		this.result = new int[dim][dim];
+		this.edges = new Vector();
+		this.nodes = new Vector();
+		initialiseResult();
+	}
+
+public static String getName() {
+		return "Prim’s algorithm";
+	} //identity of the algorithm
+
+public static String getDescription() {
+		return "A string that is a text description of the algorithm";
+	}    
+
+public void execute() {
+		String[] steps = { “Prim’s operation”, “Swapping”, “Prim’s operarion”, …etc };
+		anim.setSteps(steps);
+		sort();
+	}  // the main method that will cause execution of the algorithm
+
+The user must note again that the implementation of the methods above is needed for otherwise the compiler would give an error.
+
+	3)This step involves the breaking of the algorithm into steps (inside the Prim’s method) so that the user is abke to step
+both forwards and backwards during the animation. This again requires calling methods on the GraphAnimator at each step so that 
+the animation will be synchronized with each logical step of the algorithm. These methods animate the particular step. The 
+functionality of these methods is explained in the Java Documentation for the project. The use of setSteps() and savesState() 
+methods is similar to the previous explained example.
+
+	4)The import statement is again important. We have the animators package and inside that we have the Animator abstract 
+class that contains all those data structures that the actual animator implementations require to restore their state. The 
+GraphAnimator extends animator that defines all the methods available for a graph on the animation canvas. So it is important 
+that this is included inside the Prim’s class.
+
+	5)The final step is to add the algorithm inside the catalog.
