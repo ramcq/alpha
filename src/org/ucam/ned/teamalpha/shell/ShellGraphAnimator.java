@@ -83,7 +83,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public static final int EDGE_TYPE_TWODIR = 2;
 	public static final int EDGE_CURVE_ANGLE = 10; //curvature degree
 	public static final boolean EDGE_LINE_DRAW = false; //set to true to make it draw thin lines
-	public static final int FLASH_TIME = 50; //number of loops when flashing node/edge
+	public static final int FLASH_TIME = 15; //number of loops when flashing node/edge
 
 	public class Node /*implements Serializable*/{
 		int Nodewidth=NODE_SIZE;
@@ -1069,7 +1069,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public void showMessage(String msg) {
 		// TODO Auto-generated method stub		
 	}
-
+	
 	public void drawImage() {
 		outg.drawImage(bi,0,0,outc);
 	}
