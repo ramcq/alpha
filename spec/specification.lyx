@@ -399,6 +399,7 @@ Queue
 \begin_inset Graphics
 	filename PackageAnimatorAndQueue.ps
 	scale 50
+	BoundingBox 70bp 300bp 450bp 700bp
 	clip
 
 \end_inset 
@@ -602,6 +603,7 @@ Shell
 \begin_inset Graphics
 	filename PackageShell_incomplete.ps
 	scale 50
+	BoundingBox 100bp 400bp 550bp 700bp
 	clip
 
 \end_inset 
@@ -826,7 +828,7 @@ Division of project tasks
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0(null)">
+<column alignment="right" valignment="top" leftline="true" width="0">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
