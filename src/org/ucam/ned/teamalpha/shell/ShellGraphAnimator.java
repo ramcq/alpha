@@ -16,8 +16,6 @@ import javax.swing.JPanel;
 
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
-import org.ucam.ned.teamalpha.animators.InvalidAnimationEventException;
-
 
 /**
  * main work done by

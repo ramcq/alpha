@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.InputTooLongException;
-import org.ucam.ned.teamalpha.animators.InvalidAnimationEventException;
 import org.ucam.ned.teamalpha.animators.ItemDeletedException;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
