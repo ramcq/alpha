@@ -102,7 +102,9 @@ The field of algorithms and data structures is one of the hardest parts
  messy and hard to follow; even when the steps of an algorithm are clearly
  displayed on paper, it is not always immediately clear what operations
  have been done between each step.
- Computer animation would be an ideal way to demonstrate algorithms: the
+\layout Standard
+
+Computer animation would be an ideal way to demonstrate algorithms: the
  actions taken by the computer at each stage can be clearly demonstrated
  at whatever level of abstraction is most helpful.
  Users could move through an algorithm's execution at their own speed, going
@@ -135,10 +137,11 @@ animation script
 \end_inset 
 
  and the algorithms themselves will be written in Java; we will not implement
- our own special language.
+ our own special language for describing algorithms.
+ 
 \layout Itemize
 
-The user can specify initial data in the following way:
+The user will be able to specify initial data in the following ways:
 \begin_deeper 
 \layout Itemize
 
@@ -165,8 +168,9 @@ graphs
 \end_deeper 
 \layout Itemize
 
-The user will not be able to change the data that the algorithms are operating
- on after the initial data input stage.
+The user will set the input data once, before the animation starts, and
+ after that time he/she will not be able to alter the data without starting
+ again.
 \layout Itemize
 
 The auxiliary displays showing the time and space costs of the algorithm,
@@ -226,7 +230,8 @@ Ability to vary animation speed (between two reasonable values)
 Text explanation of each step as it happens (pseudocode as in a debugger)
 \layout Itemize
 
-Display of the time and space costs of the algorithm
+Display of the time and space costs of the algorithm (in text or graphical
+ mode)
 \layout Itemize
 
 A graph editor which allows the user to place the nodes on the animation
@@ -465,29 +470,167 @@ The system must provide a responsive, user-friendly and crash-prone interface;
 (We need more here.)
 \layout Section
 
-Division of Tasks
-\layout Itemize
+Division of tasks
+\layout Standard
 
-Manager: Graham Le Page
-\layout Itemize
 
-Librarian: Robert McQueen
-\layout Itemize
+\begin_inset  Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features>
+<column alignment="right" valignment="top" width="0(null)">
+<column alignment="block" valignment="top" width="3in">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
 
-Secretary: Andrew Medworth
-\layout Itemize
+\layout Standard
 
-User documentation: Neofytos Mylona, Graham Le Page, Alan Treanor (backup:
- Andrew Medworth)
-\layout Itemize
 
-Design: Everyone
-\layout Itemize
+\family sans 
+\series bold 
+Manager
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
 
-Coding: Robert McQueen, Steven Cooper, Andrew Medworth, Sidath Senanayake
- (backup: Zhan Li)
-\layout Itemize
+\layout Standard
 
-Troubleshooting / testing: Zhan Li, Alan Treanor (backup: Sidath Senanayake,
- plus as many others as are required!)
+Graham Le Page
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family sans 
+\series bold 
+Librarian
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Robert McQueen
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family sans 
+\series bold 
+Secretary
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Andrew Medworth
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family sans 
+\series bold 
+User documentation
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Neofytos Mylona Graham Le Page, Alan Treanor (backup: Andrew Medworth)
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family sans 
+\series bold 
+Design
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+All
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family sans 
+\series bold 
+Coding
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Robert McQueen, Steven Cooper, Andrew Medworth, Sidath Senanayake (backup:
+ Zhan Li)
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\family sans 
+\series bold 
+Troubleshooting & testing
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Zhan Li, Alan Treanor (backup: Sidath Senanayake, plus as many others as
+ are required)
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
 \the_end
