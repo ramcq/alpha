@@ -28,6 +28,10 @@ public class InsertionSort extends VectorAlgorithm {
 		
 		int n = a.length;
 		
+		// ANIM: Creat the animator vectors
+		VectorAnimator.Vector sorted = anim.createVector(new int[] {});
+		VectorAnimator.Vector unsorted = anim.createVector(a);
+		
 		// Vector is split into sorted elements and those yet to be sorted about i
 		for(i=1;i<n;i++) {
 			

@@ -20,7 +20,19 @@ public class Dijkstra extends GraphAlgorithm {
 	// To handle the infinite distance:
 	static final int INF = Integer.MAX_VALUE;
 	// The index of the node to start from
-	static final int startIndex = 0;
+	static final int STARTINDEX = 0;
+	
+	// Animator constants:
+	// Nodes
+	static final int UNTOUCHEDSETID = 0;
+	static final int WORKINGSETID = 1;
+	static final int FINISHEDSETID = 2;
+	//Edges
+	static final int EDGEDEFAULT = 0;
+	static final int INCLUDEDEDGE = 1;
+	
+	
+	GraphAnimator anim;
 	
 	class Node {
 		String name;
@@ -31,6 +43,7 @@ public class Dijkstra extends GraphAlgorithm {
 			this.index = i;
 		}
 	}
+	
 	/**
 	 * This class provides an easier to use interface to a cost matrix.
 	 * It builds itself from a cost matrix.
@@ -105,20 +118,47 @@ public class Dijkstra extends GraphAlgorithm {
 	private void setShortestDist(Node n, int d)	{
 		shortestDist.put(n, new Integer(d));
 	}
-
+	
+	/**
+	 * Returns the current shortest distance to a node
+	 * @param n
+	 * 	The node.
+	 * @return
+	 * 	The distance.
+	 */
 	public int getShortestDist(Node n) {
 		Integer d = (Integer) shortestDist.get(n);
 		return (d == null) ? INF : d.intValue();
 	}
 	
+	/**
+	 * Sets up a hierarchy of connectivity points. This helps
+	 * find out how to get to each node.
+	 * @param n1
+	 * 	The child.
+	 * @param n2
+	 * 	The parent.
+	 */
 	private void setPredecessor(Node n1, Node n2)	{
 		predecessors.put(n1, n2);
 	}
 
+	/**
+	 * Returns the parent of the given node.
+	 * @param n
+	 * 	The child node.
+	 * @return
+	 * 	The parent node.
+	 */
 	public Node getPredecessor(Node n)	{
 		return (Node) predecessors.get(n);
 	}
 	
+	/**
+	 * Extracts the current cheapest node.
+	 * @return
+	 * 	The current cheapest node.
+	 */
 	private Node extractMin() {
 		return (Node)unFinished.remove(0);
 	}
@@ -165,9 +205,14 @@ public class Dijkstra extends GraphAlgorithm {
 		
 		// Add the first element
 		Node first = map.nodeAt(start);
+		
 		setShortestDist(first, 0);
+		// ANIM: Update the cost
+		anim.setNodeLabel(first.index, Integer.toString(getShortestDist(first)));
+		
 		addToUnFinished(first);
-		//unFinished.add(first);
+		// ANIM: Add to unfinished set
+		anim.setNodeShade(first.index, WORKINGSETID);
 	}
 	
 	/**
@@ -177,30 +222,58 @@ public class Dijkstra extends GraphAlgorithm {
 	 * 	The node whose neighbours are analysed
 	 */
 	private void processNeighbours(Node n) {
+		// ANIM: Highlight the node we are working with
+		anim.setNodeHighlight(n.index, true);
+		
 		for (Iterator i = map.getDestinations(n).iterator(); i.hasNext();) {
 			Node m = map.nodeAt(((Integer)i.next()).intValue());
 			
 			// skip node already settled
 			if (isDone(m)) continue;
 			
+			// ANIM: Highlight the node we are looking at
+			anim.setNodeHighlight(m.index, true);
+			// ANIM: Highlight the edge we are looking at
+			anim.setEdgeHighlight(n.index, m.index, true);
+			
 			if (getShortestDist(m) > getShortestDist(n)+ map.getDist(n, m)) {
 				// assign new shortest distance and mark unFinished
+				
 				setShortestDist(m, getShortestDist(n) + map.getDist(n, m));
-				unFinished.add(m);
+				// ANIM: Set the new node cost
+				anim.setNodeLabel(m.index, Integer.toString(getShortestDist(m)));
+				
+				addToUnFinished(m);
+				// ANIM: Change the node shade
+				anim.setNodeShade(m.index, WORKINGSETID);
 				
 				// assign predecessor in shortest path
 				setPredecessor(m, n);
+				// ANIM: Unhighlight node and then add an edge here
+				anim.setEdgeHighlight(n.index, m.index, false);
+				anim.setEdgeShade(n.index, m.index, INCLUDEDEDGE);
 			}
-		}       
+			
+			// ANIM: Unhighlight the node/edge we were looking at
+			anim.setNodeHighlight(m.index, false);
+		}  
+		
+		// ANIM: Unhighlight the node we were working with
+		anim.setNodeHighlight(n.index, false);
 	}
 	
 	/**
+	 * Creates an instance of the Dijkstra animator class
+	 * 
 	 * @param ga
+	 * 	The animator the algorithm will talk to.
 	 * @param costs
+	 * 	The cost matrix.
 	 */
 	public Dijkstra(GraphAnimator ga, int[][] costs) {
 		super(ga, costs);
 		this.costMatrix  = costs;
+		this.anim = ga;
 		execute();
 	}
 
@@ -208,22 +281,25 @@ public class Dijkstra extends GraphAlgorithm {
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
 	public void execute() {
-		buildData(startIndex, costMatrix);
+		buildData(STARTINDEX, costMatrix);
+		
+		// ANIM: Create animator information
+		anim.createGraph(costMatrix);
 		
 		while (!unFinished.isEmpty())
 		{
 			// get the node with the shortest distance
 			Node u = extractMin();
 			
-			// destination reached, stop
+			// destination reached, stop (shortest dist pair)
 			//if (u == destination) break;
 			
 			finished.add(u);
+			// ANIM: Set node shade to finished
+			anim.setNodeShade(u.index, FINISHEDSETID);
 			
 			processNeighbours(u);
 		}
 	}
 
-	public static void main(String[] args) {
-	}
 }

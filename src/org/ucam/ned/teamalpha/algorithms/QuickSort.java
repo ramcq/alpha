@@ -31,7 +31,10 @@ public class QuickSort extends VectorAlgorithm {
 		int i = low;
 		int j = high;
 		int pivot;
-
+		
+		// ANIM: Create animator vector
+		VectorAnimator.Vector v = anim.createVector(a);
+		
 		if ( high > low) {
 
 			// Select the pivot by the median of first, middle and last element
@@ -48,6 +51,9 @@ public class QuickSort extends VectorAlgorithm {
 				if( i <= j ) 
 				{
 					swap(i, j); // TODO: Swap elements
+					// ANIM
+					v.swapElements(i, j);
+					
 					++i; // TODO: Move the arrow right
 					--j; // TODO: Move the arrow left
 				}
@@ -56,6 +62,9 @@ public class QuickSort extends VectorAlgorithm {
 			// Recursively quicksort if pointers are not at edges
 			// Need additional logic to prevent partitioning the vector too many times
 			if( low < j ) {
+				
+				// ANIM: Partition the vector
+				v.partition(i);  
 				quick(low, j );  // TODO: Partition vector at j+1
 				if( i < high )	quick( i, high );
 			}

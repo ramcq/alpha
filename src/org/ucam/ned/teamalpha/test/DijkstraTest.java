@@ -182,7 +182,7 @@
  			if (getShortestDist(m) > getShortestDist(n)+ map.getDist(n, m)) {
  				// assign new shortest distance and mark unFinished
  				setShortestDist(m, getShortestDist(n) + map.getDist(n, m));
- 				unFinished.add(m);
+ 				addToUnFinished(m);
  				
  				// assign predecessor in shortest path
  				setPredecessor(m, n);
@@ -219,7 +219,7 @@
  	DijkstraTest(int[][] costs) {
  		this.costMatrix = costs;
  		execute();
- 		//print();
+ 		print();
  	}
  	
  	public static void main(String[] args) {
