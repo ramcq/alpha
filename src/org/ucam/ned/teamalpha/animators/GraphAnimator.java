@@ -87,10 +87,10 @@ public abstract class GraphAnimator extends Animator {
 	/**
 	 * causes node to alternate between shade, white, and black for set time period.
 	 * 
-	 * @param Node
+	 * @param node
 	 * 			id of node to be flashed
 	 */
-	public abstract void flashNode(int Node);
+	public abstract void flashNode(int node);
 	/**
 	 * causes edge to alternate between shade, white, and black for set time period.
 	 * 

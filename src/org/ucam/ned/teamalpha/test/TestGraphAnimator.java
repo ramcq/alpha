@@ -8,6 +8,7 @@ package org.ucam.ned.teamalpha.test;
 
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
+import org.ucam.ned.teamalpha.animators.NonSquareMatrixException;
 
 /**
  * @author ram48
@@ -33,7 +34,8 @@ public class TestGraphAnimator extends GraphAnimator {
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#createGraph(int[][])
 	 */
-	public void createGraph(int[][] costs) {
+	public void createGraph(int[][] costs) throws NonSquareMatrixException {
+		NonSquareMatrixException.isSquare(costs);
 		System.out.println("createGraph called with costs " + costs);
 	}
 
@@ -113,4 +115,18 @@ public class TestGraphAnimator extends GraphAnimator {
 	public void restoreState(Animator.State state) {
 		System.out.println("restoreState called with state " + state);
 	}
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashEdge(int, int)
+	 */
+	public void flashEdge(int from, int to) {
+		System.out.println("flashEdge called with from " + from + " to " + to);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashNode(int)
+	 */
+	public void flashNode(int node) {
+		System.out.println("flashNode called with node " + node);
+	}
+
 }

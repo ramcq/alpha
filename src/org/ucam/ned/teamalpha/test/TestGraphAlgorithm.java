@@ -33,6 +33,7 @@ public class TestGraphAlgorithm extends GraphAlgorithm {
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#execute()
 	 */
 	public void execute(Animator anim) {
+		try {
 		this.ga = (GraphAnimator) ga;
 		// TODO this sucks, make it do something sensible
 		String[] steps = { "foo", "bar", "baz", "qux" };
@@ -50,5 +51,8 @@ public class TestGraphAlgorithm extends GraphAlgorithm {
 		ga.setCurrentStep(3);
 		ga.setNodeShade(1, 2);
 		ga.setEdgeLabel(0, 1, "edge label");
+		} catch (Exception e) {
+			System.err.println(e);
+		}
 	}
 }

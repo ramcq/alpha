@@ -50,7 +50,7 @@ public class NonSquareMatrixException extends Exception {
 	
 	public static void isSquare(int[][] matrix) throws NonSquareMatrixException {
 		int width = matrix.length;
-		for (int i=0; i<matrix.length; i++) {
+		for (int i=0; i<width; i++) {
 			if (matrix[i].length != width) throw new NonSquareMatrixException("Matrix not square: expected row "+i+" to be of length "+width);
 		}
 	}
