@@ -58,7 +58,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	private int intermediateOffset = 0; // will hold where we have got to in the current operation (e.g. how far we have moved an element so far)
 	private LinkedList eventQueue; // will hold queue the events we are to perform
 	private AnimationEvent currentEvent; // the event we are currently in the process of animating
-	public static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.black, Color.darkGray, Color.lightGray};
+	public static final Color[] SET_COLOUR = {Color.blue, Color.green, Color.orange, Color.red, Color.cyan, Color.magenta, Color.pink, Color.yellow, Color.darkGray, Color.lightGray};
 		//colours for representing the different node/edge sets
 	public static final int NODE_SIZE = 6; //node width/height
 	public static final int EDGE_TYPE_SAMDIR = 0;
@@ -135,6 +135,21 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					System.out.println(e);
 				}
 			}
+		}
+		public void flash() {
+			synchronized (ShellGraphAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.NODE_FLASH, this));
+					startAnimation();
+					while (!eventQueue.isEmpty()) ShellGraphAnimator.this.wait();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
+					System.out.println(e);
+				}
+			}			
 		}
 	}
 	
@@ -263,13 +278,16 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		public static final int NODE_LABEL_REDRAW = 3;
 		public static final int EDGE_LABEL_REDRAW = 4;
 		public static final int EDGE_SHADE_REDRAW = 5;
-				
+		public static final int NODE_FLASH = 6;
+		public static final int EDGE_FLASH = 7;
+		
 		private int type;
 		private Node n1;
 		private Edge e1;
 		AnimationEvent(int type, Node n) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.NODE_REDRAW
-					|| type == AnimationEvent.NODE_LABEL_REDRAW) {
+					|| type == AnimationEvent.NODE_LABEL_REDRAW
+					|| type == AnimationEvent.NODE_FLASH) {
 				this.type = type;
 				this.n1 = n;
 			}
@@ -277,7 +295,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		AnimationEvent(int type, Edge e) throws InvalidAnimationEventException {
 			if (type == AnimationEvent.EDGE_REDRAW
 				|| type == AnimationEvent.EDGE_LABEL_REDRAW
-				|| type == AnimationEvent.EDGE_SHADE_REDRAW) {
+				|| type == AnimationEvent.EDGE_SHADE_REDRAW
+				|| type == AnimationEvent.EDGE_FLASH) {
 				this.type = type;
 				this.e1 = e;
 			}
@@ -355,8 +374,42 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					break;		
 				case AnimationEvent.EDGE_SHADE_REDRAW:
 					intermediateOffset++;
-					drawEdgeshade(currentEvent.e1, big, intermediateOffset);
+					drawEdgeShade(currentEvent.e1, big, intermediateOffset);
 					if (intermediateOffset > 59) {
+						intermediateOffset = 0;	
+						currentEvent = null;
+					}
+					break;
+				case AnimationEvent.NODE_FLASH:
+					intermediateOffset++;
+					int tmpint = (int) (intermediateOffset / 10);
+					if ((tmpint % 4)== 0) {
+						drawFlashNode(currentEvent.n1, true, big);
+					}
+					else if ((tmpint % 4)== 2) {
+						drawFlashNode(currentEvent.n1, false, big);
+					}
+					else {
+						drawNode(currentEvent.n1, big);
+					}
+					if (tmpint > 31) {
+						intermediateOffset = 0;	
+						currentEvent = null;
+					}
+					break;
+				case AnimationEvent.EDGE_FLASH:
+					intermediateOffset++;
+					int tmpint2 = (int) (intermediateOffset / 10);
+					if ((tmpint2 % 4)== 0) {
+						drawFlashEdge(currentEvent.e1, true, big);
+					}
+					else if ((tmpint2 % 4)== 2) {
+						drawFlashEdge(currentEvent.e1, false, big);
+					}
+					else {
+						drawEdge(currentEvent.e1, big);
+					}
+					if (tmpint2 > 31) {
 						intermediateOffset = 0;	
 						currentEvent = null;
 					}
@@ -377,6 +430,17 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	//draw node on screen
 	public void drawNode(Node n, Graphics g) {
 		g.setColor(SET_COLOUR[n.set]);
+		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
+		g.setColor(fgcolour);		
+		drawNodelabel(n, g);
+	}
+	public void drawFlashNode(Node n, boolean fset, Graphics g) {
+		if (fset == true) {
+			g.setColor(Color.black);
+		}
+		else {
+			g.setColor(Color.white);
+		}
 		g.fillOval(n.x - (n.Nodewidth / 2), n.y-(n.Nodeheight / 2), n.Nodewidth, n.Nodeheight);
 		g.setColor(fgcolour);		
 		drawNodelabel(n, g);
@@ -468,7 +532,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	
 	//incrementally shade an edge on screen	
-	public void drawEdgeshade(Edge e, Graphics g, int t) {
+	public void drawEdgeShade(Edge e, Graphics g, int t) {
 		int sx1,sx2,sy1,sy2;
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
 			if (e.toshade == 1) {
@@ -497,6 +561,41 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		drawNode(nodelist[e.nd1],g);
 		drawNode(nodelist[e.nd2],g);
 	}
+	public void drawFlashEdge(Edge e, boolean fset, Graphics g) {
+		int sx1,sx2,sy1,sy2;
+		if (fset == true) {
+			g.setColor(Color.black);
+		}
+		else {
+			g.setColor(Color.white);
+		}
+		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
+			if (e.toshade == 1) {
+				sx1 = e.x2; sx2 = e.x1; sy1 = e.y2; sy2 = e.y1;
+			}
+			else {
+				sx1 = e.x1; sx2 = e.x2; sy1 = e.y1; sy2 = e.y2;
+			}
+			int x = (int) (sx1 - (sx1 - sx2));
+			int y = (int) (sy1 - (sy1 - sy2));
+			g.drawLine(sx1, sy1, x, y);
+			g.setColor(fgcolour);
+			drawEdgelabel(e, g);
+		}
+		else {
+			double slimit;
+			slimit = 1.0;
+			if (e.toshade == 0) {
+				drawcurve(e.x1,e.y1,e.x2,e.y2,e.set1,slimit,e.label1,g);
+			}
+			else {
+				drawcurve(e.x2,e.y2,e.x1,e.y1,e.set2,slimit,e.label2,g);
+			}
+		}
+		drawNode(nodelist[e.nd1],g);
+		drawNode(nodelist[e.nd2],g);
+	}
+	
 	//draw edge label on screen
 	public void drawEdgelabel(Edge e, Graphics g) {
 		if (e.type == EDGE_TYPE_SAMDIR || e.type == EDGE_TYPE_ONEDIR) {
@@ -594,9 +693,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setNodeHighlight(int Node, boolean highlight){
-		// TODO	
+		// Not included any more, replaced by flashing
 	}
-
+	
+	public void flashNode(int Node) {
+		nodelist[Node].flash();
+	}
+	
 	public void setNodeShade(int id, int set){
 		nodelist[id].setNodeshade(set);
 	}
@@ -736,6 +839,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	*	app.setEdgeShade(2,0,2);
 	*	Result: Now shades from two directions.
 	* 
-	*
+	*3)int[][] tstcosts = {{0,4,1,0},{4,0,7,0},{1,3,0,0},{0,0,0,0}};
+	*	app.createGraph(tstcosts);
+	*	app.setEdgeShade(0,2,1);
+	*	app.setEdgeShade(0,1,3);
+	*	app.setEdgeShade(2,0,2);
+	*	Result: Now draws and shades curved edges	
 	* 
 	*/
