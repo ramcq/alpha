@@ -1140,7 +1140,17 @@ public class ShellGraphAnimator extends ShellAnimator implements ActionListener,
 		}
 	}
 	private void drawGraph(Graphics2D g) {
-		// currently unused method
+		g.setColor(bgcolour);
+		g.fillRect(0, 0, bi.getWidth(), bi.getHeight());//redraw
+		for (int i=0;i<numnodes;i++) {
+			drawNode(nodelist[i],g);
+			for (int j=0;j<numnodes;j++) {
+				if (edgematrix[i][j] != null){
+					drawEdge(edgematrix[i][j],g);
+				}
+			}
+		}
+		repaint();
 	}
 	//implementation of abstract methods
 	/**
