@@ -230,14 +230,14 @@ There will be some facilities that the system will need to provide.
 The following facilities will definitely be implemented:
 \layout Itemize
 
-Support for algorithms on vectors, lists and graphs
+Support for algorithms on vectors and graphs
 \layout Itemize
 
-Neat, non-flickering graphical animation
+Clear and smooth graphical animation
 \layout Itemize
 
-Ability to step through algorithms, both forwards and backwards, at user's
- speed
+Ability to step through algorithms, both forwards and backwards, at the
+ user's desired speed
 \layout Itemize
 
 Ability to specify initial data / input (plus ability to generate random
@@ -256,7 +256,7 @@ Well-documented API for creation of new animation primitives and data structures
 Cross-platform operation using Java
 \layout Itemize
 
-Easy-to-use, user-friendly interface 
+Easy-to-use, user-friendly interface
 \layout Itemize
 
 We will be demonstrating the system by implementing the following algorithms:
@@ -376,7 +376,7 @@ GraphAlgorithm
 \family default 
  and 
 \family typewriter 
-SortAlgorithm
+VectorAlgorithm
 \family default 
 .
  These abstract classes will specify methods for querying information about
@@ -409,12 +409,13 @@ collapsed false
 
 \end_inset 
 
-UML Class diagram for package 
+UML Class diagram for packages 
 \family typewriter 
 Animator
-\layout Standard
-
-Should GraphAnimator and SortingAnimator be labelled abstract in some way?
+\family default 
+ and 
+\family typewriter 
+Queue
 \end_inset 
 
 
@@ -432,7 +433,7 @@ GraphAnimator
 \family default 
  and 
 \family typewriter 
-SortAnimator
+VectorAnimator
 \family default 
 , which will specify the methods necessary for the following primitives.
  (See Figure 
@@ -490,7 +491,7 @@ Highlight path (to indicate current focus of algorithm)
 Shade path (to indicate membership of a set of nodes or paths)
 \layout Subsubsection
 
-Sort Animator Primitives
+Vector Animator Primitives
 \layout Itemize
 
 Create vector (with initial data and label)
@@ -512,6 +513,9 @@ Insert element at marker
 \layout Itemize
 
 Split vector into two at a marker (for Quicksort)
+\layout Itemize
+
+Highlight columns of the vector (for Radix sort)
 \layout Paragraph
 
 Marker (points at a boundary between two entries in the vector)
@@ -563,7 +567,7 @@ GraphQueue
 \family default 
  and 
 \family typewriter 
-SortQueue
+VectorQueue
 \family default 
 , which extend their respective 
 \family typewriter 
@@ -632,7 +636,7 @@ GraphAnimator
 \family default 
  and 
 \family typewriter 
-SortAnimator
+VectorAnimator
 \family default 
  abstract classes are here, as well as a 
 \family typewriter 
@@ -808,8 +812,8 @@ The system must compute each step of the algorithm correctly using the data
  it receives;
 \layout Itemize
 
-The system must animate each step of the algorithm on the screen, at a speed
- chosen by the user;
+The system must animate each step of the algorithm on the screen, explaining
+ the steps taken and allowing the user to review each step individually;
 \layout Itemize
 
 The user documentation must explain how to use the system as it is implemented
@@ -850,7 +854,7 @@ collapsed false
 \begin_inset  Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features>
-<column alignment="right" valignment="top" leftline="true" width="0(null)">
+<column alignment="right" valignment="top" leftline="true" width="0">
 <column alignment="block" valignment="top" leftline="true" rightline="true" width="3in">
 <row topline="true" bottomline="true">
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
