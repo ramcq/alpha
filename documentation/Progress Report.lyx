@@ -277,7 +277,8 @@ the algorithm selection screen (Diagram 1)
 \begin_deeper 
 \layout Itemize
 
-This will have a list of available algorithms, with a description of each
+This will be the screen that appears first when the system is loaded.
+ It will have a list of available algorithms, with a description of each
  algorithm showing when the algorithm is selected.
  There will be a 'Next' button which when clicked will advance to the data
  input screen.
@@ -308,24 +309,6 @@ This will show the animation of the algorithm, along with a description
  as well as a 'Restart' button to return to the first step, and an 'Exit'
  button to return to the algorithm select screen.
 \end_deeper 
-\layout Section
-
-Examples of code
-\layout Standard
-
-Explain what they do - refer to specification
-\layout Subsection
-
-Algorithms
-\layout Subsection
-
-Animators
-\layout Subsection
-
-Queues
-\layout Subsection
-
-Shell
 \layout Section
 
 Test results
