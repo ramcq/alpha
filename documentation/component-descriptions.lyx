@@ -685,6 +685,106 @@ s for an event.
 
 \family typewriter 
 ShellGraphAnimator
+\layout Standard
+
+This class was written by Steven Cooper.
+ It is the class which does the actual graphical work for graph algorithms,
+ for example the Kruskal and Dijkstra.
+ Its constructor is the same format as 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+.
+ Also, a timer is used to control the animation using an event queue in
+ the same way as 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+.
+\layout Standard
+
+Data for nodes and edges displayed are represented by arrays of instances
+ of the 
+\family typewriter 
+Node
+\family default 
+ and 
+\family typewriter 
+Edge
+\family default 
+ inner classes.
+ These contain data to determine the coordinates, colour, and labels of
+ the node or edge when drawn.
+ They also include methods which add 
+\family typewriter 
+AnimationEvents
+\family default 
+ to the event queue in the same way as the methods in the 
+\family typewriter 
+Vector
+\family default 
+ inner class in 
+\family typewriter 
+ShellVectorAnimator
+\family default 
+.
+ However, these methods are not called by the API directly, all of the API
+ methods are in the main body of the class.
+ When called by the GenericQueue the API implementations call methods in
+ the appropriate 
+\family typewriter 
+Nodes
+\family default 
+ or 
+\family typewriter 
+Edge
+\family default 
+s that need to be animated in some way.
+ The methods which draw on the 
+\family typewriter 
+Graphics2D
+\family default 
+ canvas are all private methods in the main body of the class.
+\layout Standard
+
+The animator contains a 
+\family typewriter 
+saveState()
+\family default 
+ method which creates new copies of the 
+\family typewriter 
+Node
+\family default 
+ and 
+\family typewriter 
+Edge
+\family default 
+ arrays in a 
+\family typewriter 
+State
+\family default 
+ object.
+ When 
+\family typewriter 
+restoreState()
+\family default 
+ is called, the data in the 
+\family typewriter 
+State
+\family default 
+ object will be copied over the currently working data, and the entire image
+ redrawn using the restored data.
+\layout Standard
+
+Nearly all of the style options used in displaying the graph are stored
+ at the top of the code in the form of private constants, so the set of
+ colours used, or the font size used to display text can be easily changed.
+ However, the overall layout of the nodes is just done by placing points
+ on an n-sided polygon, and there is currently no alternative to this.
+\layout Standard
+
+Currently, the fastForward method is suffers the same problem as found in
+ the same method on ShellVectorAnimator.
 \layout Subsection
 
 
