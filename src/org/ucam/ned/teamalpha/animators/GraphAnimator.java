@@ -14,7 +14,7 @@ public abstract class GraphAnimator extends Animator {
 	 *            a square matrix of edge costs, indexed first by source node,
 	 *            and then by destination node, with 0 for no edge
 	 */
-	public abstract void createGraph(int[][] costs);
+	public abstract void createGraph(int[][] costs) throws NonSquareMatrixException;
 
 	/**
 	 * Set a text label for a node.
