@@ -69,6 +69,9 @@ ajit2
 )
 \layout Standard
 
+{
+\layout Standard
+
 4.2 Module implementation and testing
 \newline 
 
@@ -91,20 +94,20 @@ Changes in specification or design (if any)
 Difficulties (if any)
 \layout Standard
 
-Project log
-\layout Standard
+Project log:
+\layout Itemize
 
 Interfaces and modules
-\layout Standard
+\layout Itemize
 
 Authorship
-\layout Standard
+\layout Itemize
 
 Status (written, tested, work in hand...)
-\layout Standard
+\layout Itemize
 
 Copies of test results
-\layout Standard
+\layout Itemize
 
 Pointers to on-line sources 
 \newline 
@@ -113,14 +116,24 @@ Pointers to on-line sources
 
 \newline 
 Sections:
+\layout Standard
+
+}
 \layout Section
 
 Introduction
 \layout Standard
 
-This is the progress report document for the "Animating Algorithms" (Topic
- 8.5) Computer Science Tripos Part IB / Part II (General) group project.The
- authors are the members of group "Alpha", listed individually above.
+This is the progress report document for the 
+\begin_inset Quotes eld
+\end_inset 
+
+Animating Algorithms" (Topic 8.5) Computer Science Tripos Part IB / Part
+ II (General) group project.The authors are the members of group 
+\begin_inset Quotes eld
+\end_inset 
+
+Alpha", listed individually above.
  This project is being overseen by Steven Hand (
 \family typewriter 
 \series bold 
@@ -130,28 +143,98 @@ smh22@cam.ac.uk
 ).
 \layout Section
 
-Changes to specification
+Changes from specification
 \layout Standard
 
-Include difficulties
+Algorithm Package
+\layout Standard
+
+* Provision of initial data and animator moved to constructors instead.
+\newline 
+Animator Package
+\newline 
+Vector Animator
+\layout Standard
+
+* Markers and Pointers merged into Arrows.
+\layout Standard
+
+* Copy element from one pointer to another method changed to take offsets
+ rather than pointers.
+\layout Standard
+
+* Specific compare two elements method removed vector primitives; un-necessary
+ since you can just use highlight pointer.
+\layout Standard
+
+* Delete element method removed; vector lengths are invariant for sorting
+ algorithms (moved to project extensions list).
+\layout Standard
+
+* Split vector method also removed, for similar reason (preserve invariant
+ length) 
+\newline 
+
+\newline 
+Include difficulties - refer to specification
 \layout Section
 
 Code status
 \layout Standard
 
 (Written/tested/to do etc) Include authors
+\layout Subsection
+
+Algorithms
+\layout Subsection
+
+Animators
+\layout Subsection
+
+Queues
+\layout Subsection
+
+Shell
 \layout Section
 
 Examples of code
 \layout Standard
 
 Explain what they do - refer to specification
+\layout Subsection
+
+Algorithms
+\layout Subsection
+
+Animators
+\layout Subsection
+
+Queues
+\layout Subsection
+
+Shell
 \layout Section
 
 Test results
 \layout Standard
 
 Say what we are testing it for and how we are testing it
+\layout Section
+
+Documentation
+\layout Standard
+
+The user guide has been written by Graham, but will be updated in more detail
+ as the project takes shape.
+ 
+\newline 
+The developers guide for adding new algorithms to the system has been written
+ by Neofytos, again this will be updated in more detail as the project progresse
+s.
+ Current copies of both have been submitted.
+\layout Section
+
+Plan of attack
 \layout Standard
 
 Badgers

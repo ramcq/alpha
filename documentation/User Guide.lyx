@@ -1,0 +1,102 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms: User Guide
+\layout Section
+
+Introduction
+\layout Standard
+
+Animating Algorithms is a program designed to aid your understanding of
+ a variety of sorting and graph based algorithms.
+ It shows the basic working of the algorithms by animating key steps and
+ giving an explanation of what is happening at each point.
+ It also allows you to step forward and backwards through the algorithms,
+ allowing you to repeat steps if you want to see an animation again.
+\layout Section
+
+Starting up
+\layout Standard
+
+To start the program....
+\layout Section
+
+Animating an algorithm [make this easy to read, pictures ?]
+\layout Standard
+
+At the main menu, there is a drop-down box which lists the algorithms available
+ to animate.
+ Select one by clicking on it in the list, and then pressing the 'Next'
+ button at the bottom of the screen.
+ You should now be at the input data menu, which allows you to input initial
+ data for the algorithm you have chosen.
+ The type of data you can input depends on the algorithm you are using,
+ so follow the instructions given on screen concerning this.
+ To input data, click on an empty box with the mouse and write data in with
+ the keyboard.
+ There is also an option to generate random data, to do this simply click
+ on the 'Random' button.
+ When you are happy with the data being used, select one of the two ways
+ to begin the animation.
+ If you want the animation to continue on its own all the way through to
+ the end, press the 'Automatic Slide Show' button, if however you want the
+ animation to proceed at your own pace press the 'Manual' button.
+\layout Standard
+
+If you choose the 'Automatic Slide Show' option, the animation will begin
+ and run until it has finished, at which point it will return to the main
+ menu.
+ To return to the main menu before the animation finishes, click on the
+ 'Exit' button.
+ For the 'Manual' option, you will have to click on the 'Next' button after
+ each step in the algorithm to begin the next animation.
+ To step back in the algorithm, click the 'Previous' button which will take
+ you back one step.
+ To return to the main menu at any point, click the 'Exit' button.
+\layout Section
+
+Exiting
+\layout Standard
+
+To exit the program completely, press the 'Quit' button on the main menu.
+\layout Section
+
+Useful information
+\layout Standard
+
+For more useful information on algorithms, these sources may be useful:
+\layout Itemize
+
+'Introduction To Algorithms' by Cormen, Leiserson, Rivest & Stein - A comprehens
+ive look at many algorithms
+\layout Itemize
+
+www.google.co.uk - Internet search engine
+\layout Itemize
+
+...
+\the_end
