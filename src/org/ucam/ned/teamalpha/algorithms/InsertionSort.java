@@ -101,7 +101,7 @@ public class InsertionSort extends VectorAlgorithm {
 					anim.saveState();
 					anim.setCurrentStep(2);
 					
-					anim.showMessage("Since <strong>" + a[j] + "</strong>><strong>" + v + "</strong>, shift down to make space.");
+					anim.showMessage("Since <strong>" + a[j] + "</strong> &gt; <strong>" + v + "</strong>, shift down to make space.");
 					
 					sorted.moveElement(j-1, j);
 				

@@ -82,7 +82,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					anim.setCurrentStep(0);
 					arrowA.move(j, false);
 					
-					anim.showMessage("Search down and check if <strong>" + a[j] + "</strong>><strong>" + a[j+1] + "</strong>.");
+					anim.showMessage("Search down and check if <strong>" + a[j] + "</strong> &gt; <strong>" + a[j+1] + "</strong>.");
 					
 					if (a[j] > a[j + 1]) {
 						COMPARES++;
@@ -137,7 +137,7 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 					anim.setCurrentStep(1);
 					arrowB.move(j, false);
 					
-					anim.showMessage("Search down and check if <strong>" + a[j+1] + "</strong>><strong>" + a[j] + "</strong>.");
+					anim.showMessage("Search down and check if <strong>" + a[j+1] + "</strong> &gt; <strong>" + a[j] + "</strong>.");
 					
 					if (a[j] > a[j + 1]) {
 						
