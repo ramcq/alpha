@@ -1983,6 +1983,11 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}		
 	}
 	
+	/**
+	 * Causes the animator to wait (pause) for a certain time
+	 * @param time
+	 * 	Time to pause for in ms
+	 */
 	public void waitFor(int time) {
 		int frames = time * fps / 1000; // number of frames to wait for
 		synchronized (this) {
