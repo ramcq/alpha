@@ -1,27 +1,38 @@
 /*
- * projectalpha.java
+ * GUITest.java
  *
  * Created on February 5, 2004, 6:54 PM
  */
 
 /**
- *
  * @author  sas58
  */
 package org.ucam.ned.teamalpha.test;
 
 import java.util.*;
+import javax.swing.*;
 
 public class GUITest extends javax.swing.JFrame {
 	
-	/** Creates new form GUITest */
+	/** Creates new form projectalpha */
 	public GUITest() {
 		initComponents();
+		hidePanel(pnlVectorEntry);
+		hidePanel(pnlPlayTools);
 	}
 	
 	// Vars for the randome generation of ints
 	Random r = new Random();
 	private static final int RANDBOUND = 100;
+	
+	// Vars for saving lovations when hiding the panels
+	private static final int PNL_S_X = 180;
+	private static final int PNL_S_Y = 100;
+	private static final int PNL_VE_X = 10;
+	private static final int PNL_VE_Y = 140;
+	private static final int PNL_PT_X = 250;
+	private static final int PNL_PT_Y = 80;
+	
 	
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -56,6 +67,7 @@ public class GUITest extends javax.swing.JFrame {
 		txtVectorEntry14 = new javax.swing.JTextField();
 		txtVectorEntry15 = new javax.swing.JTextField();
 		cmdRandom = new javax.swing.JButton();
+		cmdClearVector = new javax.swing.JButton();
 		cmdNext2 = new javax.swing.JButton();
 		pnlSelect = new javax.swing.JPanel();
 		cbSelect = new javax.swing.JComboBox();
@@ -66,6 +78,7 @@ public class GUITest extends javax.swing.JFrame {
 
 		setTitle("Animating Algorithms");
 		setMaximizedBounds(new java.awt.Rectangle(0, 0, 500, 300));
+		setResizable(false);
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent evt) {
 				exitForm(evt);
@@ -74,18 +87,26 @@ public class GUITest extends javax.swing.JFrame {
 
 		jLabel1.setFont(new java.awt.Font("Lucida Sans", 1, 24));
 		jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		jLabel1.setText("Animating Algorithms -- Group Alpha");
+		jLabel1.setText("Animating Algorithms -- Group Alpha (TEST)");
 		getContentPane().add(jLabel1);
-		jLabel1.setBounds(10, 10, 560, 60);
+		jLabel1.setBounds(110, 10, 600, 60);
 
-		pnlMain.setBorder(new javax.swing.border.TitledBorder(null, "Chose algorithm to animate", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11)));
+		pnlMain.setBorder(new javax.swing.border.EmptyBorder(new java.awt.Insets(1, 1, 1, 1)));
 		pnlMain.setToolTipText("");
 		cmdRestart.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdRestart.setMnemonic('w');
 		cmdRestart.setText("Restart Wizard");
 		cmdRestart.setToolTipText("Click here to restart the algorithm selection");
+		cmdRestart.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				cmdRestartActionPerformed(evt);
+			}
+		});
+
 		pnlMain.add(cmdRestart);
 
 		cmdExit.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdExit.setMnemonic('x');
 		cmdExit.setText("Exit");
 		cmdExit.setToolTipText("Click here to close the application");
 		cmdExit.addActionListener(new java.awt.event.ActionListener() {
@@ -97,19 +118,22 @@ public class GUITest extends javax.swing.JFrame {
 		pnlMain.add(cmdExit);
 
 		getContentPane().add(pnlMain);
-		pnlMain.setBounds(170, 470, 240, 57);
+		pnlMain.setBounds(600, 380, 190, 40);
 
-		pnlPlayTools.setBorder(new javax.swing.border.TitledBorder(null, "Chose algorithm to animate", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11)));
+		pnlPlayTools.setBorder(new javax.swing.border.EmptyBorder(new java.awt.Insets(1, 1, 1, 1)));
 		cmdBack.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdBack.setMnemonic('z');
 		cmdBack.setText("< Back");
 		cmdBack.setToolTipText("Click here to go back in the animation sequence");
 		pnlPlayTools.add(cmdBack);
 
 		cmdStop.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdStop.setMnemonic('x');
 		cmdStop.setText("Stop");
 		pnlPlayTools.add(cmdStop);
 
 		cmdPlay.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdPlay.setMnemonic('c');
 		cmdPlay.setText("Play");
 		cmdPlay.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,14 +144,15 @@ public class GUITest extends javax.swing.JFrame {
 		pnlPlayTools.add(cmdPlay);
 
 		cmdForward.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdForward.setMnemonic('a');
 		cmdForward.setText("Forward >");
 		cmdForward.setToolTipText("Click here to step through to the next step in the animation");
 		pnlPlayTools.add(cmdForward);
 
 		getContentPane().add(pnlPlayTools);
-		pnlPlayTools.setBounds(120, 400, 350, 60);
+		pnlPlayTools.setBounds(400, 660, 340, 40);
 
-		pnlVectorEntry.setBorder(new javax.swing.border.TitledBorder(null, "Chose algorithm to animate", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11)));
+		pnlVectorEntry.setBorder(new javax.swing.border.TitledBorder(null, "Enter vector elements", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11)));
 		pnlVectorEntry.setEnabled(false);
 		txtVectorEntry00.setColumns(4);
 		txtVectorEntry00.setFont(new java.awt.Font("Lucida Sans", 0, 10));
@@ -220,13 +245,31 @@ public class GUITest extends javax.swing.JFrame {
 
 		pnlVectorEntry.add(cmdRandom);
 
+		cmdClearVector.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdClearVector.setText("Clear");
+		cmdClearVector.setToolTipText("Click here to clear all elements");
+		cmdClearVector.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				cmdClearVectorActionPerformed(evt);
+			}
+		});
+
+		pnlVectorEntry.add(cmdClearVector);
+
 		cmdNext2.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdNext2.setMnemonic('n');
 		cmdNext2.setText("Next >");
 		cmdNext2.setToolTipText("Go to the next step in the algorithm chosing process.");
+		cmdNext2.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				cmdNext2ActionPerformed(evt);
+			}
+		});
+
 		pnlVectorEntry.add(cmdNext2);
 
 		getContentPane().add(pnlVectorEntry);
-		pnlVectorEntry.setBounds(70, 280, 410, 110);
+		pnlVectorEntry.setBounds(20, 520, 750, 80);
 
 		pnlSelect.setBorder(new javax.swing.border.TitledBorder(null, "Chose algorithm to animate", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11)));
 		pnlSelect.setOpaque(false);
@@ -244,15 +287,60 @@ public class GUITest extends javax.swing.JFrame {
 		pnlSelect.add(jTextPane1);
 
 		cmdNext1.setFont(new java.awt.Font("Lucida Sans", 0, 10));
+		cmdNext1.setMnemonic('n');
 		cmdNext1.setText("Next >");
 		cmdNext1.setToolTipText("Go to the next step in the algorithm chosing process.");
+		cmdNext1.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				cmdNext1ActionPerformed(evt);
+			}
+		});
+
 		pnlSelect.add(cmdNext1);
 
 		getContentPane().add(pnlSelect);
-		pnlSelect.setBounds(50, 70, 470, 200);
+		pnlSelect.setBounds(180, 100, 470, 200);
 
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds((screenSize.width-593)/2, (screenSize.height-646)/2, 593, 646);
+		setBounds((screenSize.width-793)/2, (screenSize.height-450)/2, 793, 450);
+	}
+
+	private void cmdClearVectorActionPerformed(java.awt.event.ActionEvent evt) {
+		// Clear the all the values in the textFields
+		txtVectorEntry00.setText("");
+		txtVectorEntry01.setText("");
+		txtVectorEntry02.setText("");
+		txtVectorEntry03.setText("");
+		txtVectorEntry04.setText("");
+		txtVectorEntry05.setText("");
+		txtVectorEntry06.setText("");
+		txtVectorEntry07.setText("");
+		txtVectorEntry08.setText("");
+		txtVectorEntry09.setText("");
+		txtVectorEntry10.setText("");
+		txtVectorEntry11.setText("");
+		txtVectorEntry12.setText("");
+		txtVectorEntry13.setText("");
+		txtVectorEntry14.setText("");
+		txtVectorEntry15.setText("");
+	}
+
+	private void cmdRestartActionPerformed(java.awt.event.ActionEvent evt) {
+		hidePanel(pnlPlayTools);
+		hidePanel(pnlVectorEntry);
+		restorePanelSelect();
+	}
+
+	private void cmdNext2ActionPerformed(java.awt.event.ActionEvent evt) {
+		// Hide and show next panel
+		hidePanel(pnlVectorEntry);
+		restorePanelPlayTools();
+	}
+
+	private void cmdNext1ActionPerformed(java.awt.event.ActionEvent evt) {
+		// Hide and show next panel
+		hidePanel(pnlSelect);
+		restorePanelVectorEntry();
 	}
 
 	private void cmdPlayActionPerformed(java.awt.event.ActionEvent evt) {
@@ -302,6 +390,7 @@ public class GUITest extends javax.swing.JFrame {
 	// Variables declaration - do not modify
 	private javax.swing.JComboBox cbSelect;
 	private javax.swing.JButton cmdBack;
+	private javax.swing.JButton cmdClearVector;
 	private javax.swing.JButton cmdExit;
 	private javax.swing.JButton cmdForward;
 	private javax.swing.JButton cmdNext1;
@@ -336,6 +425,26 @@ public class GUITest extends javax.swing.JFrame {
 	
 	
 	// My functions
+	private void hidePanel(JPanel p) {
+		p.setLocation(1000,1000);
+		p.enableInputMethods(false);
+	}
+	
+	private void restorePanelSelect() {
+		pnlSelect.setLocation(PNL_S_X, PNL_S_Y);
+		pnlSelect.enableInputMethods(true);
+	}
+	
+	private void restorePanelVectorEntry() {
+		pnlVectorEntry.setLocation(PNL_VE_X, PNL_VE_Y);
+		pnlVectorEntry.enableInputMethods(true);
+	}
+	
+	private void restorePanelPlayTools() {
+		pnlPlayTools.setLocation(PNL_PT_X, PNL_PT_Y);
+		pnlPlayTools.enableInputMethods(true);
+	}
+	
 	private String nextRandomInt() {
 		int i = r.nextInt(RANDBOUND<<1) - (RANDBOUND);
 		return Integer.toString(i);
