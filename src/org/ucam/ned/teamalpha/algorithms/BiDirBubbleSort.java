@@ -137,6 +137,6 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 	}
 	
 	public static String getDescription() {
-		return "TODO [BiDirBubbleSort.getDescription] Documenters, figure out a description";
+		return "Sort by comparing each adjacent pair of items in a list in turn, swapping the items if necessary, and repeating the pass through the list until no swaps are done. The bi-directional version alternates between passes in both directions.";
 	}
 }

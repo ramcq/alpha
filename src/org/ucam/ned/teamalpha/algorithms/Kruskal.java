@@ -283,6 +283,6 @@ public class Kruskal extends GraphAlgorithm {
 	}
 	
 	public static String getDescription() {
-		return "TODO [Kruskal.getDescription] Documenters, figure out a description";
+		return "An algorithm for computing a minimum spanning tree. It maintains a set of partial minimum spanning trees, and repeatedly adds the shortest edge in the graph whose vertexes are in different partial minimum spanning trees.";
 	}
 }

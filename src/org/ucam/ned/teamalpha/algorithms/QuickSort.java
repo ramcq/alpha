@@ -225,7 +225,7 @@ public class QuickSort extends VectorAlgorithm {
 	 * @see org.ucam.ned.teamalpha.algorithms.Algorithm#getDescription()
 	 */
 	public static String getDescription() {
-		return "TODO: [QuickSort.getDescription()] : Documenters, decide on what string to have here";
+		return "An in-place sort algorithm that uses the divide and conquer paradigm. It picks an element from the array (the pivot), partitions the remaining elements into those greater than and less than this pivot, and recursively sorts the partitions. There are many variants of the basic scheme above: to select the pivot, to partition the array, to stop the recursion on small partitions, etc.";
 	}
 
 	/* (non-Javadoc)

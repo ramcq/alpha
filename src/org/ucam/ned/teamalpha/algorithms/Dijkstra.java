@@ -254,6 +254,8 @@ public class Dijkstra extends GraphAlgorithm {
 				// ANIM: Get rid of old edge if there is one
 				try {
 					anim.setEdgeShade(getPredecessor(m).index, m.index, EXCLUDEDEDGE);
+					// ANIM: removing a longer route
+					anim.setCurrentStep(3);
 				} catch (NullPointerException e) {
 					// There is no predecessor yet.
 				}
@@ -264,6 +266,7 @@ public class Dijkstra extends GraphAlgorithm {
 				
 				addToUnFinished(m);
 				// ANIM: Change the node shade
+				anim.setCurrentStep(2);
 				anim.setNodeShade(m.index, WORKINGSETID);
 				
 				// assign predecessor in shortest path
@@ -346,6 +349,6 @@ public class Dijkstra extends GraphAlgorithm {
 	}
 	
 	public static String getDescription() {
-		return "TODO [Dijkstra.getDescription] Documenters, figure out a description";
+		return "An algorithm to find the shortest paths from a single source vertex to all other vertexes in a weighted, directed graph. All weights must be nonnegative. Implementing the priority queue with a Fibonnaci heap makes the time complexity O(E + V log V), where V is the number of vertexes and E is the number of edges.";
 	}
 }
