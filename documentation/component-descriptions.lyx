@@ -25,14 +25,22 @@
 
 \layout Title
 
-Animating Algorithms
-\newline 
-Description of system components
+Animating Algorithms: Description Of System Components
 \layout Author
 
 Robert McQueen, Andrew Medworth,
 \newline 
 Steven Cooper, Sidath Senanayake
+\layout Section
+
+Introduction
+\layout Standard
+
+This is the description of system components document for the "Animating
+ Algorithms" (Topic 8.5) Computer Science Tripos Part IB / Part II (General)
+ group project.The authors are the coders of group "Alpha", listed individually
+ above.
+ This project is being over seen by Steven Hand (smh22@cam.ac.uk).
 \layout Section
 
 Algorithms

@@ -68,23 +68,6 @@ sas58
 ajit2
 \family default 
 )
-\layout Standard
-
-[Also need:
-\layout Itemize
-
-User Guide
-\layout Itemize
-
-Developers Guide
-\layout Itemize
-
-Finished project logs (Description of modules/testing Java-Doc etc)
-\layout Standard
-
-]
-\newline 
-
 \layout Section
 
 Introduction
@@ -103,7 +86,7 @@ smh22@cam.ac.uk
 \layout Section
 
 General project overview
-\layout Standard
+\layout Subsubsection*
 
 Successes
 \layout Itemize
@@ -114,9 +97,14 @@ We got on well together as a team, there were no big personality conflicts
  before deadlines.
 \layout Itemize
 
+We broke the project up into manageable sections which were successfully
+ distributed between team members, ensuring that everybody had work to do
+ and no one person was left to do the majority of the work.
+\layout Itemize
+
 We managed to get all the documentation finished and handed in on time for
  project meetings, never missing a deadline.
-\layout Standard
+\layout Subsubsection*
 
 Failures
 \layout Itemize
@@ -143,7 +131,7 @@ At the first project meeting we had a plan of who was going to be doing
  task allocation saying for example, who would be coding each module.
  Although this was sorted quickly after the meeting, we should have made
  a plan for this in the specification stage.
-\layout Standard
+\layout Subsubsection*
 
 Lessons learned
 \layout Itemize
@@ -176,7 +164,7 @@ Good planning is very important as it helps to find problems early, and
 \layout Section
 
 Summary of work undertaken
-\layout Subsection*
+\layout Subsection
 
 Manager
 \layout Subsubsection*
@@ -189,7 +177,7 @@ Graham was the manager of the project, and so was in charge of organising
  He also had a role as a documenter, producing the User Guide among other
  things.
  
-\layout Subsection*
+\layout Subsection
 
 Coders
 \layout Subsubsection*
@@ -227,7 +215,7 @@ Steven
 
 Steven coded the graph animator module, one of the most challenging parts
  of the project.
-\layout Subsection*
+\layout Subsection
 
 Testers
 \layout Subsubsection*
@@ -244,7 +232,7 @@ Alan
 
 Alan tested the vector animator as well as performing various other module
  and integration tests.
-\layout Subsection*
+\layout Subsection
 
 Documenter
 \layout Subsubsection*
@@ -256,41 +244,4 @@ Neofytos was a documenter, and so was involved in writing up many of the
  documents such as the Developers Guide.
  He also wrote the algorithm explanations that appear during animation to
  help explain what the algorithm is doing.
-\layout Section
-
-Random final report stuff
-\layout Standard
-
-The final task is to piece the whole system together, test it and ensure
- that it is adequately documented.
- The user manual should be written throughout the project, as the design
- emerges, but will need to be polished at the end of the project.
-\layout Standard
-
-The project manager must submit a final report at the final group meeting,
- which should describe the project's successes and failures, elaborate on
- any lessons learned, and include a summary of the work undertaken by different
- team members in completing the system.
- It is perfectly reasonable for an individual member not to have written
- any code but to have worked specially as a librarian or on documentation
- or testing as long as this was agreed with the other group members and
- is reported in the delivery document.
-\newline 
-
-\newline 
-
-\layout Standard
-
-4.4 Personal report
-\layout Standard
-
-Each group member must also submit a brief personal report for the final
- review meeting giving details of their individual contribution to the project.
- This should include a representative part of their contribution which might
- be program code or documentation, project management logs or minutes of
- meetings as appropriate.
- It should also give a summary assessment of the contributions made by the
- other members of the group.
- The group and the personal reports will be retained by the overseer and
- forwarded directly to the examiners.
 \the_end
