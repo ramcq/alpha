@@ -1,0 +1,51 @@
+#LyX 1.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 218
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4wide
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Animating Algorithms: Project Specification
+\layout Author
+
+Steven Cooper (sjc209), Graham LePage (gpl26), Zhan Li (zrll2), Robert McQueen
+ (ram48), Andrew Medworth (am502), Neofytos Mylona (nm314), Sidath Senanayake
+ (sas58), Alan Treanor (ajit2)
+\layout Section
+
+Introduction
+\layout Section
+
+Background
+\layout Section
+
+Facilities to be provided
+\layout Section
+
+Major system components
+\layout Section
+
+Acceptance criteria for finished project
+\layout Section
+
+Management strategy and member roles
+\the_end
