@@ -6,11 +6,12 @@ import java.awt.event.*;
 import java.lang.Math.*;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
+import org.ucam.ned.teamalpha.animators.Animator.State;
 
 
 /**
  * main work done by
- * @author igor
+ * @author am502
  * 
  * edited for graph animation by
  * @author sjc209
@@ -38,14 +39,14 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	public static final Color EDGE_START_COLOUR = Color.green;
 	public static final Color EDGE_SHADE_COLOUR = Color.green;
 	
-	public class Node implements Serializable{
+	public class Node /*implements Serializable*/{
 		int Nodewidth=3;
 		int Nodeheight=3;
 		int x;
 		int y;
 		Color colour;
 		private String label; 
-		public void Node(int x, int y) {
+		public void nodesetdata(int x, int y) {
 			this.x = x;
 			this.y = y;
 			this.colour = NODE_START_COLOUR;
@@ -95,12 +96,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		}
 	}
 	
-	public class Edge implements Serializable {
+	public class Edge /*implements Serializable*/ {
 		int x1,x2;
 		int y1,y2;
 		Color colour;
-		private string label; 
-		public void Edge(Node n1, Node n2, String cost) {
+		private String label; 
+		public void edgesetdata(Node n1, Node n2, String cost) {
 			this.x1 = n1.x /*+3*/;
 			this.x2 = n2.x /*-3*/;
 			this.y1 = n1.y /*+3*/;
@@ -297,7 +298,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				x = 250 + 100 * (int) java.lang.Math.sin(java.lang.Math.toRadians(currentang));
 				y = 250 + 100 * (int) java.lang.Math.cos(java.lang.Math.toRadians(currentang));
 				currentang = currentang + Nodeangle;
-				Nodelist[i].Node(x,y); /*TODO fix this*/
+				Nodelist[i].nodesetdata(x,y); /*TODO fix this*/
 				Nodelist[i].drawNode();
 			}
 			for (int i=0;i<costs.length;i++)
@@ -307,7 +308,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 					if (costs[i][j] != 0) {
 						if (i != j) {
 							Integer tmpint = new Integer(costs[i][j]);
-							Edgematrix[i][j].Edge(Nodelist[i],Nodelist[j],tmpint.toString()); /*TODO fix this*/
+							Edgematrix[i][j].edgesetdata(Nodelist[i],Nodelist[j],tmpint.toString()); /*TODO fix this*/
 							Edgematrix[i][j].drawEdge();
 							Edgematrix[i][j].drawlabel();
 						}
@@ -342,6 +343,46 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	
 	public void main() {
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setSteps(java.lang.String[])
+	 */
+	public void setSteps(String[] steps) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#setCurrentStep(int)
+	 */
+	public void setCurrentStep(int step) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#showMessage(java.lang.String)
+	 */
+	public void showMessage(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
+	 */
+	public State saveState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
+	 */
+	public void restoreState(State state) {
+		// TODO Auto-generated method stub
 		
 	}
 }
