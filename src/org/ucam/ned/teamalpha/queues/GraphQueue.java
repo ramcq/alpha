@@ -134,4 +134,20 @@ public class GraphQueue extends GraphAnimator implements AnimatorQueue {
 	public void prev() throws NoSuchStateException {
 		q.prev();
 	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashNode(int)
+	 */
+	public void flashNode(int Node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashEdge(int, int)
+	 */
+	public void flashEdge(int from, int to) {
+		// TODO Auto-generated method stub
+		
+	}
 }
