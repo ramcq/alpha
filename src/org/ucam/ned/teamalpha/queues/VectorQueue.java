@@ -3,7 +3,7 @@ package org.ucam.ned.teamalpha.queues;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
-public class VectorQueue implements VectorAnimator, AnimatorQueue {
+public class VectorQueue extends GenericQueue implements VectorAnimator, AnimatorQueue {
 	public class State implements Animator.State { };
 	
 	public class Vector implements VectorAnimator.Vector {
@@ -12,7 +12,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void copyElement(int offsetfrom, int offsetto) {
 			Object[] args = { new Primitive(offsetfrom), new Primitive(offsetto) };
-			q.enqueue(this, "copyElement", args);
+			enqueue(this, "copyElement", args);
 		}
 
 		/* (non-Javadoc)
@@ -20,7 +20,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void copyElement(int offsetfrom, VectorAnimator.Vector target, int offsetto) {
 			Object[] args = { new Primitive(offsetfrom), target, new Primitive(offsetto) };
-			q.enqueue(this, "copyElement", args);
+			enqueue(this, "copyElement", args);
 		}
 
 		/* (non-Javadoc)
@@ -29,7 +29,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary, boolean left) {
 			Arrow ret = new Arrow();
 			Object[] args = {label, new Primitive(position), new Primitive(boundary), new Primitive(left) };
-			q.enqueue(this, "createArrow", args, ret);
+			enqueue(this, "createArrow", args, ret);
 			return ret;
 		}
 		
@@ -39,7 +39,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) {
 			Arrow ret = new Arrow();
 			Object[] args = { new Primitive(offset), new Primitive(boundary) };
-			q.enqueue(this, "createArrow", args, ret);
+			enqueue(this, "createArrow", args, ret);
 			return ret;
 		}
 
@@ -49,7 +49,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		public VectorAnimator.Arrow createArrow(int position, boolean boundary, boolean left) {
 			Arrow ret = new Arrow();
 			Object[] args = { new Primitive(position), new Primitive(boundary), new Primitive(left) };
-			q.enqueue(this, "createArrow", args, ret);
+			enqueue(this, "createArrow", args, ret);
 			return ret;
 		}
 		
@@ -59,7 +59,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary) {
 			Arrow ret = new Arrow();
 			Object[] args = { label, new Primitive(offset), new Primitive(boundary) };
-			q.enqueue(this, "createArrow", args, ret);
+			enqueue(this, "createArrow", args, ret);
 			return ret;
 		}
 
@@ -68,12 +68,12 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void delete() {
 			Object[] args = { };
-			q.enqueue(this, "delete", args);
+			enqueue(this, "delete", args);
 		}
 
 		public void flashElement(int offset) {
 			Object[] args = { new Primitive(offset) };
-			q.enqueue(this, "flashElement", args);
+			enqueue(this, "flashElement", args);
 		}
 		
 		/* (non-Javadoc)
@@ -81,7 +81,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void moveElement(int offsetfrom, int offsetto) {
 			Object[] args = { new Primitive(offsetfrom), new Primitive(offsetto) };
-			q.enqueue(this, "moveElement", args);
+			enqueue(this, "moveElement", args);
 		}
 
 		/* (non-Javadoc)
@@ -89,7 +89,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void setElement(int offset, int value) {
 			Object[] args = { new Primitive(offset), new Primitive(value) };
-			q.enqueue(this, "setElement", args);
+			enqueue(this, "setElement", args);
 		}
 
 		/* (non-Javadoc)
@@ -97,7 +97,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void setHighlightedDigit(int column) {
 			Object[] args = { new Primitive(column) };
-			q.enqueue(this, "setHighlightedDigit", args);
+			enqueue(this, "setHighlightedDigit", args);
 		}
 
 		/* (non-Javadoc)
@@ -105,7 +105,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void setLabel(String label) {
 			Object[] args = { label };
-			q.enqueue(this, "setLabel", args);
+			enqueue(this, "setLabel", args);
 		}
 
 		/* (non-Javadoc)
@@ -113,7 +113,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void swapElements(int offset1, int offset2) {
 			Object[] args = { new Primitive(offset1), new Primitive(offset2) };
-			q.enqueue(this, "swapElements", args);
+			enqueue(this, "swapElements", args);
 		}
 
 		/* (non-Javadoc)
@@ -121,7 +121,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void swapElements(int offset1, VectorAnimator.Vector target, int offset2) {
 			Object[] args = { new Primitive(offset1), target, new Primitive(offset2) };
-			q.enqueue(this, "swapElements", args);
+			enqueue(this, "swapElements", args);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void delete() {
 			Object[] args = { };
-			q.enqueue(this, "delete", args);
+			enqueue(this, "delete", args);
 		}
 
 		/* (non-Javadoc)
@@ -139,7 +139,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void setLabel(String label) {
 			Object[] args = { label };
-			q.enqueue(this, "setLabel", args);
+			enqueue(this, "setLabel", args);
 		}
 
 		/* (non-Javadoc)
@@ -147,7 +147,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void move(int offset, boolean boundary) {
 			Object[] args = { new Primitive(offset), new Primitive(boundary) };
-			q.enqueue(this, "move", args);
+			enqueue(this, "move", args);
 		}
 		
 		/* (non-Javadoc)
@@ -155,14 +155,12 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 		 */
 		public void flash() {
 			Object[] args = { };
-			q.enqueue(this, "flash", args);
+			enqueue(this, "flash", args);
 		}
 	}
 	
-	private GenericQueue q;
-
 	public VectorQueue(VectorAnimator va) {
-		q = new GenericQueue(this, va);
+		super(va);
 	}
 
 	/* (non-Javadoc)
@@ -171,7 +169,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 	public VectorAnimator.Vector createVector(int[] values) {
 		VectorAnimator.Vector ret = new VectorQueue.Vector();
 		Object[] args = { values };
-		q.enqueue(this, "createVector", args, ret);
+		enqueue(this, "createVector", args, ret);
 		return ret;
 	}
 
@@ -181,7 +179,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 	public VectorAnimator.Vector createVector(String label, int[] values) {
 		VectorAnimator.Vector ret = new VectorQueue.Vector();
 		Object[] args = { label, values };
-		q.enqueue(this, "createVector", args, ret);
+		enqueue(this, "createVector", args, ret);
 		return ret;
 	}
 
@@ -190,7 +188,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 	 */
 	public void setSteps(String[] steps) {
 		Object[] args = { steps };
-		q.enqueue(this, "setSteps", args);
+		enqueue(this, "setSteps", args);
 	}
 
 	/* (non-Javadoc)
@@ -198,7 +196,7 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 	 */
 	public void setCurrentStep(int step) {
 		Object[] args = { new Primitive(step) };
-		q.enqueue(this, "setCurrentStep", args);
+		enqueue(this, "setCurrentStep", args);
 	}
 
 	/* (non-Javadoc)
@@ -206,14 +204,14 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 	 */
 	public void showMessage(String msg) {
 		Object[] args = { msg };
-		q.enqueue(this, "showMessage", args);
+		enqueue(this, "showMessage", args);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
 	 */
 	public Animator.State saveState() {
-		q.newState();
+		newState();
 		return new State();
 	}
 
@@ -225,38 +223,10 @@ public class VectorQueue implements VectorAnimator, AnimatorQueue {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#hasNext()
-	 */
-	public boolean hasNext() {
-		return q.hasNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#hasPrev()
-	 */
-	public boolean hasPrev() {
-		return q.hasPrev();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#next()
-	 */
-	public void next() throws NoSuchStateException {
-		q.next();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#prev()
-	 */
-	public void prev() throws NoSuchStateException {
-		q.prev();
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#setFpsFactor(double)
 	 */
 	public void setFpsFactor(double f) {
 		Object[] args = { new Primitive(f) };
-		q.enqueue(this, "setFpsFactor", args);
+		enqueue(this, "setFpsFactor", args);
 	}
 }

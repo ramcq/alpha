@@ -97,18 +97,16 @@ class GenericQueue implements AnimatorQueue {
 		}
 	}
 	
-	private Animator queue;
 	private Animator anim;
 	private HashMap subjects;
 	private Vector states;
 	private int currentstate;
 	
-	GenericQueue(Animator queue, Animator anim) {
-		this.queue = queue;
+	GenericQueue(Animator anim) {
 		this.anim = anim;
 		
 		this.subjects = new HashMap(64);
-		subjects.put(queue, anim);
+		subjects.put(this, anim);
 		
 		this.states = new Vector(16);
 		states.add(new State());

@@ -3,13 +3,11 @@ package org.ucam.ned.teamalpha.queues;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.GraphAnimator;
 
-public class GraphQueue implements GraphAnimator, AnimatorQueue {
+public class GraphQueue extends GenericQueue implements GraphAnimator, AnimatorQueue {
 	public class State implements Animator.State { };
 	
-	private GenericQueue q;
-	
 	public GraphQueue(GraphAnimator ga) {
-		q = new GenericQueue(this, ga);
+		super(ga);
 	}
 
 	/* (non-Javadoc)
@@ -17,7 +15,7 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void createGraph(int[][] costs) {
 		Object[] args = { costs };
-		q.enqueue(this, "createGraph", args);
+		enqueue(this, "createGraph", args);
 	}
 
 	/* (non-Javadoc)
@@ -25,15 +23,7 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void setNodeLabel(int node, String label) {
 		Object[] args = { new Primitive(node), label };
-		q.enqueue(this, "setNodeLabel", args);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setNodeHighlight(int, boolean)
-	 */
-	public void setNodeHighlight(int node, boolean highlight) {
-		Object[] args = { new Primitive(node), new Primitive(highlight) };
-		q.enqueue(this, "setNodeHighlight", args);
+		enqueue(this, "setNodeLabel", args);
 	}
 
 	/* (non-Javadoc)
@@ -41,7 +31,7 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void setNodeShade(int node, int set) {
 		Object[] args = { new Primitive(node), new Primitive(set) };
-		q.enqueue(this, "setNodeShade", args);
+		enqueue(this, "setNodeShade", args);
 	}
 
 	/* (non-Javadoc)
@@ -49,15 +39,7 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void setEdgeLabel(int from, int to, String label) {
 		Object[] args = { new Primitive(from), new Primitive(to), label };
-		q.enqueue(this, "setEdgeLabel", args);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#setEdgeHighlight(int, int, boolean)
-	 */
-	public void setEdgeHighlight(int from, int to, boolean highlight) {
-		Object[] args = { new Primitive(from), new Primitive(to), new Primitive(highlight) };
-		q.enqueue(this, "setEdgeHighlight", args);
+		enqueue(this, "setEdgeLabel", args);
 	}
 
 	/* (non-Javadoc)
@@ -65,7 +47,7 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void setEdgeShade(int from, int to, int set) {
 		Object[] args = { new Primitive(from), new Primitive(to), new Primitive(set) };
-		q.enqueue(this, "setEdgeShade", args);
+		enqueue(this, "setEdgeShade", args);
 	}
 
 	/* (non-Javadoc)
@@ -73,7 +55,7 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void setSteps(String[] steps) {
 		Object[] args = { steps };
-		q.enqueue(this, "setSteps", args);
+		enqueue(this, "setSteps", args);
 	}
 
 	/* (non-Javadoc)
@@ -81,7 +63,7 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void setCurrentStep(int step) {
 		Object[] args = { new Primitive(step) };
-		q.enqueue(this, "setCurrentStep", args);
+		enqueue(this, "setCurrentStep", args);
 	}
 
 	/* (non-Javadoc)
@@ -89,14 +71,14 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void showMessage(String msg) {
 		Object[] args = { msg };
-		q.enqueue(this, "showMessage", args);	
+		enqueue(this, "showMessage", args);	
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.Animator#saveState()
 	 */
 	public Animator.State saveState() {
-		q.newState();
+		newState();
 		return new State();
 	}
 
@@ -108,39 +90,11 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#hasNext()
-	 */
-	public boolean hasNext() {
-		return q.hasNext();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#hasPrev()
-	 */
-	public boolean hasPrev() {
-		return q.hasPrev();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#next()
-	 */
-	public void next() throws NoSuchStateException {
-		q.next();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.ucam.ned.teamalpha.queues.AnimatorQueue#prev()
-	 */
-	public void prev() throws NoSuchStateException {
-		q.prev();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashNode(int)
 	 */
 	public void flashNode(int Node) {
 		Object[] args = { new Primitive(Node) };
-		q.enqueue(this, "flashNode", args);
+		enqueue(this, "flashNode", args);
 	}
 
 	/* (non-Javadoc)
@@ -148,7 +102,7 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void flashEdge(int from, int to) {
 		Object[] args = { new Primitive(from), new Primitive(to)};
-		q.enqueue(this, "flashEdge", args);
+		enqueue(this, "flashEdge", args);
 	}
 	
 	/* (non-Javadoc)
@@ -156,6 +110,6 @@ public class GraphQueue implements GraphAnimator, AnimatorQueue {
 	 */
 	public void setFpsFactor(double f) {
 		Object[] args = { new Primitive(f) };
-		q.enqueue(this, "setFpsFactor", args);
+		enqueue(this, "setFpsFactor", args);
 	}
 }
