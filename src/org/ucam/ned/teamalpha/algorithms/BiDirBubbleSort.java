@@ -52,6 +52,9 @@ public class BiDirBubbleSort extends VectorAlgorithm {
 			VectorAnimator.Arrow top = v.createArrow(0, true, true);
 			top.setLabel("Top");
 			
+			// Set the first checkpoint
+			anim.saveState();
+			
 			// The main sorting phase
 			while (st < limit) {
 				anim.setCurrentStep(4);

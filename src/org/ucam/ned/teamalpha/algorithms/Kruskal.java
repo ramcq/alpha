@@ -262,6 +262,10 @@ public class Kruskal extends GraphAlgorithm {
 		// ANIM: Set up the graphanimator with the costs
 		try {
 			anim.createGraph(costMatrix);
+			
+			// Set the first checkpoint
+			anim.saveState();
+			
 		} catch (Exception e) {
 			System.out.println(e);
 		}

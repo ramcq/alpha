@@ -306,6 +306,10 @@ public class Dijkstra extends GraphAlgorithm {
 		
 		try {
 			anim.createGraph(costMatrix);
+			
+			// Set the first checkpoint
+			anim.saveState();
+			
 		} catch (Exception e) {
 			System.out.println(e);
 		}

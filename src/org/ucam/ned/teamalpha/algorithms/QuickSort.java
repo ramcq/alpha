@@ -56,6 +56,9 @@ public class QuickSort extends VectorAlgorithm {
 		VectorAnimator.Arrow aDividerLow = v.createArrow("Low", low, true, true);
 		VectorAnimator.Arrow aDividerHigh = v.createArrow("High", high+1, true, true);
 		
+		// Set the first checkpoint
+		anim.saveState();
+		
 		// ANIM: Create arrows on working vector
 		VectorAnimator.Arrow aHigh;
 		VectorAnimator.Arrow aLow;

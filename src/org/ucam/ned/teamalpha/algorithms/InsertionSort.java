@@ -56,6 +56,9 @@ public class InsertionSort extends VectorAlgorithm {
 			VectorAnimator.Arrow aUnsorted = unsorted.createArrow(0, false);
 			aUnsorted.setLabel("Take");
 			
+			// Set the first checkpoint
+			anim.saveState();
+			
 			// Vector is split into sorted elements and those yet to be sorted about i
 			// ANIM: Pick the first element in a and move to the sorted section
 			unsorted.copyElement(0, sorted, 0);
