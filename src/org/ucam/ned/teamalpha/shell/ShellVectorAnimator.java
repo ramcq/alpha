@@ -6,7 +6,7 @@
  */
  
  // Note to self: what does this do when minimised / obscured when the timer is not running?
- 
+ // Further note to self: do we really need the queue, wait, notify stuff? Can't it be recoded more simply?
 package org.ucam.ned.teamalpha.shell;
 
 import java.awt.Color;
@@ -18,12 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
@@ -34,20 +28,28 @@ import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
 /**
- * @author igor
+ * @author am502
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * This is the class which is given animation primitives by the queue and actually does the animation on screen.
+ * When it receives a primitive, it breaks it down into even more fundamental events (see ShellVectorAnimator.AnimationEvent)
+ * and executes these events sequentially. It can also save and restore its state using the State inner class.
+ * Its constructor takes a Component, which in most cases will be something like a JFrame or JPanel. It calls getGraphics() on this
+ * and uses double buffering to do smooth animations on this object.
+ * 
+ * The main drawback of the design of this class is that it is difficult to change the size or positioning of vectors without editing
+ * a great many variables. Later versions might solve this problem, and use java.awt.Graphics2D instead of java.awt.Graphics
+ * for 2D graphics, introducing the possibility of such visual wonders as anti-aliasing. :-) 
  */
 public class ShellVectorAnimator extends VectorAnimator implements ActionListener {
 	
 	// Vector inner class
-	public class Vector extends VectorAnimator.Vector implements Serializable {
+	public class Vector extends VectorAnimator.Vector {
 		static final int maxSize = 20;
 		static final int maxElementLength = 6; // Maximum number of digits in any element
 		static final int maxArrowWidth = 20; // Maximum size an arrow can be
 		static final int width = 50; // width of vector in pixels
 		
+		private boolean visible = true;
 		private final int top = 50; // y coordinate of top of vector
 		private int bottom; // y coordinate of bottom of vector
 		private int left; // x coordinate of left of vector
@@ -57,9 +59,16 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private String label; // visible label of vector
 		private String[] contents; // the actual elements of the vector (held as space-padded Strings rather than ints)
 		
-		Vector(int[] values) {
+		/**
+		 * Constructor for Vector
+		 * 
+		 * @param values
+		 * 	The elements of the new Vector (up to a maximum of 20 elements).
+		 * 	If more than 20 elements are specified, InputTooLongException will be thrown.
+		 */
+		Vector(int[] values) throws InputTooLongException {
 			size = values.length;
-			if (size > maxSize); // complain
+			if (size > maxSize) throw new InputTooLongException("Maximum size is "+ maxSize);
 			
 			// This vector will be in a new column, so increase the value of the highest column in use
 			highestColUsed++;
@@ -68,7 +77,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			bottom = top + (size * 20); // the y position of the bottom of the new vector
 			label = "Unnamed";
 			
-			contents = new String[20];
+			contents = new String[maxSize];
 			// Pad contents with spaces to ensure right alignment
 			for (int i=0; i<size; i++) {
 				contents[i] = String.valueOf(values[i]);
@@ -77,14 +86,44 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
-		Vector(String label, int[] values) {
+		/**
+		 * Constructor for Vector
+		 * 
+		 * @param label
+		 * 	The label of the Vector (should be six characters or fewer)
+		 * @param values
+		 * 	The initial values of the vector elements (no more than 20)
+		 * @throws InputTooLongException
+		 * 	if values is longer than the legal length
+		 */
+		Vector(String label, int[] values) throws InputTooLongException {
 			this(values);
 			this.label = label;
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#delete()
+		 */
 		public void delete() {
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					this.visible = false;
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.VECTOR_DELETE, this));
+					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
+					System.out.println(e);
+				}
+			}
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setLabel(java.lang.String)
+		 */
 		public void setLabel(String label) {
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -103,6 +142,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
+		 */
 		public void copyElement(int from, int to) {
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -124,9 +166,15 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
+		 */
 		public void copyElement(int from, VectorAnimator.Vector v, int to) {
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#moveElement(int, int)
+		 */
 		public void moveElement(int from, int to) {
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -148,6 +196,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setElement(int, int)
+		 */
 		public void setElement(int elt, int value) {
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -165,6 +216,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, int)
+		 */
 		public void swapElements(int elt1, int elt2) {
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -189,11 +243,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		// I'm not implementing this. The effect can be achieved with a couple of moves.
 		public void swapElements(int elt1, VectorAnimator.Vector v, int elt2) {
 		}
-		// There is no way in hell I am doing this. You never actually split an array anyway.
-		public VectorAnimator.Vector splitVector(int offset) {
-			return null;
-		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
+		 */
 		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) {
 			synchronized (ShellVectorAnimator.this) {
 				Arrow res = new Arrow(this, label, position, boundary);
@@ -213,16 +266,49 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 	
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
+		 */
 		public VectorAnimator.Arrow createArrow(int position, boolean boundary) {
 			return createArrow("A", position, boundary);
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#highlightElement(int)
+		 */
+		public void highlightElement(int elt) {
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FLASH, this, elt));
+					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
+				}
+				catch (InterruptedException e) {
+					System.out.println(e);
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+			}
+		}
+		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setHighlightedDigit(int)
+		 */
 		public void setHighlightedDigit(int column) {
+		}
+		
+		/**
+		 * @author am502
+		 *
+		 * An inner class which stores the internal state of the Vector for the purposes of importing and exporting state to and from ShellVectorAnimator
+		 */
+		public class VectorState {
 		}
 	}
 	
 	// Arrow inner class
-	public class Arrow extends VectorAnimator.Arrow implements Serializable {
+	public class Arrow extends VectorAnimator.Arrow {
 		private String label;
 		private int position; // offset in the array at which we are pointing
 		private boolean boundary; // are we pointing between two locations?
@@ -230,6 +316,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		private Color colour = Color.blue, altColour = Color.cyan;
 		private boolean left = false; // are we to the left or the right of our vector?
 		private boolean visible = false;
+		private boolean deleted = false;
 		
 		Arrow(Vector v, String label, int position, boolean boundary) {
 			this(v, position, boundary);
@@ -243,23 +330,52 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			this.boundary = boundary;
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()
+		 */
 		public void delete() {
+			synchronized (ShellVectorAnimator.this) {
+				deleted = true;
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, this));
+					startAnimation();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
+					System.out.println(e);
+				}
+			}
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setLabel(java.lang.String)
+		 */
 		public void setLabel(String label) {
 			// Trim if over 4 chars
 			if (label.length() > 4) label = label.substring(0,3); 
 			this.label = label;
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setOffset(int)
+		 */
 		public void setOffset(int offset) {
 			this.position = offset;
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setBoundary(boolean)
+		 */
 		public void setBoundary(boolean boundary) {
 			this.boundary = boundary;
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#move(int, boolean)
+		 */
 		public void move(int newpos, boolean boundary) {
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -276,8 +392,10 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		}
 		
-		// Need to discuss API issues here: have a flash() method and a changecolour() method instead?
-		public void setHighlight(boolean highlight) {
+		/* (non-Javadoc)
+		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#highlight()
+		 */
+		public void highlight() {
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_FLASH, this));
@@ -292,39 +410,48 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				}
 			}
 		}
+		
+		/**
+		 * @author am502
+		 *
+		 * A class to hold the arrow's internal state, similar to Vector.VectorState. This is for the purpose of saving and restoring the animator state.
+		 */
+		public class ArrowState {
+		}
 	}
 	
+	/**
+	 * @author am502
+	 *
+	 * An object which stores the internal states of all the vectors and arrows currently known to the animator. This will allow the animator state to be saved and restored to allow backtracking through the algorithm.
+	 */
 	// State inner class
 	public class State extends Animator.State {
-		private byte[] vectors;
-		private byte[] arrows;
-		private int numOfVectors;
-		private int numOfArrows;
+		private Vector.VectorState[] vectors;
+		private Arrow.ArrowState[] arrows;
 				
-		State(byte[] vectors, int numv, byte[] arrows, int numa) {
+		State(Vector.VectorState[] vectors, Arrow.ArrowState[] arrows) {
 			this.vectors = vectors;
-			this.numOfVectors = numv;
 			this.arrows = arrows;
-			this.numOfArrows = numa;
 		}
 		
-		public byte[] getVectors() {
+		public Vector.VectorState[] getVectors() {
 			return vectors;
 		}
 		
-		public int getNumOfVectors() {
-			return numOfVectors;
-		}
-		
-		public byte[] getArrows() {
+		public Arrow.ArrowState[] getArrows() {
 			return arrows;
-		}
-		
-		public int getNumOfArrows() {
-			return numOfArrows;
 		}
 	}
 	
+	/**
+	 * @author am502
+	 *
+	 * This class describes animation events on a level understood by this class, i.e. a very, very basic level (even more basic than the animation primitives provided externally).
+	 * These objects are queued up within the ShellVectorAnimator and executed sequentially.
+	 * There are a great many constructors, each corresponding to a different type of AnimationEvent. Each throws InvalidAnimationEventException
+	 * if an inappropriate constructor is used.
+	 */
 	// AnimationEvent inner class
 	public class AnimationEvent {
 		public static final int ELT_TO_CHANNEL = 0; // moving a single element out from the vector to the side channel
@@ -339,6 +466,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		public static final int ARROW_CHANGE = 7; // changing an arrow in some manner (so it has to be redrawn)
 		public static final int TWO_ARROW_FLASH = 11; // flash two arrows at once
 		public static final int VECTOR_CHANGE = 12; // just redraw the whole vector
+		public static final int ELT_FLASH = 13; // flashing an element to highlight it
+		public static final int VECTOR_DELETE = 14; // deleting a Vector
 
 		private int type;
 		// Arguments
@@ -379,10 +508,20 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 		
 		AnimationEvent(int type, Vector v) throws InvalidAnimationEventException {
-			if (type == AnimationEvent.VECTOR_CHANGE) {
+			if (type == AnimationEvent.VECTOR_CHANGE
+				|| type == AnimationEvent.VECTOR_DELETE) {
 				this.type = type;
 				this.v1 = v;
 				this.v2 = null;
+			}
+			else throw new InvalidAnimationEventException("Invalid event of type " + type);
+		}
+		
+		AnimationEvent(int type, Vector v, int e) throws InvalidAnimationEventException {
+			if (type == AnimationEvent.ELT_FLASH) {
+				this.type = type;
+				this.v1 = v;
+				this.e1 = e;
 			}
 			else throw new InvalidAnimationEventException("Invalid event of type " + type);
 		}
@@ -459,7 +598,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
-	private static final int fps = 30;	// Animation framerate
+	private static final int fps = 100;	// Animation framerate
 	private javax.swing.Timer timer;	// timer for animation events
 	private int highestColUsed = -1; // stores the highest column which has a vector in it
 	private int numberOfArrows = -1; // stores the number of Arrows known to the animator (minus one)
@@ -541,12 +680,12 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				case AnimationEvent.ARROW_CHANGE:
 					System.out.println("Redrawing arrow");
 					currentEvent.a1.visible = true;
-					redrawArrow(currentEvent.a1, big);
+					redrawAllArrows(big, currentEvent.a1.left, null);
 					currentEvent = null;
 					break;
 				case AnimationEvent.ARROW_FLASH:
 					intermediateOffset++;
-					if (intermediateOffset % 2 == 0) drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
+					if (intermediateOffset % 4 < 2) drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
 					else drawArrow(currentEvent.a1, big, currentEvent.a1.colour);
 					if (intermediateOffset > 60) {
 						intermediateOffset = 0;
@@ -571,9 +710,21 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 				case AnimationEvent.ELT_VERT_IN_CHANNEL:
 					moveElementInChannel(big, currentEvent.v1, currentEvent.e1, currentEvent.e2, currentEvent.b1, true);
 					break;
+				case AnimationEvent.ELT_FLASH:
+					intermediateOffset += 1;
+					big.setColor(bgcolour);
+					big.fillRect(currentEvent.v1.left+1, currentEvent.v1.top+(currentEvent.e1*20)+1, 48, 18);
+					if (intermediateOffset % 4 < 2) big.setColor(fgcolour);
+					else big.setColor(Color.green);
+					big.drawString(currentEvent.v1.contents[currentEvent.e1], currentEvent.v1.left+5, currentEvent.v1.top+(currentEvent.e1*20)+15);
+					if (intermediateOffset >= 60) {
+						currentEvent = null;
+						intermediateOffset = 0;
+					}
+					break;
 				case AnimationEvent.TWO_ARROW_FLASH:
 					intermediateOffset++;
-					if (intermediateOffset % 2 == 0) {
+					if (intermediateOffset % 4 < 2) {
 						drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
 						drawArrow(currentEvent.a2, big, currentEvent.a2.altColour);
 					}
@@ -602,6 +753,23 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					redrawVector(currentEvent.v1, big);
 					currentEvent = null;
 					break;
+				case AnimationEvent.VECTOR_DELETE:
+					// Delete all arrows associated with this vector
+					for (int i=0; i<arrows.length; i++) {
+						if (arrows[i] != null)
+						if (arrows[i].vector == currentEvent.v1) {
+							try {
+								arrows[i].deleted = true;
+								eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, arrows[i]));
+							}
+							catch (InvalidAnimationEventException e) {
+								System.out.println(e);
+							}
+						};
+					}
+					redrawVector(currentEvent.v1, big);
+					currentEvent = null;
+					break;	
 				default:
 					break;
 			}
@@ -624,9 +792,13 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	private void redrawVector(Vector v, Graphics g) {
 		// Clear vector area
 		g.setColor(bgcolour);
-		g.fillRect(v.left, v.top, Vector.width, (v.size*20)+30);
+		g.fillRect(v.left-60, v.top, Vector.width+120, (v.size*20)+30);
 		
-		drawVector(v, g);
+		if (v.visible) {
+			drawVector(v, g);
+			redrawAllArrows(g, true, null);
+			redrawAllArrows(g, false, null);
+		}
 	}
 	
 	private void redrawAllVectors(Graphics g) {
@@ -704,7 +876,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
-	public void moveElementInChannel(Graphics g, Vector v, int from, int to, boolean left, boolean cancelEvent) {
+	private void moveElementInChannel(Graphics g, Vector v, int from, int to, boolean left, boolean cancelEvent) {
 		int startY = v.top + (20*from) + 15;
 		int endY = v.top + (20*to) + 15;
 		int areaLeft = left ? v.left - 70 : v.right + 20;
@@ -740,7 +912,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		else g.drawString(v.contents[from], areaLeft, startY - intermediateOffset);
 	}
 	
-	public void moveElementFromChannel(Graphics g, Vector v, int to, boolean left, boolean cancelEvent) {
+	private void moveElementFromChannel(Graphics g, Vector v, int to, boolean left, boolean cancelEvent) {
 		int textYPos = v.top + (20*to) + 15;
 		int areaTop = v.top + (20*to) + 1;
 		int areaLeft = left ? v.left - 70 : v.left + 1;
@@ -774,7 +946,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		else g.drawString(v.contents[to], v.left+70-intermediateOffset, textYPos);
 	}
 	
-	public void moveArrowVert(Graphics g, Arrow a, int to, boolean boundary, boolean cancelEvent) {
+	private void moveArrowVert(Graphics g, Arrow a, int to, boolean boundary, boolean cancelEvent) {
 		int oldypos = a.boundary ? a.vector.top + (20*a.position) : a.vector.top + (20*a.position) + 10;
 		int newypos = boundary ? a.vector.top + (20*to) : a.vector.top + (20*to) + 10;
 		boolean movingUp = (oldypos > newypos);
@@ -804,18 +976,23 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		else drawArrow(a, g, a.colour, intermediateOffset);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.ucam.ned.teamalpha.animators.VectorAnimator#createVector(int[])
+	 */
 	public VectorAnimator.Vector createVector(int[] values) {
 		return createVector("Unnamed", values);
 	}
 
 	public VectorAnimator.Vector createVector(String label, int[] values) {
+		Vector res = null;
 		synchronized(this) {
-			Vector res = new Vector(label, values);
-			vectors[highestColUsed] = res;
 			try {
+				res = new Vector(label, values);
+				vectors[highestColUsed] = res;
 				eventQueue.addLast(new AnimationEvent(AnimationEvent.VECTOR_CHANGE, res));
 				startAnimation();
 			}
+			catch (InputTooLongException e) { System.out.println(e); }
 			catch (InvalidAnimationEventException e) {
 				System.out.println(e);
 			}
@@ -823,12 +1000,27 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		}
 	}
 	
+	/**
+	 * Creates a new Vector
+	 * 
+	 * @param label 
+	 * 	The label of the vector
+	 * @param size
+	 * 	The number of elements in the vector
+	 * @return A new Vector of the right size and label with all elements initialized to zero
+	 */
 	public VectorAnimator.Vector createVector(String label, int size) {
 		int[] c = new int[size];
 		for (int i=0; i<size; i++) c[i] = 0;
 		return createVector(label, c);
 	}
 	
+	/**
+	 * Creates a new Vector
+	 * 
+	 * @param size The number of elements in the vector
+	 * @return A new unlabelled Vector of the right size with all elements initialized to zero
+	 */
 	public VectorAnimator.Vector createVector(int size) {
 		return createVector("Unnamed", size);
 	}
@@ -875,9 +1067,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 
 		// Clear arrow area
 		g.setColor(bgcolour);
-		g.fillRect(left, ypos-5, 8, 10);
+		g.fillRect(left, ypos-5, 60, 10);
 				
-		drawArrow(a, g);
+		if (!a.deleted) drawArrow(a, g);
 	}
 	
 	private void redrawAllArrows(Graphics g, boolean left, Arrow notThis) {
@@ -897,84 +1089,21 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 	public void showMessage(String msg) {
 	}
 
-	public synchronized Animator.State saveState() throws IOException {
-		// Open output streams for serialization
-		ByteArrayOutputStream vbaos = new ByteArrayOutputStream();
-		ObjectOutputStream voos = new ObjectOutputStream(vbaos);
-		ByteArrayOutputStream abaos = new ByteArrayOutputStream();
-		ObjectOutputStream aoos = new ObjectOutputStream(abaos);
-		
-		// Serialize the vectors
-		for (int i=0; i<vectors.length; i++)  {
-			if (vectors[i] != null) voos.writeObject(vectors[i]); 
-		}
-
-		// Serialize the arrows
-		for (int i=0; i<arrows.length; i++) {
-			if (arrows[i] != null) aoos.writeObject(arrows[i]);
-		}
-				
-		// Get byte arrays
-		byte[] vects = vbaos.toByteArray();
-		byte[] arrs = abaos.toByteArray();
-		voos.close();
-		aoos.close();
-		
-		// Make the state object and return it
-		State res = new State(vects, vectors.length, arrs, arrows.length);
-		return res;
+	// This method and the next need to be completely rethought!!
+	public synchronized Animator.State saveState() {
+		return null;
 	}
 	
-	public synchronized void restoreState(Animator.State s) throws IOException {
-		// Clear vectors, arrows arrays
-		for (int i=0; i<vectors.length; i++) vectors[i] = null;
-		for (int i=0; i<arrows.length; i++) arrows[i] = null;
-		
-		State state = (State) s;
-		byte[] vects = state.getVectors();
-		ByteArrayInputStream vbais = new ByteArrayInputStream(vects);
-		// Open input stream for deserialization
-		ObjectInputStream vois = new ObjectInputStream(vbais);
-		for (int i=0; i<state.getNumOfVectors(); i++) {
-			try {
-				vectors[i] = (Vector) vois.readObject();
-			}
-			catch (ClassNotFoundException e) {
-				System.out.println(e);
-			}
-		}
-		vois.close();
-
-		byte[] arrs = state.getArrows();
-		ByteArrayInputStream abais = new ByteArrayInputStream(arrs);
-		// Open input stream for deserialization
-		ObjectInputStream aois = new ObjectInputStream(abais);
-		for (int i=0; i<state.getNumOfArrows(); i++) {
-			try {
-				arrows[i] = (Arrow) aois.readObject();
-			}
-			catch (ClassNotFoundException e) {
-				System.out.println(e);
-			}
-		}
-		aois.close();
-		
-		// Clear the whole canvas
-		big.setColor(fgcolour);
-		big.fillRect(0, 0, outc.getWidth(), outc.getHeight());
-		
-		redrawAllVectors(big);
-		redrawAllArrows(big, true, null);
-		redrawAllArrows(big, false, null);
+	public synchronized void restoreState(Animator.State s) {
 	}
 	
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("ShellVectorAnimator test");
-		frame.setSize(700,700);
+		frame.setSize(500,500);
 		frame.setVisible(true);
 		
 		JPanel panel = new JPanel(true); // lightweight container
-		panel.setSize(700,700);
+		panel.setSize(500,500);
 		frame.getContentPane().add(panel);
 		panel.setVisible(true);
 		
@@ -989,39 +1118,25 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		int[] t1 = {6,35,4,728,23,233,88};
 		app.startAnimation();
 		VectorAnimator.Vector v = app.createVector("V1", t1);
-		System.out.println("Back");
 		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
-		System.out.println("Back");
 		VectorAnimator.Arrow a2 = v.createArrow("A2", 2, false);
-		System.out.println("Back");
 		v.moveElement(2,2);
-		System.out.println("Back");
 		v.moveElement(0,5);
-		System.out.println("Back");
-		a.setHighlight(true);
-		System.out.println("Back");
+		a.highlight();
 		a.move(0, false);
-		System.out.println("Back");
 		v.copyElement(4,3);
-		System.out.println("Back");
 		v.swapElements(2,6);
-		System.out.println("Back");
 		v.setElement(0,100);
-		System.out.println("Back");
 		a2.move(6, true);
-		System.out.println("Back");
 		int[] t2 = {34,72,76667,257,878,99112,6,17};
 		VectorAnimator.Vector v2 = app.createVector("V2", t2);
-		System.out.println("Back");
 		v2.swapElements(7,2);
-		System.out.println("Back");
 		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
-		System.out.println("Back");
 		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
-		System.out.println("Back");
-		a3.setHighlight(true);
-		System.out.println("Back");
+		a3.highlight();
 		a3.move(8, true);
-		System.out.println("Back");
+		v2.highlightElement(4);
+		v.delete();
+		a3.delete();
 	}
 }
