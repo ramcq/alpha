@@ -59,7 +59,7 @@ class GenericQueue implements AnimatorQueue {
 					}
 				}
 				
-				Method method = type.getDeclaredMethod(methodname, argtypes);
+				Method method = type.getMethod(methodname, argtypes);
 				Object realret = method.invoke(realsubject, realargs);
 				
 				if (ret != null)
@@ -97,9 +97,19 @@ class GenericQueue implements AnimatorQueue {
 		}
 	}
 	
+	private static final int COMMAND_NEXT = 1;
+	private static final int COMMAND_PREV = 2;
+	
+	// for storing up events
 	private Animator anim;
 	private HashMap subjects;
 	private Vector states;
+	
+	// for the thread that delivers them
+	private LinkedList commands;
+	private boolean hasNext;
+	private boolean hasPrev;
+	private boolean isBusy;
 	private int currentstate;
 	
 	GenericQueue(Animator anim) {
@@ -111,7 +121,73 @@ class GenericQueue implements AnimatorQueue {
 		this.states = new Vector(16);
 		states.add(new State());
 		
+		this.commands = new LinkedList();
+		this.hasNext = true;
+		this.hasPrev = false;
+		this.isBusy = false;
 		this.currentstate = 0;
+		
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				while (true) {
+					int command;
+					
+					synchronized (commands) {
+						while (commands.size() == 0)
+							try {
+								commands.wait();
+							} catch (InterruptedException e) {
+								// uhuh
+							};
+						
+						 command = ((Integer) commands.getFirst()).intValue();
+					}
+
+					handleCommand(command);				
+				}
+			}
+		});
+		t.start();
+	}
+	
+	// private method that's called by the queue's runner thread
+	private synchronized void handleCommand(int cmd) {
+		State s;
+		int targetstate;
+		
+		isBusy = true;
+		
+		switch (cmd) {
+		case COMMAND_NEXT:
+			if (!hasNext)
+				return;
+			
+			targetstate = currentstate + 1;
+			hasNext = (targetstate < states.size());
+			hasPrev = (targetstate > 0);
+			
+			s = (State) states.get(currentstate);
+			s.save();
+			s.sendEvents();
+			currentstate = targetstate;
+			break;
+		case COMMAND_PREV:
+			if (!hasPrev)
+				return;
+			
+			targetstate = currentstate - 1;
+			hasNext = (targetstate < states.size());
+			hasPrev = (targetstate > 0);
+			
+			s = (State) states.get(targetstate);
+			s.restore();
+			currentstate = targetstate;
+			break;
+		default:
+			// eh?
+		}
+		
+		isBusy = false;
 	}
 	
 	synchronized void enqueue(Object subject, String methodname, Object[] args, Object ret) {
@@ -120,38 +196,46 @@ class GenericQueue implements AnimatorQueue {
 		s.events.add(e);
 	}
 	
-	void enqueue(Object subject, String methodname, Object[] args) {
+	synchronized void enqueue(Object subject, String methodname, Object[] args) {
 		enqueue(subject, methodname, args, null);
 	}
 	
 	synchronized void newState() {
 		states.add(new State());
+		
+		if (currentstate < states.size())
+			hasNext = true;
 	}
 	
 	public void next() throws NoSuchStateException {
-		if (!hasNext())
-			throw new NoSuchStateException("already in final state");
-		
-		State s = (State) states.get(currentstate);
-		s.save();
-		s.sendEvents();
-		currentstate++;
+		synchronized (commands) {
+			if (!hasNext())
+				throw new NoSuchStateException("already in final state");
+			
+			commands.addLast(new Integer(COMMAND_NEXT));
+			commands.notify();
+		}
 	}
 	
 	public void prev() throws NoSuchStateException {
-		if (!hasPrev())
-			throw new NoSuchStateException("already in first state");
-		
-		currentstate--;
-		State s = (State) states.get(currentstate);
-		s.restore();
+		synchronized (commands) {
+			if (!hasPrev())
+				throw new NoSuchStateException("already in first state");
+			
+			commands.addLast(new Integer(COMMAND_PREV));
+			commands.notify();
+		}
 	}
 	
 	public boolean hasNext() {
-		return (currentstate < states.size());
+		return hasNext;
 	}
 	
 	public boolean hasPrev() {
-		return (currentstate > 0);
+		return hasPrev;
+	}
+	
+	public boolean isBusy() {
+		return isBusy;
 	}
 }
