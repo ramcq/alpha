@@ -1245,7 +1245,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		setOpaque(true);
 		
 		int delay = (fps > 0) ? (1000 / fps) : 10;	// Frame time in ms
-		System.out.println("Delay = " + delay + " ms");
 		
 		// Instantiate timer (gives us ActionEvents at regular intervals)
 		timer = new Timer(delay, this);
@@ -1283,14 +1282,11 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 
 		// If we need a new event, get it
 		if (currentEvent == null) {
-			System.out.println("We need a new event");
 			try {
 				currentEvent = (AnimationEvent) eventQueue.removeFirst();
-				System.out.println("New event has type " + currentEvent.type);
 			}
 			catch (NoSuchElementException e) {
 				// No new events to animate, go to sleep or whatever
-				System.out.println("Nothing to do, stopping Timer");
 				currentEvent = null;
 				stopAnimation();
 				notify();
@@ -1407,11 +1403,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					if (intermediateOffset++>currentEvent.arg) {
 						currentEvent = null;
 						intermediateOffset = 0;
-						System.out.println("Finished waiting!");
 					}
 					break;
 				default:
-					System.out.println("Unsupported event type "+currentEvent.type);
 					break;
 			}
 		}
@@ -1546,7 +1540,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		if (intermediateOffset > dist) { // are we done?
 			intermediateOffset = 0;
 			if (cancelEvent) currentEvent = null;
-			System.out.println("Done moving out");
 			return;
 		}
 		intermediateOffset += granularity;
@@ -1611,11 +1604,9 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		int dist = Math.abs(startY-endY);
 		
 		if (intermediateOffset >= dist) { // are we done?
-			System.out.println("Done moving vertically");
 			if (cancelEvent) {
 				intermediateOffset = 0; 
 				if (currentEvent.type == AnimationEvent.TWO_VERT_IN_CHANNEL) {
-					System.out.println("We are swapping, so swap elements");
 					String t = v.contents[from];
 					v.contents[from] = v.contents[to];
 					v.contents[to] = t;
@@ -1624,7 +1615,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 					if (dv == null) v.contents[to] = v.contents[from];
 					else dv.contents[to] = v.contents[from];
 				}
-				System.out.println("Nullify currentEvent");
 				currentEvent = null;
 			} 
 			return;
@@ -1703,7 +1693,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 			if (cancelEvent) {
 				intermediateOffset = 0;
 				currentEvent = null;
-				System.out.println("Done moving back in");
 			}
 			return;
 		}
@@ -1764,7 +1753,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		if (intermediateOffset >= dist) { // we are done
 			intermediateOffset = 0;
 			currentEvent = null;
-			System.out.println("Done moving back in");
 			return;
 		}
 		intermediateOffset += granularity;
@@ -1874,7 +1862,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				else ShellVectorAnimator.this.notify();
 			}
 			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
+				System.err.println(e);
 			}
 			return res;
 		}
@@ -1974,7 +1962,6 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 	 */
 	public void waitFor(int time) throws InterruptedException {
 		int frames = (time / 1000) * fps; // number of frames to wait for
-		System.out.println("Waiting for "+frames);
 		synchronized (this) {
 			try {
 				eventQueue.addLast(new AnimationEvent(AnimationEvent.WAIT, frames));
@@ -1983,7 +1970,7 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 				while (!eventQueue.isEmpty()) wait();
 			}
 			catch (InvalidAnimationEventException e) {
-				System.out.println(e);
+				System.err.println(e);
 			}
 		}
 	}
@@ -2113,19 +2100,19 @@ public class ShellVectorAnimator extends ShellAnimator implements ActionListener
 		VectorAnimator.Vector v3 = app.createVector("New!!", t2);
 		}
 		catch (InputTooLongException e) {
-			System.out.println(e);
+			System.err.println(e);
 		}
 		catch (TooManyVectorsException e) {
-			System.out.println(e);
+			System.err.println(e);
 		}
 		catch (InvalidLocationException e) {
-			System.out.println(e);
+			System.err.println(e);
 		}
 		catch (ItemDeletedException e) {
-			System.out.println(e);
+			System.err.println(e);
 		}
 		catch (InterruptedException e) {
-			System.out.println(e);
+			System.err.println(e);
 		}
 	}
 }
