@@ -105,10 +105,40 @@ smh22@cam.ac.uk
 General project overview
 \layout Standard
 
-Successes/failures
+Successes
+\layout Itemize
+
+We got on well together as a team, there were no big personality conflicts
+ and there was generally a good atmosphere between team members.
+ Morale was always high, even in stressful times such as before deadlines.
+\layout Itemize
+
+We managed to get all the documentation finished and handed in on time for
+ project meetings, never missing a deadline.
+\layout Standard
+
+Failures
+\layout Itemize
+
+Communication
+\layout Itemize
+
+Time planning
+\layout Itemize
+
+Task planning
 \layout Standard
 
 Lessons learned
+\layout Itemize
+
+Task planning
+\layout Itemize
+
+Communication
+\layout Itemize
+
+Working as a team
 \layout Section
 
 Summary of work undertaken
@@ -117,28 +147,51 @@ Summary of work undertaken
 Graham
 \layout Standard
 
-what a guy
+What a guy!
 \layout Subsection
 
 Steven
+\layout Standard
+
+Coded graph animator.
 \layout Subsection
 
 Richard
+\layout Standard
+
+Tester graph animator.
 \layout Subsection
 
 Rob
+\layout Standard
+
+Coded queues and shell.
+ Set up CVS etc.
 \layout Subsection
 
 Andrew
+\layout Standard
+
+Coded vector animator.
+ Secretary as well.
 \layout Subsection
 
 Neofytos
+\layout Standard
+
+Documented stuff.
 \layout Subsection
 
 Sid
+\layout Standard
+
+Coded algorithms and shell.
 \layout Subsection
 
 Alan
+\layout Standard
+
+Tested vector animator.
 \layout Section
 
 Random final report stuff

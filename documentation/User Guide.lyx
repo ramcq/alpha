@@ -54,8 +54,8 @@ Starting up
 To start the program....
 \layout Section
 
-Animating an algorithm {make this easier to read, pictures, screenshots,
- bullet points ?}
+Animating an algorithm {make this easy to read, pictures, screenshots, bullet
+ points ?}
 \layout Itemize
 
 When the program starts, you will see this Main Menu:
@@ -120,44 +120,14 @@ For graph based algorithms, the animation screen looks like this:
 {Have a screenshot of the graph input screen (Hopefully!)}
 \layout Itemize
 
-If using the 'Manual' method, the 'Next' and 'Previous' buttons allow you
- to step forwards and backwards through the algorithm, allowing you to view
- certain steps again in order to aid your understanding of the algorithm.
+If you are using the 'Manual' method, you can use the 'Next' and 'Previous'
+ buttons which allow you to step forwards and backwards through the algorithm,
+ allowing you to view certain steps again in order to aid your understanding
+ of the algorithm.
 \layout Itemize
 
 To exit and return to the Main Menu before the animation has finished, click
  the 'Exit' button.
-\layout Standard
-\noindent 
-At the main menu, there is a drop-down box which lists the algorithms available
- to animate.
- Select one by clicking on it in the list, and then pressing the 'Next'
- button at the bottom of the screen.
- You should now be at the input data menu, which allows you to input initial
- data for the algorithm you have chosen.
- The type of data you can input depends on the algorithm you are using,
- so follow the instructions given on screen concerning this.
- To input data, click on an empty box with the mouse and write data in with
- the keyboard.
- There is also an option to generate random data, to do this simply click
- on the 'Random' button.
- When you are happy with the data being used, select one of the two ways
- to begin the animation.
- If you want the animation to continue on its own all the way through to
- the end, press the 'Automatic Slide Show' button, if however you want the
- animation to proceed at your own pace press the 'Manual' button.
-\layout Standard
-
-If you choose the 'Automatic Slide Show' option, the animation will begin
- and run until it has finished, at which point it will return to the main
- menu.
- To return to the main menu before the animation finishes, click on the
- 'Exit' button.
- For the 'Manual' option, you will have to click on the 'Next' button after
- each step in the algorithm to begin the next animation.
- To step back in the algorithm, click the 'Previous' button which will take
- you back one step.
- To return to the main menu at any point, click the 'Exit' button.
 \layout Section
 
 Exiting
