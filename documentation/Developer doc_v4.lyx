@@ -1,0 +1,630 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Developer Documentation and Extending the Project
+\layout Section
+
+Introduction
+\layout Standard
+
+Any software project is considered successful if it can be extended, meaning
+ that extra functionality and features can easily be added if one wishes
+ to do so.
+ In this project, an obvious extension would be to add new algorithms for
+ animation.
+ Also the animation API could be extended for displaying more detailed informati
+on but that would require more effort since it would involve changing all
+ the API to adapt to the new animation primitives.
+ In addition, the need to extend the API would make the project less flexible.
+ Below we concentrate on the procedure that needs to be used to add new
+ algorithms (e.g.
+ Shell Sort, Bubble Sort, Prims algorithm etc) and ways to implement them.
+ In order to make the procedure clearer to the user we will demonstrate
+ it by means of two examples, the first one extending the project to include
+ the bubble sort algorithm.
+ (that is VectorAlgorithm).
+ The second example would involve a graph algorithm such as Prim's (for
+ finding the minimum spanning tree).
+ After that it should be clear how the procedure could be applied to other
+ vector and graph algorithms besides Bubble sort and Prim's algorithm.
+\layout Section
+
+VectorAlgorithm Extension
+\layout Standard
+
+We will demonstrate step by step what needs to be done by the user to implement
+ his own algorithm so that it is easier to follow.
+ We will assume that the user is familiar with the algorithm Bubble Sort
+ and he is at the point of being ready to implement it.
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The idea here is to add the Bubble Sort class into the Algorithms package.
+ This is because the Algorithms package contains all that code that implements
+ the algorithms already in the project.
+ So the user only needs to define a classBubble Sort inside the package
+ that would actually perform all those operations as described by the algorithm.A
+ data structure that could be used would be the array to hold the elements
+ to be sorted and possibly extra arrays that would accumulate intermediate
+ results before the sorting is completed.
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The Bubble Sort class must descend from the abstract class VectorAlgorithm
+ inside the Algorithms package (similarly to the already implemented vector
+ algorithms).
+ The VectorAlgorithm descends from the abstract class Algorithm that contain
+ methods for returning the name of the Algorithm, to return a description
+ of the algorithm and also to execute the algorithm.
+ This is done so that the algorithms constructor will have a vector animator
+ that will handle the generated animation primitives.
+ For example,
+\series default 
+\size default 
+ see Figure\SpecialChar ~
+
+\begin_inset LatexCommand \ref{cap:Vector-algorithm-extension}
+
+\end_inset 
+
+.
+ We must note that the implementation of the methods above is essential
+ for otherwise the compiler would complain.
+ By the definition of Java semantics, if a class extends an abstract class
+ then it must provide implementation for all those methods that are defined
+ as abstract inside the abstract class.
+\begin_inset Float figure
+wide false
+collapsed true
+
+\layout Standard
+
+
+\family typewriter 
+package algorithms;
+\layout Standard
+
+
+\family typewriter 
+import animators.VectorAnimator;
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public class BubbleSort extends VectorAlgorithm {
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+int [ ] a;
+\layout Standard
+
+
+\family typewriter 
+VectorAnimator anim;
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public void sort(){
+\layout Standard
+
+
+\family typewriter 
+// here goes the implementation of the algorithm with
+\layout Standard
+
+
+\family typewriter 
+// all the arrays and manipulation of data
+\layout Standard
+
+
+\family typewriter 
+// according to the steps of the algorithm
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public BubbleSort(VectorAnimator va, int[] values) { //constructor
+\layout Standard
+
+
+\family typewriter 
+super(va, values);
+\layout Standard
+
+
+\family typewriter 
+this.anim = va;
+\layout Standard
+
+
+\family typewriter 
+this.a = values;
+\layout Standard
+
+
+\family typewriter 
+}
+\layout Standard
+
+
+\family typewriter 
+// va = The vector animator that will handle the generated animation primitives
+\layout Standard
+
+
+\family typewriter 
+// values = An array of the elements that are to be sorted.
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public static String getName() {
+\layout Standard
+
+
+\family typewriter 
+return "Bubble sort";
+\layout Standard
+
+
+\family typewriter 
+} //identity of the algorithm
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public static String getDescription() {
+\layout Standard
+
+
+\family typewriter 
+return "A string that is a text description of the algorithm";
+\layout Standard
+
+
+\family typewriter 
+} 
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public void execute() {
+\layout Standard
+
+
+\family typewriter 
+String[] steps = { BubbleSort operation, Swapping, BubbleSort operarion,
+ etc };
+\layout Standard
+
+
+\family typewriter 
+anim.setSteps(steps);
+\layout Standard
+
+
+\family typewriter 
+sort();
+\layout Standard
+
+
+\family typewriter 
+} // the main method that will cause execution of the algorithm
+\layout Caption
+
+
+\begin_inset LatexCommand \label{cap:Vector-algorithm-extension}
+
+\end_inset 
+
+Vector algorithm extension
+\end_inset 
+
+
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The next step is to break the algorithm into steps (inside the sort() method)
+ so that the user can have the ability to step both forwards and backwards
+ during the animation.
+ This will involve calling methods on the VectorAnimator at each step so
+ that the animation will be persistent with each logical step of the algorithm.
+ These methods will be responsible for animating that particular step.
+ The functionality of these methods is explained in the Java Documentation
+ for the project (which is provided by the coders).
+ In order to show to the user the current step that is in progress, we need
+ to call the setStep() method to highlight a string from the steps registered
+ originally, and after each logical phase of the algorithm, we need to call
+ the saveState() method to give the user a point where he can move forward
+ from and back to, or pause the animation at.
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The import statement as shown in the sample code is very important and essential.
+ First of all we have the animators package and inside that we have the
+ Animator abstract class that contains all those data structures that the
+ actual animator implementations require to restore their state.
+ The VectorAnimator extends animator that again is an abstract class that
+ defines all the methods available for a vector on the animation canvas.
+ So it is important and vital that this is included inside the BubbleSort
+ class.
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The final step would involve adding the algorithm inside the catalog where
+ all the existing algorithms are listed.
+\layout Section
+
+GraphAlgorithm Extension
+\layout Standard
+
+
+\series medium 
+\size normal 
+In this section we will try to give a detailed step by step procedure on
+ how the project can be extended with more Graph algorithms.
+ The description will involve the implementation of Prim's algorithm as
+ a running example.
+ We will again assume thatthe user is familiar with Prim's and he is ready
+ to implement the algorithm.
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The first step involves adding the class into the Algorithms package.
+ The reason is that the Algorithm package holds all the classes that implement
+ the projects algorithms.
+ So the only thing needed at this stage is for the user to define the Prims
+ algorithm class with all those operations that the algorithm performs in
+ order to find the minimum spanning tree.
+ Arrays could be used in the implementation of Prims as well as the Java
+ Vector package for implementing the graph edges and nodes.
+\series default 
+\size default 
+
+\newline 
+
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The Prims implementation must descend from the abstract class GraphAlgorithm
+ inside the Algorithms package (similarly to the already implemented Kruskal
+ and Dijkstra algorithms).
+ The GraphAlgorithm extends the abstract class Algorithm whose methods have
+ already been discussed.
+ This is again done so that the algorithms constructor will have a vector
+ animator that willhandle all the animation primitives.
+ 
+\series default 
+\size default 
+S
+\series medium 
+\size normal 
+ee 
+\series default 
+\size default 
+the 
+\series medium 
+\size normal 
+example
+\series default 
+\size default 
+ in Figure\SpecialChar ~
+
+\begin_inset LatexCommand \ref{cap:Graph-algorithm-extension}
+
+\end_inset 
+
+.
+ The user must note again that the implementation of the methods above is
+ needed for otherwise the compiler would give an error.
+\begin_inset Float figure
+wide false
+collapsed true
+
+\layout Standard
+
+
+\family typewriter 
+package algorithms;
+\layout Standard
+
+
+\family typewriter 
+import animators.GraphAnimatorAnimator;
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public class Prim extends GraphAlgorithm {
+\layout Standard
+
+
+\family typewriter 
+GraphrAnimator anim;
+\layout Standard
+
+
+\family typewriter 
+private int [ ][ ] costs;
+\layout Standard
+
+
+\family typewriter 
+private Vector edges;
+\layout Standard
+
+
+\family typewriter 
+private Vector nodes;
+\layout Standard
+
+
+\family typewriter 
+private int dim; //number of nodes
+\layout Standard
+
+
+\family typewriter 
+int[][] result;
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public void prim(){
+\layout Standard
+
+
+\family typewriter 
+// here goes the implementation of the algorithm with
+\layout Standard
+
+
+\family typewriter 
+// all the arrays and manipulation of data
+\layout Standard
+
+
+\family typewriter 
+// according to the steps of the algorithm
+\layout Standard
+
+
+\family typewriter 
+// and possibly addition of new methods to help with the operations
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public Kruskal(GraphAnimator ga, int[][] costs) {
+\layout Standard
+
+
+\family typewriter 
+super(ga, costs);
+\layout Standard
+
+
+\family typewriter 
+this.costs = costs;
+\layout Standard
+
+
+\family typewriter 
+this.dim = costs.length;
+\layout Standard
+
+
+\family typewriter 
+this.result = new int[dim][dim];
+\layout Standard
+
+
+\family typewriter 
+this.edges = new Vector();
+\layout Standard
+
+
+\family typewriter 
+this.nodes = new Vector();
+\layout Standard
+
+
+\family typewriter 
+initialiseResult();
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public static String getName() {
+\layout Standard
+
+
+\family typewriter 
+return "Prims algorithm";
+\layout Standard
+
+
+\family typewriter 
+} //identity of the algorithm
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public static String getDescription() {
+\layout Standard
+
+
+\family typewriter 
+return "A string that is a text description of the algorithm";
+\layout Standard
+
+
+\family typewriter 
+} 
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+public void execute() {
+\layout Standard
+
+
+\family typewriter 
+String[] steps = { Prims operation, Swapping, Prims operarion, etc };
+\layout Standard
+
+
+\family typewriter 
+anim.setSteps(steps);
+\layout Standard
+
+
+\family typewriter 
+sort();
+\layout Standard
+
+
+\family typewriter 
+} // the main method that will cause execution of the algorithm
+\layout Caption
+
+
+\begin_inset LatexCommand \label{cap:Graph-algorithm-extension}
+
+\end_inset 
+
+Graph algorithm extension
+\end_inset 
+
+
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+This step involves the breaking of the algorithm into steps (inside the
+ Prims method) so that the user is abke to stepboth forwards and backwards
+ during the animation.
+ This again requires calling methods on the GraphAnimator at each step so
+ that the animation will be synchronized with each logical step of the algorithm.
+ These methods animate the particular step.
+ The functionality of these methods is explained in the Java Documentation
+ for the project.
+ The use of 
+\family typewriter 
+\series default 
+\size default 
+setSteps()
+\family default 
+\series medium 
+\size normal 
+ and 
+\family typewriter 
+\series default 
+\size default 
+savesState()
+\family default 
+\series medium 
+\size normal 
+ methods is similar to the previous explained example.
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The import statement is again important.
+ We have the animators package and inside that we have the Animator abstract
+ class that contains all those data structures that the actual animator
+ implementations require to restore their state.
+ The GraphAnimator extends animator that defines all the methods available
+ for a graph on the animation canvas.
+ So it is important that this is included inside the Prims class.
+\layout Enumerate
+
+
+\series medium 
+\size normal 
+The final step is to add the algorithm inside the catalog.
+\the_end
