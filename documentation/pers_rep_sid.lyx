@@ -28,7 +28,16 @@
 Personal Report
 \layout Author
 
-Sidath Senanayake (sas58) Project: Animating Algorithms Team: Alpha
+Sidath Senanayake (sas58)
+\layout Section
+
+Introduction
+\layout Standard
+
+This document is my personal report detailing my involvment with Project
+ Alpha (Topic 8.5) which designed and built the 'Animating Algorithms' applicatio
+n in Java.
+ This project is being overseen by Dr Steve Hand.
 \layout Section
 
 Personal Work
@@ -38,34 +47,30 @@ In brief, I believe that I played a significant role in the development
  of this project and delivered all that was required of me.
  I also took on the work of other members when they had problems or ran
  out of time.
+\layout Subsection
+
+Design
 \layout Standard
 
-A rough outline of my contributions:
-\layout Itemize
+I was involved in the initial design of the specification and contributed
+ some ideas as to how certain parts could be implemented.
+ I contributed to the specification document by writing some of it and suggestin
+g ideas on some aspects of it.
+ In addition, I was part of the team of coders that devised the APIs.
+ In each algorithm, I designed the overall look and flow of the animations.
+\layout Subsection
 
-Was an active member in the design of the overall specification
-\layout Itemize
-
-Contributed to the design of the APIs
-\layout Itemize
-
-Implemented and tested the code of all 6 algorithms
-\layout Itemize
-
-Created a mock up of the GUI to try out some initial prototype design ideas
-\layout Itemize
-
-Designed the animations themselves, and wrote descriptions of each step
-\layout Itemize
-
-Performed tests on the interfaces
-\layout Itemize
-
-(minor) Provided help in the way the developer documentation was to be written
+Programming
 \layout Standard
 
-My code may be found at http://ned.ucam.org/cgi-bin/viewcvs.cgi/alpha/src/org/ucam/
-ned/teamalpha under the 
+I implemented all the algorithms and tested them
+\begin_inset Foot
+collapsed true
+
+\layout Standard
+
+The code that I wrote may be found online at: http://ned.ucam.org/cgi-bin/viewcvs.c
+gi/alpha/src/org/ucam/ned/teamalpha under the 
 \family typewriter 
 test
 \family default 
@@ -74,6 +79,35 @@ test
 algorithms
 \family default 
  packages.
+\end_inset 
+
+.
+ I integrated these algorithms with the remainder of the project by making
+ relevant calls to the animator.
+ During the early phases of the project, I built a mock GUI to test some
+ design ideas that had been discussed at meetings.
+ I believe that Rob has found some of this code useful when coding the final
+ Shell.
+\layout Subsection
+
+Testing
+\layout Standard
+
+Due to miscommunication, I ended up testing all the algorithms that I wrote.
+ For example, I wrote methods which tested the results of the sorting algorithms
+ against the inbuilt Java sort algorithms and used connectivity matrices
+ from online demos and text books to test the graph algorithms.
+ When Richard got up to speed, he tested much of my code as well.
+\layout Subsection
+
+Documentation
+\layout Standard
+
+I played a small role in the documentation with Neofytos.
+ I explained how my algorithms worked and how they interfaced with the other
+ modules.
+ For each algorithm, I came up with descriptions of each step taken in the
+ hope to make the algorithm more understandable.
 \layout Section
 
 Member assessment
