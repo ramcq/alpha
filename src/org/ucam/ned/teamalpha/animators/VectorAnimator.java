@@ -36,7 +36,7 @@ public abstract class VectorAnimator extends Animator {
 		 * @param offsetto
 		 *            the destination offset
 		 */
-		public abstract void copyElement(int offsetfrom, int offsetto) throws ItemDeletedException;
+		public abstract void copyElement(int offsetfrom, int offsetto) throws ItemDeletedException, InvalidLocationException;
 
 		/**
 		 * Copy an element from one offset in the vector to an offset in
@@ -53,7 +53,7 @@ public abstract class VectorAnimator extends Animator {
 		public abstract void copyElement(
 			int offsetfrom,
 			VectorAnimator.Vector target,
-			int offsetto) throws ItemDeletedException;
+			int offsetto) throws ItemDeletedException, InvalidLocationException;
 
 		/**
 		 * Move an element from one offset in the vector to another, shifting
@@ -64,7 +64,7 @@ public abstract class VectorAnimator extends Animator {
 		 * @param offsetto
 		 *            the destination offset
 		 */
-		public abstract void moveElement(int offsetfrom, int offsetto) throws ItemDeletedException;
+		public abstract void moveElement(int offsetfrom, int offsetto) throws ItemDeletedException, InvalidLocationException;
 
 		/**
 		 * Set the value of an element.
@@ -74,7 +74,7 @@ public abstract class VectorAnimator extends Animator {
 		 * @param value
 		 *            the value to set it to
 		 */
-		public abstract void setElement(int offset, int value) throws ItemDeletedException;
+		public abstract void setElement(int offset, int value) throws ItemDeletedException, InvalidLocationException;
 
 		/**
 		 * Swap the values of two elements within the same vector.
@@ -84,7 +84,7 @@ public abstract class VectorAnimator extends Animator {
 		 * @param offset2
 		 *            the offset to the second value
 		 */
-		public abstract void swapElements(int offset1, int offset2) throws ItemDeletedException;
+		public abstract void swapElements(int offset1, int offset2) throws ItemDeletedException, InvalidLocationException;
 
 		/**
 		 * Flash an element to draw attention to it.
@@ -92,7 +92,7 @@ public abstract class VectorAnimator extends Animator {
 		 * @param offset
 		 *  the element of the vector to flash 
 		 */
-		public abstract void flashElement(int offset) throws ItemDeletedException;
+		public abstract void flashElement(int offset) throws ItemDeletedException, InvalidLocationException;
 		
 		/**
 		 * Highlight a given digit of all the values in the vector.
@@ -101,7 +101,7 @@ public abstract class VectorAnimator extends Animator {
 		 *            the digit to highlight, counting left from 0 as the
 		 *            rightmost digit, and -1 to highlight no digit
 		 */
-		public abstract void setHighlightedDigit(int column) throws ItemDeletedException;
+		public abstract void setHighlightedDigit(int column) throws ItemDeletedException, InvalidLocationException;
 
 		/**
 		 * Create a new arrow pointing at a value in the vector, or the
@@ -114,7 +114,7 @@ public abstract class VectorAnimator extends Animator {
 		 *            true to point at the boundary before the offset
 		 * @return a reference to the arrow created
 		 */
-		public abstract VectorAnimator.Arrow createArrow(int offset, boolean boundary) throws ItemDeletedException;
+		public abstract VectorAnimator.Arrow createArrow(int offset, boolean boundary) throws ItemDeletedException, InvalidLocationException;
 
 		/**
 		 * Create a new arrow pointing at a value in the vector, or the
@@ -132,7 +132,7 @@ public abstract class VectorAnimator extends Animator {
 		public abstract VectorAnimator.Arrow createArrow(
 			String label,
 			int offset,
-			boolean boundary) throws ItemDeletedException;
+			boolean boundary) throws ItemDeletedException, InvalidLocationException;
 	}
 
 	/**
@@ -164,7 +164,7 @@ public abstract class VectorAnimator extends Animator {
 		 * 	@param boundary
 		 *            true to point at the boundary before the offset
 		 */
-		public abstract void move(int offset, boolean boundary) throws ItemDeletedException;
+		public abstract void move(int offset, boolean boundary) throws ItemDeletedException, InvalidLocationException;
 
 		/**
 		 * Flash the arrow to indicate something exciting going on.
@@ -179,7 +179,7 @@ public abstract class VectorAnimator extends Animator {
 	 *            the array of initial values
 	 * @return a reference to the vector created
 	 */
-	public abstract VectorAnimator.Vector createVector(int[] values);
+	public abstract VectorAnimator.Vector createVector(int[] values) throws InputTooLongException;
 
 	/**
 	 * Create a new vector with a label and place it on the animation canvas.
@@ -190,5 +190,5 @@ public abstract class VectorAnimator extends Animator {
 	 *            the array of initial values
 	 * @return a reference to the vector created
 	 */
-	public abstract VectorAnimator.Vector createVector(String label, int[] values);
+	public abstract VectorAnimator.Vector createVector(String label, int[] values) throws InputTooLongException;
 }
