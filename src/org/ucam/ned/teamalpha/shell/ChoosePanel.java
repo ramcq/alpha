@@ -116,7 +116,6 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 		// create vertical panel
 		JPanel right = new JPanel();
 		right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
-		right.setBorder(BorderFactory.createLoweredBevelBorder());
 		add(right);
 		
 		// add title to vertical panel
@@ -131,6 +130,7 @@ public class ChoosePanel extends ShellPanel implements TreeSelectionListener {
 		text = new JTextPane();
 		text.setEditable(false);
 		text.setPreferredSize(new Dimension(585, 500));
+		text.setBorder(BorderFactory.createLoweredBevelBorder());
 		right.add(text);
 		
 		// set the default text
