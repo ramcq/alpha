@@ -134,7 +134,8 @@ animation script
 \begin_inset Quotes erd
 \end_inset 
 
- will be written in Java; we will not implement our own special language
+ and the algorithms themselves will be written in Java; we will not implement
+ our own special language.
 \layout Itemize
 
 The user can specify initial data in the following way:
@@ -164,9 +165,14 @@ graphs
 \end_deeper 
 \layout Itemize
 
-The auxiliary displays showing the time and space costs of the algorithm
- will be implemented in text (as opposed to anything graphical); history
- etc will not be available.
+The user will not be able to change the data that the algorithms are operating
+ on after the initial data input stage.
+\layout Itemize
+
+The auxiliary displays showing the time and space costs of the algorithm,
+ and the steps and explanation of its behaviour, will be implemented with
+ a series of textual messages displayed to the user as the algorithm is
+ animated.
 \layout Section
 
 Facilities to be provided
@@ -247,6 +253,51 @@ cvs
 \layout Section
 
 Overall system architecture
+\layout Standard
+
+The main functionality of the system can be broken down into four areas,
+ algorithms, animators, queues and shell, which will be represented as packages
+ in Java.
+ The following sections contain a brief description of each package, the
+ classes within, and their interactions.
+\layout Subsection
+
+Algorithms
+\layout Standard
+
+The classes within this package will ultimately implement the algorithms
+ which the system is able to demonstrate, contain the instructions to the
+ other parts of the program for animating the steps that are taken by the
+ algorithm, provide the narrative for explaining to the user what is happening,
+ and any other information which is displayed.
+\layout Standard
+
+The abstract class Algorithm is the parent class for all of the classes
+ within this package, and an abstract class is descended from it for each
+ group of algorithms which are being implemented.
+ The initial specification is to implement two types of algorithm, GraphAlgorith
+m and SortAlgorithm.
+ These abstract classes will contain methods for querying information about
+ the algorithm, such as its name and purpose, explanation of steps, efficiency,
+ as well as setting the initial data for the algorithm and instructing it
+ to execute.
+\layout Subsection
+
+Animators
+\layout Standard
+
+This package contains a set of abstract classes descended from Animator
+ which specify the animation primitives supported by each 
+\layout Subsection
+
+Queues
+\layout Standard
+
+This package contains an interface AnimatorQueue, and two classes which
+ impl
+\layout Subsection
+
+Shell
 \layout Standard
 
 What the major components (classes) are and how they will fit together (to
