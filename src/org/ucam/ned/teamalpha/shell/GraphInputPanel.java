@@ -41,6 +41,9 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 	private HashMap numbers;
 	private int[] values;
 	
+	// Support for bidirectional graphs, FALSE by default
+	boolean bidirectional = true;
+	
 	private void makeCells(int num) {
 		fields = new JFormattedTextField[num*num];
 		numbers = new HashMap();
@@ -48,16 +51,23 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		cells.removeAll();
 		cells.setLayout(new GridLayout(num, num, 5, 5));
 		
-		for (int i = 0; i < num*num; i++) {
+		for (int k = 0; k < num*num; k++) {
+			// Calcuate the dimensions on the matrix
+			int i = k / num;
+			int j = k % num;
+			
 			JFormattedTextField field = new JFormattedTextField(NumberFormat.getIntegerInstance());
-			field.setValue(new Integer(values[i]));
+			field.setValue(new Integer(values[k]));
 			field.setColumns(6);
 			field.setHorizontalAlignment(JTextField.CENTER);
 			field.addPropertyChangeListener("value", this);
 			
+			if (!bidirectional && i<=j) field.setVisible(false);
+			if (bidirectional && i==j)  field.setVisible(false);
+			
 			cells.add(field);
-			fields[i] = field;
-			numbers.put(field, new Integer(i));
+			fields[k] = field;
+			numbers.put(field, new Integer(k));
 		}
 		
 		cells.revalidate();
@@ -78,9 +88,24 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 		
 		int[][] ret = new int[nodes][nodes];
 		
-		for (int i = 0; i < nodes; i++) {
-			for (int j = 0; j < nodes; j++) {
-				ret[i][j] = values[i*nodes+j];
+		for (int k = 0; k < nodes; k++) {
+			for (int l = 0; l < nodes; l++) {
+				
+				// Calcuate the dimensions on the matrix
+				//int i = k / nodes;
+				//int j = k % nodes;
+				
+				if (!bidirectional) {
+					if (l<k) {
+						// Add and mirror if unidirectional
+						ret[k][l] = ret[l][k] = values[k*nodes+l];
+					} else {
+						// Do nothing
+					}
+				} else { // Bidirectional case
+					if (l != k) ret[k][l] = values[k*nodes+l];
+				}
+				
 			}
 		}
 		
@@ -170,6 +195,7 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 	
 	/* (non-Javadoc)
@@ -188,6 +214,11 @@ public class GraphInputPanel extends ShellPanel implements PropertyChangeListene
 			}
 			
 			updateValues();
+			
+			// DEBUG
+			print(getValues(), 8);
+			
+			
 		} else if (command.equals("Clear")) {
 			for (int i = 0; i < 64; i++) {
 				values[i] = 0;
