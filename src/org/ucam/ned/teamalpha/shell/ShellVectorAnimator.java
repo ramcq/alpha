@@ -106,13 +106,14 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 */
 		Vector(String label, int[] values) throws InputTooLongException {
 			this(values);
-			this.label = label;
+			this.label = (label.length() <= maxElementLength) ? label : label.substring(0,maxElementLength-1);
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#delete()
 		 */
-		public void delete() {
+		public void delete() throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Arrow "+label+" already deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					this.visible = false;
@@ -133,10 +134,11 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setLabel(java.lang.String)
 		 */
-		public void setLabel(String label) {
+		public void setLabel(String label) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Arrow "+label+" already deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
-					this.label = label;
+					this.label = (label.length() <= maxElementLength) ? label : label.substring(0,maxElementLength-1);
 					// Redraw the vector
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.VECTOR_CHANGE, this));
 					if (draw) startAnimation();
@@ -155,7 +157,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
 		 */
-		public void copyElement(int from, int to) {
+		public void copyElement(int from, int to) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has already been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					// Move element out to channel
@@ -180,7 +183,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void copyElement(int from, VectorAnimator.Vector v, int to) {
+		public void copyElement(int from, VectorAnimator.Vector v, int to) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			Vector vec = (Vector) v;
 			synchronized (ShellVectorAnimator.this) {
 				try {
@@ -204,7 +208,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#moveElement(int, int)
 		 */
 		// TODO: do we actually want this?
-		public void moveElement(int from, int to) {
+		public void moveElement(int from, int to) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					// Move element out to channel
@@ -229,7 +234,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setElement(int, int)
 		 */
-		public void setElement(int elt, int value) {
+		public void setElement(int elt, int value) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_CHANGE, this, elt, value));
@@ -250,7 +256,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, int)
 		 */
-		public void swapElements(int elt1, int elt2) {
+		public void swapElements(int elt1, int elt2) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					// Move both elements out to channels
@@ -279,7 +286,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) {
+		public VectorAnimator.Arrow createArrow(String label, int position, boolean boundary) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				Arrow res = new Arrow(this, label, position, boundary);
 				arrows.add(res);
@@ -302,14 +310,15 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
 		 */
-		public VectorAnimator.Arrow createArrow(int position, boolean boundary) {
-			return createArrow("A", position, boundary);
+		public VectorAnimator.Arrow createArrow(int position, boolean boundary) throws ItemDeletedException {
+			return createArrow("", position, boundary);
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#highlightElement(int)
 		 */
-		public void flashElement(int elt) {
+		public void flashElement(int elt) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ELT_FLASH, this, elt));
@@ -340,7 +349,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	although only a few different colours can be displayed, so only a 
 		 * 	certain number of groups can be distinguished visually).
 		 */
-		public void setGroup(int group) {
+		public void setGroup(int group) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Vector \""+label+"\" has been deleted!");
 			this.group = group % vectorGroupColours.length;
 			this.colour = vectorGroupColours[this.group];
 			synchronized (ShellVectorAnimator.this) {
@@ -418,7 +428,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		
 		Arrow(Vector v, String label, int position, boolean boundary) {
 			this(v, position, boundary);
-			setLabel(label);
+			if (label.length() > 4) label = label.substring(0,4); 
+			this.label = label;
 		}
 		
 		Arrow(Vector v, int position, boolean boundary) {
@@ -430,7 +441,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()
 		 */
-		public void delete() {
+		public void delete() throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has already been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				deleted = true;
 				try {
@@ -451,16 +463,32 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setLabel(java.lang.String)
 		 */
-		public void setLabel(String label) {
+		public void setLabel(String label) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			// Trim if over 4 chars
 			if (label.length() > 4) label = label.substring(0,4); 
 			this.label = label;
+			synchronized (ShellVectorAnimator.this) {
+				try {
+					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_CHANGE, this));
+					if (draw) startAnimation();
+					else ShellVectorAnimator.this.notify();
+					while (!eventQueue.isEmpty()) ShellVectorAnimator.this.wait();
+				}
+				catch (InvalidAnimationEventException e) {
+					System.out.println(e);
+				}
+				catch (InterruptedException e) {
+					System.out.println(e);
+				}
+			}
 		}
 			
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#move(int, boolean)
 		 */
-		public void move(int newpos, boolean boundary) {
+		public void move(int newpos, boolean boundary) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_MOVE, this, newpos, boundary));
@@ -480,7 +508,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#highlight()
 		 */
-		public void flash() {
+		public void flash() throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			synchronized (ShellVectorAnimator.this) {
 				try {
 					eventQueue.addLast(new AnimationEvent(AnimationEvent.ARROW_FLASH, this));
@@ -504,7 +533,8 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		 * 	number of colours can be displayed, so only that number of different groups
 		 * 	can be visually distinguished on screen.
 		 */
-		public void setGroup(int group) {
+		public void setGroup(int group) throws ItemDeletedException {
+			if (!visible) throw new ItemDeletedException("Arrow \""+label+"\" has been deleted!");
 			this.group = group % arrowGroupColours.length;
 			this.colour = arrowGroupColours[this.group];
 			synchronized (ShellVectorAnimator.this) {
@@ -841,7 +871,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					intermediateOffset++;
 					if (intermediateOffset % 4 < 2) drawArrow(currentEvent.a1, big, currentEvent.a1.altColour);
 					else drawArrow(currentEvent.a1, big, currentEvent.a1.colour);
-					if (intermediateOffset > 60) {
+					if (intermediateOffset > 58) {
 						intermediateOffset = 0;
 						currentEvent = null;
 					}
@@ -1547,9 +1577,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		a4 = v2.createArrow("A4", 2, false);
 		a3.flash();
 		//app.stopFastForward();
-		a3.move(8, true);
-		v2.flashElement(4);
-		v.delete();
-		a3.delete();
+		//a3.move(8, true);
+		//v2.flashElement(4);
+		//v.delete();
+		//a3.delete();
 	}
 }
