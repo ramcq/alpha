@@ -120,7 +120,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void copyElement(int offsetfrom, Vector target, int offsetto) {
+		public void copyElement(int offsetfrom, VectorAnimator.Vector target, int offsetto) {
 			System.out.println("Copying element from " + offsetfrom + " to " + target);
 		}
 		
