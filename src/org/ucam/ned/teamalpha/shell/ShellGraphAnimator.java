@@ -1197,7 +1197,7 @@ public class ShellGraphAnimator
 		int Fsize,
 		Color colour) {
 		g.setColor(colour);
-		g.setFont(new Font("MonoSpaced", Font.BOLD, Fsize));
+		g.setFont(new Font("MonoSpaced", 0, Fsize));
 		g.drawString(label, x, y);
 	}
 	/**
