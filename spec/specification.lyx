@@ -742,13 +742,13 @@ Its major public methods (replicating some of the stuff in the abstract
 How it should be tested
 \layout Subsection
 
-User interface / shell
+Algorithms
 \layout Subsection
 
-Actual animator
+Animators
 \layout Subsection
 
-Animation queuer thingy
+Queues
 \layout Standard
 
 We will be implementing the following animation primitives for vectors:
@@ -794,7 +794,7 @@ make sure the next/back buttons work, eg.
 make sure the graphical user interface works correctly
 \layout Subsection
 
-The algorithms themselves
+Shell
 \layout Section
 
 Final Acceptance Criteria
