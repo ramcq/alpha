@@ -33,14 +33,24 @@ public class QuickSort extends VectorAlgorithm {
 		int j = high;
 		int pivot;
 		
+		// ANIM: Set up the set descriptions
+		anim.setSteps(new String[] {
+							"Pick pivot element",
+							"Find element less than pivot",
+							"Find element greater than pivot",
+							"Swap elements",
+							"Pointers have crossed, set new split point",
+							"Copy elements back, and call recursively",
+							"Done!"});
+				
 		// ANIM: Create animator vector if on initial run
 		VectorAnimator.Vector v = anim.createVector(a);
 		// A vector to hold the currently changing section
 		VectorAnimator.Vector curr;
 		
 		// ANIM: Create the arrows on main vector
-		VectorAnimator.Arrow aDividerLow = v.createArrow("Low", low, true);
-		VectorAnimator.Arrow aDividerHigh = v.createArrow("High", high+1, true);
+		VectorAnimator.Arrow aDividerLow = v.createArrow("Low", low, true, true);
+		VectorAnimator.Arrow aDividerHigh = v.createArrow("High", high+1, true, true);
 
 		// ANIM: Create arrows on working vector
 		VectorAnimator.Arrow aHigh;
@@ -53,6 +63,8 @@ public class QuickSort extends VectorAlgorithm {
 		
 		if (high > low) {
 
+			// ANIM: Find the pivot element
+			anim.setCurrentStep(0);
 			// Select the pivot by the median of first, middle and last element
 			pivot = a[(low + high)/2];
 			
@@ -71,12 +83,14 @@ public class QuickSort extends VectorAlgorithm {
 				// Search for elements to swap
 				while( (i < high ) && ( a[i] < pivot ) ) {
 					// ANIM: Move the low-end pointer down
+					anim.setCurrentStep(1);
 					aLow.move(i-low +1, false);
 					
 					++i;
 				}
 				while( (j > low ) && ( a[j] > pivot ) ) {
 					// ANIM: Move the high-end pointer up
+					anim.setCurrentStep(2);
 					aHigh.move(j-low -1, false);
 					
 					--j;
@@ -85,9 +99,12 @@ public class QuickSort extends VectorAlgorithm {
 				// if the indexes have not crossed, swap
 				if(i <= j ) 
 				{
-					swap(i, j); // TODO: Swap elements
-					// ANIM
-					curr.swapElements(i-low, j-low);
+					if (i !=j ) {
+						swap(i, j); 
+						// ANIM: Swap the elements
+						anim.setCurrentStep(3);
+						curr.swapElements(i-low, j-low);
+					}
 					
 					// Move pointers in place for next run
 					// ANIM: Move the low-end pointer down
@@ -96,19 +113,25 @@ public class QuickSort extends VectorAlgorithm {
 					
 					// ANIM: Move the high-end pointer up
 					if ((j-low -1)>=0) aHigh.move(j-low -1, false);
-					--j; // TODO: Move the arrow left
+					--j;
 				}
 			}
+			
+			// ANIM: Anounce partition found
+			anim.setCurrentStep(4);
 			
 			// ANIM: Highlight the split location
 			aSplitLocation = curr.createArrow("Split", i-low, true);
 			aSplitLocation.flash();
 			
+			
 			// ANIM: Copy the values of curr across
-			for (int k=0; k<=high-low; k++) {
+			anim.setCurrentStep(5);
+			
+/*			for (int k=0; k<=high-low; k++) {
 				curr.copyElement(k, v, low+k);
 			}
-			
+*/			
 			// ANIM: Remove both
 			curr.delete();
 			v.delete();
@@ -123,8 +146,7 @@ public class QuickSort extends VectorAlgorithm {
 			else {
 				if(i < high )	quick(i, high); // TODO: Partition vector at i-1
 			}
-			
-			
+		
 		}
 	}
 	
@@ -201,6 +223,8 @@ public class QuickSort extends VectorAlgorithm {
 			// ANIM: Display the final, sorted vector
 			VectorAnimator.Vector v =  this.anim.createVector(a);
 			v.setLabel("DONE!");
+			
+			anim.setCurrentStep(6);
 			
 			
 		} catch (Exception e) {
