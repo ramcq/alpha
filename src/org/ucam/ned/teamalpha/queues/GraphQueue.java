@@ -139,15 +139,15 @@ public class GraphQueue extends GraphAnimator implements AnimatorQueue {
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashNode(int)
 	 */
 	public void flashNode(int Node) {
-		// TODO Auto-generated method stub
-		
+		Object[] args = { new Primitive(Node)};
+		q.enqueue(this, "flashNode", args);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.ucam.ned.teamalpha.animators.GraphAnimator#flashEdge(int, int)
 	 */
 	public void flashEdge(int from, int to) {
-		// TODO Auto-generated method stub
-		
+		Object[] args = { new Primitive(from), new Primitive(to)};
+		q.enqueue(this, "flashEdge", args);
 	}
 }
