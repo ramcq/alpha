@@ -102,36 +102,33 @@ public class TestVectorAnimator extends VectorAnimator {
 	 * @see org.ucam.ned.teamalpha.animators.Animator#restoreState(org.ucam.ned.teamalpha.animators.Animator.State)
 	 */
 	public void restoreState(State state) {
-		// TODO Auto-generated method stub
 		System.out.println("Restoring state" + state + "...");
 	}
 	public void restoreState(Animator.State state) {
 		System.out.println("Restoring state" + state + "...");
 	}
 	
-	public class VectorAnimator.Vector extends VectorAnimator.Vector {
+	public class Vector extends VectorAnimator.Vector {
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, int)
 		 */
 		public void copyElement(int offsetfrom, int offsetto) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Copying element from " + offsetfrom + " to: " + offsetto);
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#copyElement(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
-		public void copyElement(int offsetfrom, VectorAnimator.Vector target, int offsetto) {
-			// TODO Auto-generated method stub
-			
+		public void copyElement(int offsetfrom, Vector target, int offsetto) {
+			System.out.println("Copying element from " + offsetfrom + " to " + target);
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(int, boolean)
 		 */
 		public VectorAnimator.Arrow createArrow(int offset, boolean boundary) {
-			// TODO Auto-generated method stub
+			System.out.println("Creating arrow with offset " + offset + " and boundary " + boundary); 
 			return null;
 		}
 		
@@ -139,7 +136,7 @@ public class TestVectorAnimator extends VectorAnimator {
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#createArrow(java.lang.String, int, boolean)
 		 */
 		public VectorAnimator.Arrow createArrow(String label, int offset, boolean boundary) {
-			// TODO Auto-generated method stub
+			System.out.println("Creating " + label + " with offset " + offset + " and boundary " + boundary); 
 			return null;
 		}
 		
@@ -147,64 +144,56 @@ public class TestVectorAnimator extends VectorAnimator {
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#delete()
 		 */
 		public void delete() {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Deleted!"); 
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#moveElement(int, int)
 		 */
 		public void moveElement(int offsetfrom, int offsetto) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Moving element with offset " + offsetfrom + " and " + offsetto); 
 		}
-		
+	
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setElement(int, int)
 		 */
 		public void setElement(int offset, int value) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Element set with offset " + offset + " and value " + value); 
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setHighlightedDigit(int)
 		 */
 		public void setHighlightedDigit(int column) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Highlighted digit " + column + "set."); 
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#setLabel(java.lang.String)
 		 */
 		public void setLabel(String label) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Label set with string " + label); 
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#flashElement(int)
 		 */
 		public void flashElement(int offset) {
-			// TODO Auto-generated method stub
-
+			System.out.println("Element with offset " + offset + " flashed!");
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, int)
 		 */
 		public void swapElements(int offset1, int offset2) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Elements with offsets " + offset1 + " and " + offset2 + "swapped");
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Vector#swapElements(int, org.ucam.ned.teamalpha.animators.VectorAnimator.Vector, int)
 		 */
 		public void swapElements(int offset1, VectorAnimator.Vector target, int offset2) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Elements with offsets " + offset1 + " and " + offset2 + " have been swapped to " + target);
 		}
 	}
 	
@@ -214,32 +203,28 @@ public class TestVectorAnimator extends VectorAnimator {
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#delete()
 		 */
 		public void delete() {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Deleted!");
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#move(int, boolean)
 		 */
 		public void move(int newpos, boolean boundary) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Moved to new position " + newpos + " with boundary " + boundary);
 		}
 				
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#setLabel(java.lang.String)
 		 */
 		public void setLabel(String label) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Label set with name " + label);
 		}
 		
 		/* (non-Javadoc)
 		 * @see org.ucam.ned.teamalpha.animators.VectorAnimator.Arrow#flash
 		 */
 		public void flash() {
-			// TODO Auto-generated method stub
-			
+			System.out.println("Flashed!");
 		}
 		
 	}
