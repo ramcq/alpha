@@ -16,9 +16,28 @@ import org.ucam.ned.teamalpha.animators.GraphAnimator;
  * 
  */
 
-/* Current TODO
+/*
+ * Progress log:
+ *	current time use: ~10 hours (?)
+ *  current problems: none
+ *  past problems: all nodes being appearing drawn on same point 
+ * 						- fixed, was just drawing the same node repeatedly due to flaw in actionperformed method
+ * currently implemented api:
+ * 		createGraph
+ * 		setNodeLabel (but no redraw yet)
+ * 		setNodeShade
+ * 		setEdgeLabel (but no redraw yet)
+ * 		setEdgeShade
+ * 		saveState
+ * 		restoreState
+ * 
+ */
+
+/* Current TODO list
  * 
  * Build more animation functionality
+ * 			highlighting and label drawing
+ * documentation
  * 
  */
 
