@@ -8,6 +8,8 @@ package org.ucam.ned.teamalpha.queues;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Vector;
 import org.ucam.ned.teamalpha.animators.Animator;
 
@@ -40,15 +42,20 @@ class GenericQueue {
 				Class[] argtypes = new Class[args.length];
 				
 				for (int i=0; i < args.length; i++) {
-					Object tmp = subjects.get(args[i]);
-					
-					if (tmp != null) {
-						realargs[i] = tmp;
+					if (args[i] instanceof Primitive) {
+						realargs[i] = ((Primitive) args[i]).getObject();
+						argtypes[i] = ((Primitive) args[i]).getType();
 					} else {
-						realargs[i] = args[i];
-					}
+						Object tmp = subjects.get(args[i]);
 					
-					argtypes[i] = realargs[i].getClass();
+						if (tmp != null) {
+							realargs[i] = tmp;
+						} else {
+							realargs[i] = args[i];
+						}
+					
+						argtypes[i] = realargs[i].getClass();
+					}
 				}
 				
 				Method method = type.getDeclaredMethod(methodname, argtypes);
@@ -64,10 +71,19 @@ class GenericQueue {
 	}
 	
 	private class State {
-		Vector events;
+		LinkedList events;
 		
 		State() {
-			this.events = new Vector(32);
+			this.events = new LinkedList();
+		}
+		
+		void sendEvents() {
+			Iterator i = events.listIterator();
+			
+			while (i.hasNext()) {
+				Event e = (Event) i.next();
+				e.send();
+			}
 		}
 	}
 	
@@ -98,5 +114,10 @@ class GenericQueue {
 	
 	void enqueue(Object subject, String methodname, Object[] args) {
 		enqueue(subject, methodname, args, null);
+	}
+	
+	void flush() {
+		State s = (State) states.lastElement();
+		s.sendEvents();
 	}
 }
