@@ -31,9 +31,9 @@ Developer Documentation and Extending the Project
 Introduction
 \layout Standard
 
-Any software project is considered successful if it can be extended, meaning
- that extra functionality and features can easily be added if one wishes
- to do so.
+Any software project is considered successful and flexible if it can be
+ extended, meaning that extra functionality and features can easily be added
+ if one wishes to do so.
  In this project, an obvious extension would be to add new algorithms for
  animation.
  Also the animation API could be extended for displaying more detailed informati
