@@ -31,6 +31,7 @@ import java.util.NoSuchElementException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.ucam.ned.teamalpha.animators.*;
 import org.ucam.ned.teamalpha.animators.Animator;
 import org.ucam.ned.teamalpha.animators.VectorAnimator;
 
@@ -277,10 +278,6 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 					System.out.println(e);
 				}
 			}
-		}
-		
-		// TODO: remove :-)
-		public void swapElements(int elt1, VectorAnimator.Vector v, int elt2) {
 		}
 		
 		/* (non-Javadoc)
@@ -1290,15 +1287,31 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		g.fillRect(areaLeft, areaTop, areaWidth, areaHeight);
 		
 		// Redraw all vectors and arrows
-		// TODO: problem: this puts the new element into its new position at once and still does animation (see demo)
 		redrawAllVectors(g);
 		redrawAllArrows(g, true, null);
 		redrawAllArrows(g, false, null);
 		
+		g.setColor(bgcolour);
+		g.fillRect(destVector.left+1, destVector.top+(20*destOffset)+1,48,19);
+		
 		// Redraw text
 		g.setColor(fgcolour);
-		if (left) g.drawString(destVector.contents[destOffset], sourceVector.left-70+intermediateOffset, textYPos);
-		else g.drawString(destVector.contents[destOffset], sourceVector.left+70-intermediateOffset, textYPos);
+		if (left) {
+			if (movingLeft) {
+				g.drawString(destVector.contents[destOffset],sourceVector.left-70-intermediateOffset, textYPos);
+			}
+			else {
+				g.drawString(destVector.contents[destOffset], sourceVector.left-70+intermediateOffset, textYPos);
+			}
+		}
+		else {
+			if (movingLeft) {
+				g.drawString(destVector.contents[destOffset], sourceVector.right+20-intermediateOffset, textYPos);
+			}
+			else {
+				g.drawString(destVector.contents[destOffset], sourceVector.right+20+intermediateOffset, textYPos);
+			}
+		}
 	}
 	
 	/**
@@ -1544,6 +1557,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 			}
 		});
 		
+		try {
 		int[] t1 = {6,35,4,728,23,233,88};
 		Vector v = (Vector) app.createVector("V1", t1);
 		VectorAnimator.Arrow a = v.createArrow("A1", 5, true);
@@ -1563,7 +1577,7 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		//Animator.State s = app.saveState();
 		a2.setGroup(2);
 		v2.swapElements(7,2);
-		v.copyElement(3, v2, 5);
+		v2.copyElement(3, v, 5);
 		VectorAnimator.Arrow a3 = v2.createArrow("A3", 6, true);
 		VectorAnimator.Arrow a4 = v2.createArrow("A4", 2, false);
 		a3.flash();
@@ -1581,5 +1595,9 @@ public class ShellVectorAnimator extends VectorAnimator implements ActionListene
 		//v2.flashElement(4);
 		//v.delete();
 		//a3.delete();
+		}
+		catch (ItemDeletedException e) {
+			System.out.println(e);
+		}
 	}
 }
