@@ -67,16 +67,17 @@ public class AnimatorPanel extends ShellPanel {
 		
 		// add a the animator to the top box
 		animator = choice.getAnimator();
-		animator.setPreferredSize(new Dimension(500,480));
+		//animator.setPreferredSize(new Dimension(500,480));
+		//animator.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		animator.setBorder(BorderFactory.createEtchedBorder());
 		top.add(animator);
 		
 		// and a 5 pixel gap
-		top.add(Box.createHorizontalStrut(5));
+		//top.add(Box.createHorizontalStrut(5));
 		
 		// and a list of the steps in the algorithm
-		steps = new JList();
-		top.add(steps);
+		//steps = new JList();
+		//top.add(steps);
 		
 		// add five pixel gap
 		add(Box.createVerticalStrut(5));
@@ -84,7 +85,8 @@ public class AnimatorPanel extends ShellPanel {
 		// create bottom message area
 		message = new JTextPane();
 		message.setEditable(false);
-		message.setPreferredSize(new Dimension(790, 50));
+		//message.setPreferredSize(new Dimension(790, 50));
+		//message.setMaximumSize(new Dimension(Short.MAX_VALUE, 50));
 		message.setBorder(BorderFactory.createEtchedBorder());
 		add(message);
 		

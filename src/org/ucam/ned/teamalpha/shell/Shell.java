@@ -1,5 +1,6 @@
 package org.ucam.ned.teamalpha.shell;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -179,30 +180,18 @@ public class Shell extends JFrame implements ActionListener, Runnable {
 		setContentPane(contentPane);
 		
 		// make the top panel and add
-		main = new JPanel();
+		main = new JPanel(new BorderLayout());
 		main.setOpaque(true);
-		//main.setMaximumSize(new Dimension(10000, 10000));
-		//main.setAlignmentX(0.0f); // align left
-		//main.setPreferredSize(new Dimension(800, 500));
 		contentPane.add(main);
 		
-		// add five pixel gap
+		// add separator with 5 pixels above & below
 		contentPane.add(Box.createVerticalStrut(5));
-		
-		// add separator
-		JPanel separator = new JPanel();
-		separator.setOpaque(true);
-		//separator.setMinimumSize(new Dimension(790, 10));
-		separator.add(new JSeparator(JSeparator.HORIZONTAL));
-		contentPane.add(separator);
-		
-		// add five pixel gap
+		contentPane.add(new JSeparator(JSeparator.HORIZONTAL));
 		contentPane.add(Box.createVerticalStrut(5));
 		
 		// add button panel
 		buttons = new ButtonPanel();
 		buttons.setOpaque(true);
-		//buttons.setPreferredSize(new Dimension(800, 90));
 		contentPane.add(buttons);
 		
 		// set to choose mode and display
