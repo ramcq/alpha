@@ -139,7 +139,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		int y1,y2; //coordinates for two end points of lines
 		int set; //set the edge belongs to, determines colour
 		int nd1, nd2;
-		private String label; 		
+		private String label;
+		int path;
 		/*
 		 * called by creategraph api to initialise node data 
 		 */
@@ -185,6 +186,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 		 */
 		public void setEdgeshade(int set) {
 			this.set = set;
+			this.path = 0;
+			this.drawEdgeShade();
+		}
+		public void setEdgeshade2(int set) {
+			this.set = set;
+			this.path = 1;
 			this.drawEdgeShade();
 		}
 		//put a drawing event on the animation queue
@@ -320,7 +327,7 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				case AnimationEvent.EDGE_SHADE_REDRAW:
 					intermediateOffset++;
 					drawEdgeshade(currentEvent.e1, big, intermediateOffset);
-					if (intermediateOffset > 200) {
+					if (intermediateOffset > 500) {
 						intermediateOffset = 0;	
 						currentEvent = null;
 					}
@@ -352,11 +359,18 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 	//incrementally shade an edge on screen	
 	public void drawEdgeshade(Edge e, Graphics g, int t) {
+		int sx1,sx2,sy1,sy2;
+		if (e.path == 1) {
+			sx1 = e.x2; sx2 = e.x1; sy1 = e.y2; sy2 = e.y1;
+		}
+		else {
+			sx1 = e.x1; sx2 = e.x2; sy1 = e.y1; sy2 = e.y2;
+		}
 		g.setColor(SET_COLOUR[e.set]);
 		//get line gradient
-		int x = (int) (e.x1 - (t * (e.x1 - e.x2))/200);
-		int y = (int) (e.y1 - (t * (e.y1 - e.y2))/200);
-		g.drawLine(e.x1, e.y1, x, y);
+		int x = (int) (sx1 - (t * (sx1 - sx2))/500);
+		int y = (int) (sy1 - (t * (sy1 - sy2))/500);
+		g.drawLine(sx1, sy1, x, y);
 		g.setColor(fgcolour);
 		drawNode(nodelist[e.nd1],g);
 		drawNode(nodelist[e.nd2],g);
@@ -401,8 +415,8 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			{	//create nodes
 				//calculate x,y position
 				System.out.println(costs.length + " " + arrlentst.length);
-				x = 250 + 100 * (int) java.lang.Math.sin(java.lang.Math.toRadians(currentang));
-				y = 250 + 100 * (int) java.lang.Math.cos(java.lang.Math.toRadians(currentang));
+				x = 250 + 200 * (int) java.lang.Math.sin(java.lang.Math.toRadians(currentang));
+				y = 250 + 200 * (int) java.lang.Math.cos(java.lang.Math.toRadians(currentang));
 				currentang = currentang + Nodeangle;
 				//fill in node data
 				nodelist[i] = new Node();
@@ -416,13 +430,21 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 				{
 					if (costs[i][j] != 0) {
 						if (i != j) {
-							Integer tmpint = new Integer(costs[i][j]);
-							//fill in edge data
-							edgematrix[i][j] = new Edge();
-							edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
-							edgematrix[i][j].drawEdge();
-							//draw the thing we just made
-							edgematrix[i][j].drawlabel();
+							//TODO make edges have two paths
+							if (i>j) {
+								if (edgematrix[j][i] != null) {
+									edgematrix[i][j] = edgematrix[j][i]; 
+								}
+							}
+							else {
+								Integer tmpint = new Integer(costs[i][j]);
+								//fill in edge data
+								edgematrix[i][j] = new Edge();
+								edgematrix[i][j].edgesetdata(i,j,tmpint.toString());
+								edgematrix[i][j].drawEdge();
+								//draw the thing we just made
+								edgematrix[i][j].drawlabel();
+							}
 						}
 					}
 				}
@@ -451,7 +473,13 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	}
 
 	public void setEdgeShade(int from, int to, int set) {
-		edgematrix[from][to].setEdgeshade(set);
+		if (from>to) {
+			edgematrix[from][to].setEdgeshade2(set);
+		}
+		else {
+			edgematrix[from][to].setEdgeshade(set);
+		}
+		
 	}
 	/* class for storing the animator state, used to save state
 	 * so that it can be resumed again later.
@@ -532,10 +560,11 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 			}
 		});
 		//current test data
-		int[][] tstcosts = {{0,2,1,0},{0,0,3,0},{0,0,0,0},{0,0,0,0}};
+		int[][] tstcosts = {{0,2,1,0},{2,0,3,0},{1,3,0,0},{0,0,0,0}};
 		app.createGraph(tstcosts);
 		app.setNodeShade(1,1);
 		app.setEdgeShade(0,2,1);
+		app.setEdgeShade(2,0,2);
 	}
 }
    /*
@@ -547,7 +576,12 @@ public class ShellGraphAnimator extends GraphAnimator implements ActionListener 
 	*	app.setEdgeShade(0,1,1);
 	*	Result: Worked fine (pic wanted?)
 	*
-	*
+	*2) int[][] tstcosts = {{0,2,1,0},{2,0,3,0},{1,3,0,0},{0,0,0,0}};
+	*	app.createGraph(tstcosts);
+	*	app.setNodeShade(1,1);
+	*	app.setEdgeShade(0,2,1);
+	*	app.setEdgeShade(2,0,2);
+	*	Result: Now shades from two directions.
 	* 
 	*
 	* 
