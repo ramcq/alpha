@@ -207,7 +207,7 @@ Well-documented API for creation of new animation primitives and data structures
 Cross-platform operation using Java
 \layout Itemize
 
-Graphical user interface
+Easy-to-use, user-friendly interface 
 \layout Itemize
 
 We will be demonstrating the system by implementing the following algorithms:
@@ -243,16 +243,29 @@ More algorithms, e.g.
 Environment
 \layout Standard
 
-The system will be written using the Java 2 SDK on the Eclipse IDE.
- The GUI will be implemented in the Swing windowing toolkit.
- Version control will be provided by 
+Based on our current knowledge and the availability of development tools,
+ we have decided that:
+\layout Itemize
+
+The system will be written using the Java 2 SDK on the Eclipse IDE, a powerful,
+ free, open-source Java development environment;
+\layout Itemize
+
+The GUI will be implemented in the Swing windowing toolkit;
+\layout Itemize
+
+Program testing will be done using JUnit, integrated into the Eclipse platform
+ as a plugin;
+\layout Itemize
+
+Version control will be provided by 
 \family typewriter 
 cvs
 \family default 
 .
 \layout Section
 
-Overall system architecture
+Overall System Architecture
 \layout Standard
 
 The main functionality of the system can be broken down into four areas,
@@ -308,7 +321,10 @@ show diagram, explain diagram in detail, explain why diagram is the way
  it is
 \layout Section
 
-Overall inputs, functions, and outputs
+Inputs, Functions, Outputs (fold this section into the next?)
+\layout Standard
+
+<<SNIP?>>=======Overall inputs, functions, and outputs>>>>>>> 1.10
 \layout Standard
 
 User inputs:
@@ -362,7 +378,7 @@ Pseudocode
 [optional]
 \layout Section
 
-Specification of components and test requirements
+Specification of Components and Test Requirements
 \layout Standard
 
 For each major class in the system:
@@ -440,14 +456,16 @@ make sure the graphical user interface works correctly
 The algorithms themselves
 \layout Section
 
-Final acceptance criteria
-\layout Standard
+Final Acceptance Criteria
+\layout Itemize
 
-The system must work.
- (We need more here.)
+The system must provide a responsive, user-friendly and crash-prone interface;
+\layout Itemize
+
+(We need more here.)
 \layout Section
 
-Division of tasks
+Division of Tasks
 \layout Itemize
 
 Manager: Graham Le Page
